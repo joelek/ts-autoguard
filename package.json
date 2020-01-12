@@ -1,0 +1,16 @@
+{
+	"bin": {
+		"autoguard": "./autoguard-bin.js"
+	},
+	"dependencies": {
+		"@joelek/ts-define": "github:joelek/ts-define",
+		"@types/node": "^13"
+	},
+	"license": "UNLICENSED",
+	"name": "@joelek/ts-autoguard",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/joelek/ts-autoguard.git"
+	},
+	"version": "0.0.0"
+}

@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"lib": [
+			"es5",
+			"es6"
+		],
+		"outFile": "../../build/autoguard-cli.js",
+		"types": [
+			"node"
+		]
+	},
+	"extends": "../../tsconfig.common.json",
+	"references": [
+		{
+			"path": "../../node_modules/@joelek/ts-define/projects/define/",
+			"prepend": true
+		},
+		{
+			"path": "../autoguard-lib/",
+			"prepend": true
+		}
+	]
+}

@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"lib": [
+			"es5",
+			"es6"
+		],
+		"outFile": "../../build/autoguard-lib.js",
+		"types": [
+		]
+	},
+	"extends": "../../tsconfig.common.json",
+	"references": [
+	]
+}
