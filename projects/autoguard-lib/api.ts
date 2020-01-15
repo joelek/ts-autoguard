@@ -339,7 +339,7 @@ class UnionType implements Type {
 		let lines = new globalThis.Array<string>();
 		lines.push("(subject, path) => {");
 		lines.push("	return Union.as<" + types.join(" | ") + ">(subject, [");
-		lines.push("		" + guards.join(", " + eol + "\t\t"));
+		lines.push("		" + guards.join("," + eol + "\t\t"));
 		lines.push("	], path);");
 		lines.push("}");
 		return lines.join(eol);

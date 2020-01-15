@@ -644,7 +644,7 @@ define("autoguard-lib/api", ["require", "exports"], function (require, exports) 
             var lines = new globalThis.Array();
             lines.push("(subject, path) => {");
             lines.push("	return Union.as<" + types.join(" | ") + ">(subject, [");
-            lines.push("		" + guards.join(", " + eol + "\t\t"));
+            lines.push("		" + guards.join("," + eol + "\t\t"));
             lines.push("	], path);");
             lines.push("}");
             return lines.join(eol);
