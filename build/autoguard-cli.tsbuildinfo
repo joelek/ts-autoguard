@@ -1,0 +1,91 @@
+{
+  "bundle": {
+    "commonSourceDirectory": "../projects",
+    "sourceFiles": [
+      "../projects/autoguard-cli/cli.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 470,
+          "kind": "emitHelpers",
+          "data": "typescript:values"
+        },
+        {
+          "pos": 472,
+          "end": 976,
+          "kind": "emitHelpers",
+          "data": "typescript:read"
+        },
+        {
+          "pos": 978,
+          "end": 3238,
+          "kind": "prepend",
+          "data": "../node_modules/@joelek/ts-define/build/define.js",
+          "texts": [
+            {
+              "pos": 978,
+              "end": 3238,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 3238,
+          "end": 27416,
+          "kind": "prepend",
+          "data": "./autoguard-lib.js",
+          "texts": [
+            {
+              "pos": 3238,
+              "end": 27416,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 27416,
+          "end": 28062,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 380,
+          "kind": "prepend",
+          "data": "../node_modules/@joelek/ts-define/build/define.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 380,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 380,
+          "end": 2185,
+          "kind": "prepend",
+          "data": "./autoguard-lib.d.ts",
+          "texts": [
+            {
+              "pos": 380,
+              "end": 2185,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 2185,
+          "end": 2225,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "3.7.3"
+}
