@@ -1,5 +1,3 @@
-import { Any, Array, Boolean, Null, Number, Object, Record, String, Undefined, Union } from "./native";
-
 interface Type {
 	generateType(eol: string): string;
 	generateTypeGuard(eol: string): string;
@@ -56,7 +54,13 @@ class ArrayType implements Type {
 	generateTypeGuard(eol: string): string {
 		let lines = new globalThis.Array<string>();
 		lines.push("(subject, path) => {");
-		lines.push("	return Array.as(subject, " + this.type.generateTypeGuard(eol + "\t") + ", path);");
+		lines.push("	if ((subject != null) && (subject.constructor === globalThis.Array)) {");
+		lines.push("		for (let i = 0; i < subject.length; i++) {");
+		lines.push("			(" + this.type.generateTypeGuard(eol + "\t\t\t") + ")(subject[i], path + \"[\" + i + \"]\");");
+		lines.push("		}");
+		lines.push("		return subject;");
+		lines.push("	}");
+		lines.push("	throw \"Type guard \\\"Array\\\" failed at \\\"\" + path + \"\\\"!\";");
 		lines.push("}");
 		return lines.join(eol);
 	}
@@ -80,7 +84,14 @@ class BooleanType implements Type {
 	}
 
 	generateTypeGuard(eol: string): string {
-		return "Boolean.as";
+		let lines = new globalThis.Array<string>();
+		lines.push("(subject, path) => {");
+		lines.push("	if ((subject != null) && (subject.constructor === globalThis.Boolean)) {");
+		lines.push("		return subject;");
+		lines.push("	}");
+		lines.push("	throw \"Type guard \\\"Boolean\\\" failed at \\\"\" + path + \"\\\"!\";");
+		lines.push("}");
+		return lines.join(eol);
 	}
 
 	static readonly INSTANCE = new BooleanType();
@@ -103,7 +114,14 @@ class NullType implements Type {
 	}
 
 	generateTypeGuard(eol: string): string {
-		return "Null.as";
+		let lines = new globalThis.Array<string>();
+		lines.push("(subject, path) => {");
+		lines.push("	if (subject === null) {");
+		lines.push("		return subject;");
+		lines.push("	}");
+		lines.push("	throw \"Type guard \\\"Null\\\" failed at \\\"\" + path + \"\\\"!\";");
+		lines.push("}");
+		return lines.join(eol);
 	}
 
 	static readonly INSTANCE = new NullType();
@@ -126,7 +144,14 @@ class NumberType implements Type {
 	}
 
 	generateTypeGuard(eol: string): string {
-		return "Number.as";
+		let lines = new globalThis.Array<string>();
+		lines.push("(subject, path) => {");
+		lines.push("	if ((subject != null) && (subject.constructor === globalThis.Number)) {");
+		lines.push("		return subject;");
+		lines.push("	}");
+		lines.push("	throw \"Type guard \\\"Number\\\" failed at \\\"\" + path + \"\\\"!\";");
+		lines.push("}");
+		return lines.join(eol);
 	}
 
 	static readonly INSTANCE = new NumberType();
@@ -162,15 +187,15 @@ class ObjectType implements Type {
 	}
 
 	generateTypeGuard(eol: string): string {
-		let guards = new globalThis.Array<string>();
-		for (let [key, value] of this.members) {
-			guards.push(key + ": " + value.generateTypeGuard(eol + "\t\t"));
-		}
 		let lines = new globalThis.Array<string>();
 		lines.push("(subject, path) => {");
-		lines.push("	return Object.as(subject, {");
-		lines.push("		" + guards.join("," + eol + "\t\t"));
-		lines.push("	}, path);");
+		lines.push("	if ((subject != null) && (subject.constructor === globalThis.Object)) {");
+		for (let [key, value] of this.members) {
+			lines.push("		(" + value.generateTypeGuard(eol + "\t\t") + ")(subject." + key + ", path + \".\" + \"" + key + "\");");
+		}
+		lines.push("		return subject;");
+		lines.push("	}");
+		lines.push("	throw \"Type guard \\\"Object\\\" failed at \\\"\" + path + \"\\\"!\";");
 		lines.push("}");
 		return lines.join(eol);
 	}
@@ -226,7 +251,13 @@ class RecordType implements Type {
 	generateTypeGuard(eol: string): string {
 		let lines = new globalThis.Array<string>();
 		lines.push("(subject, path) => {");
-		lines.push("	return Record.as(subject, " + this.type.generateTypeGuard(eol + "\t") + ", path);");
+		lines.push("	if ((subject != null) && (subject.constructor === globalThis.Object)) {");
+		lines.push("		for (let key of globalThis.Object.keys(subject)) {");
+		lines.push("			(" + this.type.generateTypeGuard(eol + "\t\t\t") + ")(subject[key], path + \"[\" + key + \"]\");");
+		lines.push("		}");
+		lines.push("		return subject;");
+		lines.push("	}");
+		lines.push("	throw \"Type guard \\\"Record\\\" failed at \\\"\" + path + \"\\\"!\";");
 		lines.push("}");
 		return lines.join(eol);
 	}
@@ -273,7 +304,14 @@ class StringType implements Type {
 	}
 
 	generateTypeGuard(eol: string): string {
-		return "String.as";
+		let lines = new globalThis.Array<string>();
+		lines.push("(subject, path) => {");
+		lines.push("	if ((subject != null) && (subject.constructor === globalThis.String)) {");
+		lines.push("		return subject;");
+		lines.push("	}");
+		lines.push("	throw \"Type guard \\\"String\\\" failed at \\\"\" + path + \"\\\"!\";");
+		lines.push("}");
+		return lines.join(eol);
 	}
 
 	static readonly INSTANCE = new StringType();
@@ -296,7 +334,14 @@ class UndefinedType implements Type {
 	}
 
 	generateTypeGuard(eol: string): string {
-		return "Undefined.as";
+		let lines = new globalThis.Array<string>();
+		lines.push("(subject, path) => {");
+		lines.push("	if (subject === undefined) {");
+		lines.push("		return subject;");
+		lines.push("	}");
+		lines.push("	throw \"Type guard \\\"Undefined\\\" failed at \\\"\" + path + \"\\\"!\";");
+		lines.push("}");
+		return lines.join(eol);
 	}
 
 	static readonly INSTANCE = new UndefinedType();
@@ -330,17 +375,14 @@ class UnionType implements Type {
 	}
 
 	generateTypeGuard(eol: string): string {
-		let types = new globalThis.Array<string>();
-		let guards = new globalThis.Array<string>();
-		for (let type of this.types) {
-			types.push(type.generateType(eol + "\t"));
-			guards.push(type.generateTypeGuard(eol + "\t"));
-		}
 		let lines = new globalThis.Array<string>();
 		lines.push("(subject, path) => {");
-		lines.push("	return Union.as<" + types.join(" | ") + ">(subject, [");
-		lines.push("		" + guards.join("," + eol + "\t\t"));
-		lines.push("	], path);");
+		for (let type of this.types) {
+			lines.push("	try {");
+			lines.push("		return (" + type.generateTypeGuard(eol + "\t\t") + ")(subject, path);");
+			lines.push("	} catch (error) {}");
+		}
+		lines.push("	throw \"Type guard \\\"Union\\\" failed at \\\"\" + path + \"\\\"!\";");
 		lines.push("}");
 		return lines.join(eol);
 	}
@@ -389,11 +431,7 @@ class Schema {
 		let lines = new globalThis.Array<string>();
 		lines.push("// This file was auto-generated by @joelek/ts-autoguard. Edit at own risk.");
 		lines.push("");
-		lines.push("import { Any, Array, Boolean, Null, Number, Object, Record, String, Undefined, Union } from \"autoguard-lib/native\";");
-		lines.push("");
-		lines.push("export * from \"autoguard-lib/native\";");
 		for (let [key, value] of this.types) {
-			lines.push("");
 			lines.push("export type " + key + " = " + value.generateType("\n") + ";");
 			lines.push("");
 			lines.push("export const " + key + " = {");
@@ -409,6 +447,7 @@ class Schema {
 			lines.push("		return true;");
 			lines.push("	}");
 			lines.push("};");
+			lines.push("");
 		}
 		return lines.join("\n");
 	}

@@ -33,20 +33,20 @@
         },
         {
           "pos": 3238,
-          "end": 27416,
+          "end": 22977,
           "kind": "prepend",
           "data": "./autoguard-lib.js",
           "texts": [
             {
               "pos": 3238,
-              "end": 27416,
+              "end": 22977,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 27416,
-          "end": 28062,
+          "pos": 22977,
+          "end": 23623,
           "kind": "text"
         }
       ]
@@ -68,20 +68,20 @@
         },
         {
           "pos": 380,
-          "end": 2185,
+          "end": 477,
           "kind": "prepend",
           "data": "./autoguard-lib.d.ts",
           "texts": [
             {
               "pos": 380,
-              "end": 2185,
+              "end": 477,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 2185,
-          "end": 2225,
+          "pos": 477,
+          "end": 517,
           "kind": "text"
         }
       ]
