@@ -348,7 +348,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             lines.push("(subject, path) => {");
             lines.push("	if ((subject != null) && (subject.constructor === globalThis.Object)) {");
             lines.push("		for (let key of globalThis.Object.keys(subject)) {");
-            lines.push("			(" + this.type.generateTypeGuard(eol + "\t\t\t") + ")(subject[key], path + \"[\" + key + \"]\");");
+            lines.push("			(" + this.type.generateTypeGuard(eol + "\t\t\t") + ")(subject[key], path + \"[\\\"\" + key + \"\\\"]\");");
             lines.push("		}");
             lines.push("		return subject;");
             lines.push("	}");
