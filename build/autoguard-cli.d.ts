@@ -56,7 +56,7 @@ declare module "autoguard-lib/native" {
         is<T_1>(subject: any, guard: TypeGuard<T_1>[]): subject is T_1;
     };
 }
-declare module "autoguard-lib/api" {
+declare module "autoguard-lib/lib" {
     export function transform(string: string): string;
 }
 declare module "autoguard-cli/cli" { }

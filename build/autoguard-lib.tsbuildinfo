@@ -3,7 +3,7 @@
     "commonSourceDirectory": "../projects",
     "sourceFiles": [
       "../projects/autoguard-lib/native.ts",
-      "../projects/autoguard-lib/api.ts"
+      "../projects/autoguard-lib/lib.ts"
     ],
     "js": {
       "sections": [

@@ -305,7 +305,7 @@ define("autoguard-lib/native", ["require", "exports"], function (require, export
         }
     };
 });
-define("autoguard-lib/api", ["require", "exports"], function (require, exports) {
+define("autoguard-lib/lib", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var Type = {
@@ -750,18 +750,18 @@ define("autoguard-lib/api", ["require", "exports"], function (require, exports) 
     }
     exports.transform = transform;
 });
-define("autoguard-cli/cli", ["require", "exports", "fs", "path", "autoguard-lib/api"], function (require, exports, libfs, libpath, api_1) {
+define("autoguard-cli/cli", ["require", "exports", "fs", "path", "autoguard-lib/lib"], function (require, exports, libfs, libpath, lib_1) {
     "use strict";
     exports.__esModule = true;
     try {
         var input = libfs.readFileSync(libpath.join(process.argv[2]), "utf8");
-        process.stdout.write(api_1.transform(input));
+        process.stdout.write(lib_1.transform(input));
         process.exit(0);
     }
     catch (error) { }
     try {
         var input = process.argv[2];
-        process.stdout.write(api_1.transform(input));
+        process.stdout.write(lib_1.transform(input));
         process.exit(0);
     }
     catch (error) { }

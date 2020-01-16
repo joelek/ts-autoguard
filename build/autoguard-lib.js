@@ -236,7 +236,7 @@ define("autoguard-lib/native", ["require", "exports"], function (require, export
         }
     };
 });
-define("autoguard-lib/api", ["require", "exports"], function (require, exports) {
+define("autoguard-lib/lib", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var Type = {
