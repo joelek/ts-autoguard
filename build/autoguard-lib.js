@@ -30,7 +30,6 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
     exports.__esModule = true;
     var Type = {
         parse: function (string) {
-            string = string.trim();
             try {
                 return ArrayType.parse(string);
             }
@@ -95,7 +94,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return lines.join(eol);
         };
         ArrayType.parse = function (string) {
-            var parts = /^\[(.+)\]$/is.exec(string);
+            var parts = /^\s*\[\s*(.+)\s*\]\s*$/is.exec(string);
             if (parts !== null) {
                 return new ArrayType(Type.parse(parts[1]));
             }
@@ -120,7 +119,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return lines.join(eol);
         };
         BooleanType.parse = function (string) {
-            if (string.toLowerCase() === "boolean") {
+            if (/^\s*boolean\s*$/is.exec(string) !== null) {
                 return BooleanType.INSTANCE;
             }
             throw "Not a BooleanType!";
@@ -145,7 +144,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return lines.join(eol);
         };
         NullType.parse = function (string) {
-            if (string.toLowerCase() === "null") {
+            if (/^\s*null\s*$/is.exec(string) !== null) {
                 return NullType.INSTANCE;
             }
             throw "Not a NullType!";
@@ -170,7 +169,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return lines.join(eol);
         };
         NumberType.parse = function (string) {
-            if (string.toLowerCase() === "number") {
+            if (/^\s*number\s*$/is.exec(string) !== null) {
                 return NumberType.INSTANCE;
             }
             throw "Not a NumberType!";
@@ -234,7 +233,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return this.members[Symbol.iterator]();
         };
         ObjectType.parse = function (string) {
-            var parts = /^\{\s*(.*)\s*\}$/is.exec(string);
+            var parts = /^\s*\{\s*(.*)\s*\}\s*$/is.exec(string);
             if (parts !== null) {
                 var instance = new ObjectType();
                 if (/^\s*$/is.test(parts[1])) {
@@ -288,7 +287,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return lines.join(eol);
         };
         RecordType.parse = function (string) {
-            var parts = /^\{(.+)\}$/is.exec(string);
+            var parts = /^\s*\{\s*(.+)\s*\}\s*$/is.exec(string);
             if (parts !== null) {
                 return new RecordType(Type.parse(parts[1]));
             }
@@ -307,8 +306,9 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return this.typename + ".as";
         };
         ReferenceType.parse = function (string) {
-            if (/^[a-z][a-z0-9_]*$/is.test(string)) {
-                return new ReferenceType(string);
+            var parts = /^\s*([a-z][a-z0-9_]*)\s*$/is.exec(string);
+            if (parts !== null) {
+                return new ReferenceType(parts[1]);
             }
             throw "Not a ReferenceType!";
         };
@@ -331,7 +331,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return lines.join(eol);
         };
         StringType.parse = function (string) {
-            if (string.toLowerCase() === "string") {
+            if (/^\s*string\s*$/is.exec(string) !== null) {
                 return StringType.INSTANCE;
             }
             throw "Not a StringType!";
@@ -356,7 +356,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return lines.join(eol);
         };
         UndefinedType.parse = function (string) {
-            if (string.toLowerCase() === "undefined") {
+            if (/^\s*undefined\s*$/is.exec(string) !== null) {
                 return UndefinedType.INSTANCE;
             }
             throw "Not an UndefinedType!";
@@ -487,7 +487,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
         };
         Schema.parse = function (string) {
             var e_6, _a;
-            var schema = ObjectType.parse(string.trim());
+            var schema = ObjectType.parse(string);
             var instance = new Schema();
             try {
                 for (var schema_1 = __values(schema), schema_1_1 = schema_1.next(); !schema_1_1.done; schema_1_1 = schema_1.next()) {

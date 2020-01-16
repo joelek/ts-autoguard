@@ -5,7 +5,6 @@ interface Type {
 
 const Type = {
 	parse(string: string): Type {
-		string = string.trim();
 		try {
 			return ArrayType.parse(string);
 		} catch (error) {}
@@ -66,7 +65,7 @@ class ArrayType implements Type {
 	}
 
 	static parse(string: string): Type {
-		let parts = /^\[(.+)\]$/is.exec(string);
+		let parts = /^\s*\[\s*(.+)\s*\]\s*$/is.exec(string);
 		if (parts !== null) {
 			return new ArrayType(Type.parse(parts[1]));
 		}
@@ -97,7 +96,7 @@ class BooleanType implements Type {
 	static readonly INSTANCE = new BooleanType();
 
 	static parse(string: string): Type {
-		if (string.toLowerCase() === "boolean") {
+		if (/^\s*boolean\s*$/is.exec(string) !== null) {
 			return BooleanType.INSTANCE;
 		}
 		throw "Not a BooleanType!";
@@ -127,7 +126,7 @@ class NullType implements Type {
 	static readonly INSTANCE = new NullType();
 
 	static parse(string: string): Type {
-		if (string.toLowerCase() === "null") {
+		if (/^\s*null\s*$/is.exec(string) !== null) {
 			return NullType.INSTANCE;
 		}
 		throw "Not a NullType!";
@@ -157,7 +156,7 @@ class NumberType implements Type {
 	static readonly INSTANCE = new NumberType();
 
 	static parse(string: string): Type {
-		if (string.toLowerCase() === "number") {
+		if (/^\s*number\s*$/is.exec(string) !== null) {
 			return NumberType.INSTANCE;
 		}
 		throw "Not a NumberType!";
@@ -205,7 +204,7 @@ class ObjectType implements Type {
 	}
 
 	static parse(string: string): ObjectType {
-		let parts = /^\{\s*(.*)\s*\}$/is.exec(string);
+		let parts = /^\s*\{\s*(.*)\s*\}\s*$/is.exec(string);
 		if (parts !== null) {
 			let instance = new ObjectType();
 			if (/^\s*$/is.test(parts[1])) {
@@ -263,7 +262,7 @@ class RecordType implements Type {
 	}
 
 	static parse(string: string): Type {
-		let parts = /^\{(.+)\}$/is.exec(string);
+		let parts = /^\s*\{\s*(.+)\s*\}\s*$/is.exec(string);
 		if (parts !== null) {
 			return new RecordType(Type.parse(parts[1]));
 		}
@@ -287,8 +286,9 @@ class ReferenceType implements Type {
 	}
 
 	static parse(string: string): Type {
-		if (/^[a-z][a-z0-9_]*$/is.test(string)) {
-			return new ReferenceType(string);
+		let parts = /^\s*([a-z][a-z0-9_]*)\s*$/is.exec(string);
+		if (parts !== null) {
+			return new ReferenceType(parts[1]);
 		}
 		throw "Not a ReferenceType!";
 	}
@@ -317,7 +317,7 @@ class StringType implements Type {
 	static readonly INSTANCE = new StringType();
 
 	static parse(string: string): Type {
-		if (string.toLowerCase() === "string") {
+		if (/^\s*string\s*$/is.exec(string) !== null) {
 			return StringType.INSTANCE;
 		}
 		throw "Not a StringType!";
@@ -347,7 +347,7 @@ class UndefinedType implements Type {
 	static readonly INSTANCE = new UndefinedType();
 
 	static parse(string: string): Type {
-		if (string.toLowerCase() === "undefined") {
+		if (/^\s*undefined\s*$/is.exec(string) !== null) {
 			return UndefinedType.INSTANCE;
 		}
 		throw "Not an UndefinedType!";
@@ -453,7 +453,7 @@ class Schema {
 	}
 
 	static parse(string: string): Schema {
-		let schema = ObjectType.parse(string.trim());
+		let schema = ObjectType.parse(string);
 		let instance = new Schema();
 		for (let [key, value] of schema) {
 			instance.add(key, value);
