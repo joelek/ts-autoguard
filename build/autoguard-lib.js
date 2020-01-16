@@ -414,28 +414,31 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return lines.join(eol);
         };
         UnionType.parse = function (string) {
-            var instance = new UnionType();
-            var segments = string.split("/");
-            var offset = 0;
-            var length = 1;
-            while (offset + length <= segments.length) {
-                try {
-                    var string_2 = segments.slice(offset, offset + length).join("/");
-                    var type = Type.parse(string_2);
-                    instance.add(type);
-                    offset = offset + length;
-                    length = 1;
-                    if (offset >= segments.length) {
-                        if (instance.types.size === 1) {
-                            return type;
-                        }
-                        if (instance.types.size > 1) {
-                            return instance;
+            var parts = /^\s*\(\s*(.+)\s*\)\s*$/is.exec(string);
+            if (parts !== null) {
+                var instance = new UnionType();
+                var segments = parts[1].split("|");
+                var offset = 0;
+                var length = 1;
+                while (offset + length <= segments.length) {
+                    try {
+                        var string_2 = segments.slice(offset, offset + length).join("|");
+                        var type = Type.parse(string_2);
+                        instance.add(type);
+                        offset = offset + length;
+                        length = 1;
+                        if (offset >= segments.length) {
+                            if (instance.types.size === 1) {
+                                return type;
+                            }
+                            if (instance.types.size > 1) {
+                                return instance;
+                            }
                         }
                     }
-                }
-                catch (error) {
-                    length = length + 1;
+                    catch (error) {
+                        length = length + 1;
+                    }
                 }
             }
             throw "Not a UnionType!";

@@ -33,20 +33,20 @@
         },
         {
           "pos": 3238,
-          "end": 22815,
+          "end": 23029,
           "kind": "prepend",
           "data": "./autoguard-lib.js",
           "texts": [
             {
               "pos": 3238,
-              "end": 22815,
+              "end": 23029,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 22815,
-          "end": 23461,
+          "pos": 23029,
+          "end": 23675,
           "kind": "text"
         }
       ]

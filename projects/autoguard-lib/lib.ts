@@ -388,27 +388,30 @@ class UnionType implements Type {
 	}
 
 	static parse(string: string): Type {
-		let instance = new UnionType();
-		let segments = string.split("/");
-		let offset = 0;
-		let length = 1;
-		while (offset + length <= segments.length) {
-			try {
-				let string = segments.slice(offset, offset + length).join("/");
-				let type = Type.parse(string);
-				instance.add(type);
-				offset = offset + length;
-				length = 1;
-				if (offset >= segments.length) {
-					if (instance.types.size === 1) {
-						return type;
+		let parts = /^\s*\(\s*(.+)\s*\)\s*$/is.exec(string);
+		if (parts !== null) {
+			let instance = new UnionType();
+			let segments = parts[1].split("|");
+			let offset = 0;
+			let length = 1;
+			while (offset + length <= segments.length) {
+				try {
+					let string = segments.slice(offset, offset + length).join("|");
+					let type = Type.parse(string);
+					instance.add(type);
+					offset = offset + length;
+					length = 1;
+					if (offset >= segments.length) {
+						if (instance.types.size === 1) {
+							return type;
+						}
+						if (instance.types.size > 1) {
+							return instance;
+						}
 					}
-					if (instance.types.size > 1) {
-						return instance;
-					}
+				} catch (error) {
+					length = length + 1;
 				}
-			} catch (error) {
-				length = length + 1;
 			}
 		}
 		throw "Not a UnionType!";
