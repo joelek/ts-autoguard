@@ -151,9 +151,9 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return "(" + this.type.generateType(eol) + ")[]";
         };
         ArrayType.prototype.generateTypeGuard = function (eol) {
-            var lines = new globalThis.Array();
+            var lines = new Array();
             lines.push("(subject, path) => {");
-            lines.push("	if ((subject != null) && (subject.constructor === globalThis.Array)) {");
+            lines.push("	if ((subject != null) && (subject.constructor === Array)) {");
             lines.push("		for (let i = 0; i < subject.length; i++) {");
             lines.push("			(" + this.type.generateTypeGuard(eol + "\t\t\t") + ")(subject[i], path + \"[\" + i + \"]\");");
             lines.push("		}");
@@ -179,9 +179,9 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return "boolean";
         };
         BooleanType.prototype.generateTypeGuard = function (eol) {
-            var lines = new globalThis.Array();
+            var lines = new Array();
             lines.push("(subject, path) => {");
-            lines.push("	if ((subject != null) && (subject.constructor === globalThis.Boolean)) {");
+            lines.push("	if ((subject != null) && (subject.constructor === Boolean)) {");
             lines.push("		return subject;");
             lines.push("	}");
             lines.push("	throw \"Type guard \\\"Boolean\\\" failed at \\\"\" + path + \"\\\"!\";");
@@ -204,7 +204,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return "null";
         };
         NullType.prototype.generateTypeGuard = function (eol) {
-            var lines = new globalThis.Array();
+            var lines = new Array();
             lines.push("(subject, path) => {");
             lines.push("	if (subject === null) {");
             lines.push("		return subject;");
@@ -229,9 +229,9 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return "number";
         };
         NumberType.prototype.generateTypeGuard = function (eol) {
-            var lines = new globalThis.Array();
+            var lines = new Array();
             lines.push("(subject, path) => {");
-            lines.push("	if ((subject != null) && (subject.constructor === globalThis.Number)) {");
+            lines.push("	if ((subject != null) && (subject.constructor === Number)) {");
             lines.push("		return subject;");
             lines.push("	}");
             lines.push("	throw \"Type guard \\\"Number\\\" failed at \\\"\" + path + \"\\\"!\";");
@@ -249,7 +249,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
     }());
     var ObjectType = /** @class */ (function () {
         function ObjectType() {
-            this.members = new globalThis.Map();
+            this.members = new Map();
         }
         ObjectType.prototype.add = function (key, value) {
             this.members.set(key, value);
@@ -257,7 +257,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
         };
         ObjectType.prototype.generateType = function (eol) {
             var e_1, _a;
-            var lines = new globalThis.Array();
+            var lines = new Array();
             lines.push("{");
             try {
                 for (var _b = __values(this.members), _c = _b.next(); !_c.done; _c = _b.next()) {
@@ -277,9 +277,9 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
         };
         ObjectType.prototype.generateTypeGuard = function (eol) {
             var e_2, _a;
-            var lines = new globalThis.Array();
+            var lines = new Array();
             lines.push("(subject, path) => {");
-            lines.push("	if ((subject != null) && (subject.constructor === globalThis.Object)) {");
+            lines.push("	if ((subject != null) && (subject.constructor === Object)) {");
             try {
                 for (var _b = __values(this.members), _c = _b.next(); !_c.done; _c = _b.next()) {
                     var _d = __read(_c.value, 2), key = _d[0], value = _d[1];
@@ -344,10 +344,10 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return "{ [key: string]: " + this.type.generateType(eol) + " }";
         };
         RecordType.prototype.generateTypeGuard = function (eol) {
-            var lines = new globalThis.Array();
+            var lines = new Array();
             lines.push("(subject, path) => {");
-            lines.push("	if ((subject != null) && (subject.constructor === globalThis.Object)) {");
-            lines.push("		for (let key of globalThis.Object.keys(subject)) {");
+            lines.push("	if ((subject != null) && (subject.constructor === Object)) {");
+            lines.push("		for (let key of Object.keys(subject)) {");
             lines.push("			(" + this.type.generateTypeGuard(eol + "\t\t\t") + ")(subject[key], path + \"[\\\"\" + key + \"\\\"]\");");
             lines.push("		}");
             lines.push("		return subject;");
@@ -390,9 +390,9 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return "string";
         };
         StringType.prototype.generateTypeGuard = function (eol) {
-            var lines = new globalThis.Array();
+            var lines = new Array();
             lines.push("(subject, path) => {");
-            lines.push("	if ((subject != null) && (subject.constructor === globalThis.String)) {");
+            lines.push("	if ((subject != null) && (subject.constructor === String)) {");
             lines.push("		return subject;");
             lines.push("	}");
             lines.push("	throw \"Type guard \\\"String\\\" failed at \\\"\" + path + \"\\\"!\";");
@@ -415,7 +415,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return "undefined";
         };
         UndefinedType.prototype.generateTypeGuard = function (eol) {
-            var lines = new globalThis.Array();
+            var lines = new Array();
             lines.push("(subject, path) => {");
             lines.push("	if (subject === undefined) {");
             lines.push("		return subject;");
@@ -435,7 +435,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
     }());
     var UnionType = /** @class */ (function () {
         function UnionType() {
-            this.types = new globalThis.Set();
+            this.types = new Set();
         }
         UnionType.prototype.add = function (type) {
             this.types.add(type);
@@ -443,7 +443,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
         };
         UnionType.prototype.generateType = function (eol) {
             var e_3, _a;
-            var lines = new globalThis.Array();
+            var lines = new Array();
             try {
                 for (var _b = __values(this.types), _c = _b.next(); !_c.done; _c = _b.next()) {
                     var type = _c.value;
@@ -461,7 +461,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
         };
         UnionType.prototype.generateTypeGuard = function (eol) {
             var e_4, _a;
-            var lines = new globalThis.Array();
+            var lines = new Array();
             lines.push("(subject, path) => {");
             try {
                 for (var _b = __values(this.types), _c = _b.next(); !_c.done; _c = _b.next()) {
@@ -513,7 +513,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
     }());
     var Schema = /** @class */ (function () {
         function Schema() {
-            this.types = new globalThis.Map();
+            this.types = new Map();
         }
         Schema.prototype.add = function (key, value) {
             this.types.set(key, value);
@@ -521,7 +521,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
         };
         Schema.prototype.generateModule = function () {
             var e_5, _a;
-            var lines = new globalThis.Array();
+            var lines = new Array();
             lines.push("// This file was auto-generated by @joelek/ts-autoguard. Edit at own risk.");
             lines.push("");
             try {

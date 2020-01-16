@@ -52,9 +52,9 @@ class ArrayType implements Type {
 	}
 
 	generateTypeGuard(eol: string): string {
-		let lines = new globalThis.Array<string>();
+		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
-		lines.push("	if ((subject != null) && (subject.constructor === globalThis.Array)) {");
+		lines.push("	if ((subject != null) && (subject.constructor === Array)) {");
 		lines.push("		for (let i = 0; i < subject.length; i++) {");
 		lines.push("			(" + this.type.generateTypeGuard(eol + "\t\t\t") + ")(subject[i], path + \"[\" + i + \"]\");");
 		lines.push("		}");
@@ -84,9 +84,9 @@ class BooleanType implements Type {
 	}
 
 	generateTypeGuard(eol: string): string {
-		let lines = new globalThis.Array<string>();
+		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
-		lines.push("	if ((subject != null) && (subject.constructor === globalThis.Boolean)) {");
+		lines.push("	if ((subject != null) && (subject.constructor === Boolean)) {");
 		lines.push("		return subject;");
 		lines.push("	}");
 		lines.push("	throw \"Type guard \\\"Boolean\\\" failed at \\\"\" + path + \"\\\"!\";");
@@ -114,7 +114,7 @@ class NullType implements Type {
 	}
 
 	generateTypeGuard(eol: string): string {
-		let lines = new globalThis.Array<string>();
+		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
 		lines.push("	if (subject === null) {");
 		lines.push("		return subject;");
@@ -144,9 +144,9 @@ class NumberType implements Type {
 	}
 
 	generateTypeGuard(eol: string): string {
-		let lines = new globalThis.Array<string>();
+		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
-		lines.push("	if ((subject != null) && (subject.constructor === globalThis.Number)) {");
+		lines.push("	if ((subject != null) && (subject.constructor === Number)) {");
 		lines.push("		return subject;");
 		lines.push("	}");
 		lines.push("	throw \"Type guard \\\"Number\\\" failed at \\\"\" + path + \"\\\"!\";");
@@ -165,10 +165,10 @@ class NumberType implements Type {
 }
 
 class ObjectType implements Type {
-	private members: globalThis.Map<string, Type>;
+	private members: Map<string, Type>;
 
 	constructor() {
-		this.members = new globalThis.Map<string, Type>();
+		this.members = new Map<string, Type>();
 	}
 
 	add(key: string, value: Type): this {
@@ -177,7 +177,7 @@ class ObjectType implements Type {
 	}
 
 	generateType(eol: string): string {
-		let lines = new globalThis.Array<string>();
+		let lines = new Array<string>();
 		lines.push("{");
 		for (let [key, value] of this.members) {
 			lines.push("	" + key + ": " + value.generateType(eol + "\t") + ";");
@@ -187,9 +187,9 @@ class ObjectType implements Type {
 	}
 
 	generateTypeGuard(eol: string): string {
-		let lines = new globalThis.Array<string>();
+		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
-		lines.push("	if ((subject != null) && (subject.constructor === globalThis.Object)) {");
+		lines.push("	if ((subject != null) && (subject.constructor === Object)) {");
 		for (let [key, value] of this.members) {
 			lines.push("		(" + value.generateTypeGuard(eol + "\t\t") + ")(subject." + key + ", path + \".\" + \"" + key + "\");");
 		}
@@ -249,10 +249,10 @@ class RecordType implements Type {
 	}
 
 	generateTypeGuard(eol: string): string {
-		let lines = new globalThis.Array<string>();
+		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
-		lines.push("	if ((subject != null) && (subject.constructor === globalThis.Object)) {");
-		lines.push("		for (let key of globalThis.Object.keys(subject)) {");
+		lines.push("	if ((subject != null) && (subject.constructor === Object)) {");
+		lines.push("		for (let key of Object.keys(subject)) {");
 		lines.push("			(" + this.type.generateTypeGuard(eol + "\t\t\t") + ")(subject[key], path + \"[\\\"\" + key + \"\\\"]\");");
 		lines.push("		}");
 		lines.push("		return subject;");
@@ -304,9 +304,9 @@ class StringType implements Type {
 	}
 
 	generateTypeGuard(eol: string): string {
-		let lines = new globalThis.Array<string>();
+		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
-		lines.push("	if ((subject != null) && (subject.constructor === globalThis.String)) {");
+		lines.push("	if ((subject != null) && (subject.constructor === String)) {");
 		lines.push("		return subject;");
 		lines.push("	}");
 		lines.push("	throw \"Type guard \\\"String\\\" failed at \\\"\" + path + \"\\\"!\";");
@@ -334,7 +334,7 @@ class UndefinedType implements Type {
 	}
 
 	generateTypeGuard(eol: string): string {
-		let lines = new globalThis.Array<string>();
+		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
 		lines.push("	if (subject === undefined) {");
 		lines.push("		return subject;");
@@ -355,10 +355,10 @@ class UndefinedType implements Type {
 }
 
 class UnionType implements Type {
-	private types: globalThis.Set<Type>;
+	private types: Set<Type>;
 
 	constructor() {
-		this.types = new globalThis.Set<Type>();
+		this.types = new Set<Type>();
 	}
 
 	add(type: Type): this {
@@ -367,7 +367,7 @@ class UnionType implements Type {
 	}
 
 	generateType(eol: string): string {
-		let lines = new globalThis.Array<string>();
+		let lines = new Array<string>();
 		for (let type of this.types) {
 			lines.push(type.generateType(eol));
 		}
@@ -375,7 +375,7 @@ class UnionType implements Type {
 	}
 
 	generateTypeGuard(eol: string): string {
-		let lines = new globalThis.Array<string>();
+		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
 		for (let type of this.types) {
 			lines.push("	try {");
@@ -416,10 +416,10 @@ class UnionType implements Type {
 }
 
 class Schema {
-	private types: globalThis.Map<string, Type>;
+	private types: Map<string, Type>;
 
 	constructor() {
-		this.types = new globalThis.Map<string, Type>();
+		this.types = new Map<string, Type>();
 	}
 
 	add(key: string, value: Type): this {
@@ -428,7 +428,7 @@ class Schema {
 	}
 
 	generateModule(): string {
-		let lines = new globalThis.Array<string>();
+		let lines = new Array<string>();
 		lines.push("// This file was auto-generated by @joelek/ts-autoguard. Edit at own risk.");
 		lines.push("");
 		for (let [key, value] of this.types) {
