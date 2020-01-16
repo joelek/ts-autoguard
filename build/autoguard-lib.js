@@ -55,6 +55,10 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             }
             catch (error) { }
             try {
+                return ReferenceType.parse(string);
+            }
+            catch (error) { }
+            try {
                 return StringType.parse(string);
             }
             catch (error) { }
@@ -64,10 +68,6 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             catch (error) { }
             try {
                 return UnionType.parse(string);
-            }
-            catch (error) { }
-            try {
-                return ReferenceType.parse(string);
             }
             catch (error) { }
             throw "Not a Type!";
@@ -306,7 +306,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return this.typename + ".as";
         };
         ReferenceType.parse = function (string) {
-            var parts = /^\s*([a-z][a-z0-9_]*)\s*$/is.exec(string);
+            var parts = /^\s*@([a-z][a-z0-9_]*)\s*$/is.exec(string);
             if (parts !== null) {
                 return new ReferenceType(parts[1]);
             }

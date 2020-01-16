@@ -28,7 +28,7 @@ The schema and its type language is formally defined as a regular language which
 		string_member: string
 	},
 	record_of_string_type: { string },
-	reference_type: object_type,
+	reference_type: @object_type,
 	string_type: string,
 	undefined_type: undefined,
 	union_of_string_and_null_type: ( string | null )

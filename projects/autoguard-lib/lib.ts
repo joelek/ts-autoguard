@@ -24,6 +24,9 @@ const Type = {
 			return RecordType.parse(string);
 		} catch (error) {}
 		try {
+			return ReferenceType.parse(string);
+		} catch (error) {}
+		try {
 			return StringType.parse(string);
 		} catch (error) {}
 		try {
@@ -31,9 +34,6 @@ const Type = {
 		} catch (error) {}
 		try {
 			return UnionType.parse(string);
-		} catch (error) {}
-		try {
-			return ReferenceType.parse(string);
 		} catch (error) {}
 		throw "Not a Type!";
 	}
@@ -286,7 +286,7 @@ class ReferenceType implements Type {
 	}
 
 	static parse(string: string): Type {
-		let parts = /^\s*([a-z][a-z0-9_]*)\s*$/is.exec(string);
+		let parts = /^\s*@([a-z][a-z0-9_]*)\s*$/is.exec(string);
 		if (parts !== null) {
 			return new ReferenceType(parts[1]);
 		}
