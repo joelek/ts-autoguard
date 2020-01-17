@@ -6,11 +6,17 @@
 		"@joelek/ts-define": "github:joelek/ts-define",
 		"@types/node": "^13"
 	},
+	"devDependencies": {
+		"typescript": "^3"
+	},
 	"license": "MIT",
 	"name": "@joelek/ts-autoguard",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/joelek/ts-autoguard.git"
+	},
+	"scripts": {
+		"install": "tsc --build"
 	},
 	"version": "1.0.0"
 }

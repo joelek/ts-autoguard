@@ -1,0 +1,11 @@
+{
+	"include": [],
+	"references": [
+		{
+			"path": "./projects/autoguard-cli/"
+		},
+		{
+			"path": "./projects/autoguard-lib/"
+		}
+	]
+}
