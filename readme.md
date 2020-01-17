@@ -65,8 +65,6 @@ The schema definition below shows all supported constructs.
 
 ## Configure
 
-This package was developed using TypeScript v3.7.3 and may not work in earlier versions.
-
 Globally install this package from GitHub.
 
 ```
