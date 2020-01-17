@@ -199,7 +199,7 @@ class ObjectType implements Type {
 		return lines.join(eol);
 	}
 
-	[Symbol.iterator](): Iterable<[string, Type]> {
+	[Symbol.iterator](): Iterator<[string, Type]> {
 		return this.members[Symbol.iterator]();
 	}
 
