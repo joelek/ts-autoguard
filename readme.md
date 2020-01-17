@@ -82,7 +82,9 @@ The type language is formally defined as a regular language which shares similar
 ```
 WhiteSpace = "\n" or "\t" or "\r" or " "
 OptionalWS = WhiteSpace*
-AsciiLetter = "a" to "z"
+AsciiLetterLowercase = "a" to "z"
+AsciiLetterUppercase = "A" to "Z"
+AsciiLetter = AsciiLetterLowercase or AsciiLetterUppercase
 Digit = "0" to "9"
 IdentifierTail = AsciiLetter or Digit or "_"
 Identifier = AsciiLetter IdentifierTail*

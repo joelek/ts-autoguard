@@ -94,7 +94,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return lines.join(eol);
         };
         ArrayType.parse = function (string) {
-            var parts = /^\s*\[\s*(.+)\s*\]\s*$/is.exec(string);
+            var parts = /^\s*\[\s*(.+)\s*\]\s*$/s.exec(string);
             if (parts !== null) {
                 return new ArrayType(Type.parse(parts[1]));
             }
@@ -119,7 +119,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return lines.join(eol);
         };
         BooleanType.parse = function (string) {
-            if (/^\s*boolean\s*$/is.exec(string) !== null) {
+            if (/^\s*boolean\s*$/s.exec(string) !== null) {
                 return BooleanType.INSTANCE;
             }
             throw "Not a BooleanType!";
@@ -144,7 +144,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return lines.join(eol);
         };
         NullType.parse = function (string) {
-            if (/^\s*null\s*$/is.exec(string) !== null) {
+            if (/^\s*null\s*$/s.exec(string) !== null) {
                 return NullType.INSTANCE;
             }
             throw "Not a NullType!";
@@ -169,7 +169,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return lines.join(eol);
         };
         NumberType.parse = function (string) {
-            if (/^\s*number\s*$/is.exec(string) !== null) {
+            if (/^\s*number\s*$/s.exec(string) !== null) {
                 return NumberType.INSTANCE;
             }
             throw "Not a NumberType!";
@@ -233,10 +233,10 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return this.members[Symbol.iterator]();
         };
         ObjectType.parse = function (string) {
-            var parts = /^\s*\{\s*(.*)\s*\}\s*$/is.exec(string);
+            var parts = /^\s*\{\s*(.*)\s*\}\s*$/s.exec(string);
             if (parts !== null) {
                 var instance = new ObjectType();
-                if (/^\s*$/is.test(parts[1])) {
+                if (/^\s*$/s.test(parts[1])) {
                     return instance;
                 }
                 var segments = parts[1].split(",");
@@ -245,7 +245,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
                 while (offset + length <= segments.length) {
                     try {
                         var string_1 = segments.slice(offset, offset + length).join(",");
-                        var parts_1 = /^\s*([a-z][a-z0-9_]*)\s*\:(.+)$/is.exec(string_1);
+                        var parts_1 = /^\s*([A-Za-z][A-Za-z0-9_]*)\s*\:(.+)$/s.exec(string_1);
                         if (parts_1 === null) {
                             break;
                         }
@@ -287,7 +287,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return lines.join(eol);
         };
         RecordType.parse = function (string) {
-            var parts = /^\s*\{\s*(.+)\s*\}\s*$/is.exec(string);
+            var parts = /^\s*\{\s*(.+)\s*\}\s*$/s.exec(string);
             if (parts !== null) {
                 return new RecordType(Type.parse(parts[1]));
             }
@@ -306,7 +306,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return this.typename + ".as";
         };
         ReferenceType.parse = function (string) {
-            var parts = /^\s*@([a-z][a-z0-9_]*)\s*$/is.exec(string);
+            var parts = /^\s*@([A-Za-z][A-Za-z0-9_]*)\s*$/s.exec(string);
             if (parts !== null) {
                 return new ReferenceType(parts[1]);
             }
@@ -331,7 +331,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return lines.join(eol);
         };
         StringType.parse = function (string) {
-            if (/^\s*string\s*$/is.exec(string) !== null) {
+            if (/^\s*string\s*$/s.exec(string) !== null) {
                 return StringType.INSTANCE;
             }
             throw "Not a StringType!";
@@ -356,7 +356,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return lines.join(eol);
         };
         UndefinedType.parse = function (string) {
-            if (/^\s*undefined\s*$/is.exec(string) !== null) {
+            if (/^\s*undefined\s*$/s.exec(string) !== null) {
                 return UndefinedType.INSTANCE;
             }
             throw "Not an UndefinedType!";
@@ -414,7 +414,7 @@ define("autoguard-lib/lib", ["require", "exports"], function (require, exports) 
             return lines.join(eol);
         };
         UnionType.parse = function (string) {
-            var parts = /^\s*\(\s*(.+)\s*\)\s*$/is.exec(string);
+            var parts = /^\s*\(\s*(.+)\s*\)\s*$/s.exec(string);
             if (parts !== null) {
                 var instance = new UnionType();
                 var segments = parts[1].split("|");

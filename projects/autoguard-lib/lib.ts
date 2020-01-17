@@ -65,7 +65,7 @@ class ArrayType implements Type {
 	}
 
 	static parse(string: string): Type {
-		let parts = /^\s*\[\s*(.+)\s*\]\s*$/is.exec(string);
+		let parts = /^\s*\[\s*(.+)\s*\]\s*$/s.exec(string);
 		if (parts !== null) {
 			return new ArrayType(Type.parse(parts[1]));
 		}
@@ -96,7 +96,7 @@ class BooleanType implements Type {
 	static readonly INSTANCE = new BooleanType();
 
 	static parse(string: string): Type {
-		if (/^\s*boolean\s*$/is.exec(string) !== null) {
+		if (/^\s*boolean\s*$/s.exec(string) !== null) {
 			return BooleanType.INSTANCE;
 		}
 		throw "Not a BooleanType!";
@@ -126,7 +126,7 @@ class NullType implements Type {
 	static readonly INSTANCE = new NullType();
 
 	static parse(string: string): Type {
-		if (/^\s*null\s*$/is.exec(string) !== null) {
+		if (/^\s*null\s*$/s.exec(string) !== null) {
 			return NullType.INSTANCE;
 		}
 		throw "Not a NullType!";
@@ -156,7 +156,7 @@ class NumberType implements Type {
 	static readonly INSTANCE = new NumberType();
 
 	static parse(string: string): Type {
-		if (/^\s*number\s*$/is.exec(string) !== null) {
+		if (/^\s*number\s*$/s.exec(string) !== null) {
 			return NumberType.INSTANCE;
 		}
 		throw "Not a NumberType!";
@@ -204,10 +204,10 @@ class ObjectType implements Type {
 	}
 
 	static parse(string: string): ObjectType {
-		let parts = /^\s*\{\s*(.*)\s*\}\s*$/is.exec(string);
+		let parts = /^\s*\{\s*(.*)\s*\}\s*$/s.exec(string);
 		if (parts !== null) {
 			let instance = new ObjectType();
-			if (/^\s*$/is.test(parts[1])) {
+			if (/^\s*$/s.test(parts[1])) {
 				return instance;
 			}
 			let segments = parts[1].split(",");
@@ -216,7 +216,7 @@ class ObjectType implements Type {
 			while (offset + length <= segments.length) {
 				try {
 					let string = segments.slice(offset, offset + length).join(",");
-					let parts = /^\s*([a-z][a-z0-9_]*)\s*\:(.+)$/is.exec(string);
+					let parts = /^\s*([A-Za-z][A-Za-z0-9_]*)\s*\:(.+)$/s.exec(string);
 					if (parts === null) {
 						break;
 					}
@@ -262,7 +262,7 @@ class RecordType implements Type {
 	}
 
 	static parse(string: string): Type {
-		let parts = /^\s*\{\s*(.+)\s*\}\s*$/is.exec(string);
+		let parts = /^\s*\{\s*(.+)\s*\}\s*$/s.exec(string);
 		if (parts !== null) {
 			return new RecordType(Type.parse(parts[1]));
 		}
@@ -286,7 +286,7 @@ class ReferenceType implements Type {
 	}
 
 	static parse(string: string): Type {
-		let parts = /^\s*@([a-z][a-z0-9_]*)\s*$/is.exec(string);
+		let parts = /^\s*@([A-Za-z][A-Za-z0-9_]*)\s*$/s.exec(string);
 		if (parts !== null) {
 			return new ReferenceType(parts[1]);
 		}
@@ -317,7 +317,7 @@ class StringType implements Type {
 	static readonly INSTANCE = new StringType();
 
 	static parse(string: string): Type {
-		if (/^\s*string\s*$/is.exec(string) !== null) {
+		if (/^\s*string\s*$/s.exec(string) !== null) {
 			return StringType.INSTANCE;
 		}
 		throw "Not a StringType!";
@@ -347,7 +347,7 @@ class UndefinedType implements Type {
 	static readonly INSTANCE = new UndefinedType();
 
 	static parse(string: string): Type {
-		if (/^\s*undefined\s*$/is.exec(string) !== null) {
+		if (/^\s*undefined\s*$/s.exec(string) !== null) {
 			return UndefinedType.INSTANCE;
 		}
 		throw "Not an UndefinedType!";
@@ -388,7 +388,7 @@ class UnionType implements Type {
 	}
 
 	static parse(string: string): Type {
-		let parts = /^\s*\(\s*(.+)\s*\)\s*$/is.exec(string);
+		let parts = /^\s*\(\s*(.+)\s*\)\s*$/s.exec(string);
 		if (parts !== null) {
 			let instance = new UnionType();
 			let segments = parts[1].split("|");
