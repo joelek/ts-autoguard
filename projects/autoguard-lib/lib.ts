@@ -180,12 +180,10 @@ class ObjectType implements Type {
 			return "{}";
 		}
 		let lines = new Array<string>();
-		lines.push("{");
 		for (let [key, value] of this.members) {
-			lines.push("	" + key + ": " + value.generateType(eol + "\t") + ";");
+			lines.push("	" + key + ": " + value.generateType(eol + "\t"));
 		}
-		lines.push("}");
-		return lines.join(eol);
+		return "{" + eol + lines.join("," + eol) + eol + "}";
 	}
 
 	generateTypeGuard(eol: string): string {
