@@ -458,6 +458,12 @@ class Schema {
 			lines.push("};");
 			lines.push("");
 		}
+		let autoguard = new ObjectType();
+		for (let [key, value] of this.types) {
+			autoguard.add(key, new ReferenceType(key));
+		}
+		lines.push("export type Autoguard = " + autoguard.generateType(eol) + ";");
+		lines.push("");
 		return lines.join(eol);
 	}
 
