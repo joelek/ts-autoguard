@@ -47,7 +47,7 @@ class ArrayType implements Type {
 	}
 
 	generateType(eol: string): string {
-		return "(" + this.type.generateType(eol) + ")[]";
+		return this.type.generateType(eol) + "[]";
 	}
 
 	generateTypeGuard(eol: string): string {
@@ -371,7 +371,11 @@ class UnionType implements Type {
 		for (let type of this.types) {
 			lines.push(type.generateType(eol));
 		}
-		return lines.join(" | ");
+		let string = lines.join(" | ");
+		if (this.types.size > 1) {
+			return "(" + string + ")";
+		}
+		return string
 	}
 
 	generateTypeGuard(eol: string): string {
