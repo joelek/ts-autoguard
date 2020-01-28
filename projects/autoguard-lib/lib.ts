@@ -176,6 +176,9 @@ class ObjectType implements Type {
 	}
 
 	generateType(eol: string): string {
+		if (this.members.size === 0) {
+			return "{}";
+		}
 		let lines = new Array<string>();
 		lines.push("{");
 		for (let [key, value] of this.members) {
