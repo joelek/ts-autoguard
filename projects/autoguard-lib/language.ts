@@ -494,6 +494,8 @@ export class Schema {
 		}
 		lines.push("export type Autoguard = " + autoguard.generateType(eol) + ";");
 		lines.push("");
+		lines.push("export const Autoguard = " + autoguard.generateType(eol) + ";");
+		lines.push("");
 		return lines.join(eol);
 	}
 
