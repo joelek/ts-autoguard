@@ -4,6 +4,8 @@ Auto-generated unintrusive type guards for TypeScript.
 
 ## Features
 
+### Code generation
+
 Autoguard generates TypeScript type definitions and type guards from schema definitions. Autoguard can read schema definitions from files and from arguments passed directly to the command line utility.
 
 ```
@@ -63,6 +65,32 @@ The schema definition below shows all supported constructs.
 	MyUnionOfStringAndNullType: ( string | null )
 }
 ```
+
+### Routing and serialization
+
+Autoguard provides components for type-safe routing and serialization of messages. The router may be used without the serializer but the serializer must be used in conjunction with the router.
+
+```
+import { Autoguard } from "./myschema";
+import { MessageRouter, MessageSerializer } from "@joelek/ts-autoguard/projects/autoguard-lib/routing";
+
+let router = new MessageRouter<Autoguard>();
+let serializer = new MessageSerializer<Autoguard>(router, Autoguard);
+
+router.addMessageListener("MyType", (message) => {
+	console.log(message);
+});
+
+let serialized = serializer.serialize("MyType", "Hello!");
+```
+
+The serialized value may be stored on disk or transmitted through a network and can be recovered using the `deserialize()` method.
+
+```
+serializer.deserialize(serialized);
+```
+
+The deserialized value is emitted as a message on the router.
 
 ## Configure
 
