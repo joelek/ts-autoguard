@@ -6,6 +6,9 @@ export interface Type {
 export const Type = {
 	parse(string: string): Type {
 		try {
+			return AnyType.parse(string);
+		} catch (error) {}
+		try {
 			return ArrayType.parse(string);
 		} catch (error) {}
 		try {
@@ -36,6 +39,33 @@ export const Type = {
 			return UnionType.parse(string);
 		} catch (error) {}
 		throw "Not a Type!";
+	}
+};
+
+export class AnyType implements Type {
+	constructor() {
+
+	}
+
+	generateType(eol: string): string {
+		return "any";
+	}
+
+	generateTypeGuard(eol: string): string {
+		let lines = new Array<string>();
+		lines.push("(subject, path) => {");
+		lines.push("	return true;");
+		lines.push("}");
+		return lines.join(eol);
+	}
+
+	static readonly INSTANCE = new AnyType();
+
+	static parse(string: string): Type {
+		if (/^\s*any\s*$/s.exec(string) !== null) {
+			return AnyType.INSTANCE;
+		}
+		throw "Not an AnyType!";
 	}
 };
 

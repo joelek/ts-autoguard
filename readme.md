@@ -48,6 +48,7 @@ The schema definition below shows all supported constructs.
 
 ```
 {
+	MyAnyType: any,
 	MyArrayOfStringType: [ string ],
 	MyBooleanType: boolean,
 	MyNullType: null,
@@ -86,6 +87,7 @@ AsciiLetter = AsciiLetterLowercase or AsciiLetterUppercase
 Digit = "0" to "9"
 IdentifierTail = AsciiLetter or Digit or "_"
 Identifier = AsciiLetter IdentifierTail*
+AnyType = OptionalWS "any" OptionalWS
 ArrayType = OptionalWS "[" OptionalWS Type OptionalWS "]" OptionalWS
 BooleanType = OptionalWS "boolean" OptionalWS
 NullType = OptionalWS "null" OptionalWS
@@ -100,7 +102,7 @@ StringType = OptionalWS "string" OptionalWS
 UndefinedType = OptionalWS "undefined" OptionalWS
 UnionBodyTail = OptionalWS "|" OptionalWS Type
 UnionType = OptionalWS "(" OptionalWS Type UnionBodyTail* OptionalWS ")" OptionalWS
-PrimitiveType = BooleanType or NullType or NumberType or StringType or UndefinedType
+PrimitiveType = AnyType or BooleanType or NullType or NumberType or StringType or UndefinedType
 ComplexType = ArrayType or ObjectType or RecordType or ReferenceType or UnionType
 Type = PrimitiveType or ComplexType
 SchemaDefinition = ObjectType
