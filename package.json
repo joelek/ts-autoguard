@@ -1,6 +1,6 @@
 {
 	"bin": {
-		"autoguard": "./build/source/autoguard-cli/cli.js"
+		"autoguard": "./build/source/autoguard-cli/index.js"
 	},
 	"dependencies": {},
 	"devDependencies": {
@@ -8,6 +8,7 @@
 		"typescript": "^3"
 	},
 	"license": "MIT",
+	"main": "./build/source/autoguard-lib/index.js",
 	"name": "@joelek/ts-autoguard",
 	"repository": {
 		"type": "git",
