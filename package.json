@@ -3,7 +3,6 @@
 		"autoguard": "./autoguard-bin.js"
 	},
 	"dependencies": {
-		"@joelek/ts-define": "github:joelek/ts-define",
 		"@types/node": "^13"
 	},
 	"devDependencies": {

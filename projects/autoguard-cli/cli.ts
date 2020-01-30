@@ -1,6 +1,6 @@
 import * as libfs from "fs";
 import * as libpath from "path";
-import { transform } from "autoguard-lib/lib";
+import { transform } from "../autoguard-lib/lib";
 
 try {
 	let input = libfs.readFileSync(libpath.join(process.argv[2]), "utf8");

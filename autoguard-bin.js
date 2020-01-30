@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-require("./build/autoguard-cli.js");
+require("./build/projects/autoguard-cli/cli.js");

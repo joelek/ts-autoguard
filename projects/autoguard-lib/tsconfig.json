@@ -3,11 +3,8 @@
 		"lib": [
 			"es6"
 		],
-		"outFile": "../../build/autoguard-lib.js",
 		"types": [
 		]
 	},
-	"extends": "../../tsconfig.common.json",
-	"references": [
-	]
+	"extends": "../../tsconfig.json"
 }
