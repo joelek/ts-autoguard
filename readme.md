@@ -72,7 +72,7 @@ Autoguard provides components for type-safe routing and serialization of message
 
 ```
 import { Autoguard } from "./myschema";
-import { MessageRouter, MessageSerializer } from "@joelek/ts-autoguard/projects/autoguard-lib/routing";
+import { MessageRouter, MessageSerializer } from "@joelek/ts-autoguard/source/autoguard-lib/routing";
 
 let router = new MessageRouter<Autoguard>();
 let serializer = new MessageSerializer<Autoguard>(router, Autoguard);
