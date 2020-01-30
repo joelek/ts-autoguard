@@ -7,6 +7,10 @@
 		"@types/node": "^13",
 		"typescript": "^3"
 	},
+	"files": [
+		"build/source/",
+		"package.json"
+	],
 	"license": "MIT",
 	"main": "./build/source/autoguard-lib/index.js",
 	"name": "@joelek/ts-autoguard",
