@@ -2,10 +2,9 @@
 	"bin": {
 		"autoguard": "./autoguard-bin.js"
 	},
-	"dependencies": {
-		"@types/node": "^13"
-	},
+	"dependencies": {},
 	"devDependencies": {
+		"@types/node": "^13",
 		"typescript": "^3"
 	},
 	"license": "MIT",
