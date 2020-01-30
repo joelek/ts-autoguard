@@ -1,6 +1,6 @@
 {
 	"bin": {
-		"autoguard": "./autoguard-bin.js"
+		"autoguard": "./build/projects/autoguard-cli/cli.js"
 	},
 	"dependencies": {},
 	"devDependencies": {
