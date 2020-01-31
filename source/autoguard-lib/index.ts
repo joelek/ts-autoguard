@@ -1,8 +1,12 @@
-import { Schema } from "./language";
+import * as language from "./language";
+import * as serialization from "./serialization";
 
-export * from "./language";
-export * from "./routing";
+function transform(string: string): string {
+	return language.Schema.parse(string).generateModule();
+};
 
-export function transform(string: string): string {
-	return Schema.parse(string).generateModule();
+export {
+	language,
+	serialization,
+	transform
 };

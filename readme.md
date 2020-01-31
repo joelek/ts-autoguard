@@ -66,31 +66,25 @@ The schema definition below shows all supported constructs.
 }
 ```
 
-### Routing and serialization
+### Serialization and deserialization
 
-Autoguard provides components for type-safe routing and serialization of messages. The router may be used without the serializer but the serializer must be used in conjunction with the router.
+Autoguard provides components for type-safe serialization and deserialization of messages.
 
 ```
 import { Autoguard } from "./myschema";
-import { MessageRouter, MessageSerializer } from "@joelek/ts-autoguard";
+import * as autoguard from "@joelek/ts-autoguard";
 
-let router = new MessageRouter<Autoguard>();
-let serializer = new MessageSerializer<Autoguard>(router, Autoguard);
-
-router.addMessageListener("MyType", (message) => {
-	console.log(message);
-});
-
+let serializer = new autoguard.serialization.MessageSerializer<Autoguard>(Autoguard);
 let serialized = serializer.serialize("MyType", "Hello!");
 ```
 
 The serialized value may be stored on disk or transmitted through a network and can be recovered using the `deserialize()` method.
 
 ```
-serializer.deserialize(serialized);
-```
+serializer.deserialize(serialized, (type, data) => {
 
-The deserialized value is emitted as a message on the router.
+});
+```
 
 ## Configure
 
