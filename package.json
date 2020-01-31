@@ -2,7 +2,9 @@
 	"bin": {
 		"autoguard": "./build/source/autoguard-cli/index.js"
 	},
-	"dependencies": {},
+	"dependencies": {
+		"@joelek/ts-stdlib": "github:joelek/ts-stdlib"
+	},
 	"devDependencies": {
 		"@types/node": "^13",
 		"typescript": "^3"
