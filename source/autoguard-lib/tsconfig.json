@@ -3,8 +3,7 @@
 		"lib": [
 			"es6"
 		],
-		"types": [
-		]
+		"types": []
 	},
 	"extends": "../../tsconfig.json"
 }
