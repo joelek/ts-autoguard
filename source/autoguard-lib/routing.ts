@@ -1,6 +1,6 @@
 export type Message = any;
 
-export type MessageMap<A> = {
+export type MessageMap<A extends MessageMap<A>> = {
 	[B in keyof A]: Message;
 };
 
