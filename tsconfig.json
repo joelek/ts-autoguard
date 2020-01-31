@@ -8,7 +8,7 @@
 		"noImplicitThis": true,
 		"outDir": "./build/",
 		"rootDir": "./",
-		"strictNullChecks":  true,
+		"strictNullChecks": true,
 		"target": "es6"
 	}
 }
