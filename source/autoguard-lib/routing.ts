@@ -16,23 +16,23 @@ export class MessageRouter<A extends MessageMap<A>> {
 	}
 
 	addMessageListener<B extends keyof A>(type: B, listener: MessageListener<A[B]>): void {
-		let listeners = this.listeners.get(type);
+		let listeners = this.listeners.get(type) as Set<MessageListener<A[B]>> | undefined;
 		if (listeners === undefined) {
-			listeners = new Set<MessageListener<A[keyof A]>>();
+			listeners = new Set<MessageListener<A[B]>>();
 			this.listeners.set(type, listeners);
 		}
 		listeners.add(listener);
 	}
 
 	removeMessageListener<B extends keyof A>(type: B, listener: MessageListener<A[B]>): void {
-		let listeners = this.listeners.get(type);
+		let listeners = this.listeners.get(type) as Set<MessageListener<A[B]>> | undefined;
 		if (listeners !== undefined) {
 			listeners.delete(listener);
 		}
 	}
 
 	routeMessage<B extends keyof A>(type: B, message: A[B]): void {
-		let listeners = this.listeners.get(type);
+		let listeners = this.listeners.get(type) as Set<MessageListener<A[B]>> | undefined;
 		if (listeners !== undefined) {
 			for (let listener of listeners) {
 				listener(message);
