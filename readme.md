@@ -17,7 +17,7 @@ The two commands are identical provided that the schema definition `{ MyType: st
 
 Autoguard generates and exports type definitions as well as a type guards for the types defined in the schema definition.
 
-```
+```ts
 export type MyType = string;
 
 export const MyType = {
@@ -70,7 +70,7 @@ The schema definition below shows all supported constructs.
 
 Autoguard provides components for type-safe serialization and deserialization of messages.
 
-```
+```ts
 import { Autoguard } from "./myschema";
 import * as autoguard from "@joelek/ts-autoguard";
 
@@ -80,7 +80,7 @@ let serialized = serializer.serialize("MyType", "Hello!");
 
 The serialized value may be stored on disk or transmitted through a network and can be recovered using the `deserialize()` method.
 
-```
+```ts
 serializer.deserialize(serialized, (type, data) => {
 
 });
