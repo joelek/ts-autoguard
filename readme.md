@@ -9,8 +9,8 @@ Auto-generated unintrusive type guards for TypeScript.
 Autoguard generates TypeScript type definitions and type guards from schema definitions. Autoguard can read schema definitions from files and from arguments passed directly to the command line utility.
 
 ```
-autoguard myschema.ag
-autoguard "{ MyType: string }"
+npx autoguard myschema.ag
+npx autoguard "{ MyType: string }"
 ```
 
 The two commands are identical provided that the schema definition `{ MyType: string }` was saved to the file "myschema.ag".
@@ -92,12 +92,6 @@ Install this package from GitHub.
 
 ```
 npm install joelek/ts-autoguard
-```
-
-To install the command line utility, also install the package globally.
-
-```
-npm install -g joelek/ts-autoguard
 ```
 
 ## Syntax
