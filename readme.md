@@ -91,7 +91,7 @@ serializer.deserialize(serialized, (type, data) => {
 Install this package from GitHub.
 
 ```
-npm install -s joelek/ts-autoguard
+npm install joelek/ts-autoguard
 ```
 
 To install the command line utility, also install the package globally.
