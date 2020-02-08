@@ -6,13 +6,17 @@ try {
 	let input = libfs.readFileSync(libpath.join(process.argv[2]), "utf8");
 	process.stdout.write(transform(input));
 	process.exit(0);
-} catch (error) {}
+} catch (error) {
+	process.stderr.write(error + "\n");
+}
 
 try {
 	let input = process.argv[2];
 	process.stdout.write(transform(input));
 	process.exit(0);
-} catch (error) {}
+} catch (error) {
+	process.stderr.write(error + "\n");
+}
 
 process.stderr.write("usage: autoguard <path | schema>\n");
 process.exit(1);
