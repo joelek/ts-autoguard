@@ -36,6 +36,9 @@ export const Type = {
 			return StringType.parse(string);
 		} catch (error) {}
 		try {
+			return StringLiteralType.parse(string);
+		} catch (error) {}
+		try {
 			return UndefinedType.parse(string);
 		} catch (error) {}
 		try {
@@ -421,6 +424,38 @@ export class StringType implements Type {
 			return StringType.INSTANCE;
 		}
 		throw "Not a StringType!";
+	}
+};
+
+export class StringLiteralType implements Type {
+	private value: string;
+
+	constructor(value: string) {
+		this.value = value;
+	}
+
+	generateType(eol: string): string {
+		return "\"" + this.value + "\"";
+	}
+
+	generateTypeGuard(eol: string): string {
+		let lines = new Array<string>();
+		lines.push("(subject, path) => {");
+		lines.push("	if (subject === " + this.generateType(eol + "\t") + ") {");
+		lines.push("		return subject;");
+		lines.push("	}");
+		lines.push("	throw \"Type guard \\\"StringLiteral\\\" failed at \\\"\" + path + \"\\\"!\";");
+		lines.push("}");
+		return lines.join(eol);
+	}
+
+	static parse(string: string): Type {
+		let parts = /^\s*"([A-Za-z0-9_-]*)"\s*$/s.exec(string);
+		if (parts !== null) {
+			let value = parts[1];
+			return new StringLiteralType(value);
+		}
+		throw "Not a StringLiteralType!";
 	}
 };
 

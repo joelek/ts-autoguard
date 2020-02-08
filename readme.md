@@ -62,6 +62,7 @@ The schema definition below shows all supported constructs.
 	MyRecordOfStringType: { string },
 	MyReferenceType: @MyObjectType,
 	MyStringType: string,
+	MyStringLiteralType: "literal",
 	MyUndefinedType: undefined,
 	MyUnionOfStringAndNullType: ( string | null )
 }
@@ -122,11 +123,14 @@ ObjectType = OptionalWS "{" OptionalWS ObjectBody* OptionalWS "}" OptionalWS
 RecordType = OptionalWS "{" OptionalWS Type OptionalWS "}" OptionalWS
 ReferenceType = OptionalWS "@" Identifier
 StringType = OptionalWS "string" OptionalWS
+StringLiteralLetter = AsciiLetter or Digit or "_" or "-"
+StringLiteralType = OptionalWS """ StringLiteralLetter* """ OptionalWS
 UndefinedType = OptionalWS "undefined" OptionalWS
 UnionBodyTail = OptionalWS "|" OptionalWS Type
 UnionType = OptionalWS "(" OptionalWS Type UnionBodyTail* OptionalWS ")" OptionalWS
 PrimitiveType = AnyType or BooleanType or NullType or NumberType or StringType or UndefinedType
+LiteralType = StringLiteralType
 ComplexType = ArrayType or IntersectionType or ObjectType or RecordType or ReferenceType or UnionType
-Type = PrimitiveType or ComplexType
+Type = PrimitiveType or LiteralType or ComplexType
 SchemaDefinition = ObjectType
 ```
