@@ -64,7 +64,7 @@ The schema definition below shows all supported constructs.
 	MyStringType: string,
 	MyStringLiteralType: "literal",
 	MyUndefinedType: undefined,
-	MyUnionOfStringAndNullType: ( string | null )
+	MyUnionType: ( string | null )
 }
 ```
 
