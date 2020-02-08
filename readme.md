@@ -53,6 +53,7 @@ The schema definition below shows all supported constructs.
 	MyAnyType: any,
 	MyArrayOfStringType: [ string ],
 	MyBooleanType: boolean,
+	MyIntersectionType: ( @MyObjectType & { another_string_member: string } )
 	MyNullType: null,
 	MyNumberType: number,
 	MyObjectType: {
@@ -110,6 +111,8 @@ Identifier = AsciiLetter IdentifierTail*
 AnyType = OptionalWS "any" OptionalWS
 ArrayType = OptionalWS "[" OptionalWS Type OptionalWS "]" OptionalWS
 BooleanType = OptionalWS "boolean" OptionalWS
+IntersectionBodyTail = OptionalWS "&" OptionalWS Type
+IntersectionType = OptionalWS "(" OptionalWS Type IntersectionBodyTail* OptionalWS ")" OptionalWS
 NullType = OptionalWS "null" OptionalWS
 NumberType = OptionalWS "number" OptionalWS
 ObjectKeyValue = OptionalWS Identifier OptionalWS ":" OptionalWS Type OptionalWS
@@ -123,7 +126,7 @@ UndefinedType = OptionalWS "undefined" OptionalWS
 UnionBodyTail = OptionalWS "|" OptionalWS Type
 UnionType = OptionalWS "(" OptionalWS Type UnionBodyTail* OptionalWS ")" OptionalWS
 PrimitiveType = AnyType or BooleanType or NullType or NumberType or StringType or UndefinedType
-ComplexType = ArrayType or ObjectType or RecordType or ReferenceType or UnionType
+ComplexType = ArrayType or IntersectionType or ObjectType or RecordType or ReferenceType or UnionType
 Type = PrimitiveType or ComplexType
 SchemaDefinition = ObjectType
 ```

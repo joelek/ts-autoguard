@@ -15,6 +15,9 @@ export const Type = {
 			return BooleanType.parse(string);
 		} catch (error) {}
 		try {
+			return IntersectionType.parse(string);
+		} catch (error) {}
+		try {
 			return NullType.parse(string);
 		} catch (error) {}
 		try {
@@ -130,6 +133,72 @@ export class BooleanType implements Type {
 			return BooleanType.INSTANCE;
 		}
 		throw "Not a BooleanType!";
+	}
+};
+
+export class IntersectionType implements Type {
+	private types: Set<Type>;
+
+	constructor() {
+		this.types = new Set<Type>();
+	}
+
+	add(type: Type): this {
+		this.types.add(type);
+		return this;
+	}
+
+	generateType(eol: string): string {
+		let lines = new Array<string>();
+		for (let type of this.types) {
+			lines.push(type.generateType(eol));
+		}
+		let string = lines.join(" & ");
+		if (this.types.size > 1) {
+			return "(" + string + ")";
+		}
+		return string
+	}
+
+	generateTypeGuard(eol: string): string {
+		let lines = new Array<string>();
+		lines.push("(subject, path) => {");
+		for (let type of this.types) {
+			lines.push("	(" + type.generateTypeGuard(eol + "\t") + ")(subject, path);");
+		}
+		lines.push("	return subject;");
+		lines.push("}");
+		return lines.join(eol);
+	}
+
+	static parse(string: string): Type {
+		let parts = /^\s*\(\s*(.+)\s*\)\s*$/s.exec(string);
+		if (parts !== null) {
+			let instance = new IntersectionType();
+			let segments = parts[1].split("&");
+			let offset = 0;
+			let length = 1;
+			while (offset + length <= segments.length) {
+				try {
+					let string = segments.slice(offset, offset + length).join("&");
+					let type = Type.parse(string);
+					instance.add(type);
+					offset = offset + length;
+					length = 1;
+					if (offset >= segments.length) {
+						if (instance.types.size === 1) {
+							return type;
+						}
+						if (instance.types.size > 1) {
+							return instance;
+						}
+					}
+				} catch (error) {
+					length = length + 1;
+				}
+			}
+		}
+		throw "Not an IntersectionType!";
 	}
 };
 
