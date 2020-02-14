@@ -24,6 +24,9 @@ export const Type = {
 			return NumberType.parse(string);
 		} catch (error) {}
 		try {
+			return NumberLiteralType.parse(string);
+		} catch (error) {}
+		try {
 			return ObjectType.parse(string);
 		} catch (error) {}
 		try {
@@ -262,6 +265,38 @@ export class NumberType implements Type {
 			return NumberType.INSTANCE;
 		}
 		throw "Not a NumberType!";
+	}
+};
+
+export class NumberLiteralType implements Type {
+	private value: number;
+
+	constructor(value: number) {
+		this.value = value;
+	}
+
+	generateType(eol: string): string {
+		return "" + this.value;
+	}
+
+	generateTypeGuard(eol: string): string {
+		let lines = new Array<string>();
+		lines.push("(subject, path) => {");
+		lines.push("	if (subject === " + this.generateType(eol + "\t") + ") {");
+		lines.push("		return subject;");
+		lines.push("	}");
+		lines.push("	throw \"Type guard \\\"NumericNumberLiteralTypeLiteralType\\\" failed at \\\"\" + path + \"\\\"!\";");
+		lines.push("}");
+		return lines.join(eol);
+	}
+
+	static parse(string: string): Type {
+		let parts = /^\s*([0-9]|([1-9][0-9]*))\s*$/s.exec(string);
+		if (parts !== null) {
+			let value = Number.parseInt(parts[1]);
+			return new NumberLiteralType(value);
+		}
+		throw "Not a NumberLiteralType!";
 	}
 };
 

@@ -56,6 +56,7 @@ The schema definition below shows all supported constructs.
 	MyIntersectionType: ( @MyObjectType & { another_string_member: string } )
 	MyNullType: null,
 	MyNumberType: number,
+	MyNumberLiteralType: 1337,
 	MyObjectType: {
 		string_member: string
 	},
@@ -107,6 +108,7 @@ AsciiLetterLowercase = "a" to "z"
 AsciiLetterUppercase = "A" to "Z"
 AsciiLetter = AsciiLetterLowercase or AsciiLetterUppercase
 Digit = "0" to "9"
+DigitPositive = "1" to "9"
 IdentifierTail = AsciiLetter or Digit or "_"
 Identifier = AsciiLetter IdentifierTail*
 AnyType = OptionalWS "any" OptionalWS
@@ -116,6 +118,7 @@ IntersectionBodyTail = OptionalWS "&" OptionalWS Type
 IntersectionType = OptionalWS "(" OptionalWS Type IntersectionBodyTail* OptionalWS ")" OptionalWS
 NullType = OptionalWS "null" OptionalWS
 NumberType = OptionalWS "number" OptionalWS
+NumberLiteralType = OptionalWS Digit or (DigitPositive Digit*) OptionalWS
 ObjectKeyValue = OptionalWS Identifier OptionalWS ":" OptionalWS Type OptionalWS
 ObjectBodyTail = OptionalWS "," OptionalWS ObjectKeyValue
 ObjectBody = ObjectKeyValue ObjectBodyTail*
@@ -129,7 +132,7 @@ UndefinedType = OptionalWS "undefined" OptionalWS
 UnionBodyTail = OptionalWS "|" OptionalWS Type
 UnionType = OptionalWS "(" OptionalWS Type UnionBodyTail* OptionalWS ")" OptionalWS
 PrimitiveType = AnyType or BooleanType or NullType or NumberType or StringType or UndefinedType
-LiteralType = StringLiteralType
+LiteralType = NumberLiteralType or StringLiteralType
 ComplexType = ArrayType or IntersectionType or ObjectType or RecordType or ReferenceType or UnionType
 Type = PrimitiveType or LiteralType or ComplexType
 SchemaDefinition = ObjectType
