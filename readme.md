@@ -13,7 +13,7 @@ npx autoguard myschema.ag
 npx autoguard "{ MyType: string }"
 ```
 
-The two commands are identical provided that the schema definition `{ MyType: string }` was saved to the file "myschema.ag".
+The two commands are identical provided that the schema definition `{ MyType: string }` was saved to the file "myschema.ag". If you omit the command entirely, Autoguard will search your project for `.ag` files and generate the corresponding `.ts` files.
 
 Autoguard generates and exports type definitions as well as a type guards for the types defined in the schema definition.
 
@@ -140,6 +140,5 @@ SchemaDefinition = ObjectType
 
 ## TODO
 
-* Add glob support to CLI.
 * Add support for TypeScript tuples.
 * Add descriptive error messages to CLI.
