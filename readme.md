@@ -137,3 +137,9 @@ ComplexType = ArrayType or IntersectionType or ObjectType or RecordType or Refer
 Type = PrimitiveType or LiteralType or ComplexType
 SchemaDefinition = ObjectType
 ```
+
+## TODO
+
+* Add glob support to CLI.
+* Add support for TypeScript tuples.
+* Add descriptive error messages to CLI.
