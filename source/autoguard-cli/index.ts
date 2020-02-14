@@ -21,31 +21,43 @@ function filename(path: string): string {
 }
 
 try {
-	let input = libfs.readFileSync(libpath.join(process.argv[2]), "utf8");
-	process.stdout.write(transform(input));
+	let path = process.argv[2] || "";
+	process.stderr.write("Reading file \"" + path + "\".\n");
+	let input = libfs.readFileSync(libpath.join(path), "utf8");
+	process.stderr.write("Parsing input.\n");
+	let generated = transform(input);
+	process.stderr.write("Writing to standard output.\n");
+	process.stdout.write(generated);
 	process.exit(0);
 } catch (error) {
-	process.stderr.write(error + "\n");
+	process.stderr.write("An error occurred!\n");
 }
 
 try {
-	let input = process.argv[2];
-	process.stdout.write(transform(input));
+	let input = process.argv[2] || "";
+	process.stderr.write("Parsing input.\n");
+	let generated = transform(input);
+	process.stderr.write("Writing to standard output.\n");
+	process.stdout.write(generated);
 	process.exit(0);
 } catch (error) {
-	process.stderr.write(error + "\n");
+	process.stderr.write("An error occurred!\n");
 }
 
 try {
 	let paths = findFiles("./");
 	for (let path of paths) {
+		process.stderr.write("Reading file \"" + path + "\".\n");
 		let input = libfs.readFileSync(path, "utf8");
+		process.stderr.write("Parsing input.\n");
 		let generated = transform(input);
-		libfs.writeFileSync(libpath.join(libpath.dirname(path), filename(path) + ".ts"), generated, "utf8");
+		path = libpath.join(libpath.dirname(path), filename(path) + ".ts");
+		process.stderr.write("Writing file \"" + path + "\".\n");
+		libfs.writeFileSync(path, generated, "utf8");
 	}
 	process.exit(0);
 } catch (error) {
-	process.stderr.write(error + "\n");
+	process.stderr.write("An error occurred!\n");
 }
 
 process.stderr.write("usage: autoguard [path | schema]\n");

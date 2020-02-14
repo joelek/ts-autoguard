@@ -141,4 +141,3 @@ SchemaDefinition = ObjectType
 ## TODO
 
 * Add support for TypeScript tuples.
-* Add descriptive error messages to CLI.
