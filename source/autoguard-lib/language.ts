@@ -1,7 +1,7 @@
 export interface Type {
 	generateType(eol: string): string;
 	generateTypeGuard(eol: string): string;
-}
+};
 
 export const Type = {
 	parse(string: string): Type {
