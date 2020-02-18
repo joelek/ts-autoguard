@@ -42,6 +42,9 @@ export const Type = {
 			return StringLiteralType.parse(string);
 		} catch (error) {}
 		try {
+			return TupleType.parse(string);
+		} catch (error) {}
+		try {
 			return UndefinedType.parse(string);
 		} catch (error) {}
 		try {
@@ -491,6 +494,67 @@ export class StringLiteralType implements Type {
 			return new StringLiteralType(value);
 		}
 		throw "Not a StringLiteralType!";
+	}
+};
+
+export class TupleType implements Type {
+	private types: Array<Type>;
+
+	constructor() {
+		this.types = new Array<Type>();
+	}
+
+	add(type: Type): this {
+		this.types.push(type);
+		return this;
+	}
+
+	generateType(eol: string): string {
+		let strings = new Array<string>();
+		for (let type of this.types) {
+			strings.push("	" + type.generateType(eol + "\t"));
+		}
+		return "[" + eol + strings.join("," + eol) + eol + "]";
+	}
+
+	generateTypeGuard(eol: string): string {
+		let lines = new Array<string>();
+		lines.push("(subject, path) => {");
+		lines.push("	if ((subject != null) && (subject.constructor === Array)) {");
+		for (let i = 0; i < this.types.length; i++) {
+			let type = this.types[i];
+			lines.push("		(" + type.generateTypeGuard(eol + "\t\t") + ")(subject[" + i + "], path + \"[" + i + "]\");");
+		}
+		lines.push("		return subject;");
+		lines.push("	}");
+		lines.push("	throw \"Type guard \\\"Tuple\\\" failed at \\\"\" + path + \"\\\"!\";");
+		lines.push("}");
+		return lines.join(eol);
+	}
+
+	static parse(string: string): Type {
+		let parts = /^\s*\[\s*(.+)\s*\]\s*$/s.exec(string);
+		if (parts !== null) {
+			let instance = new TupleType();
+			let segments = parts[1].split(",");
+			let offset = 0;
+			let length = 1;
+			while (offset + length <= segments.length) {
+				try {
+					let string = segments.slice(offset, offset + length).join(",");
+					let type = Type.parse(string);
+					instance.add(type);
+					offset = offset + length;
+					length = 1;
+					if (offset >= segments.length) {
+						return instance;
+					}
+				} catch (error) {
+					length = length + 1;
+				}
+			}
+		}
+		throw "Not a TupleType!";
 	}
 };
 

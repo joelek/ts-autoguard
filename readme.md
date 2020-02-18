@@ -64,6 +64,7 @@ The schema definition below shows all supported constructs.
 	MyReferenceType: @MyObjectType,
 	MyStringType: string,
 	MyStringLiteralType: "literal",
+	MyTupleType: [ string, number ],
 	MyUndefinedType: undefined,
 	MyUnionType: ( string | null )
 }
@@ -128,16 +129,15 @@ ReferenceType = OptionalWS "@" Identifier
 StringType = OptionalWS "string" OptionalWS
 StringLiteralLetter = AsciiLetter or Digit or "_" or "-"
 StringLiteralType = OptionalWS """ StringLiteralLetter* """ OptionalWS
+TupleBodyTail = OptionalWS "," OptionalWS Type
+TupleBody = Type TupleBodyTail*
+TupleType = OptionalWS "[" OptionalWS TupleBody* OptionalWS "]" OptionalWS
 UndefinedType = OptionalWS "undefined" OptionalWS
 UnionBodyTail = OptionalWS "|" OptionalWS Type
 UnionType = OptionalWS "(" OptionalWS Type UnionBodyTail* OptionalWS ")" OptionalWS
 PrimitiveType = AnyType or BooleanType or NullType or NumberType or StringType or UndefinedType
 LiteralType = NumberLiteralType or StringLiteralType
-ComplexType = ArrayType or IntersectionType or ObjectType or RecordType or ReferenceType or UnionType
+ComplexType = ArrayType or IntersectionType or ObjectType or RecordType or ReferenceType or TupleType or UnionType
 Type = PrimitiveType or LiteralType or ComplexType
 SchemaDefinition = ObjectType
 ```
-
-## TODO
-
-* Add support for TypeScript tuples.
