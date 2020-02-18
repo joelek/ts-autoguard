@@ -104,7 +104,7 @@ export class ArrayType implements Type {
 	}
 
 	static parse(string: string): Type {
-		let parts = /^\s*\[\s*(.+)\s*\]\s*$/s.exec(string);
+		let parts = /^\s*(.+)\s*\[\]\s*$/s.exec(string);
 		if (parts !== null) {
 			return new ArrayType(Type.parse(parts[1]));
 		}

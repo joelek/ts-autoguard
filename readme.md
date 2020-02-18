@@ -51,7 +51,7 @@ The schema definition below shows all supported constructs.
 ```
 {
 	MyAnyType: any,
-	MyArrayOfStringType: [ string ],
+	MyArrayOfStringType: string[],
 	MyBooleanType: boolean,
 	MyIntersectionType: ( @MyObjectType & { another_string_member: string } )
 	MyNullType: null,
@@ -112,7 +112,7 @@ DigitPositive = "1" to "9"
 IdentifierTail = AsciiLetter or Digit or "_"
 Identifier = AsciiLetter IdentifierTail*
 AnyType = OptionalWS "any" OptionalWS
-ArrayType = OptionalWS "[" OptionalWS Type OptionalWS "]" OptionalWS
+ArrayType = OptionalWS Type OptionalWS "[]" OptionalWS
 BooleanType = OptionalWS "boolean" OptionalWS
 IntersectionBodyTail = OptionalWS "&" OptionalWS Type
 IntersectionType = OptionalWS "(" OptionalWS Type IntersectionBodyTail* OptionalWS ")" OptionalWS
