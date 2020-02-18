@@ -20,13 +20,13 @@ export class MessageSerializer<A extends stdlib.routing.MessageMap<A>> {
 		let json = JSON.parse(string);
 		if ((json != null) && (json.constructor === Object)) {
 			if ((json.type != null) && (json.type.constructor === String)) {
-				let type = json.type as keyof A;
+				let type = json.type as B;
 				let data = json.data;
 				let guard = this.guards[type];
 				if (guard === undefined) {
 					throw "Unknown message type \"" + type + "\"!";
 				}
-				cb(type as B, guard.as(data) as A[B]);
+				cb(type, guard.as(data));
 				return;
 			}
 		}
