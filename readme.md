@@ -6,16 +6,21 @@ Auto-generated unintrusive type guards for TypeScript.
 
 ### Code generation
 
-Autoguard generates TypeScript type definitions and type guards from schema definitions. Autoguard can read schema definitions from files and from arguments passed directly to the command line utility.
+Autoguard generates TypeScript type definitions and type guards from schema definitions. A schema definition may look like in the following example.
+
+```ts
+{
+	MyType: string
+}
+```
+
+Autoguard reads schema definitions from `.ag` files and generates the corresponding `.ts` files. By default, Autoguard will traverse your project and generate a standalone source file for each `.ag` file it encounters.
 
 ```
-npx autoguard myschema.ag
-npx autoguard "{ MyType: string }"
+npx autoguard
 ```
 
-The two commands are identical provided that the schema definition `{ MyType: string }` was saved to the file "myschema.ag". If you omit the command entirely, Autoguard will search your project for `.ag` files and generate the corresponding `.ts` files.
-
-Autoguard generates and exports type definitions as well as a type guards for the types defined in the schema definition.
+The schema definition shown in the previous example would generate the following TypeScript code.
 
 ```ts
 export type MyType = string;
@@ -42,13 +47,13 @@ export const MyType = {
 
 Type definitions can be used to annotate TypeScript code and will disappear when transpiled to JavaScript.
 
-Type guards can be used to check whether certain values are type compatible with user-defined types using `MyType.is(...)`. Type guards can even be used to assert type compatibility using `MyType.as(...)`.
+Type guards can be used to check whether a certain value is type compatible with the corresponding type definition using `MyType.is(...)`. Type guards can even be used to assert type compatibility using `MyType.as(...)`.
 
 Type guards do not disappear when transpiled to JavaScript as they are intended as runtime guards for values where type information only is informally known. This often occurs when reading files or when communicating through APIs.
 
-The schema definition below shows all supported constructs.
+The schema definition below shows all constructs supported by Autoguard.
 
-```
+```ts
 {
 	MyAnyType: any,
 	MyArrayOfStringType: string[],

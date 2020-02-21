@@ -1,6 +1,6 @@
 import * as libfs from "fs";
 import * as libpath from "path";
-import { transform } from "../autoguard-lib";
+import * as autoguard from "../autoguard-lib";
 
 function findFiles(path: string, paths: Array<string> = []): Array<string> {
 	let stat = libfs.statSync(path);
@@ -20,45 +20,45 @@ function filename(path: string): string {
 	return libpath.basename(path).split(".").slice(0, -1).join(".");
 }
 
-try {
-	let path = process.argv[2] || "";
-	process.stderr.write("Reading file \"" + path + "\".\n");
-	let input = libfs.readFileSync(libpath.join(path), "utf8");
-	process.stderr.write("Parsing input.\n");
-	let generated = transform(input);
-	process.stderr.write("Writing to standard output.\n");
-	process.stdout.write(generated);
-	process.exit(0);
-} catch (error) {
-	process.stderr.write("An error occurred!\n");
-}
-
-try {
-	let input = process.argv[2] || "";
-	process.stderr.write("Parsing input.\n");
-	let generated = transform(input);
-	process.stderr.write("Writing to standard output.\n");
-	process.stdout.write(generated);
-	process.exit(0);
-} catch (error) {
-	process.stderr.write("An error occurred!\n");
-}
-
-try {
-	let paths = findFiles("./");
-	for (let path of paths) {
-		process.stderr.write("Reading file \"" + path + "\".\n");
-		let input = libfs.readFileSync(path, "utf8");
-		process.stderr.write("Parsing input.\n");
-		let generated = transform(input);
-		path = libpath.join(libpath.dirname(path), filename(path) + ".ts");
-		process.stderr.write("Writing file \"" + path + "\".\n");
-		libfs.writeFileSync(path, generated, "utf8");
+function run(): void {
+	let options = {
+		root: "./",
+		standalone: true
+	};
+	let found_unrecognized_argument = false;
+	for (let argv of process.argv.slice(2)) {
+		let parts: RegExpExecArray | null = null;
+		if (false) {
+		} else if ((parts = /^--root=(.+)$/.exec(argv)) != null) {
+			options.root = parts[1];
+		} else if ((parts = /^--standalone=(true|false)$/.exec(argv)) != null) {
+			options.standalone = parts[1] === "true" ? true : false;
+		} else {
+			found_unrecognized_argument = true;
+			process.stderr.write("Unrecognized argument \"" + argv + "\"!\n");
+		}
 	}
-	process.exit(0);
-} catch (error) {
-	process.stderr.write("An error occurred!\n");
+	if (found_unrecognized_argument) {
+		process.stderr.write("Arguments:\n");
+		process.stderr.write("	--root=string\n");
+		process.stderr.write("	--standalone=boolean\n");
+		process.exit(0);
+	}
+	let paths = findFiles(options.root);
+	let result = paths.reduce((sum, path) => {
+		process.stderr.write("Processing \"" + path + "\"...\n");
+		try {
+			let input = libfs.readFileSync(path, "utf8");
+			let generated = autoguard.transform(input, options.standalone);
+			path = libpath.join(libpath.dirname(path), filename(path) + ".ts");
+			libfs.writeFileSync(path, generated, "utf8");
+			return sum + 0;
+		} catch (error) {
+			process.stderr.write("\t" + error + "\n");
+			return sum + 1;
+		}
+	}, 0);
+	process.exit(result);
 }
 
-process.stderr.write("usage: autoguard [path | schema]\n");
-process.exit(1);
+run();
