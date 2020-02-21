@@ -1,9 +1,0 @@
-{
-	"compilerOptions": {
-		"lib": [
-			"es6"
-		],
-		"types": []
-	},
-	"extends": "../../tsconfig.json"
-}

@@ -9,6 +9,9 @@
 		"outDir": "./build/",
 		"rootDir": "./",
 		"strictNullChecks": true,
-		"target": "es6"
+		"target": "es6",
+		"types": [
+			"node"
+		]
 	}
 }
