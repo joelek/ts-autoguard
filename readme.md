@@ -82,7 +82,7 @@ let serializer = new autoguard.serialization.MessageSerializer<Autoguard>(Autogu
 let serialized = serializer.serialize("MyType", "Hello!");
 ```
 
-The serialized value may be stored on disk or transmitted through a network and can be recovered using the `deserialize()` method.
+The serialized value may be stored on disk or transmitted through a network and can be recovered using the `.deserialize()` method.
 
 ```ts
 serializer.deserialize(serialized, (type, data) => {
@@ -103,8 +103,8 @@ npm install joelek/ts-autoguard
 The type language is formally defined as a regular language which shares similarities with the type language in TypeScript.
 
 ```
-WhiteSpace = "\n" or "\t" or "\r" or " "
-OptionalWS = WhiteSpace*
+WhiteSpaceLetter = "\n" or "\t" or "\r" or " "
+WhiteSpace = WhiteSpaceLetter*
 AsciiLetterLowercase = "a" to "z"
 AsciiLetterUppercase = "A" to "Z"
 AsciiLetter = AsciiLetterLowercase or AsciiLetterUppercase
@@ -112,29 +112,29 @@ Digit = "0" to "9"
 DigitPositive = "1" to "9"
 IdentifierTail = AsciiLetter or Digit or "_"
 Identifier = AsciiLetter IdentifierTail*
-AnyType = OptionalWS "any" OptionalWS
-ArrayType = OptionalWS Type OptionalWS "[]" OptionalWS
-BooleanType = OptionalWS "boolean" OptionalWS
-IntersectionBodyTail = OptionalWS "&" OptionalWS Type
-IntersectionType = OptionalWS "(" OptionalWS Type IntersectionBodyTail* OptionalWS ")" OptionalWS
-NullType = OptionalWS "null" OptionalWS
-NumberType = OptionalWS "number" OptionalWS
-NumberLiteralType = OptionalWS Digit or (DigitPositive Digit*) OptionalWS
-ObjectKeyValue = OptionalWS Identifier OptionalWS ":" OptionalWS Type OptionalWS
-ObjectBodyTail = OptionalWS "," OptionalWS ObjectKeyValue
-ObjectBody = ObjectKeyValue ObjectBodyTail*
-ObjectType = OptionalWS "{" OptionalWS ObjectBody* OptionalWS "}" OptionalWS
-RecordType = OptionalWS "{" OptionalWS Type OptionalWS "}" OptionalWS
-ReferenceType = OptionalWS "@" Identifier
-StringType = OptionalWS "string" OptionalWS
+AnyType = WhiteSpace "any" WhiteSpace
+ArrayType = WhiteSpace Type WhiteSpace "[" WhiteSpace "]" WhiteSpace
+BooleanType = WhiteSpace "boolean" WhiteSpace
+IntersectionBodyTail = WhiteSpace "&" WhiteSpace Type WhiteSpace
+IntersectionType = WhiteSpace "(" WhiteSpace Type WhiteSpace IntersectionBodyTail* WhiteSpace ")" WhiteSpace
+NullType = WhiteSpace "null" WhiteSpace
+NumberType = WhiteSpace "number" WhiteSpace
+NumberLiteralType = WhiteSpace Digit or (DigitPositive Digit*) WhiteSpace
+ObjectKeyValue = WhiteSpace Identifier WhiteSpace ":" WhiteSpace Type WhiteSpace
+ObjectBodyTail = WhiteSpace "," WhiteSpace ObjectKeyValue WhiteSpace
+ObjectBody = WhiteSpace ObjectKeyValue WhiteSpace ObjectBodyTail* WhiteSpace
+ObjectType = WhiteSpace "{" WhiteSpace ObjectBody* WhiteSpace "}" WhiteSpaces
+RecordType = WhiteSpace "{" WhiteSpace Type WhiteSpace "}" WhiteSpace
+ReferenceType = WhiteSpace "@" Identifier WhiteSpace
+StringType = WhiteSpace "string" WhiteSpace
 StringLiteralLetter = AsciiLetter or Digit or "_" or "-"
-StringLiteralType = OptionalWS """ StringLiteralLetter* """ OptionalWS
-TupleBodyTail = OptionalWS "," OptionalWS Type
-TupleBody = Type TupleBodyTail*
-TupleType = OptionalWS "[" OptionalWS TupleBody* OptionalWS "]" OptionalWS
-UndefinedType = OptionalWS "undefined" OptionalWS
-UnionBodyTail = OptionalWS "|" OptionalWS Type
-UnionType = OptionalWS "(" OptionalWS Type UnionBodyTail* OptionalWS ")" OptionalWS
+StringLiteralType = WhiteSpace """ StringLiteralLetter* """ WhiteSpace
+TupleBodyTail = WhiteSpace "," WhiteSpace Type WhiteSpace
+TupleBody = WhiteSpace Type WhiteSpace TupleBodyTail* WhiteSpace
+TupleType = WhiteSpace "[" WhiteSpace TupleBody* WhiteSpace "]" WhiteSpace
+UndefinedType = WhiteSpace "undefined" WhiteSpace
+UnionBodyTail = WhiteSpace "|" WhiteSpace Type WhiteSpace
+UnionType = WhiteSpace "(" WhiteSpace Type WhiteSpace UnionBodyTail* WhiteSpace ")" WhiteSpace
 PrimitiveType = AnyType or BooleanType or NullType or NumberType or StringType or UndefinedType
 LiteralType = NumberLiteralType or StringLiteralType
 ComplexType = ArrayType or IntersectionType or ObjectType or RecordType or ReferenceType or TupleType or UnionType
