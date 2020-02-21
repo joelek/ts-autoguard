@@ -70,7 +70,7 @@ export class AnyType implements Type {
 	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
-		lines.push("	return true;");
+		lines.push("	return subject;");
 		lines.push("}");
 		return lines.join(options.eol);
 	}
