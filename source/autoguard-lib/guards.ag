@@ -1,0 +1,7 @@
+{
+	Boolean: boolean,
+	Number: number,
+	Null: null,
+	String: string,
+	Undefined: undefined
+}
