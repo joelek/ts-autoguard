@@ -1,6 +1,10 @@
+export type Options = {
+	eol: string;
+};
+
 export interface Type {
-	generateType(eol: string): string;
-	generateTypeGuard(eol: string): string;
+	generateType(options: Options): string;
+	generateTypeGuard(options: Options): string;
 };
 
 export const Type = {
@@ -59,16 +63,16 @@ export class AnyType implements Type {
 
 	}
 
-	generateType(eol: string): string {
+	generateType(options: Options): string {
 		return "any";
 	}
 
-	generateTypeGuard(eol: string): string {
+	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
 		lines.push("	return true;");
 		lines.push("}");
-		return lines.join(eol);
+		return lines.join(options.eol);
 	}
 
 	static readonly INSTANCE = new AnyType();
@@ -88,22 +92,22 @@ export class ArrayType implements Type {
 		this.type = type;
 	}
 
-	generateType(eol: string): string {
-		return this.type.generateType(eol) + "[]";
+	generateType(options: Options): string {
+		return this.type.generateType(options) + "[]";
 	}
 
-	generateTypeGuard(eol: string): string {
+	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
 		lines.push("	if ((subject != null) && (subject.constructor === Array)) {");
 		lines.push("		for (let i = 0; i < subject.length; i++) {");
-		lines.push("			(" + this.type.generateTypeGuard(eol + "\t\t\t") + ")(subject[i], path + \"[\" + i + \"]\");");
+		lines.push("			(" + this.type.generateTypeGuard({ ...options, eol: options.eol + "\t\t\t" }) + ")(subject[i], path + \"[\" + i + \"]\");");
 		lines.push("		}");
 		lines.push("		return subject;");
 		lines.push("	}");
 		lines.push("	throw \"Type guard \\\"Array\\\" failed at \\\"\" + path + \"\\\"!\";");
 		lines.push("}");
-		return lines.join(eol);
+		return lines.join(options.eol);
 	}
 
 	static parse(string: string): Type {
@@ -120,11 +124,11 @@ export class BooleanType implements Type {
 
 	}
 
-	generateType(eol: string): string {
+	generateType(options: Options): string {
 		return "boolean";
 	}
 
-	generateTypeGuard(eol: string): string {
+	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
 		lines.push("	if ((subject != null) && (subject.constructor === Boolean)) {");
@@ -132,7 +136,7 @@ export class BooleanType implements Type {
 		lines.push("	}");
 		lines.push("	throw \"Type guard \\\"Boolean\\\" failed at \\\"\" + path + \"\\\"!\";");
 		lines.push("}");
-		return lines.join(eol);
+		return lines.join(options.eol);
 	}
 
 	static readonly INSTANCE = new BooleanType();
@@ -157,10 +161,10 @@ export class IntersectionType implements Type {
 		return this;
 	}
 
-	generateType(eol: string): string {
+	generateType(options: Options): string {
 		let lines = new Array<string>();
 		for (let type of this.types) {
-			lines.push(type.generateType(eol));
+			lines.push(type.generateType(options));
 		}
 		let string = lines.join(" & ");
 		if (this.types.size > 1) {
@@ -169,15 +173,15 @@ export class IntersectionType implements Type {
 		return string
 	}
 
-	generateTypeGuard(eol: string): string {
+	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
 		for (let type of this.types) {
-			lines.push("	(" + type.generateTypeGuard(eol + "\t") + ")(subject, path);");
+			lines.push("	(" + type.generateTypeGuard({ ...options, eol: options.eol + "\t" }) + ")(subject, path);");
 		}
 		lines.push("	return subject;");
 		lines.push("}");
-		return lines.join(eol);
+		return lines.join(options.eol);
 	}
 
 	static parse(string: string): Type {
@@ -216,11 +220,11 @@ export class NullType implements Type {
 
 	}
 
-	generateType(eol: string): string {
+	generateType(options: Options): string {
 		return "null";
 	}
 
-	generateTypeGuard(eol: string): string {
+	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
 		lines.push("	if (subject === null) {");
@@ -228,7 +232,7 @@ export class NullType implements Type {
 		lines.push("	}");
 		lines.push("	throw \"Type guard \\\"Null\\\" failed at \\\"\" + path + \"\\\"!\";");
 		lines.push("}");
-		return lines.join(eol);
+		return lines.join(options.eol);
 	}
 
 	static readonly INSTANCE = new NullType();
@@ -246,11 +250,11 @@ export class NumberType implements Type {
 
 	}
 
-	generateType(eol: string): string {
+	generateType(options: Options): string {
 		return "number";
 	}
 
-	generateTypeGuard(eol: string): string {
+	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
 		lines.push("	if ((subject != null) && (subject.constructor === Number)) {");
@@ -258,7 +262,7 @@ export class NumberType implements Type {
 		lines.push("	}");
 		lines.push("	throw \"Type guard \\\"Number\\\" failed at \\\"\" + path + \"\\\"!\";");
 		lines.push("}");
-		return lines.join(eol);
+		return lines.join(options.eol);
 	}
 
 	static readonly INSTANCE = new NumberType();
@@ -278,19 +282,19 @@ export class NumberLiteralType implements Type {
 		this.value = value;
 	}
 
-	generateType(eol: string): string {
+	generateType(options: Options): string {
 		return "" + this.value;
 	}
 
-	generateTypeGuard(eol: string): string {
+	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
-		lines.push("	if (subject === " + this.generateType(eol + "\t") + ") {");
+		lines.push("	if (subject === " + this.generateType({ ...options, eol: options.eol + "\t" }) + ") {");
 		lines.push("		return subject;");
 		lines.push("	}");
 		lines.push("	throw \"Type guard \\\"NumericNumberLiteralTypeLiteralType\\\" failed at \\\"\" + path + \"\\\"!\";");
 		lines.push("}");
-		return lines.join(eol);
+		return lines.join(options.eol);
 	}
 
 	static parse(string: string): Type {
@@ -315,29 +319,29 @@ export class ObjectType implements Type {
 		return this;
 	}
 
-	generateType(eol: string): string {
+	generateType(options: Options): string {
 		if (this.members.size === 0) {
 			return "{}";
 		}
 		let lines = new Array<string>();
 		for (let [key, value] of this.members) {
-			lines.push("	" + key + ": " + value.generateType(eol + "\t"));
+			lines.push("	" + key + ": " + value.generateType({ ...options, eol: options.eol + "\t" }));
 		}
-		return "{" + eol + lines.join("," + eol) + eol + "}";
+		return "{" + options.eol + lines.join("," + options.eol) + options.eol + "}";
 	}
 
-	generateTypeGuard(eol: string): string {
+	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
 		lines.push("	if ((subject != null) && (subject.constructor === Object)) {");
 		for (let [key, value] of this.members) {
-			lines.push("		(" + value.generateTypeGuard(eol + "\t\t") + ")(subject." + key + ", path + \".\" + \"" + key + "\");");
+			lines.push("		(" + value.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject." + key + ", path + \".\" + \"" + key + "\");");
 		}
 		lines.push("		return subject;");
 		lines.push("	}");
 		lines.push("	throw \"Type guard \\\"Object\\\" failed at \\\"\" + path + \"\\\"!\";");
 		lines.push("}");
-		return lines.join(eol);
+		return lines.join(options.eol);
 	}
 
 	[Symbol.iterator](): Iterator<[string, Type]> {
@@ -384,22 +388,22 @@ export class RecordType implements Type {
 		this.type = type;
 	}
 
-	generateType(eol: string): string {
-		return "{ [key: string]: " + this.type.generateType(eol) + " }";
+	generateType(options: Options): string {
+		return "{ [key: string]: " + this.type.generateType(options) + " }";
 	}
 
-	generateTypeGuard(eol: string): string {
+	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
 		lines.push("	if ((subject != null) && (subject.constructor === Object)) {");
 		lines.push("		for (let key of Object.keys(subject)) {");
-		lines.push("			(" + this.type.generateTypeGuard(eol + "\t\t\t") + ")(subject[key], path + \"[\\\"\" + key + \"\\\"]\");");
+		lines.push("			(" + this.type.generateTypeGuard({ ...options, eol: options.eol + "\t\t\t" }) + ")(subject[key], path + \"[\\\"\" + key + \"\\\"]\");");
 		lines.push("		}");
 		lines.push("		return subject;");
 		lines.push("	}");
 		lines.push("	throw \"Type guard \\\"Record\\\" failed at \\\"\" + path + \"\\\"!\";");
 		lines.push("}");
-		return lines.join(eol);
+		return lines.join(options.eol);
 	}
 
 	static parse(string: string): Type {
@@ -418,11 +422,11 @@ export class ReferenceType implements Type {
 		this.typename = typename;
 	}
 
-	generateType(eol: string): string {
+	generateType(options: Options): string {
 		return this.typename;
 	}
 
-	generateTypeGuard(eol: string): string {
+	generateTypeGuard(options: Options): string {
 		return this.typename + ".as";
 	}
 
@@ -440,11 +444,11 @@ export class StringType implements Type {
 
 	}
 
-	generateType(eol: string): string {
+	generateType(options: Options): string {
 		return "string";
 	}
 
-	generateTypeGuard(eol: string): string {
+	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
 		lines.push("	if ((subject != null) && (subject.constructor === String)) {");
@@ -452,7 +456,7 @@ export class StringType implements Type {
 		lines.push("	}");
 		lines.push("	throw \"Type guard \\\"String\\\" failed at \\\"\" + path + \"\\\"!\";");
 		lines.push("}");
-		return lines.join(eol);
+		return lines.join(options.eol);
 	}
 
 	static readonly INSTANCE = new StringType();
@@ -472,19 +476,19 @@ export class StringLiteralType implements Type {
 		this.value = value;
 	}
 
-	generateType(eol: string): string {
+	generateType(options: Options): string {
 		return "\"" + this.value + "\"";
 	}
 
-	generateTypeGuard(eol: string): string {
+	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
-		lines.push("	if (subject === " + this.generateType(eol + "\t") + ") {");
+		lines.push("	if (subject === " + this.generateType({ ...options, eol: options.eol + "\t" }) + ") {");
 		lines.push("		return subject;");
 		lines.push("	}");
 		lines.push("	throw \"Type guard \\\"StringLiteral\\\" failed at \\\"\" + path + \"\\\"!\";");
 		lines.push("}");
-		return lines.join(eol);
+		return lines.join(options.eol);
 	}
 
 	static parse(string: string): Type {
@@ -509,27 +513,27 @@ export class TupleType implements Type {
 		return this;
 	}
 
-	generateType(eol: string): string {
+	generateType(options: Options): string {
 		let strings = new Array<string>();
 		for (let type of this.types) {
-			strings.push("	" + type.generateType(eol + "\t"));
+			strings.push("	" + type.generateType({ ...options, eol: options.eol + "\t" }));
 		}
-		return "[" + eol + strings.join("," + eol) + eol + "]";
+		return "[" + options.eol + strings.join("," + options.eol) + options.eol + "]";
 	}
 
-	generateTypeGuard(eol: string): string {
+	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
 		lines.push("	if ((subject != null) && (subject.constructor === Array)) {");
 		for (let i = 0; i < this.types.length; i++) {
 			let type = this.types[i];
-			lines.push("		(" + type.generateTypeGuard(eol + "\t\t") + ")(subject[" + i + "], path + \"[" + i + "]\");");
+			lines.push("		(" + type.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject[" + i + "], path + \"[" + i + "]\");");
 		}
 		lines.push("		return subject;");
 		lines.push("	}");
 		lines.push("	throw \"Type guard \\\"Tuple\\\" failed at \\\"\" + path + \"\\\"!\";");
 		lines.push("}");
-		return lines.join(eol);
+		return lines.join(options.eol);
 	}
 
 	static parse(string: string): Type {
@@ -563,11 +567,11 @@ export class UndefinedType implements Type {
 
 	}
 
-	generateType(eol: string): string {
+	generateType(options: Options): string {
 		return "undefined";
 	}
 
-	generateTypeGuard(eol: string): string {
+	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
 		lines.push("	if (subject === undefined) {");
@@ -575,7 +579,7 @@ export class UndefinedType implements Type {
 		lines.push("	}");
 		lines.push("	throw \"Type guard \\\"Undefined\\\" failed at \\\"\" + path + \"\\\"!\";");
 		lines.push("}");
-		return lines.join(eol);
+		return lines.join(options.eol);
 	}
 
 	static readonly INSTANCE = new UndefinedType();
@@ -600,10 +604,10 @@ export class UnionType implements Type {
 		return this;
 	}
 
-	generateType(eol: string): string {
+	generateType(options: Options): string {
 		let lines = new Array<string>();
 		for (let type of this.types) {
-			lines.push(type.generateType(eol));
+			lines.push(type.generateType(options));
 		}
 		let string = lines.join(" | ");
 		if (this.types.size > 1) {
@@ -612,17 +616,17 @@ export class UnionType implements Type {
 		return string
 	}
 
-	generateTypeGuard(eol: string): string {
+	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
 		for (let type of this.types) {
 			lines.push("	try {");
-			lines.push("		return (" + type.generateTypeGuard(eol + "\t\t") + ")(subject, path);");
+			lines.push("		return (" + type.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject, path);");
 			lines.push("	} catch (error) {}");
 		}
 		lines.push("	throw \"Type guard \\\"Union\\\" failed at \\\"\" + path + \"\\\"!\";");
 		lines.push("}");
-		return lines.join(eol);
+		return lines.join(options.eol);
 	}
 
 	static parse(string: string): Type {
@@ -668,17 +672,16 @@ export class Schema {
 		return this;
 	}
 
-	generateModule(): string {
-		let eol = "\r\n";
+	generateModule(options: Options): string {
 		let lines = new Array<string>();
 		lines.push("// This file was auto-generated by @joelek/ts-autoguard. Edit at own risk.");
 		lines.push("");
 		for (let [key, value] of this.types) {
-			lines.push("export type " + key + " = " + value.generateType(eol) + ";");
+			lines.push("export type " + key + " = " + value.generateType(options) + ";");
 			lines.push("");
 			lines.push("export const " + key + " = {");
 			lines.push("	as(subject: any, path: string = \"\"): " + key + " {");
-			lines.push("		return (" + value.generateTypeGuard(eol + "\t\t") + ")(subject, path);");
+			lines.push("		return (" + value.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject, path);");
 			lines.push("	},");
 			lines.push("	is(subject: any): subject is " + key + " {");
 			lines.push("		try {");
@@ -695,11 +698,11 @@ export class Schema {
 		for (let [key, value] of this.types) {
 			autoguard.add(key, new ReferenceType(key));
 		}
-		lines.push("export type Autoguard = " + autoguard.generateType(eol) + ";");
+		lines.push("export type Autoguard = " + autoguard.generateType(options) + ";");
 		lines.push("");
-		lines.push("export const Autoguard = " + autoguard.generateType(eol) + ";");
+		lines.push("export const Autoguard = " + autoguard.generateType(options) + ";");
 		lines.push("");
-		return lines.join(eol);
+		return lines.join(options.eol);
 	}
 
 	static parse(string: string): Schema {
