@@ -5,7 +5,7 @@ export type Boolean = boolean;
 export const Boolean = {
 	as(subject: any, path: string = ""): Boolean {
 		return ((subject, path) => {
-			if ((subject != null) && (subject.constructor === Boolean)) {
+			if ((subject != null) && (subject.constructor === globalThis.Boolean)) {
 				return subject;
 			}
 			throw "Type guard \"Boolean\" failed at \"" + path + "\"!";
@@ -26,7 +26,7 @@ export type Number = number;
 export const Number = {
 	as(subject: any, path: string = ""): Number {
 		return ((subject, path) => {
-			if ((subject != null) && (subject.constructor === Number)) {
+			if ((subject != null) && (subject.constructor === globalThis.Number)) {
 				return subject;
 			}
 			throw "Type guard \"Number\" failed at \"" + path + "\"!";
@@ -68,7 +68,7 @@ export type String = string;
 export const String = {
 	as(subject: any, path: string = ""): String {
 		return ((subject, path) => {
-			if ((subject != null) && (subject.constructor === String)) {
+			if ((subject != null) && (subject.constructor === globalThis.String)) {
 				return subject;
 			}
 			throw "Type guard \"String\" failed at \"" + path + "\"!";

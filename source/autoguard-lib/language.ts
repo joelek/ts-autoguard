@@ -100,7 +100,7 @@ export class ArrayType implements Type {
 	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
-		lines.push("	if ((subject != null) && (subject.constructor === Array)) {");
+		lines.push("	if ((subject != null) && (subject.constructor === globalThis.Array)) {");
 		lines.push("		for (let i = 0; i < subject.length; i++) {");
 		lines.push("			(" + this.type.generateTypeGuard({ ...options, eol: options.eol + "\t\t\t" }) + ")(subject[i], path + \"[\" + i + \"]\");");
 		lines.push("		}");
@@ -133,7 +133,7 @@ export class BooleanType implements Type {
 		let lines = new Array<string>();
 		if (options.standalone) {
 			lines.push("(subject, path) => {");
-			lines.push("	if ((subject != null) && (subject.constructor === Boolean)) {");
+			lines.push("	if ((subject != null) && (subject.constructor === globalThis.Boolean)) {");
 			lines.push("		return subject;");
 			lines.push("	}");
 			lines.push("	throw \"Type guard \\\"Boolean\\\" failed at \\\"\" + path + \"\\\"!\";");
@@ -267,7 +267,7 @@ export class NumberType implements Type {
 		let lines = new Array<string>();
 		if (options.standalone) {
 			lines.push("(subject, path) => {");
-			lines.push("	if ((subject != null) && (subject.constructor === Number)) {");
+			lines.push("	if ((subject != null) && (subject.constructor === globalThis.Number)) {");
 			lines.push("		return subject;");
 			lines.push("	}");
 			lines.push("	throw \"Type guard \\\"Number\\\" failed at \\\"\" + path + \"\\\"!\";");
@@ -346,7 +346,7 @@ export class ObjectType implements Type {
 	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
-		lines.push("	if ((subject != null) && (subject.constructor === Object)) {");
+		lines.push("	if ((subject != null) && (subject.constructor === globalThis.Object)) {");
 		for (let [key, value] of this.members) {
 			lines.push("		(" + value.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject." + key + ", path + \".\" + \"" + key + "\");");
 		}
@@ -408,8 +408,8 @@ export class RecordType implements Type {
 	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
-		lines.push("	if ((subject != null) && (subject.constructor === Object)) {");
-		lines.push("		for (let key of Object.keys(subject)) {");
+		lines.push("	if ((subject != null) && (subject.constructor === globalThis.Object)) {");
+		lines.push("		for (let key of globalThis.Object.keys(subject)) {");
 		lines.push("			(" + this.type.generateTypeGuard({ ...options, eol: options.eol + "\t\t\t" }) + ")(subject[key], path + \"[\\\"\" + key + \"\\\"]\");");
 		lines.push("		}");
 		lines.push("		return subject;");
@@ -465,7 +465,7 @@ export class StringType implements Type {
 		let lines = new Array<string>();
 		if (options.standalone) {
 			lines.push("(subject, path) => {");
-			lines.push("	if ((subject != null) && (subject.constructor === String)) {");
+			lines.push("	if ((subject != null) && (subject.constructor === globalThis.String)) {");
 			lines.push("		return subject;");
 			lines.push("	}");
 			lines.push("	throw \"Type guard \\\"String\\\" failed at \\\"\" + path + \"\\\"!\";");
@@ -541,7 +541,7 @@ export class TupleType implements Type {
 	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
 		lines.push("(subject, path) => {");
-		lines.push("	if ((subject != null) && (subject.constructor === Array)) {");
+		lines.push("	if ((subject != null) && (subject.constructor === globalThis.Array)) {");
 		for (let i = 0; i < this.types.length; i++) {
 			let type = this.types[i];
 			lines.push("		(" + type.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject[" + i + "], path + \"[" + i + "]\");");
