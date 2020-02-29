@@ -374,11 +374,17 @@ export class ObjectType implements Type {
 			while (offset + length <= segments.length) {
 				try {
 					let string = segments.slice(offset, offset + length).join(",");
-					let parts = /^\s*([A-Za-z][A-Za-z0-9_]*)\s*\:(.+)$/s.exec(string);
+					let parts = /^\s*([A-Za-z][A-Za-z0-9_]*)\s*([?]?)\s*\:(.+)$/s.exec(string);
 					if (parts === null) {
 						break;
 					}
-					let type = Type.parse(parts[2]);
+					let type = Type.parse(parts[3]);
+					if (parts[2] === "?") {
+						let union = new UnionType();
+						union.add(UndefinedType.INSTANCE);
+						union.add(type);
+						type = union;
+					}
 					instance.add(parts[1], type);
 					offset = offset + length;
 					length = 1;
