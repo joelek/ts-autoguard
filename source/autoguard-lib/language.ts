@@ -305,7 +305,7 @@ export class NumberLiteralType implements Type {
 		lines.push("	if (subject === " + this.generateType({ ...options, eol: options.eol + "\t" }) + ") {");
 		lines.push("		return subject;");
 		lines.push("	}");
-		lines.push("	throw \"Type guard \\\"NumericNumberLiteralTypeLiteralType\\\" failed at \\\"\" + path + \"\\\"!\";");
+		lines.push("	throw \"Type guard \\\"NumberLiteral\\\" failed at \\\"\" + path + \"\\\"!\";");
 		lines.push("}");
 		return lines.join(options.eol);
 	}
