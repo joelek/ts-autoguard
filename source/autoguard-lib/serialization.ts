@@ -1,8 +1,8 @@
 import * as stdlib from "@joelek/ts-stdlib";
 
 export type MessageGuard<A extends stdlib.routing.Message> = {
-	as(subject: any): A;
-	is(subject: any): subject is A;
+	as(subject: any, path?: string): A;
+	is(subject: any, path?: string): subject is A;
 };
 
 export type MessageGuardMap<A extends stdlib.routing.MessageMap<A>> = {
