@@ -22,6 +22,7 @@ function filename(path: string): string {
 
 function run(): void {
 	let options = {
+		eol: "\r\n",
 		root: "./",
 		standalone: true
 	};
@@ -29,6 +30,8 @@ function run(): void {
 	for (let argv of process.argv.slice(2)) {
 		let parts: RegExpExecArray | null = null;
 		if (false) {
+		} else if ((parts = /^--eol=(.+)$/.exec(argv)) != null) {
+			options.eol = parts[1];
 		} else if ((parts = /^--root=(.+)$/.exec(argv)) != null) {
 			options.root = parts[1];
 		} else if ((parts = /^--standalone=(true|false)$/.exec(argv)) != null) {
@@ -40,6 +43,7 @@ function run(): void {
 	}
 	if (found_unrecognized_argument) {
 		process.stderr.write("Arguments:\n");
+		process.stderr.write("	--eol=string\n");
 		process.stderr.write("	--root=string\n");
 		process.stderr.write("	--standalone=boolean\n");
 		process.exit(0);
@@ -49,7 +53,7 @@ function run(): void {
 		process.stderr.write("Processing \"" + path + "\"...\n");
 		try {
 			let input = libfs.readFileSync(path, "utf8");
-			let generated = autoguard.transform(input, options.standalone);
+			let generated = autoguard.transform(input, options);
 			path = libpath.join(libpath.dirname(path), filename(path) + ".ts");
 			libfs.writeFileSync(path, generated, "utf8");
 			return sum + 0;
