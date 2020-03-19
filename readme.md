@@ -126,6 +126,7 @@ IntersectionType = WhiteSpace "(" WhiteSpace Type WhiteSpace IntersectionBodyTai
 NullType = WhiteSpace "null" WhiteSpace
 NumberType = WhiteSpace "number" WhiteSpace
 NumberLiteralType = WhiteSpace Digit or (DigitPositive Digit*) WhiteSpace
+ObjectKey = Identifier
 ObjectKeyValue = WhiteSpace ObjectKey WhiteSpace "?"? WhiteSpace ":" WhiteSpace Type WhiteSpace
 ObjectBodyTail = WhiteSpace "," WhiteSpace ObjectKeyValue WhiteSpace
 ObjectBody = WhiteSpace ObjectKeyValue WhiteSpace ObjectBodyTail* WhiteSpace
