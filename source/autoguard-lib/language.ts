@@ -352,14 +352,19 @@ export class ObjectKey {
 	}
 };
 
+export type ObjectMember = {
+	type: Type;
+	optional: boolean;
+};
+
 export class ObjectType implements Type {
-	private members: Map<string, Type>;
+	private members: Map<string, ObjectMember>;
 
 	constructor() {
-		this.members = new Map<string, Type>();
+		this.members = new Map<string, ObjectMember>();
 	}
 
-	add(key: string, value: Type): this {
+	add(key: string, value: ObjectMember): this {
 		this.members.set(key, value);
 		return this;
 	}
@@ -370,7 +375,7 @@ export class ObjectType implements Type {
 		}
 		let lines = new Array<string>();
 		for (let [key, value] of this.members) {
-			lines.push("	\"" + key + "\": " + value.generateType({ ...options, eol: options.eol + "\t" }));
+			lines.push("	\"" + key + "\"" + (value.optional ? "?" : "") + ": " + value.type.generateType({ ...options, eol: options.eol + "\t" }));
 		}
 		return "{" + options.eol + lines.join("," + options.eol) + options.eol + "}";
 	}
@@ -380,7 +385,14 @@ export class ObjectType implements Type {
 		lines.push("(subject, path) => {");
 		lines.push("	if ((subject != null) && (subject.constructor === globalThis.Object)) {");
 		for (let [key, value] of this.members) {
-			lines.push("		(" + value.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject[\"" + key + "\"], path + \"[\\\"" + key + "\\\"]\");");
+			let type = value.type;
+			if (value.optional) {
+				let union = new UnionType();
+				union.add(UndefinedType.INSTANCE);
+				union.add(type);
+				type = union;
+			}
+			lines.push("		(" + type.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject[\"" + key + "\"], path + \"[\\\"" + key + "\\\"]\");");
 		}
 		lines.push("		return subject;");
 		lines.push("	}");
@@ -389,7 +401,7 @@ export class ObjectType implements Type {
 		return lines.join(options.eol);
 	}
 
-	[Symbol.iterator](): Iterator<[string, Type]> {
+	[Symbol.iterator](): Iterator<[string, ObjectMember]> {
 		return this.members[Symbol.iterator]();
 	}
 
@@ -413,13 +425,10 @@ export class ObjectType implements Type {
 					let key = ObjectKey.parse(parts[1]);
 					let optional = parts[2] === "?";
 					let type = Type.parse(parts[3]);
-					if (optional) {
-						let union = new UnionType();
-						union.add(UndefinedType.INSTANCE);
-						union.add(type);
-						type = union;
-					}
-					instance.add(key, type);
+					instance.add(key, {
+						type,
+						optional
+					});
 					offset = offset + length;
 					length = 1;
 					if (offset >= segments.length) {
@@ -761,7 +770,10 @@ export class Schema {
 		}
 		let autoguard = new ObjectType();
 		for (let [key, value] of this.types) {
-			autoguard.add(key, new ReferenceType(key));
+			autoguard.add(key, {
+				type: new ReferenceType(key),
+				optional: false
+			});
 		}
 		lines.push("export type Autoguard = " + autoguard.generateType(options) + ";");
 		lines.push("");
@@ -774,7 +786,7 @@ export class Schema {
 		let schema = ObjectType.parse(string);
 		let instance = new Schema();
 		for (let [key, value] of schema) {
-			instance.add(key, value);
+			instance.add(key, value.type);
 		}
 		return instance;
 	}
