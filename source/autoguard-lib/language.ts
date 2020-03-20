@@ -451,7 +451,7 @@ export class RecordType implements Type {
 	}
 
 	generateType(options: Options): string {
-		return "{ [key: string]: " + this.type.generateType(options) + " }";
+		return "{ [key: string]: undefined | " + this.type.generateType(options) + " }";
 	}
 
 	generateTypeGuard(options: Options): string {
