@@ -106,17 +106,17 @@ export const Undefined = {
 };
 
 export type Autoguard = {
-	Boolean: Boolean,
-	Number: Number,
-	Null: Null,
-	String: String,
-	Undefined: Undefined
+	"Boolean": Boolean,
+	"Number": Number,
+	"Null": Null,
+	"String": String,
+	"Undefined": Undefined
 };
 
 export const Autoguard = {
-	Boolean: Boolean,
-	Number: Number,
-	Null: Null,
-	String: String,
-	Undefined: Undefined
+	"Boolean": Boolean,
+	"Number": Number,
+	"Null": Null,
+	"String": String,
+	"Undefined": Undefined
 };

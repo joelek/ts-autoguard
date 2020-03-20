@@ -64,7 +64,8 @@ The schema definition below shows all constructs supported by Autoguard.
 	MyNumberLiteralType: 1337,
 	MyObjectType: {
 		string_member: string,
-		my_optional_member?: string
+		optional_member?: string,
+		"member-with-dashes": string
 	},
 	MyRecordOfStringType: { string },
 	MyReferenceType: @MyObjectType,
@@ -126,7 +127,7 @@ IntersectionType = WhiteSpace "(" WhiteSpace Type WhiteSpace IntersectionBodyTai
 NullType = WhiteSpace "null" WhiteSpace
 NumberType = WhiteSpace "number" WhiteSpace
 NumberLiteralType = WhiteSpace Digit or (DigitPositive Digit*) WhiteSpace
-ObjectKey = Identifier
+ObjectKey = Identifier or StringLiteral
 ObjectKeyValue = WhiteSpace ObjectKey WhiteSpace "?"? WhiteSpace ":" WhiteSpace Type WhiteSpace
 ObjectBodyTail = WhiteSpace "," WhiteSpace ObjectKeyValue WhiteSpace
 ObjectBody = WhiteSpace ObjectKeyValue WhiteSpace ObjectBodyTail* WhiteSpace
@@ -135,7 +136,8 @@ RecordType = WhiteSpace "{" WhiteSpace Type WhiteSpace "}" WhiteSpace
 ReferenceType = WhiteSpace "@" Identifier WhiteSpace
 StringType = WhiteSpace "string" WhiteSpace
 StringLiteralLetter = AsciiLetter or Digit or "_" or "-"
-StringLiteralType = WhiteSpace """ StringLiteralLetter* """ WhiteSpace
+StringLiteral = """ StringLiteralLetter* """
+StringLiteralType = WhiteSpace StringLiteral WhiteSpace
 TupleBodyTail = WhiteSpace "," WhiteSpace Type WhiteSpace
 TupleBody = WhiteSpace Type WhiteSpace TupleBodyTail* WhiteSpace
 TupleType = WhiteSpace "[" WhiteSpace TupleBody* WhiteSpace "]" WhiteSpace

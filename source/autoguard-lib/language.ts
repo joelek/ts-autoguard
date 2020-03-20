@@ -1,3 +1,23 @@
+export class Identifier {
+	static parse(string: string): string {
+		let parts = /^([A-Za-z][A-Za-z0-9_]*)$/s.exec(string);
+		if (parts !== null) {
+			return parts[1];
+		}
+		throw "Not an Identifier!";
+	}
+};
+
+export class StringLiteral {
+	static parse(string: string): string {
+		let parts = /^["]([A-Za-z0-9_-]*)["]$/s.exec(string);
+		if (parts !== null) {
+			return parts[1];
+		}
+		throw "Not a StringLiteral!";
+	}
+}
+
 export type Options = {
 	eol: string;
 	standalone: boolean;
@@ -320,6 +340,18 @@ export class NumberLiteralType implements Type {
 	}
 };
 
+export class ObjectKey {
+	static parse(string: string): string {
+		try {
+			return Identifier.parse(string);
+		} catch (error) {}
+		try {
+			return StringLiteral.parse(string);
+		} catch (error) {}
+		throw "Not an ObjectKey!";
+	}
+};
+
 export class ObjectType implements Type {
 	private members: Map<string, Type>;
 
@@ -338,7 +370,7 @@ export class ObjectType implements Type {
 		}
 		let lines = new Array<string>();
 		for (let [key, value] of this.members) {
-			lines.push("	" + key + ": " + value.generateType({ ...options, eol: options.eol + "\t" }));
+			lines.push("	\"" + key + "\": " + value.generateType({ ...options, eol: options.eol + "\t" }));
 		}
 		return "{" + options.eol + lines.join("," + options.eol) + options.eol + "}";
 	}
@@ -348,7 +380,7 @@ export class ObjectType implements Type {
 		lines.push("(subject, path) => {");
 		lines.push("	if ((subject != null) && (subject.constructor === globalThis.Object)) {");
 		for (let [key, value] of this.members) {
-			lines.push("		(" + value.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject." + key + ", path + \".\" + \"" + key + "\");");
+			lines.push("		(" + value.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject[\"" + key + "\"], path + \"[\\\"" + key + "\\\"]\");");
 		}
 		lines.push("		return subject;");
 		lines.push("	}");
@@ -374,18 +406,20 @@ export class ObjectType implements Type {
 			while (offset + length <= segments.length) {
 				try {
 					let string = segments.slice(offset, offset + length).join(",");
-					let parts = /^\s*([A-Za-z][A-Za-z0-9_]*)\s*([?]?)\s*\:(.+)$/s.exec(string);
+					let parts = /^\s*([^?:]+)\s*([?]?)\s*\:(.+)$/s.exec(string);
 					if (parts === null) {
 						break;
 					}
+					let key = ObjectKey.parse(parts[1]);
+					let optional = parts[2] === "?";
 					let type = Type.parse(parts[3]);
-					if (parts[2] === "?") {
+					if (optional) {
 						let union = new UnionType();
 						union.add(UndefinedType.INSTANCE);
 						union.add(type);
 						type = union;
 					}
-					instance.add(parts[1], type);
+					instance.add(key, type);
 					offset = offset + length;
 					length = 1;
 					if (offset >= segments.length) {
