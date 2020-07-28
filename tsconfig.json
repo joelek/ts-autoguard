@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"composite": true,
-		"module": "none",
+		"module": "commonjs",
 		"moduleResolution": "node",
 		"noImplicitAny": true,
 		"noImplicitReturns": true,
