@@ -154,7 +154,7 @@ export class BooleanType implements Type {
 		if (options.standalone) {
 			lines.push("(subject, path) => {");
 			lines.push("	if ((subject != null) && (subject.constructor === globalThis.Boolean)) {");
-			lines.push("		return subject;");
+			lines.push("		return subject as boolean;");
 			lines.push("	}");
 			lines.push("	throw \"Type guard \\\"Boolean\\\" failed at \\\"\" + path + \"\\\"!\";");
 			lines.push("}");
@@ -288,7 +288,7 @@ export class NumberType implements Type {
 		if (options.standalone) {
 			lines.push("(subject, path) => {");
 			lines.push("	if ((subject != null) && (subject.constructor === globalThis.Number)) {");
-			lines.push("		return subject;");
+			lines.push("		return subject as number;");
 			lines.push("	}");
 			lines.push("	throw \"Type guard \\\"Number\\\" failed at \\\"\" + path + \"\\\"!\";");
 			lines.push("}");
@@ -515,7 +515,7 @@ export class StringType implements Type {
 		if (options.standalone) {
 			lines.push("(subject, path) => {");
 			lines.push("	if ((subject != null) && (subject.constructor === globalThis.String)) {");
-			lines.push("		return subject;");
+			lines.push("		return subject as string;");
 			lines.push("	}");
 			lines.push("	throw \"Type guard \\\"String\\\" failed at \\\"\" + path + \"\\\"!\";");
 			lines.push("}");
