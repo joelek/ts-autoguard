@@ -1,14 +1,16 @@
 {
 	"bin": {
-		"autoguard": "./bin.js"
+		"autoguard": "./build/autoguard-cli/index.js"
+	},
+	"devDependencies": {
+		"@types/node": "^13.13.15",
+		"typescript": "^3.9.7"
 	},
 	"dependencies": {
-		"@joelek/ts-stdlib": "github:joelek/ts-stdlib",
-		"@types/node": "^13",
-		"typescript": "^3"
+		"@joelek/ts-stdlib": "github:joelek/ts-stdlib"
 	},
 	"license": "MIT",
-	"main": "./build/source/autoguard-lib/index.js",
+	"main": "./build/autoguard-lib/index.js",
 	"name": "@joelek/ts-autoguard",
 	"repository": {
 		"type": "git",
@@ -16,8 +18,7 @@
 	},
 	"scripts": {
 		"build": "rm -rf ./build/ && npx tsc --build",
-		"clean": "rm -rf ./build/ ./node_modules/",
-		"install": "npm run build"
+		"clean": "rm -rf ./build/ ./node_modules/"
 	},
 	"version": "3.0.0"
 }

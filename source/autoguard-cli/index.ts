@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import * as libfs from "fs";
 import * as libpath from "path";
 import * as autoguard from "../autoguard-lib";
