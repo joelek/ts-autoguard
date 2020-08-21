@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import * as libfs from "fs";
+import * as libos from "os";
 import * as libpath from "path";
 import * as autoguard from "../autoguard-lib";
 
@@ -24,7 +25,7 @@ function filename(path: string): string {
 
 function run(): void {
 	let options = {
-		eol: "\r\n",
+		eol: libos.EOL,
 		root: "./",
 		standalone: true
 	};
