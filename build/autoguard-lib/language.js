@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Schema = exports.UnionType = exports.UndefinedType = exports.TupleType = exports.StringLiteralType = exports.StringType = exports.ReferenceType = exports.RecordType = exports.ObjectType = exports.ObjectKey = exports.NumberLiteralType = exports.NumberType = exports.NullType = exports.IntersectionType = exports.BooleanType = exports.ArrayType = exports.AnyType = exports.Type = exports.StringLiteral = exports.Identifier = void 0;
 class Identifier {
     static parse(string) {
         let parts = /^([A-Za-z][A-Za-z0-9_]*)$/s.exec(string);

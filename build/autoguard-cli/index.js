@@ -2,6 +2,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const libfs = require("fs");
+const libos = require("os");
 const libpath = require("path");
 const autoguard = require("../autoguard-lib");
 function findFiles(path, paths = []) {
@@ -23,7 +24,7 @@ function filename(path) {
 }
 function run() {
     let options = {
-        eol: "\r\n",
+        eol: libos.EOL,
         root: "./",
         standalone: true
     };
