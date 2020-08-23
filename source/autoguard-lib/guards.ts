@@ -5,8 +5,6 @@ type IntersectionOfUnion<A> = (A extends any ? (_: A) => void : never) extends (
 type TupleOf<A extends any[]> = [...A];
 type UnionOf<A extends any[]> = A[number];
 
-export type Any = any;
-
 export const Any = {
 	as(subject: any, path: string = ""): any {
 		return subject;
@@ -44,8 +42,6 @@ export const Array = {
 		};
 	}
 };
-
-export type Boolean = boolean;
 
 export const Boolean = {
 	as(subject: any, path: string = ""): boolean {
@@ -85,8 +81,6 @@ export const Intersection = {
 	}
 };
 
-export type Null = null;
-
 export const Null = {
 	as(subject: any, path: string = ""): null {
 		if (subject === null) {
@@ -103,8 +97,6 @@ export const Null = {
 		return true;
 	}
 };
-
-export type Number = number;
 
 export const Number = {
 	as(subject: any, path: string = ""): number {
@@ -192,8 +184,6 @@ export const Record = {
 	}
 };
 
-export type String = string;
-
 export const String = {
 	as(subject: any, path: string = ""): string {
 		if ((subject != null) && (subject.constructor === globalThis.String)) {
@@ -256,8 +246,6 @@ export const Tuple = {
 	}
 };
 
-export type Undefined = undefined;
-
 export const Undefined = {
 	as(subject: any, path: string = ""): undefined {
 		if (subject === undefined) {
@@ -296,22 +284,4 @@ export const Union = {
 			}
 		};
 	}
-};
-
-export type Autoguard = {
-	"Any": Any,
-	"Boolean": Boolean,
-	"Number": Number,
-	"Null": Null,
-	"String": String,
-	"Undefined": Undefined
-};
-
-export const Autoguard = {
-	"Any": Any,
-	"Boolean": Boolean,
-	"Number": Number,
-	"Null": Null,
-	"String": String,
-	"Undefined": Undefined
 };
