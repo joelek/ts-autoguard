@@ -10,7 +10,7 @@ Autoguard generates TypeScript type definitions and type guards from schema defi
 
 ```ts
 {
-	MyType: string
+	MyArrayOfStringType: string[]
 }
 ```
 
@@ -23,20 +23,28 @@ npx autoguard
 The schema definition shown in the previous example would generate the following TypeScript code.
 
 ```ts
-export type MyType = string;
+export type MyArrayOfStringType = string[];
 
-export const MyType = {
-	as(subject: any, path: string = ""): MyType {
+export const MyArrayOfStringType = {
+	as(subject: any, path: string = ""): MyArrayOfStringType {
 		return ((subject, path) => {
-			if ((subject != null) && (subject.constructor === String)) {
+			if ((subject != null) && (subject.constructor === globalThis.Array)) {
+				for (let i = 0; i < subject.length; i++) {
+					((subject, path) => {
+						if ((subject != null) && (subject.constructor === globalThis.String)) {
+							return subject as string;
+						}
+						throw "Type guard \"String\" failed at \"" + path + "\"!";
+					})(subject[i], path + "[" + i + "]");
+				}
 				return subject;
 			}
-			throw "Type guard \"String\" failed at \"" + path + "\"!";
+			throw "Type guard \"Array\" failed at \"" + path + "\"!";
 		})(subject, path);
 	},
-	is(subject: any): subject is MyType {
+	is(subject: any): subject is MyArrayOfStringType {
 		try {
-			MyType.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
