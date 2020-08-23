@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.MessageSerializer = void 0;
 class MessageSerializer {
     constructor(guards) {
         this.guards = guards;

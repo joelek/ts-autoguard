@@ -1,7 +1,11 @@
 import * as stdlib from "@joelek/ts-stdlib";
+export declare type Message = stdlib.routing.Message;
 export declare type MessageGuard<A extends stdlib.routing.Message> = {
     as(subject: any, path?: string): A;
     is(subject: any, path?: string): subject is A;
+};
+export declare type MessageGuardTuple<A extends stdlib.routing.Message[]> = {
+    [B in keyof A]: MessageGuard<A[B]>;
 };
 export declare type MessageGuardMap<A extends stdlib.routing.MessageMap<A>> = {
     [B in keyof A]: MessageGuard<A[B]>;
