@@ -2,6 +2,66 @@
 
 Auto-generated unintrusive type guards for TypeScript.
 
+## Motivation
+
+JSON is a standardized and commonly used format for which JavaScript runtimes contain built-in serialization functionality. The TypeScript return type of the deserialization function `JSON.parse()` is `any` since there is no way for the TypeScript compiler to know what the serialized data consists of. The TypeScript `any` type is flexible and allows you to treat it as pretty much anything. This is both extremely useful and incredibly dangerous for the runtime safety of an application.
+
+Type assertions are TypeScript constructs used for asserting type information that is only informally known. It is not uncommon to see JSON deserialization followed by a type assertion in code handling API communication or file IO.
+
+```ts
+const numbers = [ 0, 1, 2 ];
+const serialized = JSON.stringify(numbers);
+const deserialized = JSON.parse(serialized) as number[];
+const sum = deserialized.reduce((sum, number) => {
+	return sum + number;
+}, 0);
+```
+
+The logic of the example shown above is perfectly sound but the code is prone to errors. We can change the original list of numbers to a list of strings without the TypeScript compiler noticing the error introduced. This has some major implications.
+
+```ts
+const numbers = [ "0", "1", "2" ];
+const serialized = JSON.stringify(numbers);
+const deserialized = JSON.parse(serialized) as number[];
+const sum = deserialized.reduce((sum, number) => {
+	return sum + number;
+}, 0);
+```
+
+Since the type assertion is performed at compile-time, TypeScript still infers the type of sum as `number` while the runtime type has changed to `string`. The sum changes from the number 3 to the string "0012". Experienced JavaScript developers may notice the error since the error is introduced locally.
+
+A real-world example will most likely consist of serialization and deserialization occuring in separate applications, often executing on two different devices connected through a network.
+
+```ts
+const deserialized = JSON.parse(serialized) as number[];
+const sum = deserialized.reduce((sum, number) => {
+	return sum + number;
+}, 0);
+```
+
+The correctness of the consuming application depends on how well the contract established between it and the producing application is uphold. Unfortunately, mistakes happen and contracts may be broken.
+
+Type assertions provide no automatic warning mechanisms and broken contracts will in the best case be noticed as strange runtime behaviours in the development environment of the consuming application.
+
+It is not uncommon for the producing application to be maintained by an entirely different organization. In that case, strange runtime behaviours arising from broken contracts may occur in the production environment of the consuming application. Since errors have a tendency to propagate, the consequences may be severe!
+
+Type guards are intended to prevent from the consequences of broken contracts by embedding runtime assertions into JavaScript code. This guarantees that the consuming application executes with correct type information as the developer intended.
+
+```ts
+import * as autoguard from "@joelek/ts-autoguard";
+
+const { Array, Number } = { ...autoguard.guards };
+const guard = Array.of(Number);
+const deserialized = guard.as(JSON.parse(serialized));
+const sum = deserialized.reduce((sum, number) => {
+	return sum + number;
+}, 0);
+```
+
+The type assertion has been replaced by a type guard assertion using `guard.as(...)`. The code in the example will throw an error if a broken contract is detected.
+
+Type guards also support checking using `guard.is(...)` for use in branching decisions. Type checks will not throw errors but instead return true or false depending on the success of the check.
+
 ## Features
 
 ### Code generation
