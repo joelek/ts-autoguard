@@ -16,6 +16,30 @@ export const Any = {
 	}
 };
 
+export const Array = {
+	of<A extends serialization.Message>(guard: serialization.MessageGuard<A>): serialization.MessageGuard<Array<A>> {
+		return {
+			as(subject: any, path: string = ""): Array<A> {
+				if ((subject != null) && (subject.constructor === globalThis.Array)) {
+					for (let i = 0; i < subject.length; i++) {
+						guard.as(subject[i], path + "[" + i + "]");
+					}
+					return subject;
+				}
+				throw "Type guard \"Array\" failed at \"" + path + "\"!";
+			},
+			is(subject: any): subject is Array<A> {
+				try {
+					this.as(subject);
+				} catch (error) {
+					return false;
+				}
+				return true;
+			}
+		};
+	}
+};
+
 export type Boolean = boolean;
 
 export const Boolean = {
@@ -73,6 +97,75 @@ export const Number = {
 	}
 };
 
+export const NumberLiteral = {
+	of<A extends number>(value: A): serialization.MessageGuard<A> {
+		return {
+			as(subject: any, path: string = ""): A {
+				if (subject === value) {
+					return subject;
+				}
+				throw "Type guard \"NumberLiteral\" failed at \"" + path + "\"!";
+			},
+			is(subject: any): subject is A {
+				try {
+					this.as(subject);
+				} catch (error) {
+					return false;
+				}
+				return true;
+			}
+		};
+	}
+};
+
+export const Object = {
+	of<A extends { [key: string]: serialization.Message }>(guards: serialization.MessageGuardMap<A>): serialization.MessageGuard<A> {
+		return {
+			as(subject: any, path: string = ""): A {
+				if ((subject != null) && (subject.constructor === globalThis.Object)) {
+					for (let key in guards) {
+						guards[key].as(subject[key], path + "[\"" + key + "\"]");
+					}
+					return subject;
+				}
+				throw "Type guard \"Object\" failed at \"" + path + "\"!";
+			},
+			is(subject: any): subject is A {
+				try {
+					this.as(subject);
+				} catch (error) {
+					return false;
+				}
+				return true;
+			}
+		};
+	}
+};
+
+export const Record = {
+	of<A extends serialization.Message>(guard: serialization.MessageGuard<A>): serialization.MessageGuard<Record<string, undefined | A>> {
+		return {
+			as(subject: any, path: string = ""): Record<string, undefined | A> {
+				if ((subject != null) && (subject.constructor === globalThis.Object)) {
+					for (let key of globalThis.Object.keys(subject)) {
+						guard.as(subject[key], path + "[\"" + key + "\"]");
+					}
+					return subject;
+				}
+				throw "Type guard \"Record\" failed at \"" + path + "\"!";
+			},
+			is(subject: any): subject is Record<string, undefined | A> {
+				try {
+					this.as(subject);
+				} catch (error) {
+					return false;
+				}
+				return true;
+			}
+		};
+	}
+};
+
 export type String = string;
 
 export const String = {
@@ -89,6 +182,27 @@ export const String = {
 			return false;
 		}
 		return true;
+	}
+};
+
+export const StringLiteral = {
+	of<A extends string>(value: A): serialization.MessageGuard<A> {
+		return {
+			as(subject: any, path: string = ""): A {
+				if (subject === value) {
+					return subject;
+				}
+				throw "Type guard \"StringLiteral\" failed at \"" + path + "\"!";
+			},
+			is(subject: any): subject is A {
+				try {
+					this.as(subject);
+				} catch (error) {
+					return false;
+				}
+				return true;
+			}
+		};
 	}
 };
 
