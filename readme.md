@@ -107,10 +107,10 @@ serializer.deserialize(serialized, (type, data) => {
 
 ## Configure
 
-Install this package from GitHub.
+Autoguard releases follow semantic versioning and release packages are published using the GitHub platform. Use the following command to install the latest release.
 
 ```
-npm install joelek/ts-autoguard
+npm install joelek/ts-autoguard#semver:^3
 ```
 
 ## Syntax
