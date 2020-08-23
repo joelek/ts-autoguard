@@ -273,7 +273,10 @@ export const MyTupleType = {
 			if ((subject != null) && (subject.constructor === globalThis.Array)) {
 				(autoguard.guards.String.as)(subject[0], path + "[0]");
 				(autoguard.guards.Number.as)(subject[1], path + "[1]");
-				return subject;
+				return subject as [
+					string,
+					number
+				];
 			}
 			throw "Type guard \"Tuple\" failed at \"" + path + "\"!";
 		})(subject, path);

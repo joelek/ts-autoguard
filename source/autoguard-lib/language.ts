@@ -595,7 +595,7 @@ export class TupleType implements Type {
 			let type = this.types[i];
 			lines.push("		(" + type.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject[" + i + "], path + \"[" + i + "]\");");
 		}
-		lines.push("		return subject;");
+		lines.push("		return subject as " + this.generateType({ ...options, eol: options.eol + "\t\t" }) + ";");
 		lines.push("	}");
 		lines.push("	throw \"Type guard \\\"Tuple\\\" failed at \\\"\" + path + \"\\\"!\";");
 		lines.push("}");

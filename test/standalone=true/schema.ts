@@ -341,7 +341,10 @@ export const MyTupleType = {
 					}
 					throw "Type guard \"Number\" failed at \"" + path + "\"!";
 				})(subject[1], path + "[1]");
-				return subject;
+				return subject as [
+					string,
+					number
+				];
 			}
 			throw "Type guard \"Tuple\" failed at \"" + path + "\"!";
 		})(subject, path);
