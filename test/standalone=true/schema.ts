@@ -10,7 +10,7 @@ export const MyAnyType = {
 	},
 	is(subject: any): subject is MyAnyType {
 		try {
-			MyAnyType.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
@@ -39,7 +39,7 @@ export const MyArrayOfStringType = {
 	},
 	is(subject: any): subject is MyArrayOfStringType {
 		try {
-			MyArrayOfStringType.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
@@ -60,7 +60,7 @@ export const MyBooleanType = {
 	},
 	is(subject: any): subject is MyBooleanType {
 		try {
-			MyBooleanType.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
@@ -106,7 +106,7 @@ export const MyIntersectionType = {
 	},
 	is(subject: any): subject is MyIntersectionType {
 		try {
-			MyIntersectionType.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
@@ -127,7 +127,7 @@ export const MyNullType = {
 	},
 	is(subject: any): subject is MyNullType {
 		try {
-			MyNullType.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
@@ -148,7 +148,7 @@ export const MyNumberType = {
 	},
 	is(subject: any): subject is MyNumberType {
 		try {
-			MyNumberType.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
@@ -169,7 +169,7 @@ export const MyNumberLiteralType = {
 	},
 	is(subject: any): subject is MyNumberLiteralType {
 		try {
-			MyNumberLiteralType.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
@@ -225,7 +225,7 @@ export const MyObjectType = {
 	},
 	is(subject: any): subject is MyObjectType {
 		try {
-			MyObjectType.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
@@ -254,7 +254,7 @@ export const MyRecordOfStringType = {
 	},
 	is(subject: any): subject is MyRecordOfStringType {
 		try {
-			MyRecordOfStringType.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
@@ -270,7 +270,7 @@ export const MyReferenceType = {
 	},
 	is(subject: any): subject is MyReferenceType {
 		try {
-			MyReferenceType.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
@@ -291,7 +291,7 @@ export const MyStringType = {
 	},
 	is(subject: any): subject is MyStringType {
 		try {
-			MyStringType.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
@@ -312,7 +312,7 @@ export const MyStringLiteralType = {
 	},
 	is(subject: any): subject is MyStringLiteralType {
 		try {
-			MyStringLiteralType.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
@@ -351,7 +351,7 @@ export const MyTupleType = {
 	},
 	is(subject: any): subject is MyTupleType {
 		try {
-			MyTupleType.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
@@ -372,7 +372,7 @@ export const MyUndefinedType = {
 	},
 	is(subject: any): subject is MyUndefinedType {
 		try {
-			MyUndefinedType.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
@@ -406,7 +406,7 @@ export const MyUnionType = {
 	},
 	is(subject: any): subject is MyUnionType {
 		try {
-			MyUnionType.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}

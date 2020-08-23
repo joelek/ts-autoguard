@@ -759,7 +759,7 @@ export class Schema {
 			lines.push("	},");
 			lines.push("	is(subject: any): subject is " + key + " {");
 			lines.push("		try {");
-			lines.push("			" + key + ".as(subject);");
+			lines.push("			this.as(subject);");
 			lines.push("		} catch (error) {");
 			lines.push("			return false;");
 			lines.push("		}");

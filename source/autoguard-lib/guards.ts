@@ -27,7 +27,7 @@ export const Boolean = {
 	},
 	is(subject: any): subject is boolean {
 		try {
-			Boolean.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
@@ -46,7 +46,7 @@ export const Null = {
 	},
 	is(subject: any): subject is null {
 		try {
-			Number.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
@@ -65,7 +65,7 @@ export const Number = {
 	},
 	is(subject: any): subject is number {
 		try {
-			Null.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
@@ -84,7 +84,7 @@ export const String = {
 	},
 	is(subject: any): subject is string {
 		try {
-			String.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
@@ -103,7 +103,7 @@ export const Undefined = {
 	},
 	is(subject: any): subject is undefined {
 		try {
-			Undefined.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
