@@ -64,9 +64,28 @@ Type guards also support checking using `guard.is(...)` for use in branching dec
 
 ## Features
 
+### Type guards
+
+Autoguard can be used to manually create type guards for your data.
+
+```ts
+import * as autoguard from "@joelek/ts-autoguard";
+
+const { Array, Number, Object, String } = { ...autoguard.guards };
+const guard = Array.of(Object.of({
+	id: String,
+	name: String,
+	age: Number
+}));
+```
+
+NB: This feature requires that you compile your code using TypeScript 4 or newer.
+
 ### Code generation
 
-Autoguard generates TypeScript type definitions and type guards from schema definitions. A schema definition may look like in the following example.
+Autoguard can generate TypeScript type definitions and type guards from schema definitions. Type definitions can be used to annotate TypeScript code and will disappear when transpiled to JavaScript.
+
+A schema definition may look like in the following example.
 
 ```ts
 {
@@ -80,7 +99,7 @@ Autoguard reads schema definitions from `.ag` files and generates the correspond
 npx autoguard
 ```
 
-The schema definition shown in the previous example would generate the following TypeScript code.
+The schema definition shown in the previous example will generate the following module. This module is quite verbose but there are no runtime dependencies.
 
 ```ts
 export type MyArrayOfStringType = string[];
@@ -113,11 +132,21 @@ export const MyArrayOfStringType = {
 };
 ```
 
-Type definitions can be used to annotate TypeScript code and will disappear when transpiled to JavaScript.
+Autoguard can generate significantly less verbose modules with the addition of a runtime dependency.
 
-Type guards can be used to check whether a certain value is type compatible with the corresponding type definition using `MyType.is(...)`. Type guards can even be used to assert type compatibility using `MyType.as(...)`.
+```
+npx autoguard --standalone=false
+```
 
-Type guards do not disappear when transpiled to JavaScript as they are intended as runtime guards for values where type information only is informally known. This often occurs when reading files or when communicating through APIs.
+```
+import * as autoguard from "@joelek/ts-autoguard";
+
+const { Array, String } = { ...autoguard.guards };
+export type MyArrayOfStringType = string[];
+export const MyArrayOfStringType = Array.of(String);
+```
+
+NB: This feature requires that you compile your code using TypeScript 4 or newer.
 
 The schema definition below shows all constructs supported by Autoguard.
 
@@ -170,7 +199,7 @@ serializer.deserialize(serialized, (type, data) => {
 Autoguard releases follow semantic versioning and release packages are published using the GitHub platform. Use the following command to install the latest release.
 
 ```
-npm install joelek/ts-autoguard#semver:^3
+npm install joelek/ts-autoguard#semver:^4
 ```
 
 ## Syntax
