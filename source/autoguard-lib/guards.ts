@@ -1,5 +1,21 @@
 import * as serialization from "./serialization";
 
+export type Any = any;
+
+export const Any = {
+	as(subject: any, path: string = ""): any {
+		return subject;
+	},
+	is(subject: any): subject is any {
+		try {
+			Any.as(subject);
+		} catch (error) {
+			return false;
+		}
+		return true;
+	}
+};
+
 export type Boolean = boolean;
 
 export const Boolean = {
@@ -96,6 +112,7 @@ export const Undefined = {
 };
 
 export type Autoguard = {
+	"Any": Any,
 	"Boolean": Boolean,
 	"Number": Number,
 	"Null": Null,
@@ -104,6 +121,7 @@ export type Autoguard = {
 };
 
 export const Autoguard = {
+	"Any": Any,
 	"Boolean": Boolean,
 	"Number": Number,
 	"Null": Null,
