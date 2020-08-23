@@ -2,7 +2,7 @@
 
 import * as autoguard from "../../";
 
-const { Any, Array, Boolean, Null, Number, NumberLiteral, Object, Record, String, StringLiteral, Undefined } = { ...autoguard.guards };
+const { Any, Array, Boolean, Intersection, Null, Number, NumberLiteral, Object, Record, String, StringLiteral, Tuple, Undefined, Union } = { ...autoguard.guards };
 
 export type MyAnyType = any;
 
@@ -22,33 +22,14 @@ export type MyIntersectionType = ({
 	"another_string_member": string
 });
 
-export const MyIntersectionType = {
-	as(subject: any, path: string = ""): ({
-		"a_string_member": string
-	} & {
-		"another_string_member": string
-	}) {
-		(Object.of({
-			"a_string_member": String
-		})).as(subject, path);
-		(Object.of({
-			"another_string_member": String
-		})).as(subject, path);
-		return subject;
-	},
-	is(subject: any): subject is ({
-		"a_string_member": string
-	} & {
-		"another_string_member": string
-	}) {
-		try {
-			this.as(subject);
-		} catch (error) {
-			return false;
-		}
-		return true;
-	}
-};
+export const MyIntersectionType = Intersection.of(
+	Object.of({
+		"a_string_member": String
+	}),
+	Object.of({
+		"another_string_member": String
+	})
+);
 
 export type MyNullType = null;
 
@@ -70,25 +51,10 @@ export type MyObjectType = {
 
 export const MyObjectType = Object.of({
 	"string_member": String,
-	"optional_member": {
-		as(subject: any, path: string = ""): (undefined | string) {
-			try {
-				return (Undefined).as(subject, path);
-			} catch (error) {}
-			try {
-				return (String).as(subject, path);
-			} catch (error) {}
-			throw "Type guard \"Union\" failed at \"" + path + "\"!";
-		},
-		is(subject: any): subject is (undefined | string) {
-			try {
-				this.as(subject);
-			} catch (error) {
-				return false;
-			}
-			return true;
-		}
-	},
+	"optional_member": Union.of(
+		Undefined,
+		String
+	),
 	"member-with-dashes": String
 });
 
@@ -113,33 +79,10 @@ export type MyTupleType = [
 	number
 ];
 
-export const MyTupleType = {
-	as(subject: any, path: string = ""): [
-		string,
-		number
-	] {
-		if ((subject != null) && (subject.constructor === globalThis.Array)) {
-			(String).as(subject[0], path + "[0]");
-			(Number).as(subject[1], path + "[1]");
-			return subject as [
-				string,
-				number
-			];
-		}
-		throw "Type guard \"Tuple\" failed at \"" + path + "\"!";
-	},
-	is(subject: any): subject is [
-		string,
-		number
-	] {
-		try {
-			this.as(subject);
-		} catch (error) {
-			return false;
-		}
-		return true;
-	}
-};
+export const MyTupleType = Tuple.of(
+	String,
+	Number
+);
 
 export type MyUndefinedType = undefined;
 
@@ -147,25 +90,10 @@ export const MyUndefinedType = Undefined;
 
 export type MyUnionType = (string | null);
 
-export const MyUnionType = {
-	as(subject: any, path: string = ""): (string | null) {
-		try {
-			return (String).as(subject, path);
-		} catch (error) {}
-		try {
-			return (Null).as(subject, path);
-		} catch (error) {}
-		throw "Type guard \"Union\" failed at \"" + path + "\"!";
-	},
-	is(subject: any): subject is (string | null) {
-		try {
-			this.as(subject);
-		} catch (error) {
-			return false;
-		}
-		return true;
-	}
-};
+export const MyUnionType = Union.of(
+	String,
+	Null
+);
 
 export type Autoguard = {
 	"MyAnyType": MyAnyType,

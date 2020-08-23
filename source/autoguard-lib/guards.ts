@@ -1,5 +1,10 @@
 import * as serialization from "./serialization";
 
+type IntersectionOf<A extends any[]> = IntersectionOfUnion<UnionOf<A>>;
+type IntersectionOfUnion<A> = (A extends any ? (_: A) => void : never) extends ((_: infer B) => void) ? B : never;
+type TupleOf<A extends any[]> = [...A];
+type UnionOf<A extends any[]> = A[number];
+
 export type Any = any;
 
 export const Any = {
@@ -56,6 +61,27 @@ export const Boolean = {
 			return false;
 		}
 		return true;
+	}
+};
+
+export const Intersection = {
+	of<A extends TupleOf<serialization.Message>>(...guards: TupleOf<serialization.MessageGuardTuple<A>>): serialization.MessageGuard<IntersectionOf<A>> {
+		return {
+			as(subject: any, path: string = ""): IntersectionOf<A> {
+				for (let value of guards) {
+					value.as(subject, path);
+				}
+				return subject;
+			},
+			is(subject: any): subject is IntersectionOf<A> {
+				try {
+					this.as(subject);
+				} catch (error) {
+					return false;
+				}
+				return true;
+			}
+		};
 	}
 };
 
@@ -206,6 +232,30 @@ export const StringLiteral = {
 	}
 };
 
+export const Tuple = {
+	of<A extends TupleOf<serialization.Message>>(...guards: TupleOf<serialization.MessageGuardTuple<A>>): serialization.MessageGuard<TupleOf<A>> {
+		return {
+			as(subject: any, path: string = ""): TupleOf<A> {
+				if ((subject != null) && (subject.constructor === globalThis.Array)) {
+					for (let i = 0; i < guards.length; i++) {
+						guards[i].as(subject[i], path + "[" + i + "]");
+					}
+					return subject as TupleOf<A>;
+				}
+				throw "Type guard \"Tuple\" failed at \"" + path + "\"!";
+			},
+			is(subject: any): subject is TupleOf<A> {
+				try {
+					this.as(subject);
+				} catch (error) {
+					return false;
+				}
+				return true;
+			}
+		};
+	}
+};
+
 export type Undefined = undefined;
 
 export const Undefined = {
@@ -222,6 +272,29 @@ export const Undefined = {
 			return false;
 		}
 		return true;
+	}
+};
+
+export const Union = {
+	of<A extends TupleOf<serialization.Message>>(...guards: TupleOf<serialization.MessageGuardTuple<A>>): serialization.MessageGuard<UnionOf<A>> {
+		return {
+			as(subject: any, path: string = ""): UnionOf<A> {
+				for (let guard of guards) {
+					try {
+						return guard.as(subject, path);
+					} catch (error) {}
+				}
+				throw "Type guard \"Union\" failed at \"" + path + "\"!";
+			},
+			is(subject: any): subject is UnionOf<A> {
+				try {
+					this.as(subject);
+				} catch (error) {
+					return false;
+				}
+				return true;
+			}
+		};
 	}
 };
 

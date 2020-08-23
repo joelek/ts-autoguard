@@ -215,25 +215,13 @@ export class IntersectionType implements Type {
 			}
 			lines.push("	return subject;");
 			lines.push("}");
+			return lines.join(options.eol);
 		} else {
-			lines.push("{");
-			lines.push("	as(subject: any, path: string = \"\"): " + this.generateType({ ...options, eol: options.eol + "\t" }) + " {");
 			for (let type of this.types) {
-				lines.push("		(" + type.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ").as(subject, path);");
+				lines.push("	" + type.generateTypeGuard({ ...options, eol: options.eol + "\t" }));
 			}
-			lines.push("		return subject;");
-			lines.push("	},");
-			lines.push("	is(subject: any): subject is " + this.generateType({ ...options, eol: options.eol + "\t" }) + " {");
-			lines.push("		try {");
-			lines.push("			this.as(subject);");
-			lines.push("		} catch (error) {");
-			lines.push("			return false;");
-			lines.push("		}");
-			lines.push("		return true;");
-			lines.push("	}");
-			lines.push("}");
+			return "Intersection.of(" + options.eol + lines.join("," + options.eol) + options.eol + ")";
 		}
-		return lines.join(options.eol);
 	}
 
 	static parse(string: string): Type {
@@ -657,29 +645,13 @@ export class TupleType implements Type {
 			lines.push("	}");
 			lines.push("	throw \"Type guard \\\"Tuple\\\" failed at \\\"\" + path + \"\\\"!\";");
 			lines.push("}");
+			return lines.join(options.eol);
 		} else {
-			lines.push("{");
-			lines.push("	as(subject: any, path: string = \"\"): " + this.generateType({ ...options, eol: options.eol + "\t" }) + " {");
-			lines.push("		if ((subject != null) && (subject.constructor === globalThis.Array)) {");
-			for (let i = 0; i < this.types.length; i++) {
-				let type = this.types[i];
-				lines.push("			(" + type.generateTypeGuard({ ...options, eol: options.eol + "\t\t\t" }) + ").as(subject[" + i + "], path + \"[" + i + "]\");");
+			for (let type of this.types) {
+				lines.push("	" + type.generateTypeGuard({ ...options, eol: options.eol + "\t" }));
 			}
-			lines.push("			return subject as " + this.generateType({ ...options, eol: options.eol + "\t\t\t" }) + ";");
-			lines.push("		}");
-			lines.push("		throw \"Type guard \\\"Tuple\\\" failed at \\\"\" + path + \"\\\"!\";");
-			lines.push("	},");
-			lines.push("	is(subject: any): subject is " + this.generateType({ ...options, eol: options.eol + "\t" }) + " {");
-			lines.push("		try {");
-			lines.push("			this.as(subject);");
-			lines.push("		} catch (error) {");
-			lines.push("			return false;");
-			lines.push("		}");
-			lines.push("		return true;");
-			lines.push("	}");
-			lines.push("}");
+			return "Tuple.of(" + options.eol + lines.join("," + options.eol) + options.eol + ")";
 		}
-		return lines.join(options.eol);
 	}
 
 	static parse(string: string): Type {
@@ -777,27 +749,13 @@ export class UnionType implements Type {
 			}
 			lines.push("	throw \"Type guard \\\"Union\\\" failed at \\\"\" + path + \"\\\"!\";");
 			lines.push("}");
+			return lines.join(options.eol);
 		} else {
-			lines.push("{");
-			lines.push("	as(subject: any, path: string = \"\"): " + this.generateType({ ...options, eol: options.eol + "\t" }) + " {");
 			for (let type of this.types) {
-				lines.push("		try {");
-				lines.push("			return (" + type.generateTypeGuard({ ...options, eol: options.eol + "\t\t\t" }) + ").as(subject, path);");
-				lines.push("		} catch (error) {}");
+				lines.push("	" + type.generateTypeGuard({ ...options, eol: options.eol + "\t" }));
 			}
-			lines.push("		throw \"Type guard \\\"Union\\\" failed at \\\"\" + path + \"\\\"!\";");
-			lines.push("	},");
-			lines.push("	is(subject: any): subject is " + this.generateType({ ...options, eol: options.eol + "\t" }) + " {");
-			lines.push("		try {");
-			lines.push("			this.as(subject);");
-			lines.push("		} catch (error) {");
-			lines.push("			return false;");
-			lines.push("		}");
-			lines.push("		return true;");
-			lines.push("	}");
-			lines.push("}");
+			return "Union.of(" + options.eol + lines.join("," + options.eol) + options.eol + ")";
 		}
-		return lines.join(options.eol);
 	}
 
 	static parse(string: string): Type {
@@ -850,7 +808,7 @@ export class Schema {
 		if (!options.standalone) {
 			lines.push("import * as autoguard from \"@joelek/ts-autoguard\";");
 			lines.push("");
-			lines.push("const { Any, Array, Boolean, Null, Number, NumberLiteral, Object, Record, String, StringLiteral, Undefined } = { ...autoguard.guards };");
+			lines.push("const { Any, Array, Boolean, Intersection, Null, Number, NumberLiteral, Object, Record, String, StringLiteral, Tuple, Undefined, Union } = { ...autoguard.guards };");
 			lines.push("");
 		}
 		for (let [key, value] of this.types) {
