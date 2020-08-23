@@ -90,9 +90,13 @@ export class AnyType implements Type {
 
 	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
-		lines.push("(subject, path) => {");
-		lines.push("	return subject;");
-		lines.push("}");
+		if (options.standalone) {
+			lines.push("(subject, path) => {");
+			lines.push("	return subject;");
+			lines.push("}");
+		} else {
+			lines.push("Any");
+		}
 		return lines.join(options.eol);
 	}
 
@@ -119,15 +123,19 @@ export class ArrayType implements Type {
 
 	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
-		lines.push("(subject, path) => {");
-		lines.push("	if ((subject != null) && (subject.constructor === globalThis.Array)) {");
-		lines.push("		for (let i = 0; i < subject.length; i++) {");
-		lines.push("			(" + this.type.generateTypeGuard({ ...options, eol: options.eol + "\t\t\t" }) + ")(subject[i], path + \"[\" + i + \"]\");");
-		lines.push("		}");
-		lines.push("		return subject;");
-		lines.push("	}");
-		lines.push("	throw \"Type guard \\\"Array\\\" failed at \\\"\" + path + \"\\\"!\";");
-		lines.push("}");
+		if (options.standalone) {
+			lines.push("(subject, path) => {");
+			lines.push("	if ((subject != null) && (subject.constructor === globalThis.Array)) {");
+			lines.push("		for (let i = 0; i < subject.length; i++) {");
+			lines.push("			(" + this.type.generateTypeGuard({ ...options, eol: options.eol + "\t\t\t" }) + ")(subject[i], path + \"[\" + i + \"]\");");
+			lines.push("		}");
+			lines.push("		return subject;");
+			lines.push("	}");
+			lines.push("	throw \"Type guard \\\"Array\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("}");
+		} else {
+			lines.push("Array.of(" + this.type.generateTypeGuard({ ...options, eol: options.eol }) + ")");
+		}
 		return lines.join(options.eol);
 	}
 
@@ -159,7 +167,7 @@ export class BooleanType implements Type {
 			lines.push("	throw \"Type guard \\\"Boolean\\\" failed at \\\"\" + path + \"\\\"!\";");
 			lines.push("}");
 		} else {
-			lines.push("autoguard.guards.Boolean.as");
+			lines.push("Boolean");
 		}
 		return lines.join(options.eol);
 	}
@@ -200,12 +208,31 @@ export class IntersectionType implements Type {
 
 	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
-		lines.push("(subject, path) => {");
-		for (let type of this.types) {
-			lines.push("	(" + type.generateTypeGuard({ ...options, eol: options.eol + "\t" }) + ")(subject, path);");
+		if (options.standalone) {
+			lines.push("(subject, path) => {");
+			for (let type of this.types) {
+				lines.push("	(" + type.generateTypeGuard({ ...options, eol: options.eol + "\t" }) + ")(subject, path);");
+			}
+			lines.push("	return subject;");
+			lines.push("}");
+		} else {
+			lines.push("{");
+			lines.push("	as(subject: any, path: string = \"\"): " + this.generateType({ ...options, eol: options.eol + "\t" }) + " {");
+			for (let type of this.types) {
+				lines.push("		(" + type.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ").as(subject, path);");
+			}
+			lines.push("		return subject;");
+			lines.push("	},");
+			lines.push("	is(subject: any): subject is " + this.generateType({ ...options, eol: options.eol + "\t" }) + " {");
+			lines.push("		try {");
+			lines.push("			this.as(subject);");
+			lines.push("		} catch (error) {");
+			lines.push("			return false;");
+			lines.push("		}");
+			lines.push("		return true;");
+			lines.push("	}");
+			lines.push("}");
 		}
-		lines.push("	return subject;");
-		lines.push("}");
 		return lines.join(options.eol);
 	}
 
@@ -259,7 +286,7 @@ export class NullType implements Type {
 			lines.push("	throw \"Type guard \\\"Null\\\" failed at \\\"\" + path + \"\\\"!\";");
 			lines.push("}");
 		} else {
-			lines.push("autoguard.guards.Null.as");
+			lines.push("Null");
 		}
 		return lines.join(options.eol);
 	}
@@ -293,7 +320,7 @@ export class NumberType implements Type {
 			lines.push("	throw \"Type guard \\\"Number\\\" failed at \\\"\" + path + \"\\\"!\";");
 			lines.push("}");
 		} else {
-			lines.push("autoguard.guards.Number.as");
+			lines.push("Number");
 		}
 		return lines.join(options.eol);
 	}
@@ -321,12 +348,16 @@ export class NumberLiteralType implements Type {
 
 	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
-		lines.push("(subject, path) => {");
-		lines.push("	if (subject === " + this.generateType({ ...options, eol: options.eol + "\t" }) + ") {");
-		lines.push("		return subject;");
-		lines.push("	}");
-		lines.push("	throw \"Type guard \\\"NumberLiteral\\\" failed at \\\"\" + path + \"\\\"!\";");
-		lines.push("}");
+		if (options.standalone) {
+			lines.push("(subject, path) => {");
+			lines.push("	if (subject === " + this.generateType({ ...options, eol: options.eol + "\t" }) + ") {");
+			lines.push("		return subject;");
+			lines.push("	}");
+			lines.push("	throw \"Type guard \\\"NumberLiteral\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("}");
+		} else {
+			lines.push("NumberLiteral.of(" + this.generateType({ ...options, eol: options.eol }) + ")");
+		}
 		return lines.join(options.eol);
 	}
 
@@ -382,23 +413,37 @@ export class ObjectType implements Type {
 
 	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
-		lines.push("(subject, path) => {");
-		lines.push("	if ((subject != null) && (subject.constructor === globalThis.Object)) {");
-		for (let [key, value] of this.members) {
-			let type = value.type;
-			if (value.optional) {
-				let union = new UnionType();
-				union.add(UndefinedType.INSTANCE);
-				union.add(type);
-				type = union;
+		if (options.standalone) {
+			lines.push("(subject, path) => {");
+			lines.push("	if ((subject != null) && (subject.constructor === globalThis.Object)) {");
+			for (let [key, value] of this.members) {
+				let type = value.type;
+				if (value.optional) {
+					let union = new UnionType();
+					union.add(UndefinedType.INSTANCE);
+					union.add(type);
+					type = union;
+				}
+				lines.push("		(" + type.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject[\"" + key + "\"], path + \"[\\\"" + key + "\\\"]\");");
 			}
-			lines.push("		(" + type.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject[\"" + key + "\"], path + \"[\\\"" + key + "\\\"]\");");
+			lines.push("		return subject;");
+			lines.push("	}");
+			lines.push("	throw \"Type guard \\\"Object\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("}");
+			return lines.join(options.eol);
+		} else {
+			for (let [key, value] of this.members) {
+				let type = value.type;
+				if (value.optional) {
+					let union = new UnionType();
+					union.add(UndefinedType.INSTANCE);
+					union.add(type);
+					type = union;
+				}
+				lines.push("	\"" + key + "\": " + type.generateTypeGuard({ ...options, eol: options.eol + "\t" }));
+			}
+			return "Object.of({" + options.eol + lines.join("," + options.eol) + options.eol + "})";
 		}
-		lines.push("		return subject;");
-		lines.push("	}");
-		lines.push("	throw \"Type guard \\\"Object\\\" failed at \\\"\" + path + \"\\\"!\";");
-		lines.push("}");
-		return lines.join(options.eol);
 	}
 
 	[Symbol.iterator](): Iterator<[string, ObjectMember]> {
@@ -451,20 +496,24 @@ export class RecordType implements Type {
 	}
 
 	generateType(options: Options): string {
-		return "{ [key: string]: undefined | " + this.type.generateType(options) + " }";
+		return "Record<string, undefined | " + this.type.generateType(options) + ">";
 	}
 
 	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
-		lines.push("(subject, path) => {");
-		lines.push("	if ((subject != null) && (subject.constructor === globalThis.Object)) {");
-		lines.push("		for (let key of globalThis.Object.keys(subject)) {");
-		lines.push("			(" + this.type.generateTypeGuard({ ...options, eol: options.eol + "\t\t\t" }) + ")(subject[key], path + \"[\\\"\" + key + \"\\\"]\");");
-		lines.push("		}");
-		lines.push("		return subject;");
-		lines.push("	}");
-		lines.push("	throw \"Type guard \\\"Record\\\" failed at \\\"\" + path + \"\\\"!\";");
-		lines.push("}");
+		if (options.standalone) {
+			lines.push("(subject, path) => {");
+			lines.push("	if ((subject != null) && (subject.constructor === globalThis.Object)) {");
+			lines.push("		for (let key of globalThis.Object.keys(subject)) {");
+			lines.push("			(" + this.type.generateTypeGuard({ ...options, eol: options.eol + "\t\t\t" }) + ")(subject[key], path + \"[\\\"\" + key + \"\\\"]\");");
+			lines.push("		}");
+			lines.push("		return subject;");
+			lines.push("	}");
+			lines.push("	throw \"Type guard \\\"Record\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("}");
+		} else {
+			lines.push("Record.of(" + this.type.generateTypeGuard({ ...options, eol: options.eol }) + ")");
+		}
 		return lines.join(options.eol);
 	}
 
@@ -489,7 +538,11 @@ export class ReferenceType implements Type {
 	}
 
 	generateTypeGuard(options: Options): string {
-		return this.typename + ".as";
+		if (options.standalone) {
+			return this.typename + ".as";
+		} else {
+			return this.typename;
+		}
 	}
 
 	static parse(string: string): Type {
@@ -520,7 +573,7 @@ export class StringType implements Type {
 			lines.push("	throw \"Type guard \\\"String\\\" failed at \\\"\" + path + \"\\\"!\";");
 			lines.push("}");
 		} else {
-			lines.push("autoguard.guards.String.as");
+			lines.push("String");
 		}
 		return lines.join(options.eol);
 	}
@@ -548,12 +601,16 @@ export class StringLiteralType implements Type {
 
 	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
-		lines.push("(subject, path) => {");
-		lines.push("	if (subject === " + this.generateType({ ...options, eol: options.eol + "\t" }) + ") {");
-		lines.push("		return subject;");
-		lines.push("	}");
-		lines.push("	throw \"Type guard \\\"StringLiteral\\\" failed at \\\"\" + path + \"\\\"!\";");
-		lines.push("}");
+		if (options.standalone) {
+			lines.push("(subject, path) => {");
+			lines.push("	if (subject === " + this.generateType({ ...options, eol: options.eol + "\t" }) + ") {");
+			lines.push("		return subject;");
+			lines.push("	}");
+			lines.push("	throw \"Type guard \\\"StringLiteral\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("}");
+		} else {
+			lines.push("StringLiteral.of(\"" + this.value + "\")");
+		}
 		return lines.join(options.eol);
 	}
 
@@ -589,16 +646,39 @@ export class TupleType implements Type {
 
 	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
-		lines.push("(subject, path) => {");
-		lines.push("	if ((subject != null) && (subject.constructor === globalThis.Array)) {");
-		for (let i = 0; i < this.types.length; i++) {
-			let type = this.types[i];
-			lines.push("		(" + type.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject[" + i + "], path + \"[" + i + "]\");");
+		if (options.standalone) {
+			lines.push("(subject, path) => {");
+			lines.push("	if ((subject != null) && (subject.constructor === globalThis.Array)) {");
+			for (let i = 0; i < this.types.length; i++) {
+				let type = this.types[i];
+				lines.push("		(" + type.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject[" + i + "], path + \"[" + i + "]\");");
+			}
+			lines.push("		return subject as " + this.generateType({ ...options, eol: options.eol + "\t\t" }) + ";");
+			lines.push("	}");
+			lines.push("	throw \"Type guard \\\"Tuple\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("}");
+		} else {
+			lines.push("{");
+			lines.push("	as(subject: any, path: string = \"\"): " + this.generateType({ ...options, eol: options.eol + "\t" }) + " {");
+			lines.push("		if ((subject != null) && (subject.constructor === globalThis.Array)) {");
+			for (let i = 0; i < this.types.length; i++) {
+				let type = this.types[i];
+				lines.push("			(" + type.generateTypeGuard({ ...options, eol: options.eol + "\t\t\t" }) + ").as(subject[" + i + "], path + \"[" + i + "]\");");
+			}
+			lines.push("			return subject as " + this.generateType({ ...options, eol: options.eol + "\t\t\t" }) + ";");
+			lines.push("		}");
+			lines.push("		throw \"Type guard \\\"Tuple\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("	},");
+			lines.push("	is(subject: any): subject is " + this.generateType({ ...options, eol: options.eol + "\t" }) + " {");
+			lines.push("		try {");
+			lines.push("			this.as(subject);");
+			lines.push("		} catch (error) {");
+			lines.push("			return false;");
+			lines.push("		}");
+			lines.push("		return true;");
+			lines.push("	}");
+			lines.push("}");
 		}
-		lines.push("		return subject as " + this.generateType({ ...options, eol: options.eol + "\t\t" }) + ";");
-		lines.push("	}");
-		lines.push("	throw \"Type guard \\\"Tuple\\\" failed at \\\"\" + path + \"\\\"!\";");
-		lines.push("}");
 		return lines.join(options.eol);
 	}
 
@@ -647,7 +727,7 @@ export class UndefinedType implements Type {
 			lines.push("	throw \"Type guard \\\"Undefined\\\" failed at \\\"\" + path + \"\\\"!\";");
 			lines.push("}");
 		} else {
-			lines.push("autoguard.guards.Undefined.as");
+			lines.push("Undefined");
 		}
 		return lines.join(options.eol);
 	}
@@ -688,14 +768,35 @@ export class UnionType implements Type {
 
 	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
-		lines.push("(subject, path) => {");
-		for (let type of this.types) {
-			lines.push("	try {");
-			lines.push("		return (" + type.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject, path);");
-			lines.push("	} catch (error) {}");
+		if (options.standalone) {
+			lines.push("(subject, path) => {");
+			for (let type of this.types) {
+				lines.push("	try {");
+				lines.push("		return (" + type.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject, path);");
+				lines.push("	} catch (error) {}");
+			}
+			lines.push("	throw \"Type guard \\\"Union\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("}");
+		} else {
+			lines.push("{");
+			lines.push("	as(subject: any, path: string = \"\"): " + this.generateType({ ...options, eol: options.eol + "\t" }) + " {");
+			for (let type of this.types) {
+				lines.push("		try {");
+				lines.push("			return (" + type.generateTypeGuard({ ...options, eol: options.eol + "\t\t\t" }) + ").as(subject, path);");
+				lines.push("		} catch (error) {}");
+			}
+			lines.push("		throw \"Type guard \\\"Union\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("	},");
+			lines.push("	is(subject: any): subject is " + this.generateType({ ...options, eol: options.eol + "\t" }) + " {");
+			lines.push("		try {");
+			lines.push("			this.as(subject);");
+			lines.push("		} catch (error) {");
+			lines.push("			return false;");
+			lines.push("		}");
+			lines.push("		return true;");
+			lines.push("	}");
+			lines.push("}");
 		}
-		lines.push("	throw \"Type guard \\\"Union\\\" failed at \\\"\" + path + \"\\\"!\";");
-		lines.push("}");
 		return lines.join(options.eol);
 	}
 
@@ -749,24 +850,31 @@ export class Schema {
 		if (!options.standalone) {
 			lines.push("import * as autoguard from \"@joelek/ts-autoguard\";");
 			lines.push("");
+			lines.push("const { Any, Array, Boolean, Null, Number, NumberLiteral, Object, Record, String, StringLiteral, Undefined } = { ...autoguard.guards };");
+			lines.push("");
 		}
 		for (let [key, value] of this.types) {
 			lines.push("export type " + key + " = " + value.generateType(options) + ";");
 			lines.push("");
-			lines.push("export const " + key + " = {");
-			lines.push("	as(subject: any, path: string = \"\"): " + key + " {");
-			lines.push("		return (" + value.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject, path);");
-			lines.push("	},");
-			lines.push("	is(subject: any): subject is " + key + " {");
-			lines.push("		try {");
-			lines.push("			this.as(subject);");
-			lines.push("		} catch (error) {");
-			lines.push("			return false;");
-			lines.push("		}");
-			lines.push("		return true;");
-			lines.push("	}");
-			lines.push("};");
-			lines.push("");
+			if (options.standalone) {
+				lines.push("export const " + key + " = {");
+				lines.push("	as(subject: any, path: string = \"\"): " + key + " {");
+				lines.push("		return (" + value.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject, path);");
+				lines.push("	},");
+				lines.push("	is(subject: any): subject is " + key + " {");
+				lines.push("		try {");
+				lines.push("			this.as(subject);");
+				lines.push("		} catch (error) {");
+				lines.push("			return false;");
+				lines.push("		}");
+				lines.push("		return true;");
+				lines.push("	}");
+				lines.push("};");
+				lines.push("");
+			} else {
+				lines.push("export const " + key + " = " + value.generateTypeGuard({ ...options, eol: options.eol }) + ";");
+				lines.push("");
+			}
 		}
 		let autoguard = new ObjectType();
 		for (let [key, value] of this.types) {

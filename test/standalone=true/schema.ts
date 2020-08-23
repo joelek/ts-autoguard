@@ -233,7 +233,7 @@ export const MyObjectType = {
 	}
 };
 
-export type MyRecordOfStringType = { [key: string]: undefined | string };
+export type MyRecordOfStringType = Record<string, undefined | string>;
 
 export const MyRecordOfStringType = {
 	as(subject: any, path: string = ""): MyRecordOfStringType {
