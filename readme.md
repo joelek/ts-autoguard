@@ -66,7 +66,7 @@ The schema definition below shows all constructs supported by Autoguard.
 	MyAnyType: any,
 	MyArrayOfStringType: string[],
 	MyBooleanType: boolean,
-	MyIntersectionType: ( @MyObjectType & { another_string_member: string } ),
+	MyIntersectionType: ( { a_string_member: string } & { another_string_member: string } ),
 	MyNullType: null,
 	MyNumberType: number,
 	MyNumberLiteralType: 1337,
