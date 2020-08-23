@@ -19,25 +19,6 @@ export const Boolean = {
 	}
 };
 
-export type Number = number;
-
-export const Number = {
-	as(subject: any, path: string = ""): number {
-		if ((subject != null) && (subject.constructor === globalThis.Number)) {
-			return subject as number;
-		}
-		throw "Type guard \"Number\" failed at \"" + path + "\"!";
-	},
-	is(subject: any): subject is number {
-		try {
-			Number.as(subject);
-		} catch (error) {
-			return false;
-		}
-		return true;
-	}
-};
-
 export type Null = null;
 
 export const Null = {
@@ -48,6 +29,25 @@ export const Null = {
 		throw "Type guard \"Null\" failed at \"" + path + "\"!";
 	},
 	is(subject: any): subject is null {
+		try {
+			Number.as(subject);
+		} catch (error) {
+			return false;
+		}
+		return true;
+	}
+};
+
+export type Number = number;
+
+export const Number = {
+	as(subject: any, path: string = ""): number {
+		if ((subject != null) && (subject.constructor === globalThis.Number)) {
+			return subject as number;
+		}
+		throw "Type guard \"Number\" failed at \"" + path + "\"!";
+	},
+	is(subject: any): subject is number {
 		try {
 			Null.as(subject);
 		} catch (error) {
