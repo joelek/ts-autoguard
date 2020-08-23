@@ -1,0 +1,21 @@
+{
+	MyAnyType: any,
+	MyArrayOfStringType: string[],
+	MyBooleanType: boolean,
+	MyIntersectionType: ( { a_string_member: string } & { another_string_member: string } ),
+	MyNullType: null,
+	MyNumberType: number,
+	MyNumberLiteralType: 1337,
+	MyObjectType: {
+		string_member: string,
+		optional_member?: string,
+		"member-with-dashes": string
+	},
+	MyRecordOfStringType: { string },
+	MyReferenceType: @MyObjectType,
+	MyStringType: string,
+	MyStringLiteralType: "literal",
+	MyTupleType: [ string, number ],
+	MyUndefinedType: undefined,
+	MyUnionType: ( string | null )
+}
