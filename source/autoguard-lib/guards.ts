@@ -11,7 +11,7 @@ export const Any = {
 	},
 	is(subject: any): subject is any {
 		try {
-			Any.as(subject);
+			this.as(subject);
 		} catch (error) {
 			return false;
 		}
