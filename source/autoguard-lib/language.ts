@@ -131,7 +131,7 @@ export class ArrayType implements Type {
 			lines.push("		}");
 			lines.push("		return subject;");
 			lines.push("	}");
-			lines.push("	throw \"Type guard \\\"Array\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("	throw \"Expected an array at \" + path + \"!\";");
 			lines.push("}");
 		} else {
 			lines.push("Array.of(" + this.type.generateTypeGuard({ ...options, eol: options.eol }) + ")");
@@ -164,7 +164,7 @@ export class BooleanType implements Type {
 			lines.push("	if ((subject != null) && (subject.constructor === globalThis.Boolean)) {");
 			lines.push("		return subject as boolean;");
 			lines.push("	}");
-			lines.push("	throw \"Type guard \\\"Boolean\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("	throw \"Expected a boolean at \" + path + \"!\";");
 			lines.push("}");
 		} else {
 			lines.push("Boolean");
@@ -271,7 +271,7 @@ export class NullType implements Type {
 			lines.push("	if (subject === null) {");
 			lines.push("		return subject;");
 			lines.push("	}");
-			lines.push("	throw \"Type guard \\\"Null\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("	throw \"Expected null at \" + path + \"!\";");
 			lines.push("}");
 		} else {
 			lines.push("Null");
@@ -305,7 +305,7 @@ export class NumberType implements Type {
 			lines.push("	if ((subject != null) && (subject.constructor === globalThis.Number)) {");
 			lines.push("		return subject as number;");
 			lines.push("	}");
-			lines.push("	throw \"Type guard \\\"Number\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("	throw \"Expected a number at \" + path + \"!\";");
 			lines.push("}");
 		} else {
 			lines.push("Number");
@@ -341,7 +341,7 @@ export class NumberLiteralType implements Type {
 			lines.push("	if (subject === " + this.generateType({ ...options, eol: options.eol + "\t" }) + ") {");
 			lines.push("		return subject;");
 			lines.push("	}");
-			lines.push("	throw \"Type guard \\\"NumberLiteral\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("	throw \"Expected " + this.value + " at \" + path + \"!\";");
 			lines.push("}");
 		} else {
 			lines.push("NumberLiteral.of(" + this.generateType({ ...options, eol: options.eol }) + ")");
@@ -416,7 +416,7 @@ export class ObjectType implements Type {
 			}
 			lines.push("		return subject;");
 			lines.push("	}");
-			lines.push("	throw \"Type guard \\\"Object\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("	throw \"Expected an object at \" + path + \"!\";");
 			lines.push("}");
 			return lines.join(options.eol);
 		} else {
@@ -497,7 +497,7 @@ export class RecordType implements Type {
 			lines.push("		}");
 			lines.push("		return subject;");
 			lines.push("	}");
-			lines.push("	throw \"Type guard \\\"Record\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("	throw \"Expected a record at \" + path + \"!\";");
 			lines.push("}");
 		} else {
 			lines.push("Record.of(" + this.type.generateTypeGuard({ ...options, eol: options.eol }) + ")");
@@ -558,7 +558,7 @@ export class StringType implements Type {
 			lines.push("	if ((subject != null) && (subject.constructor === globalThis.String)) {");
 			lines.push("		return subject as string;");
 			lines.push("	}");
-			lines.push("	throw \"Type guard \\\"String\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("	throw \"Expected a string at \" + path + \"!\";");
 			lines.push("}");
 		} else {
 			lines.push("String");
@@ -594,7 +594,7 @@ export class StringLiteralType implements Type {
 			lines.push("	if (subject === " + this.generateType({ ...options, eol: options.eol + "\t" }) + ") {");
 			lines.push("		return subject;");
 			lines.push("	}");
-			lines.push("	throw \"Type guard \\\"StringLiteral\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("	throw \"Expected \\\"" + this.value + "\\\" at \" + path + \"!\";");
 			lines.push("}");
 		} else {
 			lines.push("StringLiteral.of(\"" + this.value + "\")");
@@ -643,7 +643,7 @@ export class TupleType implements Type {
 			}
 			lines.push("		return subject as " + this.generateType({ ...options, eol: options.eol + "\t\t" }) + ";");
 			lines.push("	}");
-			lines.push("	throw \"Type guard \\\"Tuple\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("	throw \"Expected a tuple at \" + path + \"!\";");
 			lines.push("}");
 			return lines.join(options.eol);
 		} else {
@@ -696,7 +696,7 @@ export class UndefinedType implements Type {
 			lines.push("	if (subject === undefined) {");
 			lines.push("		return subject;");
 			lines.push("	}");
-			lines.push("	throw \"Type guard \\\"Undefined\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("	throw \"Expected undefined at \" + path + \"!\";");
 			lines.push("}");
 		} else {
 			lines.push("Undefined");
@@ -747,7 +747,7 @@ export class UnionType implements Type {
 				lines.push("		return (" + type.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject, path);");
 				lines.push("	} catch (error) {}");
 			}
-			lines.push("	throw \"Type guard \\\"Union\\\" failed at \\\"\" + path + \"\\\"!\";");
+			lines.push("	throw \"Expected a union at \" + path + \"!\";");
 			lines.push("}");
 			return lines.join(options.eol);
 		} else {

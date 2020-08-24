@@ -29,7 +29,7 @@ export const Array = {
 					}
 					return subject;
 				}
-				throw "Type guard \"Array\" failed at \"" + path + "\"!";
+				throw "Expected an array at " + path + "!";
 			},
 			is(subject: any): subject is Array<A> {
 				try {
@@ -48,7 +48,7 @@ export const Boolean = {
 		if ((subject != null) && (subject.constructor === globalThis.Boolean)) {
 			return subject as boolean;
 		}
-		throw "Type guard \"Boolean\" failed at \"" + path + "\"!";
+		throw "Expected a boolean at " + path + "!";
 	},
 	is(subject: any): subject is boolean {
 		try {
@@ -86,7 +86,7 @@ export const Null = {
 		if (subject === null) {
 			return subject;
 		}
-		throw "Type guard \"Null\" failed at \"" + path + "\"!";
+		throw "Expected null at " + path + "!";
 	},
 	is(subject: any): subject is null {
 		try {
@@ -103,7 +103,7 @@ export const Number = {
 		if ((subject != null) && (subject.constructor === globalThis.Number)) {
 			return subject as number;
 		}
-		throw "Type guard \"Number\" failed at \"" + path + "\"!";
+		throw "Expected a number at " + path + "!";
 	},
 	is(subject: any): subject is number {
 		try {
@@ -122,7 +122,7 @@ export const NumberLiteral = {
 				if (subject === value) {
 					return subject;
 				}
-				throw "Type guard \"NumberLiteral\" failed at \"" + path + "\"!";
+				throw "Expected " + value + " at " + path + "!";
 			},
 			is(subject: any): subject is A {
 				try {
@@ -146,7 +146,7 @@ export const Object = {
 					}
 					return subject;
 				}
-				throw "Type guard \"Object\" failed at \"" + path + "\"!";
+				throw "Expected an object at " + path + "!";
 			},
 			is(subject: any): subject is A {
 				try {
@@ -170,7 +170,7 @@ export const Record = {
 					}
 					return subject;
 				}
-				throw "Type guard \"Record\" failed at \"" + path + "\"!";
+				throw "Expected a record at " + path + "!";
 			},
 			is(subject: any): subject is Record<string, undefined | A> {
 				try {
@@ -189,7 +189,7 @@ export const String = {
 		if ((subject != null) && (subject.constructor === globalThis.String)) {
 			return subject as string;
 		}
-		throw "Type guard \"String\" failed at \"" + path + "\"!";
+		throw "Expected a string at " + path + "!";
 	},
 	is(subject: any): subject is string {
 		try {
@@ -208,7 +208,7 @@ export const StringLiteral = {
 				if (subject === value) {
 					return subject;
 				}
-				throw "Type guard \"StringLiteral\" failed at \"" + path + "\"!";
+				throw "Expected \"" + value + "\" at " + path + "!";
 			},
 			is(subject: any): subject is A {
 				try {
@@ -232,7 +232,7 @@ export const Tuple = {
 					}
 					return subject as TupleOf<A>;
 				}
-				throw "Type guard \"Tuple\" failed at \"" + path + "\"!";
+				throw "Expected a tuple at " + path + "!";
 			},
 			is(subject: any): subject is TupleOf<A> {
 				try {
@@ -251,7 +251,7 @@ export const Undefined = {
 		if (subject === undefined) {
 			return subject;
 		}
-		throw "Type guard \"Undefined\" failed at \"" + path + "\"!";
+		throw "Expected undefined at " + path + "!";
 	},
 	is(subject: any): subject is undefined {
 		try {
@@ -272,7 +272,7 @@ export const Union = {
 						return guard.as(subject, path);
 					} catch (error) {}
 				}
-				throw "Type guard \"Union\" failed at \"" + path + "\"!";
+				throw "Expected a union at " + path + "!";
 			},
 			is(subject: any): subject is UnionOf<A> {
 				try {

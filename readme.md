@@ -111,12 +111,12 @@ export const MyArrayOfStringType = {
 						if ((subject != null) && (subject.constructor === globalThis.String)) {
 							return subject as string;
 						}
-						throw "Type guard \"String\" failed at \"" + path + "\"!";
+						throw "Expected a string at " + path + "!";
 					})(subject[i], path + "[" + i + "]");
 				}
 				return subject;
 			}
-			throw "Type guard \"Array\" failed at \"" + path + "\"!";
+			throw "Expected an array at " + path + "!";
 		})(subject, path);
 	},
 	is(subject: any): subject is MyArrayOfStringType {
