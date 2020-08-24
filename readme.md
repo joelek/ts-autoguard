@@ -79,8 +79,6 @@ const guard = Array.of(Object.of({
 }));
 ```
 
-NB: This feature requires that you compile your code using TypeScript 4 or newer.
-
 ### Code generation
 
 Autoguard can generate TypeScript type definitions and type guards from schema definitions. Type definitions can be used to annotate TypeScript code and will disappear when transpiled to JavaScript.
@@ -146,8 +144,6 @@ export type MyArrayOfStringType = string[];
 export const MyArrayOfStringType = Array.of(String);
 ```
 
-NB: This feature requires that you compile your code using TypeScript 4 or newer.
-
 The schema definition below shows all constructs supported by Autoguard.
 
 ```ts
@@ -201,6 +197,8 @@ Autoguard releases follow semantic versioning and release packages are published
 ```
 npm install joelek/ts-autoguard#semver:^4
 ```
+
+NB: Autoguard currently targets TypeScript 4. Some features may not be supported for older TypeScript versions.
 
 ## Syntax
 
