@@ -7,7 +7,7 @@ exports.Any = {
     },
     is(subject) {
         try {
-            exports.Any.as(subject);
+            this.as(subject);
         }
         catch (error) {
             return false;
@@ -25,7 +25,7 @@ exports.Array = {
                     }
                     return subject;
                 }
-                throw "Type guard \"Array\" failed at \"" + path + "\"!";
+                throw "Expected an array at " + path + "!";
             },
             is(subject) {
                 try {
@@ -44,7 +44,7 @@ exports.Boolean = {
         if ((subject != null) && (subject.constructor === globalThis.Boolean)) {
             return subject;
         }
-        throw "Type guard \"Boolean\" failed at \"" + path + "\"!";
+        throw "Expected a boolean at " + path + "!";
     },
     is(subject) {
         try {
@@ -82,7 +82,7 @@ exports.Null = {
         if (subject === null) {
             return subject;
         }
-        throw "Type guard \"Null\" failed at \"" + path + "\"!";
+        throw "Expected null at " + path + "!";
     },
     is(subject) {
         try {
@@ -99,7 +99,7 @@ exports.Number = {
         if ((subject != null) && (subject.constructor === globalThis.Number)) {
             return subject;
         }
-        throw "Type guard \"Number\" failed at \"" + path + "\"!";
+        throw "Expected a number at " + path + "!";
     },
     is(subject) {
         try {
@@ -118,7 +118,7 @@ exports.NumberLiteral = {
                 if (subject === value) {
                     return subject;
                 }
-                throw "Type guard \"NumberLiteral\" failed at \"" + path + "\"!";
+                throw "Expected " + value + " at " + path + "!";
             },
             is(subject) {
                 try {
@@ -142,7 +142,7 @@ exports.Object = {
                     }
                     return subject;
                 }
-                throw "Type guard \"Object\" failed at \"" + path + "\"!";
+                throw "Expected an object at " + path + "!";
             },
             is(subject) {
                 try {
@@ -166,7 +166,7 @@ exports.Record = {
                     }
                     return subject;
                 }
-                throw "Type guard \"Record\" failed at \"" + path + "\"!";
+                throw "Expected a record at " + path + "!";
             },
             is(subject) {
                 try {
@@ -185,7 +185,7 @@ exports.String = {
         if ((subject != null) && (subject.constructor === globalThis.String)) {
             return subject;
         }
-        throw "Type guard \"String\" failed at \"" + path + "\"!";
+        throw "Expected a string at " + path + "!";
     },
     is(subject) {
         try {
@@ -204,7 +204,7 @@ exports.StringLiteral = {
                 if (subject === value) {
                     return subject;
                 }
-                throw "Type guard \"StringLiteral\" failed at \"" + path + "\"!";
+                throw "Expected \"" + value + "\" at " + path + "!";
             },
             is(subject) {
                 try {
@@ -228,7 +228,7 @@ exports.Tuple = {
                     }
                     return subject;
                 }
-                throw "Type guard \"Tuple\" failed at \"" + path + "\"!";
+                throw "Expected a tuple at " + path + "!";
             },
             is(subject) {
                 try {
@@ -247,7 +247,7 @@ exports.Undefined = {
         if (subject === undefined) {
             return subject;
         }
-        throw "Type guard \"Undefined\" failed at \"" + path + "\"!";
+        throw "Expected undefined at " + path + "!";
     },
     is(subject) {
         try {
@@ -269,7 +269,7 @@ exports.Union = {
                     }
                     catch (error) { }
                 }
-                throw "Type guard \"Union\" failed at \"" + path + "\"!";
+                throw "Expected a union at " + path + "!";
             },
             is(subject) {
                 try {

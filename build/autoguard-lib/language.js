@@ -133,7 +133,7 @@ class ArrayType {
             lines.push("		}");
             lines.push("		return subject;");
             lines.push("	}");
-            lines.push("	throw \"Type guard \\\"Array\\\" failed at \\\"\" + path + \"\\\"!\";");
+            lines.push("	throw \"Expected an array at \" + path + \"!\";");
             lines.push("}");
         }
         else {
@@ -164,7 +164,7 @@ class BooleanType {
             lines.push("	if ((subject != null) && (subject.constructor === globalThis.Boolean)) {");
             lines.push("		return subject as boolean;");
             lines.push("	}");
-            lines.push("	throw \"Type guard \\\"Boolean\\\" failed at \\\"\" + path + \"\\\"!\";");
+            lines.push("	throw \"Expected a boolean at \" + path + \"!\";");
             lines.push("}");
         }
         else {
@@ -265,7 +265,7 @@ class NullType {
             lines.push("	if (subject === null) {");
             lines.push("		return subject;");
             lines.push("	}");
-            lines.push("	throw \"Type guard \\\"Null\\\" failed at \\\"\" + path + \"\\\"!\";");
+            lines.push("	throw \"Expected null at \" + path + \"!\";");
             lines.push("}");
         }
         else {
@@ -296,7 +296,7 @@ class NumberType {
             lines.push("	if ((subject != null) && (subject.constructor === globalThis.Number)) {");
             lines.push("		return subject as number;");
             lines.push("	}");
-            lines.push("	throw \"Type guard \\\"Number\\\" failed at \\\"\" + path + \"\\\"!\";");
+            lines.push("	throw \"Expected a number at \" + path + \"!\";");
             lines.push("}");
         }
         else {
@@ -328,7 +328,7 @@ class NumberLiteralType {
             lines.push("	if (subject === " + this.generateType(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })) + ") {");
             lines.push("		return subject;");
             lines.push("	}");
-            lines.push("	throw \"Type guard \\\"NumberLiteral\\\" failed at \\\"\" + path + \"\\\"!\";");
+            lines.push("	throw \"Expected " + this.value + " at \" + path + \"!\";");
             lines.push("}");
         }
         else {
@@ -397,7 +397,7 @@ class ObjectType {
             }
             lines.push("		return subject;");
             lines.push("	}");
-            lines.push("	throw \"Type guard \\\"Object\\\" failed at \\\"\" + path + \"\\\"!\";");
+            lines.push("	throw \"Expected an object at \" + path + \"!\";");
             lines.push("}");
             return lines.join(options.eol);
         }
@@ -475,7 +475,7 @@ class RecordType {
             lines.push("		}");
             lines.push("		return subject;");
             lines.push("	}");
-            lines.push("	throw \"Type guard \\\"Record\\\" failed at \\\"\" + path + \"\\\"!\";");
+            lines.push("	throw \"Expected a record at \" + path + \"!\";");
             lines.push("}");
         }
         else {
@@ -531,7 +531,7 @@ class StringType {
             lines.push("	if ((subject != null) && (subject.constructor === globalThis.String)) {");
             lines.push("		return subject as string;");
             lines.push("	}");
-            lines.push("	throw \"Type guard \\\"String\\\" failed at \\\"\" + path + \"\\\"!\";");
+            lines.push("	throw \"Expected a string at \" + path + \"!\";");
             lines.push("}");
         }
         else {
@@ -563,7 +563,7 @@ class StringLiteralType {
             lines.push("	if (subject === " + this.generateType(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })) + ") {");
             lines.push("		return subject;");
             lines.push("	}");
-            lines.push("	throw \"Type guard \\\"StringLiteral\\\" failed at \\\"\" + path + \"\\\"!\";");
+            lines.push("	throw \"Expected \\\"" + this.value + "\\\" at \" + path + \"!\";");
             lines.push("}");
         }
         else {
@@ -608,7 +608,7 @@ class TupleType {
             }
             lines.push("		return subject as " + this.generateType(Object.assign(Object.assign({}, options), { eol: options.eol + "\t\t" })) + ";");
             lines.push("	}");
-            lines.push("	throw \"Type guard \\\"Tuple\\\" failed at \\\"\" + path + \"\\\"!\";");
+            lines.push("	throw \"Expected a tuple at \" + path + \"!\";");
             lines.push("}");
             return lines.join(options.eol);
         }
@@ -660,7 +660,7 @@ class UndefinedType {
             lines.push("	if (subject === undefined) {");
             lines.push("		return subject;");
             lines.push("	}");
-            lines.push("	throw \"Type guard \\\"Undefined\\\" failed at \\\"\" + path + \"\\\"!\";");
+            lines.push("	throw \"Expected undefined at \" + path + \"!\";");
             lines.push("}");
         }
         else {
@@ -706,7 +706,7 @@ class UnionType {
                 lines.push("		return (" + type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t\t" })) + ")(subject, path);");
                 lines.push("	} catch (error) {}");
             }
-            lines.push("	throw \"Type guard \\\"Union\\\" failed at \\\"\" + path + \"\\\"!\";");
+            lines.push("	throw \"Expected a union at \" + path + \"!\";");
             lines.push("}");
             return lines.join(options.eol);
         }
