@@ -64,8 +64,8 @@ export const Intersection = {
 	of<A extends TupleOf<serialization.Message>>(...guards: TupleOf<serialization.MessageGuardTuple<A>>): serialization.MessageGuard<IntersectionOf<A>> {
 		return {
 			as(subject: any, path: string = ""): IntersectionOf<A> {
-				for (let value of guards) {
-					value.as(subject, path);
+				for (let guard of guards) {
+					guard.as(subject, path);
 				}
 				return subject;
 			},
