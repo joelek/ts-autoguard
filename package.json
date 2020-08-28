@@ -18,7 +18,8 @@
 	},
 	"scripts": {
 		"build": "rm -rf ./build/ && npx tsc --build",
-		"clean": "rm -rf ./build/ ./node_modules/"
+		"clean": "rm -rf ./build/ ./node_modules/",
+		"dist": "git stash && npm run build && git commit -a -m \"Generate build artifacts.\""
 	},
 	"version": "4.0.1"
 }
