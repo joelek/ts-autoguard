@@ -48,10 +48,9 @@ It is not uncommon for the producing application to be maintained by an entirely
 Type guards are intended to prevent from the consequences of broken contracts by embedding runtime assertions into JavaScript code. This guarantees that the consuming application executes with correct type information as the developer intended.
 
 ```ts
-import * as autoguard from "@joelek/ts-autoguard";
+import { guards as autoguard } from "@joelek/ts-autoguard";
 
-const { Array, Number } = { ...autoguard.guards };
-const guard = Array.of(Number);
+const guard = autoguard.Array.of(autoguard.Number);
 const deserialized = guard.as(JSON.parse(serialized));
 const sum = deserialized.reduce((sum, number) => {
 	return sum + number;
@@ -69,13 +68,12 @@ Type guards also support checking using `guard.is(...)` for use in branching dec
 Autoguard can be used to manually create type guards for your data.
 
 ```ts
-import * as autoguard from "@joelek/ts-autoguard";
+import { guards as autoguard } from "@joelek/ts-autoguard";
 
-const { Array, Number, Object, String } = { ...autoguard.guards };
-const guard = Array.of(Object.of({
-	id: String,
-	name: String,
-	age: Number
+const guard = autoguard.Array.of(autoguard.Object.of({
+	id: autoguard.String,
+	name: autoguard.String,
+	age: autoguard.Number
 }));
 ```
 
@@ -136,12 +134,11 @@ Autoguard can generate significantly less verbose modules with the addition of a
 npx autoguard --standalone=false
 ```
 
-```
-import * as autoguard from "@joelek/ts-autoguard";
+```ts
+import { guards as autoguard } from "@joelek/ts-autoguard";
 
-const { Array, String } = { ...autoguard.guards };
 export type MyArrayOfStringType = string[];
-export const MyArrayOfStringType = Array.of(String);
+export const MyArrayOfStringType = autoguard.Array.of(autoguard.String);
 ```
 
 The schema definition below shows all constructs supported by Autoguard.

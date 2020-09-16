@@ -60,8 +60,8 @@ exports.Intersection = {
     of(...guards) {
         return {
             as(subject, path = "") {
-                for (let value of guards) {
-                    value.as(subject, path);
+                for (let guard of guards) {
+                    guard.as(subject, path);
                 }
                 return subject;
             },

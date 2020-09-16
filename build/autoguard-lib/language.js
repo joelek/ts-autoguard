@@ -102,7 +102,7 @@ class AnyType {
             lines.push("}");
         }
         else {
-            lines.push("Any");
+            lines.push("autoguard.Any");
         }
         return lines.join(options.eol);
     }
@@ -137,7 +137,7 @@ class ArrayType {
             lines.push("}");
         }
         else {
-            lines.push("Array.of(" + this.type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol })) + ")");
+            lines.push("autoguard.Array.of(" + this.type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol })) + ")");
         }
         return lines.join(options.eol);
     }
@@ -168,7 +168,7 @@ class BooleanType {
             lines.push("}");
         }
         else {
-            lines.push("Boolean");
+            lines.push("autoguard.Boolean");
         }
         return lines.join(options.eol);
     }
@@ -216,7 +216,7 @@ class IntersectionType {
             for (let type of this.types) {
                 lines.push("	" + type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
             }
-            return "Intersection.of(" + options.eol + lines.join("," + options.eol) + options.eol + ")";
+            return "autoguard.Intersection.of(" + options.eol + lines.join("," + options.eol) + options.eol + ")";
         }
     }
     static parse(string) {
@@ -269,7 +269,7 @@ class NullType {
             lines.push("}");
         }
         else {
-            lines.push("Null");
+            lines.push("autoguard.Null");
         }
         return lines.join(options.eol);
     }
@@ -300,7 +300,7 @@ class NumberType {
             lines.push("}");
         }
         else {
-            lines.push("Number");
+            lines.push("autoguard.Number");
         }
         return lines.join(options.eol);
     }
@@ -332,7 +332,7 @@ class NumberLiteralType {
             lines.push("}");
         }
         else {
-            lines.push("NumberLiteral.of(" + this.generateType(Object.assign(Object.assign({}, options), { eol: options.eol })) + ")");
+            lines.push("autoguard.NumberLiteral.of(" + this.generateType(Object.assign(Object.assign({}, options), { eol: options.eol })) + ")");
         }
         return lines.join(options.eol);
     }
@@ -412,7 +412,7 @@ class ObjectType {
                 }
                 lines.push("	\"" + key + "\": " + type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
             }
-            return "Object.of({" + options.eol + lines.join("," + options.eol) + options.eol + "})";
+            return "autoguard.Object.of({" + options.eol + lines.join("," + options.eol) + options.eol + "})";
         }
     }
     [Symbol.iterator]() {
@@ -479,7 +479,7 @@ class RecordType {
             lines.push("}");
         }
         else {
-            lines.push("Record.of(" + this.type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol })) + ")");
+            lines.push("autoguard.Record.of(" + this.type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol })) + ")");
         }
         return lines.join(options.eol);
     }
@@ -535,7 +535,7 @@ class StringType {
             lines.push("}");
         }
         else {
-            lines.push("String");
+            lines.push("autoguard.String");
         }
         return lines.join(options.eol);
     }
@@ -567,7 +567,7 @@ class StringLiteralType {
             lines.push("}");
         }
         else {
-            lines.push("StringLiteral.of(\"" + this.value + "\")");
+            lines.push("autoguard.StringLiteral.of(\"" + this.value + "\")");
         }
         return lines.join(options.eol);
     }
@@ -616,7 +616,7 @@ class TupleType {
             for (let type of this.types) {
                 lines.push("	" + type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
             }
-            return "Tuple.of(" + options.eol + lines.join("," + options.eol) + options.eol + ")";
+            return "autoguard.Tuple.of(" + options.eol + lines.join("," + options.eol) + options.eol + ")";
         }
     }
     static parse(string) {
@@ -664,7 +664,7 @@ class UndefinedType {
             lines.push("}");
         }
         else {
-            lines.push("Undefined");
+            lines.push("autoguard.Undefined");
         }
         return lines.join(options.eol);
     }
@@ -714,7 +714,7 @@ class UnionType {
             for (let type of this.types) {
                 lines.push("	" + type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
             }
-            return "Union.of(" + options.eol + lines.join("," + options.eol) + options.eol + ")";
+            return "autoguard.Union.of(" + options.eol + lines.join("," + options.eol) + options.eol + ")";
         }
     }
     static parse(string) {
@@ -763,9 +763,7 @@ class Schema {
         lines.push("// This file was auto-generated by @joelek/ts-autoguard. Edit at own risk.");
         lines.push("");
         if (!options.standalone) {
-            lines.push("import * as autoguard from \"@joelek/ts-autoguard\";");
-            lines.push("");
-            lines.push("const { Any, Array, Boolean, Intersection, Null, Number, NumberLiteral, Object, Record, String, StringLiteral, Tuple, Undefined, Union } = { ...autoguard.guards };");
+            lines.push("import { guards as autoguard } from \"@joelek/ts-autoguard\";");
             lines.push("");
         }
         for (let [key, value] of this.types) {
