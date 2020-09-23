@@ -14,7 +14,7 @@ exports.Identifier = Identifier;
 ;
 class StringLiteral {
     static parse(string) {
-        let parts = /^["]([A-Za-z0-9_-]*)["]$/s.exec(string);
+        let parts = /^["]([^"]*)["]$/s.exec(string);
         if (parts !== null) {
             return parts[1];
         }
