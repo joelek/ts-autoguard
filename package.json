@@ -21,5 +21,5 @@
 		"clean": "rm -rf ./build/ ./node_modules/",
 		"dist": "git stash && npm run build && git commit -a -m \"Generate build artifacts.\""
 	},
-	"version": "4.0.2"
+	"version": "4.0.3"
 }
