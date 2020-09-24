@@ -603,7 +603,7 @@ export class StringLiteralType implements Type {
 	}
 
 	static parse(string: string): Type {
-		let parts = /^\s*"([A-Za-z0-9_-]*)"\s*$/s.exec(string);
+		let parts = /^\s*"([^"]*)"\s*$/s.exec(string);
 		if (parts !== null) {
 			let value = parts[1];
 			return new StringLiteralType(value);

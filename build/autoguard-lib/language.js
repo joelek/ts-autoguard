@@ -572,7 +572,7 @@ class StringLiteralType {
         return lines.join(options.eol);
     }
     static parse(string) {
-        let parts = /^\s*"([A-Za-z0-9_-]*)"\s*$/s.exec(string);
+        let parts = /^\s*"([^"]*)"\s*$/s.exec(string);
         if (parts !== null) {
             let value = parts[1];
             return new StringLiteralType(value);
