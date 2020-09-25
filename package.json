@@ -19,7 +19,10 @@
 	"scripts": {
 		"build": "rm -rf ./build/ && npx tsc --build",
 		"clean": "rm -rf ./build/ ./node_modules/",
-		"dist": "npm run build && git add ./build/ && git commit -m \"Generate build artifacts.\""
+		"dist": "npm run build && git add ./build/ && git commit -m \"Generate build artifacts.\"",
+		"test:true": "node ./build/autoguard-cli/index.js --root=./test/standalone=true/ --standalone=true",
+		"test:false": "node ./build/autoguard-cli/index.js --root=./test/standalone=false/ --standalone=false",
+		"test": "npm run test:true && npm run test:false"
 	},
 	"version": "4.0.4"
 }
