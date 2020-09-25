@@ -201,7 +201,7 @@ export const MyNumberLiteralType = {
 export type MyObjectType = {
 	"string_member": string,
 	"optional_member"?: string,
-	"member-with-dashes": string
+	"quoted-member": string
 };
 
 export const MyObjectType = {
@@ -238,7 +238,7 @@ export const MyObjectType = {
 						return subject as string;
 					}
 					throw "Expected a string at " + path + "!";
-				})(subject["member-with-dashes"], path + "[\"member-with-dashes\"]");
+				})(subject["quoted-member"], path + "[\"quoted-member\"]");
 				return subject;
 			}
 			throw "Expected an object at " + path + "!";
@@ -320,15 +320,15 @@ export const MyStringType = {
 	}
 };
 
-export type MyStringLiteralType = "literal";
+export type MyStringLiteralType = "räksmörgås";
 
 export const MyStringLiteralType = {
 	as(subject: any, path: string = ""): MyStringLiteralType {
 		return ((subject, path) => {
-			if (subject === "literal") {
+			if (subject === "räksmörgås") {
 				return subject;
 			}
-			throw "Expected \"literal\" at " + path + "!";
+			throw "Expected \"räksmörgås\" at " + path + "!";
 		})(subject, path);
 	},
 	is(subject: any): subject is MyStringLiteralType {

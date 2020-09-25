@@ -156,12 +156,12 @@ The schema definition below shows all constructs supported by Autoguard.
 	MyObjectType: {
 		string_member: string,
 		optional_member?: string,
-		"member-with-dashes": string
+		"quoted-member": string
 	},
 	MyRecordOfStringType: { string },
 	MyReferenceType: @MyObjectType,
 	MyStringType: string,
-	MyStringLiteralType: "literal",
+	MyStringLiteralType: "räksmörgås",
 	MyTupleType: [ string, number ],
 	MyUndefinedType: undefined,
 	MyUnionType: ( string | null )

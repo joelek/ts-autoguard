@@ -48,7 +48,7 @@ export const MyNumberLiteralType = autoguard.NumberLiteral.of(1337);
 export type MyObjectType = {
 	"string_member": string,
 	"optional_member"?: string,
-	"member-with-dashes": string
+	"quoted-member": string
 };
 
 export const MyObjectType = autoguard.Object.of({
@@ -57,7 +57,7 @@ export const MyObjectType = autoguard.Object.of({
 		autoguard.Undefined,
 		autoguard.String
 	),
-	"member-with-dashes": autoguard.String
+	"quoted-member": autoguard.String
 });
 
 export type MyRecordOfStringType = Record<string, undefined | string>;
@@ -72,9 +72,9 @@ export type MyStringType = string;
 
 export const MyStringType = autoguard.String;
 
-export type MyStringLiteralType = "literal";
+export type MyStringLiteralType = "räksmörgås";
 
-export const MyStringLiteralType = autoguard.StringLiteral.of("literal");
+export const MyStringLiteralType = autoguard.StringLiteral.of("räksmörgås");
 
 export type MyTupleType = [
 	string,
