@@ -40,6 +40,9 @@ export const Type = {
 			return BooleanType.parse(string);
 		} catch (error) {}
 		try {
+			return BooleanLiteralType.parse(string);
+		} catch (error) {}
+		try {
 			return IntersectionType.parse(string);
 		} catch (error) {}
 		try {
@@ -179,6 +182,42 @@ export class BooleanType implements Type {
 			return BooleanType.INSTANCE;
 		}
 		throw "Not a BooleanType!";
+	}
+};
+
+export class BooleanLiteralType implements Type {
+	private value: boolean;
+
+	constructor(value: boolean) {
+		this.value = value;
+	}
+
+	generateType(options: Options): string {
+		return "" + this.value;
+	}
+
+	generateTypeGuard(options: Options): string {
+		let lines = new Array<string>();
+		if (options.standalone) {
+			lines.push("(subject, path) => {");
+			lines.push("	if (subject === " + this.generateType({ ...options, eol: options.eol + "\t" }) + ") {");
+			lines.push("		return subject;");
+			lines.push("	}");
+			lines.push("	throw \"Expected " + this.value + " at \" + path + \"!\";");
+			lines.push("}");
+		} else {
+			lines.push("autoguard.BooleanLiteral.of(" + this.generateType({ ...options, eol: options.eol }) + ")");
+		}
+		return lines.join(options.eol);
+	}
+
+	static parse(string: string): Type {
+		let parts = /^\s*(true|false)\s*$/s.exec(string);
+		if (parts !== null) {
+			let value = parts[1] === "true";
+			return new BooleanLiteralType(value);
+		}
+		throw "Not a BooleanLiteralType!";
 	}
 };
 

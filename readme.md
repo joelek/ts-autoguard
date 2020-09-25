@@ -148,6 +148,7 @@ The schema definition below shows all constructs supported by Autoguard.
 	MyAnyType: any,
 	MyArrayOfStringType: string[],
 	MyBooleanType: boolean,
+	MyBooleanliteralType: true,
 	MyIntersectionType: ( { a_string_member: string } & { another_string_member: string } ),
 	MyNullType: null,
 	MyNumberType: number,
@@ -214,6 +215,7 @@ Identifier = AsciiLetter IdentifierTail*
 AnyType = WhiteSpace "any" WhiteSpace
 ArrayType = WhiteSpace Type WhiteSpace "[" WhiteSpace "]" WhiteSpace
 BooleanType = WhiteSpace "boolean" WhiteSpace
+BooleanLiteralType = WhiteSpace "true" or "false" WhiteSpace
 IntersectionBodyTail = WhiteSpace "&" WhiteSpace Type WhiteSpace
 IntersectionType = WhiteSpace "(" WhiteSpace Type WhiteSpace IntersectionBodyTail* WhiteSpace ")" WhiteSpace
 NullType = WhiteSpace "null" WhiteSpace

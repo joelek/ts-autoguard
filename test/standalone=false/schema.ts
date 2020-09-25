@@ -14,6 +14,10 @@ export type MyBooleanType = boolean;
 
 export const MyBooleanType = autoguard.Boolean;
 
+export type MyBooleanliteralType = true;
+
+export const MyBooleanliteralType = autoguard.BooleanLiteral.of(true);
+
 export type MyIntersectionType = ({
 	"a_string_member": string
 } & {
@@ -97,6 +101,7 @@ export type Autoguard = {
 	"MyAnyType": MyAnyType,
 	"MyArrayOfStringType": MyArrayOfStringType,
 	"MyBooleanType": MyBooleanType,
+	"MyBooleanliteralType": MyBooleanliteralType,
 	"MyIntersectionType": MyIntersectionType,
 	"MyNullType": MyNullType,
 	"MyNumberType": MyNumberType,
@@ -115,6 +120,7 @@ export const Autoguard = {
 	"MyAnyType": MyAnyType,
 	"MyArrayOfStringType": MyArrayOfStringType,
 	"MyBooleanType": MyBooleanType,
+	"MyBooleanliteralType": MyBooleanliteralType,
 	"MyIntersectionType": MyIntersectionType,
 	"MyNullType": MyNullType,
 	"MyNumberType": MyNumberType,

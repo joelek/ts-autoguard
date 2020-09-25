@@ -2,6 +2,7 @@
 	MyAnyType: any,
 	MyArrayOfStringType: string[],
 	MyBooleanType: boolean,
+	MyBooleanliteralType: true,
 	MyIntersectionType: ( { a_string_member: string } & { another_string_member: string } ),
 	MyNullType: null,
 	MyNumberType: number,

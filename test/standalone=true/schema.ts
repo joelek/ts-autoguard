@@ -68,6 +68,27 @@ export const MyBooleanType = {
 	}
 };
 
+export type MyBooleanliteralType = true;
+
+export const MyBooleanliteralType = {
+	as(subject: any, path: string = ""): MyBooleanliteralType {
+		return ((subject, path) => {
+			if (subject === true) {
+				return subject;
+			}
+			throw "Expected true at " + path + "!";
+		})(subject, path);
+	},
+	is(subject: any): subject is MyBooleanliteralType {
+		try {
+			this.as(subject);
+		} catch (error) {
+			return false;
+		}
+		return true;
+	}
+};
+
 export type MyIntersectionType = ({
 	"a_string_member": string
 } & {
@@ -418,6 +439,7 @@ export type Autoguard = {
 	"MyAnyType": MyAnyType,
 	"MyArrayOfStringType": MyArrayOfStringType,
 	"MyBooleanType": MyBooleanType,
+	"MyBooleanliteralType": MyBooleanliteralType,
 	"MyIntersectionType": MyIntersectionType,
 	"MyNullType": MyNullType,
 	"MyNumberType": MyNumberType,
@@ -436,6 +458,7 @@ export const Autoguard = {
 	"MyAnyType": MyAnyType,
 	"MyArrayOfStringType": MyArrayOfStringType,
 	"MyBooleanType": MyBooleanType,
+	"MyBooleanliteralType": MyBooleanliteralType,
 	"MyIntersectionType": MyIntersectionType,
 	"MyNullType": MyNullType,
 	"MyNumberType": MyNumberType,

@@ -60,6 +60,27 @@ export const Boolean = {
 	}
 };
 
+export const BooleanLiteral = {
+	of<A extends boolean>(value: A): serialization.MessageGuard<A> {
+		return {
+			as(subject: any, path: string = ""): A {
+				if (subject === value) {
+					return subject;
+				}
+				throw "Expected " + value + " at " + path + "!";
+			},
+			is(subject: any): subject is A {
+				try {
+					this.as(subject);
+				} catch (error) {
+					return false;
+				}
+				return true;
+			}
+		};
+	}
+};
+
 export const Intersection = {
 	of<A extends TupleOf<serialization.Message>>(...guards: TupleOf<serialization.MessageGuardTuple<A>>): serialization.MessageGuard<IntersectionOf<A>> {
 		return {

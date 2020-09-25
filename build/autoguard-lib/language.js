@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Schema = exports.UnionType = exports.UndefinedType = exports.TupleType = exports.StringLiteralType = exports.StringType = exports.ReferenceType = exports.RecordType = exports.ObjectType = exports.ObjectKey = exports.NumberLiteralType = exports.NumberType = exports.NullType = exports.IntersectionType = exports.BooleanType = exports.ArrayType = exports.AnyType = exports.Type = exports.StringLiteral = exports.Identifier = void 0;
+exports.Schema = exports.UnionType = exports.UndefinedType = exports.TupleType = exports.StringLiteralType = exports.StringType = exports.ReferenceType = exports.RecordType = exports.ObjectType = exports.ObjectKey = exports.NumberLiteralType = exports.NumberType = exports.NullType = exports.IntersectionType = exports.BooleanLiteralType = exports.BooleanType = exports.ArrayType = exports.AnyType = exports.Type = exports.StringLiteral = exports.Identifier = void 0;
 class Identifier {
     static parse(string) {
         let parts = /^([A-Za-z][A-Za-z0-9_]*)$/s.exec(string);
@@ -35,6 +35,10 @@ exports.Type = {
         catch (error) { }
         try {
             return BooleanType.parse(string);
+        }
+        catch (error) { }
+        try {
+            return BooleanLiteralType.parse(string);
         }
         catch (error) { }
         try {
@@ -181,6 +185,39 @@ class BooleanType {
 }
 exports.BooleanType = BooleanType;
 BooleanType.INSTANCE = new BooleanType();
+;
+class BooleanLiteralType {
+    constructor(value) {
+        this.value = value;
+    }
+    generateType(options) {
+        return "" + this.value;
+    }
+    generateTypeGuard(options) {
+        let lines = new Array();
+        if (options.standalone) {
+            lines.push("(subject, path) => {");
+            lines.push("	if (subject === " + this.generateType(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })) + ") {");
+            lines.push("		return subject;");
+            lines.push("	}");
+            lines.push("	throw \"Expected " + this.value + " at \" + path + \"!\";");
+            lines.push("}");
+        }
+        else {
+            lines.push("autoguard.BooleanLiteral.of(" + this.generateType(Object.assign(Object.assign({}, options), { eol: options.eol })) + ")");
+        }
+        return lines.join(options.eol);
+    }
+    static parse(string) {
+        let parts = /^\s*(true|false)\s*$/s.exec(string);
+        if (parts !== null) {
+            let value = parts[1] === "true";
+            return new BooleanLiteralType(value);
+        }
+        throw "Not a BooleanLiteralType!";
+    }
+}
+exports.BooleanLiteralType = BooleanLiteralType;
 ;
 class IntersectionType {
     constructor() {

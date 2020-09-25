@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Union = exports.Undefined = exports.Tuple = exports.StringLiteral = exports.String = exports.Record = exports.Object = exports.NumberLiteral = exports.Number = exports.Null = exports.Intersection = exports.Boolean = exports.Array = exports.Any = void 0;
+exports.Union = exports.Undefined = exports.Tuple = exports.StringLiteral = exports.String = exports.Record = exports.Object = exports.NumberLiteral = exports.Number = exports.Null = exports.Intersection = exports.BooleanLiteral = exports.Boolean = exports.Array = exports.Any = void 0;
 exports.Any = {
     as(subject, path = "") {
         return subject;
@@ -54,6 +54,27 @@ exports.Boolean = {
             return false;
         }
         return true;
+    }
+};
+exports.BooleanLiteral = {
+    of(value) {
+        return {
+            as(subject, path = "") {
+                if (subject === value) {
+                    return subject;
+                }
+                throw "Expected " + value + " at " + path + "!";
+            },
+            is(subject) {
+                try {
+                    this.as(subject);
+                }
+                catch (error) {
+                    return false;
+                }
+                return true;
+            }
+        };
     }
 };
 exports.Intersection = {

@@ -36,6 +36,13 @@ export declare class BooleanType implements Type {
     static readonly INSTANCE: BooleanType;
     static parse(string: string): Type;
 }
+export declare class BooleanLiteralType implements Type {
+    private value;
+    constructor(value: boolean);
+    generateType(options: Options): string;
+    generateTypeGuard(options: Options): string;
+    static parse(string: string): Type;
+}
 export declare class IntersectionType implements Type {
     private types;
     constructor();

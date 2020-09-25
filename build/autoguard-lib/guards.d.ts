@@ -14,6 +14,9 @@ export declare const Boolean: {
     as(subject: any, path?: string): boolean;
     is(subject: any): subject is boolean;
 };
+export declare const BooleanLiteral: {
+    of<A extends boolean>(value: A): serialization.MessageGuard<A>;
+};
 export declare const Intersection: {
     of<A extends any[]>(...guards_0: serialization.MessageGuardTuple<A>): serialization.MessageGuard<IntersectionOfUnion<UnionOf<A>>>;
 };
