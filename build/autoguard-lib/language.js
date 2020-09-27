@@ -1,95 +1,131 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Schema = exports.UnionType = exports.UndefinedType = exports.TupleType = exports.StringLiteralType = exports.StringType = exports.ReferenceType = exports.RecordType = exports.ObjectType = exports.ObjectKey = exports.NumberLiteralType = exports.NumberType = exports.NullType = exports.IntersectionType = exports.BooleanLiteralType = exports.BooleanType = exports.ArrayType = exports.AnyType = exports.Type = exports.StringLiteral = exports.Identifier = void 0;
-class Identifier {
-    static parse(string) {
-        let parts = /^([A-Za-z][A-Za-z0-9_]*)$/s.exec(string);
-        if (parts !== null) {
-            return parts[1];
-        }
-        throw "Not an Identifier!";
-    }
-}
-exports.Identifier = Identifier;
-;
-class StringLiteral {
-    static parse(string) {
-        let parts = /^["]([^"]*)["]$/s.exec(string);
-        if (parts !== null) {
-            return parts[1];
-        }
-        throw "Not a StringLiteral!";
-    }
-}
-exports.StringLiteral = StringLiteral;
+exports.Schema = exports.UnionType = exports.UndefinedType = exports.TupleType = exports.StringLiteralType = exports.StringType = exports.ReferenceType = exports.RecordType = exports.ObjectType = exports.NumberLiteralType = exports.NumberType = exports.NullType = exports.IntersectionType = exports.GroupType = exports.BooleanLiteralType = exports.BooleanType = exports.ArrayType = exports.AnyType = exports.Type = void 0;
+const tokenization = require("./tokenization");
 ;
 exports.Type = {
-    parse(string) {
+    parse(tokens, ...exclude) {
         try {
-            return AnyType.parse(string);
+            let copy = tokens.slice();
+            let type = ArrayType.parse(copy, ...exclude);
+            tokens.splice(0, tokens.length - copy.length);
+            return type;
         }
         catch (error) { }
         try {
-            return ArrayType.parse(string);
+            let copy = tokens.slice();
+            let type = IntersectionType.parse(copy, ...exclude);
+            tokens.splice(0, tokens.length - copy.length);
+            return type;
         }
         catch (error) { }
         try {
-            return BooleanType.parse(string);
+            let copy = tokens.slice();
+            let type = UnionType.parse(copy, ...exclude);
+            tokens.splice(0, tokens.length - copy.length);
+            return type;
         }
         catch (error) { }
         try {
-            return BooleanLiteralType.parse(string);
+            let copy = tokens.slice();
+            let type = AnyType.parse(copy);
+            tokens.splice(0, tokens.length - copy.length);
+            return type;
         }
         catch (error) { }
         try {
-            return IntersectionType.parse(string);
+            let copy = tokens.slice();
+            let type = BooleanType.parse(copy);
+            tokens.splice(0, tokens.length - copy.length);
+            return type;
         }
         catch (error) { }
         try {
-            return NullType.parse(string);
+            let copy = tokens.slice();
+            let type = BooleanLiteralType.parse(copy);
+            tokens.splice(0, tokens.length - copy.length);
+            return type;
         }
         catch (error) { }
         try {
-            return NumberType.parse(string);
+            let copy = tokens.slice();
+            let type = NullType.parse(copy);
+            tokens.splice(0, tokens.length - copy.length);
+            return type;
         }
         catch (error) { }
         try {
-            return NumberLiteralType.parse(string);
+            let copy = tokens.slice();
+            let type = NumberType.parse(copy);
+            tokens.splice(0, tokens.length - copy.length);
+            return type;
         }
         catch (error) { }
         try {
-            return ObjectType.parse(string);
+            let copy = tokens.slice();
+            let type = NumberLiteralType.parse(copy);
+            tokens.splice(0, tokens.length - copy.length);
+            return type;
         }
         catch (error) { }
         try {
-            return RecordType.parse(string);
+            let copy = tokens.slice();
+            let type = StringType.parse(copy);
+            tokens.splice(0, tokens.length - copy.length);
+            return type;
         }
         catch (error) { }
         try {
-            return ReferenceType.parse(string);
+            let copy = tokens.slice();
+            let type = StringLiteralType.parse(copy);
+            tokens.splice(0, tokens.length - copy.length);
+            return type;
         }
         catch (error) { }
         try {
-            return StringType.parse(string);
+            let copy = tokens.slice();
+            let type = UndefinedType.parse(copy);
+            tokens.splice(0, tokens.length - copy.length);
+            return type;
         }
         catch (error) { }
         try {
-            return StringLiteralType.parse(string);
+            let copy = tokens.slice();
+            let type = ReferenceType.parse(copy);
+            tokens.splice(0, tokens.length - copy.length);
+            return type;
         }
         catch (error) { }
         try {
-            return TupleType.parse(string);
+            let copy = tokens.slice();
+            let type = TupleType.parse(copy);
+            tokens.splice(0, tokens.length - copy.length);
+            return type;
         }
         catch (error) { }
         try {
-            return UndefinedType.parse(string);
+            let copy = tokens.slice();
+            let type = ObjectType.parse(copy);
+            tokens.splice(0, tokens.length - copy.length);
+            return type;
         }
         catch (error) { }
         try {
-            return UnionType.parse(string);
+            let copy = tokens.slice();
+            let type = GroupType.parse(copy);
+            tokens.splice(0, tokens.length - copy.length);
+            return type;
         }
         catch (error) { }
-        throw "Not a Type!";
+        try {
+            let copy = tokens.slice();
+            let type = RecordType.parse(copy);
+            tokens.splice(0, tokens.length - copy.length);
+            return type;
+        }
+        catch (error) { }
+        let token = tokenization.expect(tokens[0], undefined, undefined);
+        throw `Syntax error! Unxpected ${token.value} at row ${token.row}, col ${token.col}!`;
     }
 };
 class AnyType {
@@ -110,11 +146,9 @@ class AnyType {
         }
         return lines.join(options.eol);
     }
-    static parse(string) {
-        if (/^\s*any\s*$/s.exec(string) !== null) {
-            return AnyType.INSTANCE;
-        }
-        throw "Not an AnyType!";
+    static parse(tokens) {
+        tokenization.expect(tokens.shift(), undefined, "any");
+        return AnyType.INSTANCE;
     }
 }
 exports.AnyType = AnyType;
@@ -145,12 +179,27 @@ class ArrayType {
         }
         return lines.join(options.eol);
     }
-    static parse(string) {
-        let parts = /^\s*(.+)\s*\[\s*\]\s*$/s.exec(string);
-        if (parts !== null) {
-            return new ArrayType(exports.Type.parse(parts[1]));
+    static parse(tokens, ...exclude) {
+        var _a, _b;
+        if (exclude.includes("Array")) {
+            throw `Recursion prevention!`;
         }
-        throw "Not an ArrayType!";
+        let type = exports.Type.parse(tokens, ...exclude, "Array");
+        tokenization.expect(tokens.shift(), undefined, "[");
+        tokenization.expect(tokens.shift(), undefined, "]");
+        let array = new ArrayType(type);
+        while (true) {
+            if (((_a = tokens[0]) === null || _a === void 0 ? void 0 : _a.value) !== "[") {
+                break;
+            }
+            if (((_b = tokens[1]) === null || _b === void 0 ? void 0 : _b.value) !== "]") {
+                break;
+            }
+            tokenization.expect(tokens.shift(), undefined, "[");
+            tokenization.expect(tokens.shift(), undefined, "]");
+            array = new ArrayType(array);
+        }
+        return array;
     }
 }
 exports.ArrayType = ArrayType;
@@ -176,11 +225,9 @@ class BooleanType {
         }
         return lines.join(options.eol);
     }
-    static parse(string) {
-        if (/^\s*boolean\s*$/s.exec(string) !== null) {
-            return BooleanType.INSTANCE;
-        }
-        throw "Not a BooleanType!";
+    static parse(tokens) {
+        tokenization.expect(tokens.shift(), undefined, "boolean");
+        return BooleanType.INSTANCE;
     }
 }
 exports.BooleanType = BooleanType;
@@ -208,16 +255,31 @@ class BooleanLiteralType {
         }
         return lines.join(options.eol);
     }
-    static parse(string) {
-        let parts = /^\s*(true|false)\s*$/s.exec(string);
-        if (parts !== null) {
-            let value = parts[1] === "true";
-            return new BooleanLiteralType(value);
-        }
-        throw "Not a BooleanLiteralType!";
+    static parse(tokens) {
+        let value = tokenization.expect(tokens.shift(), undefined, ["true", "false"]).value;
+        return new BooleanLiteralType(value === "true");
     }
 }
 exports.BooleanLiteralType = BooleanLiteralType;
+;
+class GroupType {
+    constructor(type) {
+        this.type = type;
+    }
+    generateType(options) {
+        return "(" + this.type.generateType(options) + ")";
+    }
+    generateTypeGuard(options) {
+        return this.type.generateTypeGuard(options);
+    }
+    static parse(tokens) {
+        tokenization.expect(tokens.shift(), undefined, "(");
+        let type = exports.Type.parse(tokens);
+        tokenization.expect(tokens.shift(), undefined, ")");
+        return new GroupType(type);
+    }
+}
+exports.GroupType = GroupType;
 ;
 class IntersectionType {
     constructor() {
@@ -233,9 +295,6 @@ class IntersectionType {
             lines.push(type.generateType(options));
         }
         let string = lines.join(" & ");
-        if (this.types.size > 1) {
-            return "(" + string + ")";
-        }
         return string;
     }
     generateTypeGuard(options) {
@@ -256,35 +315,23 @@ class IntersectionType {
             return "autoguard.Intersection.of(" + options.eol + lines.join("," + options.eol) + options.eol + ")";
         }
     }
-    static parse(string) {
-        let parts = /^\s*\(\s*(.+)\s*\)\s*$/s.exec(string);
-        if (parts !== null) {
-            let instance = new IntersectionType();
-            let segments = parts[1].split("&");
-            let offset = 0;
-            let length = 1;
-            while (offset + length <= segments.length) {
-                try {
-                    let string = segments.slice(offset, offset + length).join("&");
-                    let type = exports.Type.parse(string);
-                    instance.add(type);
-                    offset = offset + length;
-                    length = 1;
-                    if (offset >= segments.length) {
-                        if (instance.types.size === 1) {
-                            return type;
-                        }
-                        if (instance.types.size > 1) {
-                            return instance;
-                        }
-                    }
-                }
-                catch (error) {
-                    length = length + 1;
-                }
+    static parse(tokens, ...exclude) {
+        var _a;
+        if (exclude.includes("Intersection")) {
+            throw `Recursion prevention!`;
+        }
+        let type = exports.Type.parse(tokens, ...exclude, "Intersection");
+        let instance = new IntersectionType();
+        instance.add(type);
+        while (true) {
+            tokenization.expect(tokens.shift(), undefined, "&");
+            let type = exports.Type.parse(tokens, ...exclude, "Intersection");
+            instance.add(type);
+            if (((_a = tokens[0]) === null || _a === void 0 ? void 0 : _a.value) !== "&") {
+                break;
             }
         }
-        throw "Not an IntersectionType!";
+        return instance;
     }
 }
 exports.IntersectionType = IntersectionType;
@@ -310,11 +357,9 @@ class NullType {
         }
         return lines.join(options.eol);
     }
-    static parse(string) {
-        if (/^\s*null\s*$/s.exec(string) !== null) {
-            return NullType.INSTANCE;
-        }
-        throw "Not a NullType!";
+    static parse(tokens) {
+        tokenization.expect(tokens.shift(), undefined, "null");
+        return NullType.INSTANCE;
     }
 }
 exports.NullType = NullType;
@@ -341,11 +386,9 @@ class NumberType {
         }
         return lines.join(options.eol);
     }
-    static parse(string) {
-        if (/^\s*number\s*$/s.exec(string) !== null) {
-            return NumberType.INSTANCE;
-        }
-        throw "Not a NumberType!";
+    static parse(tokens) {
+        tokenization.expect(tokens.shift(), undefined, "number");
+        return NumberType.INSTANCE;
     }
 }
 exports.NumberType = NumberType;
@@ -373,31 +416,12 @@ class NumberLiteralType {
         }
         return lines.join(options.eol);
     }
-    static parse(string) {
-        let parts = /^\s*([0-9]|([1-9][0-9]*))\s*$/s.exec(string);
-        if (parts !== null) {
-            let value = Number.parseInt(parts[1]);
-            return new NumberLiteralType(value);
-        }
-        throw "Not a NumberLiteralType!";
+    static parse(tokens) {
+        let value = tokenization.expect(tokens.shift(), "NUMBER_LITERAL", undefined).value;
+        return new NumberLiteralType(Number.parseInt(value));
     }
 }
 exports.NumberLiteralType = NumberLiteralType;
-;
-class ObjectKey {
-    static parse(string) {
-        try {
-            return Identifier.parse(string);
-        }
-        catch (error) { }
-        try {
-            return StringLiteral.parse(string);
-        }
-        catch (error) { }
-        throw "Not an ObjectKey!";
-    }
-}
-exports.ObjectKey = ObjectKey;
 ;
 class ObjectType {
     constructor() {
@@ -449,48 +473,36 @@ class ObjectType {
                 }
                 lines.push("	\"" + key + "\": " + type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
             }
-            return "autoguard.Object.of({" + options.eol + lines.join("," + options.eol) + options.eol + "})";
+            return "autoguard.Object.of<" + this.generateType(options) + ">({" + options.eol + lines.join("," + options.eol) + options.eol + "})";
         }
     }
-    [Symbol.iterator]() {
-        return this.members[Symbol.iterator]();
-    }
-    static parse(string) {
-        let parts = /^\s*\{\s*(.*)\s*\}\s*$/s.exec(string);
-        if (parts !== null) {
-            let instance = new ObjectType();
-            if (/^\s*$/s.test(parts[1])) {
-                return instance;
-            }
-            let segments = parts[1].split(",");
-            let offset = 0;
-            let length = 1;
-            while (offset + length <= segments.length) {
-                try {
-                    let string = segments.slice(offset, offset + length).join(",");
-                    let parts = /^\s*([^?:]+)\s*([?]?)\s*\:(.+)$/s.exec(string);
-                    if (parts === null) {
-                        break;
-                    }
-                    let key = ObjectKey.parse(parts[1]);
-                    let optional = parts[2] === "?";
-                    let type = exports.Type.parse(parts[3]);
-                    instance.add(key, {
-                        type,
-                        optional
-                    });
-                    offset = offset + length;
-                    length = 1;
-                    if (offset >= segments.length) {
-                        return instance;
-                    }
+    static parse(tokens) {
+        var _a, _b, _c;
+        tokenization.expect(tokens.shift(), undefined, "{");
+        let instance = new ObjectType();
+        if (((_a = tokens[0]) === null || _a === void 0 ? void 0 : _a.value) !== "}") {
+            while (true) {
+                let optional = false;
+                let token = tokenization.expect(tokens.shift(), ["IDENTIFIER", "STRING_LITERAL"], undefined);
+                let key = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
+                if (((_b = tokens[0]) === null || _b === void 0 ? void 0 : _b.value) === "?") {
+                    tokens.shift();
+                    optional = true;
                 }
-                catch (error) {
-                    length = length + 1;
+                tokenization.expect(tokens.shift(), undefined, ":");
+                let type = exports.Type.parse(tokens);
+                instance.add(key, {
+                    type,
+                    optional
+                });
+                if (((_c = tokens[0]) === null || _c === void 0 ? void 0 : _c.value) !== ",") {
+                    break;
                 }
+                tokenization.expect(tokens.shift(), undefined, ",");
             }
         }
-        throw "Not an ObjectType!";
+        tokenization.expect(tokens.shift(), undefined, "}");
+        return instance;
     }
 }
 exports.ObjectType = ObjectType;
@@ -520,12 +532,11 @@ class RecordType {
         }
         return lines.join(options.eol);
     }
-    static parse(string) {
-        let parts = /^\s*\{\s*(.+)\s*\}\s*$/s.exec(string);
-        if (parts !== null) {
-            return new RecordType(exports.Type.parse(parts[1]));
-        }
-        throw "Not a RecordType!";
+    static parse(tokens) {
+        tokenization.expect(tokens.shift(), undefined, "{");
+        let type = exports.Type.parse(tokens);
+        tokenization.expect(tokens.shift(), undefined, "}");
+        return new RecordType(type);
     }
 }
 exports.RecordType = RecordType;
@@ -545,12 +556,13 @@ class ReferenceType {
             return this.typename;
         }
     }
-    static parse(string) {
-        let parts = /^\s*@([A-Za-z][A-Za-z0-9_]*)\s*$/s.exec(string);
-        if (parts !== null) {
-            return new ReferenceType(parts[1]);
+    static parse(tokens) {
+        var _a;
+        if (((_a = tokens[0]) === null || _a === void 0 ? void 0 : _a.value) === "@") {
+            tokenization.expect(tokens.shift(), undefined, "@");
         }
-        throw "Not a ReferenceType!";
+        let value = tokenization.expect(tokens.shift(), "IDENTIFIER", undefined).value;
+        return new ReferenceType(value);
     }
 }
 exports.ReferenceType = ReferenceType;
@@ -576,11 +588,9 @@ class StringType {
         }
         return lines.join(options.eol);
     }
-    static parse(string) {
-        if (/^\s*string\s*$/s.exec(string) !== null) {
-            return StringType.INSTANCE;
-        }
-        throw "Not a StringType!";
+    static parse(tokens) {
+        tokenization.expect(tokens.shift(), undefined, "string");
+        return StringType.INSTANCE;
     }
 }
 exports.StringType = StringType;
@@ -608,13 +618,9 @@ class StringLiteralType {
         }
         return lines.join(options.eol);
     }
-    static parse(string) {
-        let parts = /^\s*"([^"]*)"\s*$/s.exec(string);
-        if (parts !== null) {
-            let value = parts[1];
-            return new StringLiteralType(value);
-        }
-        throw "Not a StringLiteralType!";
+    static parse(tokens) {
+        let value = tokenization.expect(tokens.shift(), "STRING_LITERAL", undefined).value;
+        return new StringLiteralType(value.slice(1, -1));
     }
 }
 exports.StringLiteralType = StringLiteralType;
@@ -656,30 +662,20 @@ class TupleType {
             return "autoguard.Tuple.of(" + options.eol + lines.join("," + options.eol) + options.eol + ")";
         }
     }
-    static parse(string) {
-        let parts = /^\s*\[\s*(.+)\s*\]\s*$/s.exec(string);
-        if (parts !== null) {
-            let instance = new TupleType();
-            let segments = parts[1].split(",");
-            let offset = 0;
-            let length = 1;
-            while (offset + length <= segments.length) {
-                try {
-                    let string = segments.slice(offset, offset + length).join(",");
-                    let type = exports.Type.parse(string);
-                    instance.add(type);
-                    offset = offset + length;
-                    length = 1;
-                    if (offset >= segments.length) {
-                        return instance;
-                    }
-                }
-                catch (error) {
-                    length = length + 1;
-                }
+    static parse(tokens) {
+        var _a;
+        tokenization.expect(tokens.shift(), undefined, "[");
+        let instance = new TupleType();
+        while (true) {
+            let type = exports.Type.parse(tokens);
+            instance.add(type);
+            if (((_a = tokens[0]) === null || _a === void 0 ? void 0 : _a.value) !== ",") {
+                break;
             }
+            tokenization.expect(tokens.shift(), undefined, ",");
         }
-        throw "Not a TupleType!";
+        tokenization.expect(tokens.shift(), undefined, "]");
+        return instance;
     }
 }
 exports.TupleType = TupleType;
@@ -705,11 +701,9 @@ class UndefinedType {
         }
         return lines.join(options.eol);
     }
-    static parse(string) {
-        if (/^\s*undefined\s*$/s.exec(string) !== null) {
-            return UndefinedType.INSTANCE;
-        }
-        throw "Not an UndefinedType!";
+    static parse(tokens) {
+        tokenization.expect(tokens.shift(), undefined, "undefined");
+        return UndefinedType.INSTANCE;
     }
 }
 exports.UndefinedType = UndefinedType;
@@ -729,9 +723,6 @@ class UnionType {
             lines.push(type.generateType(options));
         }
         let string = lines.join(" | ");
-        if (this.types.size > 1) {
-            return "(" + string + ")";
-        }
         return string;
     }
     generateTypeGuard(options) {
@@ -754,35 +745,23 @@ class UnionType {
             return "autoguard.Union.of(" + options.eol + lines.join("," + options.eol) + options.eol + ")";
         }
     }
-    static parse(string) {
-        let parts = /^\s*\(\s*(.+)\s*\)\s*$/s.exec(string);
-        if (parts !== null) {
-            let instance = new UnionType();
-            let segments = parts[1].split("|");
-            let offset = 0;
-            let length = 1;
-            while (offset + length <= segments.length) {
-                try {
-                    let string = segments.slice(offset, offset + length).join("|");
-                    let type = exports.Type.parse(string);
-                    instance.add(type);
-                    offset = offset + length;
-                    length = 1;
-                    if (offset >= segments.length) {
-                        if (instance.types.size === 1) {
-                            return type;
-                        }
-                        if (instance.types.size > 1) {
-                            return instance;
-                        }
-                    }
-                }
-                catch (error) {
-                    length = length + 1;
-                }
+    static parse(tokens, ...exclude) {
+        var _a;
+        if (exclude.includes("Union")) {
+            throw `Recursion prevention!`;
+        }
+        let type = exports.Type.parse(tokens, ...exclude, "Union");
+        let instance = new UnionType();
+        instance.add(type);
+        while (true) {
+            tokenization.expect(tokens.shift(), undefined, "|");
+            let type = exports.Type.parse(tokens, ...exclude, "Union");
+            instance.add(type);
+            if (((_a = tokens[0]) === null || _a === void 0 ? void 0 : _a.value) !== "|") {
+                break;
             }
         }
-        throw "Not a UnionType!";
+        return instance;
     }
 }
 exports.UnionType = UnionType;
@@ -840,11 +819,23 @@ class Schema {
         lines.push("");
         return lines.join(options.eol);
     }
-    static parse(string) {
-        let schema = ObjectType.parse(string);
+    static parse(tokens) {
+        var _a;
+        tokenization.expect(tokens.shift(), undefined, "{");
         let instance = new Schema();
-        for (let [key, value] of schema) {
-            instance.add(key, value.type);
+        while (true) {
+            let identifier = tokenization.expect(tokens.shift(), "IDENTIFIER", undefined).value;
+            tokenization.expect(tokens.shift(), undefined, ":");
+            let type = exports.Type.parse(tokens);
+            instance.add(identifier, type);
+            if (((_a = tokens[0]) === null || _a === void 0 ? void 0 : _a.value) !== ",") {
+                break;
+            }
+            tokenization.expect(tokens.shift(), undefined, ",");
+        }
+        tokenization.expect(tokens.shift(), undefined, "}");
+        if (tokens.length > 0) {
+            throw `Syntax error! Unxpected ${tokens[0].value} at row ${tokens[0].row}, col ${tokens[0].col}!`;
         }
         return instance;
     }
