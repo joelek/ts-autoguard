@@ -18,11 +18,15 @@ export type MyBooleanliteralType = true;
 
 export const MyBooleanliteralType = autoguard.BooleanLiteral.of(true);
 
-export type MyIntersectionType = ({
+export type MyGroupType = (any);
+
+export const MyGroupType = autoguard.Any;
+
+export type MyIntersectionType = {
 	"a_string_member": string
 } & {
 	"another_string_member": string
-});
+};
 
 export const MyIntersectionType = autoguard.Intersection.of(
 	autoguard.Object.of({
@@ -90,7 +94,7 @@ export type MyUndefinedType = undefined;
 
 export const MyUndefinedType = autoguard.Undefined;
 
-export type MyUnionType = (string | null);
+export type MyUnionType = string | null;
 
 export const MyUnionType = autoguard.Union.of(
 	autoguard.String,
@@ -102,6 +106,7 @@ export type Autoguard = {
 	"MyArrayOfStringType": MyArrayOfStringType,
 	"MyBooleanType": MyBooleanType,
 	"MyBooleanliteralType": MyBooleanliteralType,
+	"MyGroupType": MyGroupType,
 	"MyIntersectionType": MyIntersectionType,
 	"MyNullType": MyNullType,
 	"MyNumberType": MyNumberType,
@@ -121,6 +126,7 @@ export const Autoguard = {
 	"MyArrayOfStringType": MyArrayOfStringType,
 	"MyBooleanType": MyBooleanType,
 	"MyBooleanliteralType": MyBooleanliteralType,
+	"MyGroupType": MyGroupType,
 	"MyIntersectionType": MyIntersectionType,
 	"MyNullType": MyNullType,
 	"MyNumberType": MyNumberType,

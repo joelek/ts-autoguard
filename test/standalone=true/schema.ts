@@ -89,11 +89,29 @@ export const MyBooleanliteralType = {
 	}
 };
 
-export type MyIntersectionType = ({
+export type MyGroupType = (any);
+
+export const MyGroupType = {
+	as(subject: any, path: string = ""): MyGroupType {
+		return ((subject, path) => {
+			return subject;
+		})(subject, path);
+	},
+	is(subject: any): subject is MyGroupType {
+		try {
+			this.as(subject);
+		} catch (error) {
+			return false;
+		}
+		return true;
+	}
+};
+
+export type MyIntersectionType = {
 	"a_string_member": string
 } & {
 	"another_string_member": string
-});
+};
 
 export const MyIntersectionType = {
 	as(subject: any, path: string = ""): MyIntersectionType {
@@ -401,7 +419,7 @@ export const MyUndefinedType = {
 	}
 };
 
-export type MyUnionType = (string | null);
+export type MyUnionType = string | null;
 
 export const MyUnionType = {
 	as(subject: any, path: string = ""): MyUnionType {
@@ -440,6 +458,7 @@ export type Autoguard = {
 	"MyArrayOfStringType": MyArrayOfStringType,
 	"MyBooleanType": MyBooleanType,
 	"MyBooleanliteralType": MyBooleanliteralType,
+	"MyGroupType": MyGroupType,
 	"MyIntersectionType": MyIntersectionType,
 	"MyNullType": MyNullType,
 	"MyNumberType": MyNumberType,
@@ -459,6 +478,7 @@ export const Autoguard = {
 	"MyArrayOfStringType": MyArrayOfStringType,
 	"MyBooleanType": MyBooleanType,
 	"MyBooleanliteralType": MyBooleanliteralType,
+	"MyGroupType": MyGroupType,
 	"MyIntersectionType": MyIntersectionType,
 	"MyNullType": MyNullType,
 	"MyNumberType": MyNumberType,

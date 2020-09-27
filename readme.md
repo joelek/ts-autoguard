@@ -149,7 +149,8 @@ The schema definition below shows all constructs supported by Autoguard.
 	MyArrayOfStringType: string[],
 	MyBooleanType: boolean,
 	MyBooleanliteralType: true,
-	MyIntersectionType: ( { a_string_member: string } & { another_string_member: string } ),
+	MyGroupType: (any),
+	MyIntersectionType: { a_string_member: string } & { another_string_member: string },
 	MyNullType: null,
 	MyNumberType: number,
 	MyNumberLiteralType: 1337,
@@ -159,12 +160,12 @@ The schema definition below shows all constructs supported by Autoguard.
 		"quoted-member": string
 	},
 	MyRecordOfStringType: { string },
-	MyReferenceType: @MyObjectType,
+	MyReferenceType: MyObjectType,
 	MyStringType: string,
 	MyStringLiteralType: "räksmörgås",
 	MyTupleType: [ string, number ],
 	MyUndefinedType: undefined,
-	MyUnionType: ( string | null )
+	MyUnionType: string | null
 }
 ```
 
@@ -216,6 +217,7 @@ AnyType = WhiteSpace "any" WhiteSpace
 ArrayType = WhiteSpace Type WhiteSpace "[" WhiteSpace "]" WhiteSpace
 BooleanType = WhiteSpace "boolean" WhiteSpace
 BooleanLiteralType = WhiteSpace "true" or "false" WhiteSpace
+GroupType = WhiteSpace "(" WhiteSpace Type WhiteSpace ")" WhiteSpace
 IntersectionBodyTail = WhiteSpace "&" WhiteSpace Type WhiteSpace
 IntersectionType = WhiteSpace "(" WhiteSpace Type WhiteSpace IntersectionBodyTail* WhiteSpace ")" WhiteSpace
 NullType = WhiteSpace "null" WhiteSpace
@@ -227,7 +229,7 @@ ObjectBodyTail = WhiteSpace "," WhiteSpace ObjectKeyValue WhiteSpace
 ObjectBody = WhiteSpace ObjectKeyValue WhiteSpace ObjectBodyTail* WhiteSpace
 ObjectType = WhiteSpace "{" WhiteSpace ObjectBody* WhiteSpace "}" WhiteSpace
 RecordType = WhiteSpace "{" WhiteSpace Type WhiteSpace "}" WhiteSpace
-ReferenceType = WhiteSpace "@" Identifier WhiteSpace
+ReferenceType = WhiteSpace "@"? Identifier WhiteSpace
 StringType = WhiteSpace "string" WhiteSpace
 StringLiteralLetter = not """
 StringLiteral = """ StringLiteralLetter* """
@@ -240,7 +242,10 @@ UnionBodyTail = WhiteSpace "|" WhiteSpace Type WhiteSpace
 UnionType = WhiteSpace "(" WhiteSpace Type WhiteSpace UnionBodyTail* WhiteSpace ")" WhiteSpace
 PrimitiveType = AnyType or BooleanType or NullType or NumberType or StringType or UndefinedType
 LiteralType = NumberLiteralType or StringLiteralType
-ComplexType = ArrayType or IntersectionType or ObjectType or RecordType or ReferenceType or TupleType or UnionType
+ComplexType = ArrayType or GroupType or IntersectionType or ObjectType or RecordType or ReferenceType or TupleType or UnionType
 Type = PrimitiveType or LiteralType or ComplexType
-SchemaDefinition = ObjectType
+SchemaKeyValue = WhiteSpace Identifier WhiteSpace ":" WhiteSpace Type WhiteSpace
+SchemaBodyTail = WhiteSpace "," WhiteSpace SchemaKeyValue WhiteSpace
+SchemaBody = WhiteSpace SchemaKeyValue WhiteSpace SchemaBodyTail* WhiteSpace
+SchemaDefinition = WhiteSpace "{" WhiteSpace SchemaBody* WhiteSpace "}" WhiteSpace
 ```

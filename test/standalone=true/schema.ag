@@ -3,7 +3,8 @@
 	MyArrayOfStringType: string[],
 	MyBooleanType: boolean,
 	MyBooleanliteralType: true,
-	MyIntersectionType: ( { a_string_member: string } & { another_string_member: string } ),
+	MyGroupType: (any),
+	MyIntersectionType: { a_string_member: string } & { another_string_member: string },
 	MyNullType: null,
 	MyNumberType: number,
 	MyNumberLiteralType: 1337,
@@ -13,10 +14,10 @@
 		"quoted-member": string
 	},
 	MyRecordOfStringType: { string },
-	MyReferenceType: @MyObjectType,
+	MyReferenceType: MyObjectType,
 	MyStringType: string,
 	MyStringLiteralType: "räksmörgås",
 	MyTupleType: [ string, number ],
 	MyUndefinedType: undefined,
-	MyUnionType: ( string | null )
+	MyUnionType: string | null
 }
