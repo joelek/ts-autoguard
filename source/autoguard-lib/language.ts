@@ -502,7 +502,7 @@ export class ObjectType implements Type {
 				}
 				lines.push("	\"" + key + "\": " + type.generateTypeGuard({ ...options, eol: options.eol + "\t" }));
 			}
-			return "autoguard.Object.of({" + options.eol + lines.join("," + options.eol) + options.eol + "})";
+			return "autoguard.Object.of<" + this.generateType(options) + ">({" + options.eol + lines.join("," + options.eol) + options.eol + "})";
 		}
 	}
 

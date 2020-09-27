@@ -29,10 +29,14 @@ export type MyIntersectionType = {
 };
 
 export const MyIntersectionType = autoguard.Intersection.of(
-	autoguard.Object.of({
+	autoguard.Object.of<{
+		"a_string_member": string
+	}>({
 		"a_string_member": autoguard.String
 	}),
-	autoguard.Object.of({
+	autoguard.Object.of<{
+		"another_string_member": string
+	}>({
 		"another_string_member": autoguard.String
 	})
 );
@@ -55,7 +59,11 @@ export type MyObjectType = {
 	"quoted-member": string
 };
 
-export const MyObjectType = autoguard.Object.of({
+export const MyObjectType = autoguard.Object.of<{
+	"string_member": string,
+	"optional_member"?: string,
+	"quoted-member": string
+}>({
 	"string_member": autoguard.String,
 	"optional_member": autoguard.Union.of(
 		autoguard.Undefined,
