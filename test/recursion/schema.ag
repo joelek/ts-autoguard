@@ -1,0 +1,17 @@
+{
+	array1: string[],
+	array2: string[][],
+	array3: string[][][],
+	array4: string[][][][],
+	array5: string[][][][][],
+	intersection1: {},
+	intersection2: {} & {},
+	intersection3: {} & {} & {},
+	intersection4: {} & {} & {} & {},
+	intersection5: {} & {} & {} & {} & {},
+	union1: string,
+	union2: string | string,
+	union3: string | string | string,
+	union4: string | string | string | string,
+	union5: string | string | string | string | string
+}
