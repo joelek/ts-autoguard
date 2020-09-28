@@ -16,7 +16,7 @@ export const Type = {
 	parse(tokens: Array<tokenization.Token>, ...exclude: Typename[]): Type {
 		try {
 			let copy = tokens.slice();
-			let type = ArrayType.parse(copy, ...exclude);
+			let type = UnionType.parse(copy, ...exclude);
 			tokens.splice(0, tokens.length - copy.length);
 			return type;
 		} catch (error) {}
@@ -28,7 +28,7 @@ export const Type = {
 		} catch (error) {}
 		try {
 			let copy = tokens.slice();
-			let type = UnionType.parse(copy, ...exclude);
+			let type = ArrayType.parse(copy, ...exclude);
 			tokens.splice(0, tokens.length - copy.length);
 			return type;
 		} catch (error) {}
