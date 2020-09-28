@@ -7,7 +7,7 @@ exports.Type = {
     parse(tokens, ...exclude) {
         try {
             let copy = tokens.slice();
-            let type = ArrayType.parse(copy, ...exclude);
+            let type = UnionType.parse(copy, ...exclude);
             tokens.splice(0, tokens.length - copy.length);
             return type;
         }
@@ -21,7 +21,7 @@ exports.Type = {
         catch (error) { }
         try {
             let copy = tokens.slice();
-            let type = UnionType.parse(copy, ...exclude);
+            let type = ArrayType.parse(copy, ...exclude);
             tokens.splice(0, tokens.length - copy.length);
             return type;
         }
