@@ -439,7 +439,8 @@ class ObjectType {
         for (let [key, value] of this.members) {
             lines.push("	\"" + key + "\"" + (value.optional ? "?" : "") + ": " + value.type.generateType(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
         }
-        return "{" + options.eol + lines.join("," + options.eol) + options.eol + "}";
+        let string = lines.length > 0 ? options.eol + lines.join("," + options.eol) + options.eol : "";
+        return "{" + string + "}";
     }
     generateTypeGuard(options) {
         let lines = new Array();
@@ -473,7 +474,8 @@ class ObjectType {
                 }
                 lines.push("	\"" + key + "\": " + type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
             }
-            return "autoguard.Object.of<" + this.generateType(options) + ">({" + options.eol + lines.join("," + options.eol) + options.eol + "})";
+            let string = lines.length > 0 ? options.eol + lines.join("," + options.eol) + options.eol : "";
+            return "autoguard.Object.of<" + this.generateType(options) + ">({" + string + "})";
         }
     }
     static parse(tokens) {
@@ -638,7 +640,8 @@ class TupleType {
         for (let type of this.types) {
             strings.push("	" + type.generateType(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
         }
-        return "[" + options.eol + strings.join("," + options.eol) + options.eol + "]";
+        let string = strings.length > 0 ? options.eol + strings.join("," + options.eol) + options.eol : "";
+        return "[" + string + "]";
     }
     generateTypeGuard(options) {
         let lines = new Array();
@@ -659,7 +662,8 @@ class TupleType {
             for (let type of this.types) {
                 lines.push("	" + type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
             }
-            return "autoguard.Tuple.of(" + options.eol + lines.join("," + options.eol) + options.eol + ")";
+            let string = lines.length > 0 ? options.eol + lines.join("," + options.eol) + options.eol : "";
+            return "autoguard.Tuple.of(" + string + ")";
         }
     }
     static parse(tokens) {
