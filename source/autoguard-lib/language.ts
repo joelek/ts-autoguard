@@ -709,13 +709,15 @@ export class TupleType implements Type {
 	static parse(tokens: Array<tokenization.Token>): TupleType {
 		tokenization.expect(tokens.shift(), undefined, "[");
 		let instance = new TupleType();
-		while (true) {
-			let type = Type.parse(tokens);
-			instance.add(type);
-			if (tokens[0]?.value !== ",") {
-				break;
+		if (tokens[0]?.value !== "]") {
+			while (true) {
+				let type = Type.parse(tokens);
+				instance.add(type);
+				if (tokens[0]?.value !== ",") {
+					break;
+				}
+				tokenization.expect(tokens.shift(), undefined, ",");
 			}
-			tokenization.expect(tokens.shift(), undefined, ",");
 		}
 		tokenization.expect(tokens.shift(), undefined, "]");
 		return instance;
@@ -874,15 +876,17 @@ export class Schema {
 	static parse(tokens: Array<tokenization.Token>): Schema {
 		tokenization.expect(tokens.shift(), undefined, "{");
 		let instance = new Schema();
-		while (true) {
-			let identifier = tokenization.expect(tokens.shift(), "IDENTIFIER", undefined).value;
-			tokenization.expect(tokens.shift(), undefined, ":");
-			let type = Type.parse(tokens);
-			instance.add(identifier, type);
-			if (tokens[0]?.value !== ",") {
-				break;
+		if (tokens[0]?.value !== "}") {
+			while (true) {
+				let identifier = tokenization.expect(tokens.shift(), "IDENTIFIER", undefined).value;
+				tokenization.expect(tokens.shift(), undefined, ":");
+				let type = Type.parse(tokens);
+				instance.add(identifier, type);
+				if (tokens[0]?.value !== ",") {
+					break;
+				}
+				tokenization.expect(tokens.shift(), undefined, ",");
 			}
-			tokenization.expect(tokens.shift(), undefined, ",");
 		}
 		tokenization.expect(tokens.shift(), undefined, "}");
 		if (tokens.length > 0) {
