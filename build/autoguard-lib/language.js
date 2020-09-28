@@ -663,16 +663,18 @@ class TupleType {
         }
     }
     static parse(tokens) {
-        var _a;
+        var _a, _b;
         tokenization.expect(tokens.shift(), undefined, "[");
         let instance = new TupleType();
-        while (true) {
-            let type = exports.Type.parse(tokens);
-            instance.add(type);
-            if (((_a = tokens[0]) === null || _a === void 0 ? void 0 : _a.value) !== ",") {
-                break;
+        if (((_a = tokens[0]) === null || _a === void 0 ? void 0 : _a.value) !== "]") {
+            while (true) {
+                let type = exports.Type.parse(tokens);
+                instance.add(type);
+                if (((_b = tokens[0]) === null || _b === void 0 ? void 0 : _b.value) !== ",") {
+                    break;
+                }
+                tokenization.expect(tokens.shift(), undefined, ",");
             }
-            tokenization.expect(tokens.shift(), undefined, ",");
         }
         tokenization.expect(tokens.shift(), undefined, "]");
         return instance;
@@ -820,18 +822,20 @@ class Schema {
         return lines.join(options.eol);
     }
     static parse(tokens) {
-        var _a;
+        var _a, _b;
         tokenization.expect(tokens.shift(), undefined, "{");
         let instance = new Schema();
-        while (true) {
-            let identifier = tokenization.expect(tokens.shift(), "IDENTIFIER", undefined).value;
-            tokenization.expect(tokens.shift(), undefined, ":");
-            let type = exports.Type.parse(tokens);
-            instance.add(identifier, type);
-            if (((_a = tokens[0]) === null || _a === void 0 ? void 0 : _a.value) !== ",") {
-                break;
+        if (((_a = tokens[0]) === null || _a === void 0 ? void 0 : _a.value) !== "}") {
+            while (true) {
+                let identifier = tokenization.expect(tokens.shift(), "IDENTIFIER", undefined).value;
+                tokenization.expect(tokens.shift(), undefined, ":");
+                let type = exports.Type.parse(tokens);
+                instance.add(identifier, type);
+                if (((_b = tokens[0]) === null || _b === void 0 ? void 0 : _b.value) !== ",") {
+                    break;
+                }
+                tokenization.expect(tokens.shift(), undefined, ",");
             }
-            tokenization.expect(tokens.shift(), undefined, ",");
         }
         tokenization.expect(tokens.shift(), undefined, "}");
         if (tokens.length > 0) {
