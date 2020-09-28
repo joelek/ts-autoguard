@@ -17,5 +17,7 @@
 	preceedence1: string[] | string,
 	preceedence2: string | string[],
 	preceedence3: string | { a: string } & { b: string },
-	preceedence4: { a: string } & { b: string } | string
+	preceedence4: { a: string } & { b: string } | string,
+	empty1: [],
+	empty2: {}
 }

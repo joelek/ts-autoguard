@@ -24,70 +24,40 @@ export const array5 = autoguard.Array.of(autoguard.Array.of(autoguard.Array.of(a
 
 export type intersection1 = {};
 
-export const intersection1 = autoguard.Object.of<{}>({
-
-});
+export const intersection1 = autoguard.Object.of<{}>({});
 
 export type intersection2 = {} & {};
 
 export const intersection2 = autoguard.Intersection.of(
-	autoguard.Object.of<{}>({
-
-	}),
-	autoguard.Object.of<{}>({
-
-	})
+	autoguard.Object.of<{}>({}),
+	autoguard.Object.of<{}>({})
 );
 
 export type intersection3 = {} & {} & {};
 
 export const intersection3 = autoguard.Intersection.of(
-	autoguard.Object.of<{}>({
-
-	}),
-	autoguard.Object.of<{}>({
-
-	}),
-	autoguard.Object.of<{}>({
-
-	})
+	autoguard.Object.of<{}>({}),
+	autoguard.Object.of<{}>({}),
+	autoguard.Object.of<{}>({})
 );
 
 export type intersection4 = {} & {} & {} & {};
 
 export const intersection4 = autoguard.Intersection.of(
-	autoguard.Object.of<{}>({
-
-	}),
-	autoguard.Object.of<{}>({
-
-	}),
-	autoguard.Object.of<{}>({
-
-	}),
-	autoguard.Object.of<{}>({
-
-	})
+	autoguard.Object.of<{}>({}),
+	autoguard.Object.of<{}>({}),
+	autoguard.Object.of<{}>({}),
+	autoguard.Object.of<{}>({})
 );
 
 export type intersection5 = {} & {} & {} & {} & {};
 
 export const intersection5 = autoguard.Intersection.of(
-	autoguard.Object.of<{}>({
-
-	}),
-	autoguard.Object.of<{}>({
-
-	}),
-	autoguard.Object.of<{}>({
-
-	}),
-	autoguard.Object.of<{}>({
-
-	}),
-	autoguard.Object.of<{}>({
-
-	})
+	autoguard.Object.of<{}>({}),
+	autoguard.Object.of<{}>({}),
+	autoguard.Object.of<{}>({}),
+	autoguard.Object.of<{}>({}),
+	autoguard.Object.of<{}>({})
 );
 
 export type union1 = string;
@@ -176,6 +146,14 @@ export const preceedence4 = autoguard.Union.of(
 	autoguard.String
 );
 
+export type empty1 = [];
+
+export const empty1 = autoguard.Tuple.of();
+
+export type empty2 = {};
+
+export const empty2 = autoguard.Object.of<{}>({});
+
 export type Autoguard = {
 	"array1": array1,
 	"array2": array2,
@@ -195,7 +173,9 @@ export type Autoguard = {
 	"preceedence1": preceedence1,
 	"preceedence2": preceedence2,
 	"preceedence3": preceedence3,
-	"preceedence4": preceedence4
+	"preceedence4": preceedence4,
+	"empty1": empty1,
+	"empty2": empty2
 };
 
 export const Autoguard = {
@@ -217,5 +197,7 @@ export const Autoguard = {
 	"preceedence1": preceedence1,
 	"preceedence2": preceedence2,
 	"preceedence3": preceedence3,
-	"preceedence4": preceedence4
+	"preceedence4": preceedence4,
+	"empty1": empty1,
+	"empty2": empty2
 };
