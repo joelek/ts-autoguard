@@ -13,5 +13,9 @@
 	union2: string | string,
 	union3: string | string | string,
 	union4: string | string | string | string,
-	union5: string | string | string | string | string
+	union5: string | string | string | string | string,
+	preceedence1: string[] | string,
+	preceedence2: string | string[],
+	preceedence3: string | { a: string } & { b: string },
+	preceedence4: { a: string } & { b: string } | string
 }

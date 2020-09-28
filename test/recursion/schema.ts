@@ -118,6 +118,64 @@ export const union5 = autoguard.Union.of(
 	autoguard.String
 );
 
+export type preceedence1 = string[] | string;
+
+export const preceedence1 = autoguard.Union.of(
+	autoguard.Array.of(autoguard.String),
+	autoguard.String
+);
+
+export type preceedence2 = string | string[];
+
+export const preceedence2 = autoguard.Union.of(
+	autoguard.String,
+	autoguard.Array.of(autoguard.String)
+);
+
+export type preceedence3 = string | {
+	"a": string
+} & {
+	"b": string
+};
+
+export const preceedence3 = autoguard.Union.of(
+	autoguard.String,
+	autoguard.Intersection.of(
+		autoguard.Object.of<{
+			"a": string
+		}>({
+			"a": autoguard.String
+		}),
+		autoguard.Object.of<{
+			"b": string
+		}>({
+			"b": autoguard.String
+		})
+	)
+);
+
+export type preceedence4 = {
+	"a": string
+} & {
+	"b": string
+} | string;
+
+export const preceedence4 = autoguard.Union.of(
+	autoguard.Intersection.of(
+		autoguard.Object.of<{
+			"a": string
+		}>({
+			"a": autoguard.String
+		}),
+		autoguard.Object.of<{
+			"b": string
+		}>({
+			"b": autoguard.String
+		})
+	),
+	autoguard.String
+);
+
 export type Autoguard = {
 	"array1": array1,
 	"array2": array2,
@@ -133,7 +191,11 @@ export type Autoguard = {
 	"union2": union2,
 	"union3": union3,
 	"union4": union4,
-	"union5": union5
+	"union5": union5,
+	"preceedence1": preceedence1,
+	"preceedence2": preceedence2,
+	"preceedence3": preceedence3,
+	"preceedence4": preceedence4
 };
 
 export const Autoguard = {
@@ -151,5 +213,9 @@ export const Autoguard = {
 	"union2": union2,
 	"union3": union3,
 	"union4": union4,
-	"union5": union5
+	"union5": union5,
+	"preceedence1": preceedence1,
+	"preceedence2": preceedence2,
+	"preceedence3": preceedence3,
+	"preceedence4": preceedence4
 };
