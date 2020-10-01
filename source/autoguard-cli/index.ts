@@ -56,7 +56,10 @@ function run(): void {
 		process.stderr.write("Processing \"" + path + "\"...\n");
 		try {
 			let input = libfs.readFileSync(path, "utf8");
+			let start = Date.now();
 			let generated = autoguard.transform(input, options);
+			let duration = Date.now() - start;
+			process.stderr.write("	Transform: " + duration + " ms\n");
 			path = libpath.join(libpath.dirname(path), filename(path) + ".ts");
 			libfs.writeFileSync(path, generated, "utf8");
 			return sum + 0;
