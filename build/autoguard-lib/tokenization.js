@@ -90,7 +90,8 @@ class Tokenizer {
 exports.Tokenizer = Tokenizer;
 ;
 function expect(token, family) {
-    if (family !== token.family) {
+    let families = Array.isArray(family) ? family : [family];
+    if (!families.includes(token.family)) {
         throw `Unexpected ${token.family} at row ${token.row}, col ${token.col}!`;
     }
     return token;

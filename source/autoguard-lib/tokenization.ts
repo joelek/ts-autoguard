@@ -131,8 +131,9 @@ export class Tokenizer {
 	}
 };
 
-export function expect(token: Token, family: Family): Token {
-	if (family !== token.family) {
+export function expect(token: Token, family: Family | Family[]): Token {
+	let families = Array.isArray(family) ? family : [family];
+	if (!families.includes(token.family)) {
 		throw `Unexpected ${token.family} at row ${token.row}, col ${token.col}!`;
 	}
 	return token;

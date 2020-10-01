@@ -214,14 +214,16 @@ class BooleanLiteralType {
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
-            let token = read();
+            let token = tokenization.expect(read(), [
+                "true",
+                "false"
+            ]);
             if (token.family === "true") {
                 return BooleanLiteralType.INSTANCE_TRUE;
             }
-            else if (token.family === "false") {
+            else {
                 return BooleanLiteralType.INSTANCE_FALSE;
             }
-            throw ``;
         });
     }
 }
@@ -472,11 +474,19 @@ class ObjectType {
             if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.value) !== "}") {
                 while (true) {
                     let optional = false;
-                    let token = read();
-                    let key = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.family === "IDENTIFIER" ? token.value : undefined;
-                    if (key == null) {
-                        throw ``;
-                    }
+                    let token = tokenization.expect(read(), [
+                        "any",
+                        "boolean",
+                        "false",
+                        "null",
+                        "number",
+                        "string",
+                        "true",
+                        "undefined",
+                        "IDENTIFIER",
+                        "STRING_LITERAL"
+                    ]);
+                    let key = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
                     if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.value) === "?") {
                         read();
                         optional = true;

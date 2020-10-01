@@ -18,4 +18,4 @@ export declare class Tokenizer {
     constructor(string: string);
     newContext<A>(producer: (read: () => Token, peek: () => Token | undefined) => A): A;
 }
-export declare function expect(token: Token, family: Family): Token;
+export declare function expect(token: Token, family: Family | Family[]): Token;

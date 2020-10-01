@@ -222,13 +222,15 @@ export class BooleanLiteralType implements Type {
 
 	static parse(tokenizer: tokenization.Tokenizer): BooleanLiteralType {
 		return tokenizer.newContext((read, peek) => {
-			let token = read();
+			let token = tokenization.expect(read(), [
+				"true",
+				"false"
+			]);
 			if (token.family === "true") {
 				return BooleanLiteralType.INSTANCE_TRUE;
-			} else if (token.family === "false") {
+			} else {
 				return BooleanLiteralType.INSTANCE_FALSE;
 			}
-			throw ``;
 		});
 	}
 };
@@ -500,11 +502,19 @@ export class ObjectType implements Type {
 			if (peek()?.value !== "}") {
 				while (true) {
 					let optional = false;
-					let token = read();
-					let key = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.family === "IDENTIFIER" ? token.value : undefined;
-					if (key == null) {
-						throw ``;
-					}
+					let token = tokenization.expect(read(), [
+						"any",
+						"boolean",
+						"false",
+						"null",
+						"number",
+						"string",
+						"true",
+						"undefined",
+						"IDENTIFIER",
+						"STRING_LITERAL"
+					]);
+					let key = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
 					if (peek()?.value === "?") {
 						read();
 						optional = true;
