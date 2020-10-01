@@ -32,9 +32,7 @@ export declare const NumberLiteral: {
     of<A extends number>(value: A): serialization.MessageGuard<A>;
 };
 export declare const Object: {
-    of<A extends {
-        [key: string]: any;
-    }>(guards: serialization.MessageGuardMap<A>): serialization.MessageGuard<A>;
+    of<A extends import("@joelek/ts-stdlib/build/routing").MessageMap<A> = {}, B extends import("@joelek/ts-stdlib/build/routing").MessageMap<B> = {}, C = A & Partial<B>>(required: serialization.MessageGuardMap<A>, optional: serialization.MessageGuardMap<B>): serialization.MessageGuard<C>;
 };
 export declare const Record: {
     of<A extends unknown>(guard: serialization.MessageGuard<A>): serialization.MessageGuard<Record<string, A | undefined>>;

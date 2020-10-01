@@ -158,18 +158,23 @@ export const NumberLiteral = {
 };
 
 export const Object = {
-	of<A extends { [key: string]: serialization.Message }>(guards: serialization.MessageGuardMap<A>): serialization.MessageGuard<A> {
+	of<A extends serialization.MessageMap<A> = {}, B extends serialization.MessageMap<B> = {}, C = A & Partial<B>>(required: serialization.MessageGuardMap<A>, optional: serialization.MessageGuardMap<B>): serialization.MessageGuard<C> {
 		return {
-			as(subject: any, path: string = ""): A {
+			as(subject: any, path: string = ""): C {
 				if ((subject != null) && (subject.constructor === globalThis.Object)) {
-					for (let key in guards) {
-						guards[key].as(subject[key], path + "[\"" + key + "\"]");
+					for (let key in required) {
+						required[key].as(subject[key], path + "[\"" + key + "\"]");
+					}
+					for (let key in optional) {
+						if (key in subject) {
+							optional[key].as(subject[key], path + "[\"" + key + "\"]");
+						}
 					}
 					return subject;
 				}
 				throw "Expected an object at " + path + "!";
 			},
-			is(subject: any): subject is A {
+			is(subject: any): subject is C {
 				try {
 					this.as(subject);
 				} catch (error) {

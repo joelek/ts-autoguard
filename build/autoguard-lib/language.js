@@ -75,7 +75,7 @@ exports.Type = {
         catch (error) { }
         return tokenizer.newContext((read, peek) => {
             let token = read();
-            throw `Syntax error at row ${token.row}, col ${token.col}!`;
+            throw `Unexpected ${token.family} at row ${token.row}, col ${token.col}!`;
         });
     }
 };
@@ -99,7 +99,7 @@ class AnyType {
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
-            tokenization.expect(read(), undefined, "any");
+            tokenization.expect(read(), "any");
             return AnyType.INSTANCE;
         });
     }
@@ -138,14 +138,14 @@ class ArrayType {
         }
         return tokenizer.newContext((read, peek) => {
             let type = exports.Type.parse(tokenizer, ...exclude, "Array");
-            tokenization.expect(read(), undefined, "[");
-            tokenization.expect(read(), undefined, "]");
+            tokenization.expect(read(), "[");
+            tokenization.expect(read(), "]");
             let array = new ArrayType(type);
             while (true) {
                 try {
                     tokenizer.newContext((read, peek) => {
-                        tokenization.expect(read(), undefined, "[");
-                        tokenization.expect(read(), undefined, "]");
+                        tokenization.expect(read(), "[");
+                        tokenization.expect(read(), "]");
                         array = new ArrayType(array);
                     });
                 }
@@ -182,7 +182,7 @@ class BooleanType {
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
-            tokenization.expect(read(), undefined, "boolean");
+            tokenization.expect(read(), "boolean");
             return BooleanType.INSTANCE;
         });
     }
@@ -214,13 +214,14 @@ class BooleanLiteralType {
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
-            let value = tokenization.expect(read(), undefined, ["true", "false"]).value;
-            if (value === "true") {
+            let token = read();
+            if (token.family === "true") {
                 return BooleanLiteralType.INSTANCE_TRUE;
             }
-            else {
+            else if (token.family === "false") {
                 return BooleanLiteralType.INSTANCE_FALSE;
             }
+            throw ``;
         });
     }
 }
@@ -240,9 +241,9 @@ class GroupType {
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
-            tokenization.expect(read(), undefined, "(");
+            tokenization.expect(read(), "(");
             let type = exports.Type.parse(tokenizer);
-            tokenization.expect(read(), undefined, ")");
+            tokenization.expect(read(), ")");
             return new GroupType(type);
         });
     }
@@ -293,12 +294,15 @@ class IntersectionType {
             let instance = new IntersectionType();
             instance.add(type);
             while (true) {
-                tokenization.expect(read(), undefined, "&");
-                let type = exports.Type.parse(tokenizer, ...exclude, "Intersection");
-                instance.add(type);
                 if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.value) !== "&") {
                     break;
                 }
+                tokenization.expect(read(), "&");
+                let type = exports.Type.parse(tokenizer, ...exclude, "Intersection");
+                instance.add(type);
+            }
+            if (instance.types.size === 1) {
+                return type;
             }
             return instance;
         });
@@ -329,7 +333,7 @@ class NullType {
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
-            tokenization.expect(read(), undefined, "null");
+            tokenization.expect(read(), "null");
             return NullType.INSTANCE;
         });
     }
@@ -360,7 +364,7 @@ class NumberType {
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
-            tokenization.expect(read(), undefined, "number");
+            tokenization.expect(read(), "number");
             return NumberType.INSTANCE;
         });
     }
@@ -392,7 +396,7 @@ class NumberLiteralType {
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
-            let value = tokenization.expect(read(), "NUMBER_LITERAL", undefined).value;
+            let value = tokenization.expect(read(), "NUMBER_LITERAL").value;
             return new NumberLiteralType(Number.parseInt(value));
         });
     }
@@ -440,6 +444,8 @@ class ObjectType {
             return lines.join(options.eol);
         }
         else {
+            let optional = new Array();
+            let required = new Array();
             for (let [key, value] of this.members) {
                 let type = value.type;
                 if (value.optional) {
@@ -447,28 +453,35 @@ class ObjectType {
                     union.add(UndefinedType.INSTANCE);
                     union.add(type);
                     type = union;
+                    optional.push("	\"" + key + "\": " + type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
                 }
-                lines.push("	\"" + key + "\": " + type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
+                else {
+                    required.push("	\"" + key + "\": " + type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
+                }
             }
-            let string = lines.length > 0 ? options.eol + lines.join("," + options.eol) + options.eol : "";
-            return "autoguard.Object.of<" + this.generateType(options) + ">({" + string + "})";
+            let string1 = required.length > 0 ? options.eol + required.join("," + options.eol) + options.eol : "";
+            let string2 = optional.length > 0 ? options.eol + optional.join("," + options.eol) + options.eol : "";
+            return "autoguard.Object.of({" + string1 + "}, {" + string2 + "})";
         }
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
             var _a, _b, _c;
-            tokenization.expect(read(), undefined, "{");
+            tokenization.expect(read(), "{");
             let instance = new ObjectType();
             if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.value) !== "}") {
                 while (true) {
                     let optional = false;
-                    let token = tokenization.expect(read(), ["IDENTIFIER", "STRING_LITERAL"], undefined);
-                    let key = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
+                    let token = read();
+                    let key = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.family === "IDENTIFIER" ? token.value : undefined;
+                    if (key == null) {
+                        throw ``;
+                    }
                     if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.value) === "?") {
                         read();
                         optional = true;
                     }
-                    tokenization.expect(read(), undefined, ":");
+                    tokenization.expect(read(), ":");
                     let type = exports.Type.parse(tokenizer);
                     instance.add(key, {
                         type,
@@ -477,10 +490,10 @@ class ObjectType {
                     if (((_c = peek()) === null || _c === void 0 ? void 0 : _c.value) !== ",") {
                         break;
                     }
-                    tokenization.expect(read(), undefined, ",");
+                    tokenization.expect(read(), ",");
                 }
             }
-            tokenization.expect(read(), undefined, "}");
+            tokenization.expect(read(), "}");
             return instance;
         });
     }
@@ -514,9 +527,9 @@ class RecordType {
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
-            tokenization.expect(read(), undefined, "{");
+            tokenization.expect(read(), "{");
             let type = exports.Type.parse(tokenizer);
-            tokenization.expect(read(), undefined, "}");
+            tokenization.expect(read(), "}");
             return new RecordType(type);
         });
     }
@@ -541,10 +554,10 @@ class ReferenceType {
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
             var _a;
-            if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.value) === "@") {
-                tokenization.expect(read(), undefined, "@");
+            if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) === "@") {
+                tokenization.expect(read(), "@");
             }
-            let value = tokenization.expect(read(), "IDENTIFIER", undefined).value;
+            let value = tokenization.expect(read(), "IDENTIFIER").value;
             return new ReferenceType(value);
         });
     }
@@ -574,7 +587,7 @@ class StringType {
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
-            tokenization.expect(read(), undefined, "string");
+            tokenization.expect(read(), "string");
             return StringType.INSTANCE;
         });
     }
@@ -606,7 +619,7 @@ class StringLiteralType {
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
-            let value = tokenization.expect(read(), "STRING_LITERAL", undefined).value;
+            let value = tokenization.expect(read(), "STRING_LITERAL").value;
             return new StringLiteralType(value.slice(1, -1));
         });
     }
@@ -655,7 +668,7 @@ class TupleType {
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
             var _a, _b;
-            tokenization.expect(read(), undefined, "[");
+            tokenization.expect(read(), "[");
             let instance = new TupleType();
             if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.value) !== "]") {
                 while (true) {
@@ -664,10 +677,10 @@ class TupleType {
                     if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.value) !== ",") {
                         break;
                     }
-                    tokenization.expect(read(), undefined, ",");
+                    tokenization.expect(read(), ",");
                 }
             }
-            tokenization.expect(read(), undefined, "]");
+            tokenization.expect(read(), "]");
             return instance;
         });
     }
@@ -697,7 +710,7 @@ class UndefinedType {
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
-            tokenization.expect(read(), undefined, "undefined");
+            tokenization.expect(read(), "undefined");
             return UndefinedType.INSTANCE;
         });
     }
@@ -751,12 +764,15 @@ class UnionType {
             let instance = new UnionType();
             instance.add(type);
             while (true) {
-                tokenization.expect(read(), undefined, "|");
-                let type = exports.Type.parse(tokenizer, ...exclude, "Union");
-                instance.add(type);
                 if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.value) !== "|") {
                     break;
                 }
+                tokenization.expect(read(), "|");
+                let type = exports.Type.parse(tokenizer, ...exclude, "Union");
+                instance.add(type);
+            }
+            if (instance.types.size === 1) {
+                return type;
             }
             return instance;
         });
@@ -820,21 +836,21 @@ class Schema {
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
             var _a, _b;
-            tokenization.expect(read(), undefined, "{");
+            tokenization.expect(read(), "{");
             let instance = new Schema();
             if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.value) !== "}") {
                 while (true) {
-                    let identifier = tokenization.expect(read(), "IDENTIFIER", undefined).value;
-                    tokenization.expect(read(), undefined, ":");
+                    let identifier = tokenization.expect(read(), "IDENTIFIER").value;
+                    tokenization.expect(read(), ":");
                     let type = exports.Type.parse(tokenizer);
                     instance.add(identifier, type);
                     if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.value) !== ",") {
                         break;
                     }
-                    tokenization.expect(read(), undefined, ",");
+                    tokenization.expect(read(), ",");
                 }
             }
-            tokenization.expect(read(), undefined, "}");
+            tokenization.expect(read(), "}");
             if (peek() != null) {
                 throw `Expected end of stream!`;
             }

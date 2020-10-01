@@ -1,4 +1,4 @@
-export declare const Families: ["WHITESPACE", "PUNCTUATOR", "NUMBER_LITERAL", "IDENTIFIER", "STRING_LITERAL"];
+export declare const Families: ["WS", "(", ")", "[", "]", "{", "}", "?", "|", "&", "@", ",", ":", "any", "boolean", "false", "null", "number", "string", "true", "undefined", "IDENTIFIER", "NUMBER_LITERAL", "STRING_LITERAL"];
 export declare type Families = typeof Families;
 export declare type Family = typeof Families[number];
 export declare type Token = {
@@ -6,6 +6,9 @@ export declare type Token = {
     col: number;
     family: Family;
     value: string;
+};
+export declare type TypeMap<A extends [...string[]], B> = {
+    [_ in A[number]]: B;
 };
 export declare class Tokenizer {
     private tokens;
@@ -15,5 +18,4 @@ export declare class Tokenizer {
     constructor(string: string);
     newContext<A>(producer: (read: () => Token, peek: () => Token | undefined) => A): A;
 }
-export declare function tokenize(string: string): Generator<Token>;
-export declare function expect(token: Token | undefined, family?: Family | Family[], value?: string | string[]): Token;
+export declare function expect(token: Token, family: Family): Token;

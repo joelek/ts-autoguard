@@ -473,6 +473,8 @@ export class ObjectType implements Type {
 			lines.push("}");
 			return lines.join(options.eol);
 		} else {
+			let optional = new Array<string>();
+			let required = new Array<string>();
 			for (let [key, value] of this.members) {
 				let type = value.type;
 				if (value.optional) {
@@ -480,11 +482,14 @@ export class ObjectType implements Type {
 					union.add(UndefinedType.INSTANCE);
 					union.add(type);
 					type = union;
+					optional.push("	\"" + key + "\": " + type.generateTypeGuard({ ...options, eol: options.eol + "\t" }));
+				} else {
+					required.push("	\"" + key + "\": " + type.generateTypeGuard({ ...options, eol: options.eol + "\t" }));
 				}
-				lines.push("	\"" + key + "\": " + type.generateTypeGuard({ ...options, eol: options.eol + "\t" }));
 			}
-			let string = lines.length > 0 ? options.eol + lines.join("," + options.eol) + options.eol : "";
-			return "autoguard.Object.of<" + this.generateType(options) + ">({" + string + "})";
+			let string1 = required.length > 0 ? options.eol + required.join("," + options.eol) + options.eol : "";
+			let string2 = optional.length > 0 ? options.eol + optional.join("," + options.eol) + options.eol : "";
+			return "autoguard.Object.of({" + string1 + "}, {" + string2 + "})";
 		}
 	}
 

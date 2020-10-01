@@ -24,40 +24,40 @@ export const array5 = autoguard.Array.of(autoguard.Array.of(autoguard.Array.of(a
 
 export type intersection1 = {};
 
-export const intersection1 = autoguard.Object.of<{}>({});
+export const intersection1 = autoguard.Object.of({}, {});
 
 export type intersection2 = {} & {};
 
 export const intersection2 = autoguard.Intersection.of(
-	autoguard.Object.of<{}>({}),
-	autoguard.Object.of<{}>({})
+	autoguard.Object.of({}, {}),
+	autoguard.Object.of({}, {})
 );
 
 export type intersection3 = {} & {} & {};
 
 export const intersection3 = autoguard.Intersection.of(
-	autoguard.Object.of<{}>({}),
-	autoguard.Object.of<{}>({}),
-	autoguard.Object.of<{}>({})
+	autoguard.Object.of({}, {}),
+	autoguard.Object.of({}, {}),
+	autoguard.Object.of({}, {})
 );
 
 export type intersection4 = {} & {} & {} & {};
 
 export const intersection4 = autoguard.Intersection.of(
-	autoguard.Object.of<{}>({}),
-	autoguard.Object.of<{}>({}),
-	autoguard.Object.of<{}>({}),
-	autoguard.Object.of<{}>({})
+	autoguard.Object.of({}, {}),
+	autoguard.Object.of({}, {}),
+	autoguard.Object.of({}, {}),
+	autoguard.Object.of({}, {})
 );
 
 export type intersection5 = {} & {} & {} & {} & {};
 
 export const intersection5 = autoguard.Intersection.of(
-	autoguard.Object.of<{}>({}),
-	autoguard.Object.of<{}>({}),
-	autoguard.Object.of<{}>({}),
-	autoguard.Object.of<{}>({}),
-	autoguard.Object.of<{}>({})
+	autoguard.Object.of({}, {}),
+	autoguard.Object.of({}, {}),
+	autoguard.Object.of({}, {}),
+	autoguard.Object.of({}, {}),
+	autoguard.Object.of({}, {})
 );
 
 export type union1 = string;
@@ -103,16 +103,12 @@ export type preceedence3 = string | {
 export const preceedence3 = autoguard.Union.of(
 	autoguard.String,
 	autoguard.Intersection.of(
-		autoguard.Object.of<{
-			"a": string
-		}>({
+		autoguard.Object.of({
 			"a": autoguard.String
-		}),
-		autoguard.Object.of<{
-			"b": string
-		}>({
+		}, {}),
+		autoguard.Object.of({
 			"b": autoguard.String
-		})
+		}, {})
 	)
 );
 
@@ -124,16 +120,12 @@ export type preceedence4 = {
 
 export const preceedence4 = autoguard.Union.of(
 	autoguard.Intersection.of(
-		autoguard.Object.of<{
-			"a": string
-		}>({
+		autoguard.Object.of({
 			"a": autoguard.String
-		}),
-		autoguard.Object.of<{
-			"b": string
-		}>({
+		}, {}),
+		autoguard.Object.of({
 			"b": autoguard.String
-		})
+		}, {})
 	),
 	autoguard.String
 );
@@ -144,7 +136,7 @@ export const empty1 = autoguard.Tuple.of();
 
 export type empty2 = {};
 
-export const empty2 = autoguard.Object.of<{}>({});
+export const empty2 = autoguard.Object.of({}, {});
 
 export type Autoguard = {
 	"array1": array1,

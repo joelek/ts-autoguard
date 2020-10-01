@@ -54,7 +54,7 @@ export declare class IntersectionType implements Type {
     add(type: Type): this;
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
-    static parse(tokenizer: tokenization.Tokenizer, ...exclude: Typename[]): IntersectionType;
+    static parse(tokenizer: tokenization.Tokenizer, ...exclude: Typename[]): Type;
 }
 export declare class NullType implements Type {
     constructor();
@@ -138,7 +138,7 @@ export declare class UnionType implements Type {
     add(type: Type): this;
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
-    static parse(tokenizer: tokenization.Tokenizer, ...exclude: Array<Typename>): UnionType;
+    static parse(tokenizer: tokenization.Tokenizer, ...exclude: Array<Typename>): Type;
 }
 export declare class Schema {
     private types;
