@@ -13,111 +13,62 @@ export interface Type {
 };
 
 export const Type = {
-	parse(tokens: Array<tokenization.Token>, ...exclude: Typename[]): Type {
+	parse(tokenizer: tokenization.Tokenizer, ...exclude: Typename[]): Type {
 		try {
-			let copy = tokens.slice();
-			let type = UnionType.parse(copy, ...exclude);
-			tokens.splice(0, tokens.length - copy.length);
-			return type;
+			return UnionType.parse(tokenizer, ...exclude);
 		} catch (error) {}
 		try {
-			let copy = tokens.slice();
-			let type = IntersectionType.parse(copy, ...exclude);
-			tokens.splice(0, tokens.length - copy.length);
-			return type;
+			return IntersectionType.parse(tokenizer, ...exclude);
 		} catch (error) {}
 		try {
-			let copy = tokens.slice();
-			let type = ArrayType.parse(copy, ...exclude);
-			tokens.splice(0, tokens.length - copy.length);
-			return type;
+			return ArrayType.parse(tokenizer, ...exclude);
 		} catch (error) {}
 		try {
-			let copy = tokens.slice();
-			let type = AnyType.parse(copy);
-			tokens.splice(0, tokens.length - copy.length);
-			return type;
+			return AnyType.parse(tokenizer);
 		} catch (error) {}
 		try {
-			let copy = tokens.slice();
-			let type = BooleanType.parse(copy);
-			tokens.splice(0, tokens.length - copy.length);
-			return type;
+			return BooleanType.parse(tokenizer);
 		} catch (error) {}
 		try {
-			let copy = tokens.slice();
-			let type = BooleanLiteralType.parse(copy);
-			tokens.splice(0, tokens.length - copy.length);
-			return type;
+			return BooleanLiteralType.parse(tokenizer);
 		} catch (error) {}
 		try {
-			let copy = tokens.slice();
-			let type = NullType.parse(copy);
-			tokens.splice(0, tokens.length - copy.length);
-			return type;
+			return NullType.parse(tokenizer);
 		} catch (error) {}
 		try {
-			let copy = tokens.slice();
-			let type = NumberType.parse(copy);
-			tokens.splice(0, tokens.length - copy.length);
-			return type;
+			return NumberType.parse(tokenizer);
 		} catch (error) {}
 		try {
-			let copy = tokens.slice();
-			let type = NumberLiteralType.parse(copy);
-			tokens.splice(0, tokens.length - copy.length);
-			return type;
+			return NumberLiteralType.parse(tokenizer);
 		} catch (error) {}
 		try {
-			let copy = tokens.slice();
-			let type = StringType.parse(copy);
-			tokens.splice(0, tokens.length - copy.length);
-			return type;
+			return StringType.parse(tokenizer);
 		} catch (error) {}
 		try {
-			let copy = tokens.slice();
-			let type = StringLiteralType.parse(copy);
-			tokens.splice(0, tokens.length - copy.length);
-			return type;
+			return StringLiteralType.parse(tokenizer);
 		} catch (error) {}
 		try {
-			let copy = tokens.slice();
-			let type = UndefinedType.parse(copy);
-			tokens.splice(0, tokens.length - copy.length);
-			return type;
+			return UndefinedType.parse(tokenizer);
 		} catch (error) {}
 		try {
-			let copy = tokens.slice();
-			let type = ReferenceType.parse(copy);
-			tokens.splice(0, tokens.length - copy.length);
-			return type;
+			return ReferenceType.parse(tokenizer);
 		} catch (error) {}
 		try {
-			let copy = tokens.slice();
-			let type = TupleType.parse(copy);
-			tokens.splice(0, tokens.length - copy.length);
-			return type;
+			return TupleType.parse(tokenizer);
 		} catch (error) {}
 		try {
-			let copy = tokens.slice();
-			let type = ObjectType.parse(copy);
-			tokens.splice(0, tokens.length - copy.length);
-			return type;
+			return ObjectType.parse(tokenizer);
 		} catch (error) {}
 		try {
-			let copy = tokens.slice();
-			let type = GroupType.parse(copy);
-			tokens.splice(0, tokens.length - copy.length);
-			return type;
+			return GroupType.parse(tokenizer);
 		} catch (error) {}
 		try {
-			let copy = tokens.slice();
-			let type = RecordType.parse(copy);
-			tokens.splice(0, tokens.length - copy.length);
-			return type;
+			return RecordType.parse(tokenizer);
 		} catch (error) {}
-		let token = tokenization.expect(tokens[0], undefined, undefined);
-		throw `Syntax error! Unxpected ${token.value} at row ${token.row}, col ${token.col}!`;
+		return tokenizer.newContext((read, peek) => {
+			let token = read();
+			throw `Syntax error at row ${token.row}, col ${token.col}!`;
+		});
 	}
 };
 
@@ -144,9 +95,11 @@ export class AnyType implements Type {
 
 	static readonly INSTANCE = new AnyType();
 
-	static parse(tokens: Array<tokenization.Token>): AnyType {
-		tokenization.expect(tokens.shift(), undefined, "any");
-		return AnyType.INSTANCE;
+	static parse(tokenizer: tokenization.Tokenizer): AnyType {
+		return tokenizer.newContext((read, peek) => {
+			tokenization.expect(read(), undefined, "any");
+			return AnyType.INSTANCE;
+		});
 	}
 };
 
@@ -179,26 +132,28 @@ export class ArrayType implements Type {
 		return lines.join(options.eol);
 	}
 
-	static parse(tokens: Array<tokenization.Token>, ...exclude: Typename[]): ArrayType {
+	static parse(tokenizer: tokenization.Tokenizer, ...exclude: Typename[]): ArrayType {
 		if (exclude.includes("Array")) {
 			throw `Recursion prevention!`;
 		}
-		let type = Type.parse(tokens, ...exclude, "Array");
-		tokenization.expect(tokens.shift(), undefined, "[");
-		tokenization.expect(tokens.shift(), undefined, "]");
-		let array = new ArrayType(type);
-		while (true) {
-			if (tokens[0]?.value !== "[") {
-				break;
+		return tokenizer.newContext((read, peek) => {
+			let type = Type.parse(tokenizer, ...exclude, "Array");
+			tokenization.expect(read(), undefined, "[");
+			tokenization.expect(read(), undefined, "]");
+			let array = new ArrayType(type);
+			while (true) {
+				try {
+					tokenizer.newContext((read, peek) => {
+						tokenization.expect(read(), undefined, "[");
+						tokenization.expect(read(), undefined, "]");
+						array = new ArrayType(array);
+					});
+				} catch (error) {
+					break;
+				}
 			}
-			if (tokens[1]?.value !== "]") {
-				break;
-			}
-			tokenization.expect(tokens.shift(), undefined, "[");
-			tokenization.expect(tokens.shift(), undefined, "]");
-			array = new ArrayType(array);
-		}
-		return array;
+			return array;
+		});
 	}
 };
 
@@ -228,9 +183,11 @@ export class BooleanType implements Type {
 
 	static readonly INSTANCE = new BooleanType();
 
-	static parse(tokens: Array<tokenization.Token>): BooleanType {
-		tokenization.expect(tokens.shift(), undefined, "boolean");
-		return BooleanType.INSTANCE;
+	static parse(tokenizer: tokenization.Tokenizer): BooleanType {
+		return tokenizer.newContext((read, peek) => {
+			tokenization.expect(read(), undefined, "boolean");
+			return BooleanType.INSTANCE;
+		});
 	}
 };
 
@@ -260,9 +217,11 @@ export class BooleanLiteralType implements Type {
 		return lines.join(options.eol);
 	}
 
-	static parse(tokens: Array<tokenization.Token>): BooleanLiteralType {
-		let value = tokenization.expect(tokens.shift(), undefined, ["true", "false"]).value;
-		return new BooleanLiteralType(value === "true");
+	static parse(tokenizer: tokenization.Tokenizer): BooleanLiteralType {
+		return tokenizer.newContext((read, peek) => {
+			let value = tokenization.expect(read(), undefined, ["true", "false"]).value;
+			return new BooleanLiteralType(value === "true");
+		});
 	}
 };
 
@@ -281,11 +240,13 @@ export class GroupType implements Type {
 		return this.type.generateTypeGuard(options);
 	}
 
-	static parse(tokens: Array<tokenization.Token>): GroupType {
-		tokenization.expect(tokens.shift(), undefined, "(");
-		let type = Type.parse(tokens);
-		tokenization.expect(tokens.shift(), undefined, ")");
-		return new GroupType(type);
+	static parse(tokenizer: tokenization.Tokenizer): GroupType {
+		return tokenizer.newContext((read, peek) => {
+			tokenization.expect(read(), undefined, "(");
+			let type = Type.parse(tokenizer);
+			tokenization.expect(read(), undefined, ")");
+			return new GroupType(type);
+		});
 	}
 };
 
@@ -328,22 +289,24 @@ export class IntersectionType implements Type {
 		}
 	}
 
-	static parse(tokens: Array<tokenization.Token>, ...exclude: Typename[]): IntersectionType {
+	static parse(tokenizer: tokenization.Tokenizer, ...exclude: Typename[]): IntersectionType {
 		if (exclude.includes("Intersection")) {
 			throw `Recursion prevention!`;
 		}
-		let type = Type.parse(tokens, ...exclude, "Intersection");
-		let instance = new IntersectionType();
-		instance.add(type);
-		while (true) {
-			tokenization.expect(tokens.shift(), undefined, "&");
-			let type = Type.parse(tokens, ...exclude, "Intersection");
+		return tokenizer.newContext((read, peek) => {
+			let type = Type.parse(tokenizer, ...exclude, "Intersection");
+			let instance = new IntersectionType();
 			instance.add(type);
-			if (tokens[0]?.value !== "&") {
-				break;
+			while (true) {
+				tokenization.expect(read(), undefined, "&");
+				let type = Type.parse(tokenizer, ...exclude, "Intersection");
+				instance.add(type);
+				if (peek()?.value !== "&") {
+					break;
+				}
 			}
-		}
-		return instance;
+			return instance;
+		});
 	}
 };
 
@@ -373,9 +336,11 @@ export class NullType implements Type {
 
 	static readonly INSTANCE = new NullType();
 
-	static parse(tokens: Array<tokenization.Token>): NullType {
-		tokenization.expect(tokens.shift(), undefined, "null");
-		return NullType.INSTANCE;
+	static parse(tokenizer: tokenization.Tokenizer): NullType {
+		return tokenizer.newContext((read, peek) => {
+			tokenization.expect(read(), undefined, "null");
+			return NullType.INSTANCE;
+		});
 	}
 };
 
@@ -405,9 +370,11 @@ export class NumberType implements Type {
 
 	static readonly INSTANCE = new NumberType();
 
-	static parse(tokens: Array<tokenization.Token>): NumberType {
-		tokenization.expect(tokens.shift(), undefined, "number");
-		return NumberType.INSTANCE;
+	static parse(tokenizer: tokenization.Tokenizer): NumberType {
+		return tokenizer.newContext((read, peek) => {
+			tokenization.expect(read(), undefined, "number");
+			return NumberType.INSTANCE;
+		});
 	}
 };
 
@@ -437,9 +404,11 @@ export class NumberLiteralType implements Type {
 		return lines.join(options.eol);
 	}
 
-	static parse(tokens: Array<tokenization.Token>): NumberLiteralType {
-		let value = tokenization.expect(tokens.shift(), "NUMBER_LITERAL", undefined).value;
-		return new NumberLiteralType(Number.parseInt(value));
+	static parse(tokenizer: tokenization.Tokenizer): NumberLiteralType {
+		return tokenizer.newContext((read, peek) => {
+			let value = tokenization.expect(read(), "NUMBER_LITERAL", undefined).value;
+			return new NumberLiteralType(Number.parseInt(value));
+		});
 	}
 };
 
@@ -508,32 +477,34 @@ export class ObjectType implements Type {
 		}
 	}
 
-	static parse(tokens: Array<tokenization.Token>): ObjectType {
-		tokenization.expect(tokens.shift(), undefined, "{");
-		let instance = new ObjectType();
-		if (tokens[0]?.value !== "}") {
-			while (true) {
-				let optional = false;
-				let token = tokenization.expect(tokens.shift(), ["IDENTIFIER", "STRING_LITERAL"], undefined);
-				let key = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
-				if (tokens[0]?.value === "?") {
-					tokens.shift();
-					optional = true;
+	static parse(tokenizer: tokenization.Tokenizer): ObjectType {
+		return tokenizer.newContext((read, peek) => {
+			tokenization.expect(read(), undefined, "{");
+			let instance = new ObjectType();
+			if (peek()?.value !== "}") {
+				while (true) {
+					let optional = false;
+					let token = tokenization.expect(read(), ["IDENTIFIER", "STRING_LITERAL"], undefined);
+					let key = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
+					if (peek()?.value === "?") {
+						read();
+						optional = true;
+					}
+					tokenization.expect(read(), undefined, ":");
+					let type = Type.parse(tokenizer);
+					instance.add(key, {
+						type,
+						optional
+					});
+					if (peek()?.value !== ",") {
+						break;
+					}
+					tokenization.expect(read(), undefined, ",");
 				}
-				tokenization.expect(tokens.shift(), undefined, ":");
-				let type = Type.parse(tokens);
-				instance.add(key, {
-					type,
-					optional
-				});
-				if (tokens[0]?.value !== ",") {
-					break;
-				}
-				tokenization.expect(tokens.shift(), undefined, ",");
 			}
-		}
-		tokenization.expect(tokens.shift(), undefined, "}");
-		return instance;
+			tokenization.expect(read(), undefined, "}");
+			return instance;
+		});
 	}
 };
 
@@ -566,11 +537,13 @@ export class RecordType implements Type {
 		return lines.join(options.eol);
 	}
 
-	static parse(tokens: Array<tokenization.Token>): RecordType {
-		tokenization.expect(tokens.shift(), undefined, "{");
-		let type = Type.parse(tokens);
-		tokenization.expect(tokens.shift(), undefined, "}");
-		return new RecordType(type);
+	static parse(tokenizer: tokenization.Tokenizer): RecordType {
+		return tokenizer.newContext((read, peek) => {
+			tokenization.expect(read(), undefined, "{");
+			let type = Type.parse(tokenizer);
+			tokenization.expect(read(), undefined, "}");
+			return new RecordType(type);
+		});
 	}
 };
 
@@ -593,12 +566,14 @@ export class ReferenceType implements Type {
 		}
 	}
 
-	static parse(tokens: Array<tokenization.Token>): ReferenceType {
-		if (tokens[0]?.value === "@") {
-			tokenization.expect(tokens.shift(), undefined, "@");
-		}
-		let value = tokenization.expect(tokens.shift(), "IDENTIFIER", undefined).value;
-		return new ReferenceType(value);
+	static parse(tokenizer: tokenization.Tokenizer): ReferenceType {
+		return tokenizer.newContext((read, peek) => {
+			if (peek()?.value === "@") {
+				tokenization.expect(read(), undefined, "@");
+			}
+			let value = tokenization.expect(read(), "IDENTIFIER", undefined).value;
+			return new ReferenceType(value);
+		});
 	}
 };
 
@@ -628,9 +603,11 @@ export class StringType implements Type {
 
 	static readonly INSTANCE = new StringType();
 
-	static parse(tokens: Array<tokenization.Token>): StringType {
-		tokenization.expect(tokens.shift(), undefined, "string");
-		return StringType.INSTANCE;
+	static parse(tokenizer: tokenization.Tokenizer): StringType {
+		return tokenizer.newContext((read, peek) => {
+			tokenization.expect(read(), undefined, "string");
+			return StringType.INSTANCE;
+		});
 	}
 };
 
@@ -660,9 +637,11 @@ export class StringLiteralType implements Type {
 		return lines.join(options.eol);
 	}
 
-	static parse(tokens: Array<tokenization.Token>): StringLiteralType {
-		let value = tokenization.expect(tokens.shift(), "STRING_LITERAL", undefined).value;
-		return new StringLiteralType(value.slice(1, -1));
+	static parse(tokenizer: tokenization.Tokenizer): StringLiteralType {
+		return tokenizer.newContext((read, peek) => {
+			let value = tokenization.expect(read(), "STRING_LITERAL", undefined).value;
+			return new StringLiteralType(value.slice(1, -1));
+		});
 	}
 };
 
@@ -710,21 +689,23 @@ export class TupleType implements Type {
 		}
 	}
 
-	static parse(tokens: Array<tokenization.Token>): TupleType {
-		tokenization.expect(tokens.shift(), undefined, "[");
-		let instance = new TupleType();
-		if (tokens[0]?.value !== "]") {
-			while (true) {
-				let type = Type.parse(tokens);
-				instance.add(type);
-				if (tokens[0]?.value !== ",") {
-					break;
+	static parse(tokenizer: tokenization.Tokenizer): TupleType {
+		return tokenizer.newContext((read, peek) => {
+			tokenization.expect(read(), undefined, "[");
+			let instance = new TupleType();
+			if (peek()?.value !== "]") {
+				while (true) {
+					let type = Type.parse(tokenizer);
+					instance.add(type);
+					if (peek()?.value !== ",") {
+						break;
+					}
+					tokenization.expect(read(), undefined, ",");
 				}
-				tokenization.expect(tokens.shift(), undefined, ",");
 			}
-		}
-		tokenization.expect(tokens.shift(), undefined, "]");
-		return instance;
+			tokenization.expect(read(), undefined, "]");
+			return instance;
+		});
 	}
 };
 
@@ -754,9 +735,11 @@ export class UndefinedType implements Type {
 
 	static readonly INSTANCE = new UndefinedType();
 
-	static parse(tokens: Array<tokenization.Token>): UndefinedType {
-		tokenization.expect(tokens.shift(), undefined, "undefined");
-		return UndefinedType.INSTANCE;
+	static parse(tokenizer: tokenization.Tokenizer): UndefinedType {
+		return tokenizer.newContext((read, peek) => {
+			tokenization.expect(read(), undefined, "undefined");
+			return UndefinedType.INSTANCE;
+		});
 	}
 };
 
@@ -801,22 +784,24 @@ export class UnionType implements Type {
 		}
 	}
 
-	static parse(tokens: Array<tokenization.Token>, ...exclude: Array<Typename>): UnionType {
+	static parse(tokenizer: tokenization.Tokenizer, ...exclude: Array<Typename>): UnionType {
 		if (exclude.includes("Union")) {
 			throw `Recursion prevention!`;
 		}
-		let type = Type.parse(tokens, ...exclude, "Union");
-		let instance = new UnionType();
-		instance.add(type);
-		while (true) {
-			tokenization.expect(tokens.shift(), undefined, "|");
-			let type = Type.parse(tokens, ...exclude, "Union");
+		return tokenizer.newContext((read, peek) => {
+			let type = Type.parse(tokenizer, ...exclude, "Union");
+			let instance = new UnionType();
 			instance.add(type);
-			if (tokens[0]?.value !== "|") {
-				break;
+			while (true) {
+				tokenization.expect(read(), undefined, "|");
+				let type = Type.parse(tokenizer, ...exclude, "Union");
+				instance.add(type);
+				if (peek()?.value !== "|") {
+					break;
+				}
 			}
-		}
-		return instance;
+			return instance;
+		});
 	}
 };
 
@@ -877,25 +862,27 @@ export class Schema {
 		return lines.join(options.eol);
 	}
 
-	static parse(tokens: Array<tokenization.Token>): Schema {
-		tokenization.expect(tokens.shift(), undefined, "{");
-		let instance = new Schema();
-		if (tokens[0]?.value !== "}") {
-			while (true) {
-				let identifier = tokenization.expect(tokens.shift(), "IDENTIFIER", undefined).value;
-				tokenization.expect(tokens.shift(), undefined, ":");
-				let type = Type.parse(tokens);
-				instance.add(identifier, type);
-				if (tokens[0]?.value !== ",") {
-					break;
+	static parse(tokenizer: tokenization.Tokenizer): Schema {
+		return tokenizer.newContext((read, peek) => {
+			tokenization.expect(read(), undefined, "{");
+			let instance = new Schema();
+			if (peek()?.value !== "}") {
+				while (true) {
+					let identifier = tokenization.expect(read(), "IDENTIFIER", undefined).value;
+					tokenization.expect(read(), undefined, ":");
+					let type = Type.parse(tokenizer);
+					instance.add(identifier, type);
+					if (peek()?.value !== ",") {
+						break;
+					}
+					tokenization.expect(read(), undefined, ",");
 				}
-				tokenization.expect(tokens.shift(), undefined, ",");
 			}
-		}
-		tokenization.expect(tokens.shift(), undefined, "}");
-		if (tokens.length > 0) {
-			throw `Syntax error! Unxpected ${tokens[0].value} at row ${tokens[0].row}, col ${tokens[0].col}!`;
-		}
-		return instance;
+			tokenization.expect(read(), undefined, "}");
+			if (peek() != null) {
+				throw `Expected end of stream!`;
+			}
+			return instance;
+		});
 	}
 };

@@ -6,6 +6,8 @@ export const Families = (<A extends string[]>(...tuple: A): [...A] => tuple)(
 	"STRING_LITERAL"
 );
 
+export type Families = typeof Families;
+
 export type Family = typeof Families[number];
 
 export type Token = {
@@ -13,6 +15,39 @@ export type Token = {
 	col: number,
 	family: Family,
 	value: string
+};
+
+export class Tokenizer {
+	private tokens: Array<Token>;
+	private offset: number;
+
+	private peek(): Token | undefined {
+		return this.tokens[this.offset];
+	}
+
+	private read(): Token {
+		if (this.offset >= this.tokens.length) {
+			throw `Unexpectedly reached end of stream!`;
+		}
+		return this.tokens[this.offset++];
+	}
+
+	constructor(string: string) {
+		this.tokens = Array.of(...tokenize(string)).filter((token) => {
+			return token.family !== "WHITESPACE";
+		});
+		this.offset = 0;
+	}
+
+	newContext<A>(producer: (read: () => Token, peek: () => Token | undefined) => A): A {
+		let offset = this.offset;
+		try {
+			return producer(() => this.read(), () => this.peek());
+		} catch (error) {
+			this.offset = offset;
+			throw error;
+		}
+	}
 };
 
 export function* tokenize(string: string): Generator<Token> {
