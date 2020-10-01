@@ -202,6 +202,9 @@ export class BooleanLiteralType implements Type {
 		return "" + this.value;
 	}
 
+	static readonly INSTANCE_TRUE = new BooleanLiteralType(true);
+	static readonly INSTANCE_FALSE = new BooleanLiteralType(false);
+
 	generateTypeGuard(options: Options): string {
 		let lines = new Array<string>();
 		if (options.standalone) {
@@ -220,7 +223,11 @@ export class BooleanLiteralType implements Type {
 	static parse(tokenizer: tokenization.Tokenizer): BooleanLiteralType {
 		return tokenizer.newContext((read, peek) => {
 			let value = tokenization.expect(read(), undefined, ["true", "false"]).value;
-			return new BooleanLiteralType(value === "true");
+			if (value === "true") {
+				return BooleanLiteralType.INSTANCE_TRUE;
+			} else {
+				return BooleanLiteralType.INSTANCE_FALSE;
+			}
 		});
 	}
 };
