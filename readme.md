@@ -201,11 +201,9 @@ NB: Autoguard currently targets TypeScript 4. Some features may not be supported
 
 ## Syntax
 
-The type language is formally defined as a regular language which shares similarities with the type language in TypeScript.
+The type language is formally defined as a language that shares similarities with the type language in TypeScript. White space may occur between non-terminal tokens and is considered insignificant.
 
 ```
-WhiteSpaceLetter = "\n" or "\t" or "\r" or " "
-WhiteSpace = WhiteSpaceLetter*
 AsciiLetterLowercase = "a" to "z"
 AsciiLetterUppercase = "A" to "Z"
 AsciiLetter = AsciiLetterLowercase or AsciiLetterUppercase
@@ -213,39 +211,37 @@ Digit = "0" to "9"
 DigitPositive = "1" to "9"
 IdentifierTail = AsciiLetter or Digit or "_"
 Identifier = AsciiLetter IdentifierTail*
-AnyType = WhiteSpace "any" WhiteSpace
-ArrayType = WhiteSpace Type WhiteSpace "[" WhiteSpace "]" WhiteSpace
-BooleanType = WhiteSpace "boolean" WhiteSpace
-BooleanLiteralType = WhiteSpace "true" or "false" WhiteSpace
-GroupType = WhiteSpace "(" WhiteSpace Type WhiteSpace ")" WhiteSpace
-IntersectionBodyTail = WhiteSpace "&" WhiteSpace Type WhiteSpace
-IntersectionType = WhiteSpace "(" WhiteSpace Type WhiteSpace IntersectionBodyTail* WhiteSpace ")" WhiteSpace
-NullType = WhiteSpace "null" WhiteSpace
-NumberType = WhiteSpace "number" WhiteSpace
-NumberLiteralType = WhiteSpace Digit or (DigitPositive Digit*) WhiteSpace
+AnyType = "any"
+ArrayType = Type "[" "]"
+BooleanType = "boolean"
+BooleanLiteralType = "true" or "false"
+GroupType = "(" Type ")"
+IntersectionType = Type "&" Type
+NullType = "null"
+NumberType = "number"
+NumberLiteralType = Digit or (DigitPositive Digit*)
 ObjectKey = Identifier or StringLiteral
-ObjectKeyValue = WhiteSpace ObjectKey WhiteSpace "?"? WhiteSpace ":" WhiteSpace Type WhiteSpace
-ObjectBodyTail = WhiteSpace "," WhiteSpace ObjectKeyValue WhiteSpace
-ObjectBody = WhiteSpace ObjectKeyValue WhiteSpace ObjectBodyTail* WhiteSpace
-ObjectType = WhiteSpace "{" WhiteSpace ObjectBody* WhiteSpace "}" WhiteSpace
-RecordType = WhiteSpace "{" WhiteSpace Type WhiteSpace "}" WhiteSpace
-ReferenceType = WhiteSpace "@"? Identifier WhiteSpace
-StringType = WhiteSpace "string" WhiteSpace
+ObjectKeyValue = ObjectKey "?"? ":" Type
+ObjectBodyTail = "," ObjectKeyValue
+ObjectBody = ObjectKeyValue ObjectBodyTail*
+ObjectType = "{" ObjectBody* "}"
+RecordType = "{" Type "}"
+ReferenceType = "@"? Identifier
+StringType = "string"
 StringLiteralLetter = not """
 StringLiteral = """ StringLiteralLetter* """
-StringLiteralType = WhiteSpace StringLiteral WhiteSpace
-TupleBodyTail = WhiteSpace "," WhiteSpace Type WhiteSpace
-TupleBody = WhiteSpace Type WhiteSpace TupleBodyTail* WhiteSpace
-TupleType = WhiteSpace "[" WhiteSpace TupleBody* WhiteSpace "]" WhiteSpace
-UndefinedType = WhiteSpace "undefined" WhiteSpace
-UnionBodyTail = WhiteSpace "|" WhiteSpace Type WhiteSpace
-UnionType = WhiteSpace "(" WhiteSpace Type WhiteSpace UnionBodyTail* WhiteSpace ")" WhiteSpace
+StringLiteralType = StringLiteral
+TupleBodyTail = "," Type
+TupleBody = Type TupleBodyTail*
+TupleType = "[" TupleBody* "]"
+UndefinedType = "undefined"
+UnionType = Type "|" Type
 PrimitiveType = AnyType or BooleanType or NullType or NumberType or StringType or UndefinedType
 LiteralType = NumberLiteralType or StringLiteralType
 ComplexType = ArrayType or GroupType or IntersectionType or ObjectType or RecordType or ReferenceType or TupleType or UnionType
 Type = PrimitiveType or LiteralType or ComplexType
-SchemaKeyValue = WhiteSpace Identifier WhiteSpace ":" WhiteSpace Type WhiteSpace
-SchemaBodyTail = WhiteSpace "," WhiteSpace SchemaKeyValue WhiteSpace
-SchemaBody = WhiteSpace SchemaKeyValue WhiteSpace SchemaBodyTail* WhiteSpace
-SchemaDefinition = WhiteSpace "{" WhiteSpace SchemaBody* WhiteSpace "}" WhiteSpace
+SchemaKeyValue = Identifier ":" Type
+SchemaBodyTail = "," SchemaKeyValue
+SchemaBody = SchemaKeyValue SchemaBodyTail*
+SchemaDefinition = "{" SchemaBody* "}"
 ```
