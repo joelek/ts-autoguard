@@ -297,7 +297,7 @@ export class IntersectionType implements Type {
 		}
 	}
 
-	static parse(tokenizer: tokenization.Tokenizer, ...exclude: Typename[]): IntersectionType {
+	static parse(tokenizer: tokenization.Tokenizer, ...exclude: Typename[]): Type {
 		if (exclude.includes("Intersection")) {
 			throw `Recursion prevention!`;
 		}
@@ -306,12 +306,15 @@ export class IntersectionType implements Type {
 			let instance = new IntersectionType();
 			instance.add(type);
 			while (true) {
-				tokenization.expect(read(), "&");
-				let type = Type.parse(tokenizer, ...exclude, "Intersection");
-				instance.add(type);
 				if (peek()?.value !== "&") {
 					break;
 				}
+				tokenization.expect(read(), "&");
+				let type = Type.parse(tokenizer, ...exclude, "Intersection");
+				instance.add(type);
+			}
+			if (instance.types.size === 1) {
+				return type;
 			}
 			return instance;
 		});
@@ -795,7 +798,7 @@ export class UnionType implements Type {
 		}
 	}
 
-	static parse(tokenizer: tokenization.Tokenizer, ...exclude: Array<Typename>): UnionType {
+	static parse(tokenizer: tokenization.Tokenizer, ...exclude: Array<Typename>): Type {
 		if (exclude.includes("Union")) {
 			throw `Recursion prevention!`;
 		}
@@ -804,12 +807,15 @@ export class UnionType implements Type {
 			let instance = new UnionType();
 			instance.add(type);
 			while (true) {
-				tokenization.expect(read(), "|");
-				let type = Type.parse(tokenizer, ...exclude, "Union");
-				instance.add(type);
 				if (peek()?.value !== "|") {
 					break;
 				}
+				tokenization.expect(read(), "|");
+				let type = Type.parse(tokenizer, ...exclude, "Union");
+				instance.add(type);
+			}
+			if (instance.types.size === 1) {
+				return type;
 			}
 			return instance;
 		});

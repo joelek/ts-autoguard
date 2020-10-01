@@ -66,27 +66,19 @@ export const union1 = autoguard.String;
 
 export type union2 = string;
 
-export const union2 = autoguard.Union.of(
-	autoguard.String
-);
+export const union2 = autoguard.String;
 
 export type union3 = string;
 
-export const union3 = autoguard.Union.of(
-	autoguard.String
-);
+export const union3 = autoguard.String;
 
 export type union4 = string;
 
-export const union4 = autoguard.Union.of(
-	autoguard.String
-);
+export const union4 = autoguard.String;
 
 export type union5 = string;
 
-export const union5 = autoguard.Union.of(
-	autoguard.String
-);
+export const union5 = autoguard.String;
 
 export type preceedence1 = string[] | string;
 
