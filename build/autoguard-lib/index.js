@@ -10,10 +10,8 @@ exports.serialization = serialization;
 const tokenization = require("./tokenization");
 exports.tokenization = tokenization;
 function transform(string, options) {
-    let tokens = Array.of(...tokenization.tokenize(string)).filter((token) => {
-        return token.family !== "WHITESPACE";
-    });
-    let schema = language.Schema.parse(tokens);
+    let tokenizer = new tokenization.Tokenizer(string);
+    let schema = language.Schema.parse(tokenizer);
     return schema.generateModule(options);
 }
 exports.transform = transform;

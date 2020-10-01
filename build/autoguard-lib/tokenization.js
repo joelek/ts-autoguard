@@ -1,7 +1,36 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.expect = exports.tokenize = exports.Families = void 0;
+exports.expect = exports.tokenize = exports.Tokenizer = exports.Families = void 0;
 exports.Families = ((...tuple) => tuple)("WHITESPACE", "PUNCTUATOR", "NUMBER_LITERAL", "IDENTIFIER", "STRING_LITERAL");
+class Tokenizer {
+    constructor(string) {
+        this.tokens = Array.of(...tokenize(string)).filter((token) => {
+            return token.family !== "WHITESPACE";
+        });
+        this.offset = 0;
+    }
+    peek() {
+        return this.tokens[this.offset];
+    }
+    read() {
+        if (this.offset >= this.tokens.length) {
+            throw `Unexpectedly reached end of stream!`;
+        }
+        return this.tokens[this.offset++];
+    }
+    newContext(producer) {
+        let offset = this.offset;
+        try {
+            return producer(() => this.read(), () => this.peek());
+        }
+        catch (error) {
+            this.offset = offset;
+            throw error;
+        }
+    }
+}
+exports.Tokenizer = Tokenizer;
+;
 function* tokenize(string) {
     let re = /(?<WHITESPACE>[\t\r\n ]+)|(?<PUNCTUATOR>[\(\)\[\]\{\}\?\|&@,:])|(?<NUMBER_LITERAL>([1-9][0-9]+)|([0-9]))|(?<IDENTIFIER>[a-z][a-z0-9_]*)|(?<STRING_LITERAL>["][^"]*["])|(.)/isgu;
     let match = null;
