@@ -25,5 +25,5 @@
 		"test:recursion": "node ./build/autoguard-cli/index.js --root=./test/recursion/ --standalone=false",
 		"test": "npm run test:true && npm run test:false && npm run test:recursion"
 	},
-	"version": "4.2.3"
+	"version": "4.2.4"
 }
