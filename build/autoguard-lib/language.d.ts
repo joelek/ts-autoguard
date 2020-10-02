@@ -7,6 +7,7 @@ export declare type Options = {
 export interface Type {
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
+    setTypename?(typename?: string): void;
 }
 export declare const Type: {
     parse(tokenizer: tokenization.Tokenizer, ...exclude: Typename[]): Type;
@@ -83,10 +84,12 @@ export declare type ObjectMember = {
 };
 export declare class ObjectType implements Type {
     private members;
+    private typename;
     constructor();
     add(key: string, value: ObjectMember): this;
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
+    setTypename(typename?: string): void;
     static parse(tokenizer: tokenization.Tokenizer): ObjectType;
 }
 export declare class RecordType implements Type {

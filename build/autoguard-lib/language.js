@@ -446,8 +446,6 @@ class ObjectType {
             return lines.join(options.eol);
         }
         else {
-            let optional = new Array();
-            let required = new Array();
             for (let [key, value] of this.members) {
                 let type = value.type;
                 if (value.optional) {
@@ -455,16 +453,16 @@ class ObjectType {
                     union.add(UndefinedType.INSTANCE);
                     union.add(type);
                     type = union;
-                    optional.push("	\"" + key + "\": " + type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
                 }
-                else {
-                    required.push("	\"" + key + "\": " + type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
-                }
+                lines.push("	\"" + key + "\": " + type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
             }
-            let string1 = required.length > 0 ? options.eol + required.join("," + options.eol) + options.eol : "";
-            let string2 = optional.length > 0 ? options.eol + optional.join("," + options.eol) + options.eol : "";
-            return "autoguard.Object.of({" + string1 + "}, {" + string2 + "})";
+            let type = this.typename != null ? this.typename : this.generateType(options);
+            let guard = lines.length > 0 ? options.eol + lines.join("," + options.eol) + options.eol : "";
+            return "autoguard.Object.of<" + type + ">({" + guard + "})";
         }
+    }
+    setTypename(typename) {
+        this.typename = typename;
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
@@ -845,7 +843,7 @@ class Schema {
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
-            var _a, _b;
+            var _a, _b, _c;
             tokenization.expect(read(), "{");
             let instance = new Schema();
             if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.value) !== "}") {
@@ -853,8 +851,9 @@ class Schema {
                     let identifier = tokenization.expect(read(), "IDENTIFIER").value;
                     tokenization.expect(read(), ":");
                     let type = exports.Type.parse(tokenizer);
+                    (_b = type.setTypename) === null || _b === void 0 ? void 0 : _b.call(type, identifier);
                     instance.add(identifier, type);
-                    if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.value) !== ",") {
+                    if (((_c = peek()) === null || _c === void 0 ? void 0 : _c.value) !== ",") {
                         break;
                     }
                     tokenization.expect(read(), ",");

@@ -154,17 +154,12 @@ exports.NumberLiteral = {
     }
 };
 exports.Object = {
-    of(required, optional) {
+    of(guards) {
         return {
             as(subject, path = "") {
                 if ((subject != null) && (subject.constructor === globalThis.Object)) {
-                    for (let key in required) {
-                        required[key].as(subject[key], path + "[\"" + key + "\"]");
-                    }
-                    for (let key in optional) {
-                        if (key in subject) {
-                            optional[key].as(subject[key], path + "[\"" + key + "\"]");
-                        }
+                    for (let key in guards) {
+                        guards[key].as(subject[key], path + "[\"" + key + "\"]");
                     }
                     return subject;
                 }

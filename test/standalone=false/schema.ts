@@ -29,12 +29,16 @@ export type MyIntersectionType = {
 };
 
 export const MyIntersectionType = autoguard.Intersection.of(
-	autoguard.Object.of({
+	autoguard.Object.of<{
+		"a_string_member": string
+	}>({
 		"a_string_member": autoguard.String
-	}, {}),
-	autoguard.Object.of({
+	}),
+	autoguard.Object.of<{
+		"another_string_member": string
+	}>({
 		"another_string_member": autoguard.String
-	}, {})
+	})
 );
 
 export type MyNullType = null;
@@ -55,14 +59,13 @@ export type MyObjectType = {
 	"quoted-member": string
 };
 
-export const MyObjectType = autoguard.Object.of({
+export const MyObjectType = autoguard.Object.of<MyObjectType>({
 	"string_member": autoguard.String,
-	"quoted-member": autoguard.String
-}, {
 	"optional_member": autoguard.Union.of(
 		autoguard.Undefined,
 		autoguard.String
-	)
+	),
+	"quoted-member": autoguard.String
 });
 
 export type MyRecordOfStringType = Record<string, undefined | string>;

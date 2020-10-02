@@ -10,6 +10,7 @@ export type Options = {
 export interface Type {
 	generateType(options: Options): string;
 	generateTypeGuard(options: Options): string;
+	setTypename?(typename?: string): void;
 };
 
 export const Type = {
@@ -432,6 +433,7 @@ export type ObjectMember = {
 
 export class ObjectType implements Type {
 	private members: Map<string, ObjectMember>;
+	private typename: string | undefined;
 
 	constructor() {
 		this.members = new Map<string, ObjectMember>();
@@ -475,8 +477,6 @@ export class ObjectType implements Type {
 			lines.push("}");
 			return lines.join(options.eol);
 		} else {
-			let optional = new Array<string>();
-			let required = new Array<string>();
 			for (let [key, value] of this.members) {
 				let type = value.type;
 				if (value.optional) {
@@ -484,15 +484,17 @@ export class ObjectType implements Type {
 					union.add(UndefinedType.INSTANCE);
 					union.add(type);
 					type = union;
-					optional.push("	\"" + key + "\": " + type.generateTypeGuard({ ...options, eol: options.eol + "\t" }));
-				} else {
-					required.push("	\"" + key + "\": " + type.generateTypeGuard({ ...options, eol: options.eol + "\t" }));
 				}
+				lines.push("	\"" + key + "\": " + type.generateTypeGuard({ ...options, eol: options.eol + "\t" }));
 			}
-			let string1 = required.length > 0 ? options.eol + required.join("," + options.eol) + options.eol : "";
-			let string2 = optional.length > 0 ? options.eol + optional.join("," + options.eol) + options.eol : "";
-			return "autoguard.Object.of({" + string1 + "}, {" + string2 + "})";
+			let type = this.typename != null ? this.typename : this.generateType(options);
+			let guard = lines.length > 0 ? options.eol + lines.join("," + options.eol) + options.eol : "";
+			return "autoguard.Object.of<" + type + ">({" + guard + "})";
 		}
+	}
+
+	setTypename(typename?: string): void {
+		this.typename = typename;
 	}
 
 	static parse(tokenizer: tokenization.Tokenizer): ObjectType {
@@ -903,6 +905,7 @@ export class Schema {
 					let identifier = tokenization.expect(read(), "IDENTIFIER").value;
 					tokenization.expect(read(), ":");
 					let type = Type.parse(tokenizer);
+					type.setTypename?.(identifier);
 					instance.add(identifier, type);
 					if (peek()?.value !== ",") {
 						break;
