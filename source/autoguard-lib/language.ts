@@ -593,7 +593,7 @@ export class ReferenceType implements Type {
 		if (options.standalone) {
 			return this.typename + ".as";
 		} else {
-			return this.typename;
+			return "autoguard.Reference.of<" + this.typename + ">(() => " + this.typename + ")";
 		}
 	}
 

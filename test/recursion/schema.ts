@@ -146,6 +146,14 @@ export type empty2 = {};
 
 export const empty2 = autoguard.Object.of<empty2>({});
 
+export type reference1 = reference2;
+
+export const reference1 = autoguard.Reference.of<reference2>(() => reference2);
+
+export type reference2 = {};
+
+export const reference2 = autoguard.Object.of<reference2>({});
+
 export type Autoguard = {
 	"array1": array1,
 	"array2": array2,
@@ -167,7 +175,9 @@ export type Autoguard = {
 	"preceedence3": preceedence3,
 	"preceedence4": preceedence4,
 	"empty1": empty1,
-	"empty2": empty2
+	"empty2": empty2,
+	"reference1": reference1,
+	"reference2": reference2
 };
 
 export const Autoguard = {
@@ -191,5 +201,7 @@ export const Autoguard = {
 	"preceedence3": preceedence3,
 	"preceedence4": preceedence4,
 	"empty1": empty1,
-	"empty2": empty2
+	"empty2": empty2,
+	"reference1": reference1,
+	"reference2": reference2
 };

@@ -205,6 +205,19 @@ export const Record = {
 	}
 };
 
+export const Reference = {
+	of<A extends serialization.Message>(guard: () => serialization.MessageGuard<A>): serialization.MessageGuard<A> {
+		return {
+			as(subject: any, path: string = ""): A {
+				return guard().as(subject, path);
+			},
+			is(subject: any): subject is A {
+				return guard().is(subject);
+			}
+		};
+	}
+};
+
 export const String = {
 	as(subject: any, path: string = ""): string {
 		if ((subject != null) && (subject.constructor === globalThis.String)) {

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Union = exports.Undefined = exports.Tuple = exports.StringLiteral = exports.String = exports.Record = exports.Object = exports.NumberLiteral = exports.Number = exports.Null = exports.Intersection = exports.BooleanLiteral = exports.Boolean = exports.Array = exports.Any = void 0;
+exports.Union = exports.Undefined = exports.Tuple = exports.StringLiteral = exports.String = exports.Reference = exports.Record = exports.Object = exports.NumberLiteral = exports.Number = exports.Null = exports.Intersection = exports.BooleanLiteral = exports.Boolean = exports.Array = exports.Any = void 0;
 exports.Any = {
     as(subject, path = "") {
         return subject;
@@ -197,6 +197,18 @@ exports.Record = {
                     return false;
                 }
                 return true;
+            }
+        };
+    }
+};
+exports.Reference = {
+    of(guard) {
+        return {
+            as(subject, path = "") {
+                return guard().as(subject, path);
+            },
+            is(subject) {
+                return guard().is(subject);
             }
         };
     }

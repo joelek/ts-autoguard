@@ -556,7 +556,7 @@ class ReferenceType {
             return this.typename + ".as";
         }
         else {
-            return this.typename;
+            return "autoguard.Reference.of<" + this.typename + ">(() => " + this.typename + ")";
         }
     }
     static parse(tokenizer) {

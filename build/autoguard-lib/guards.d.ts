@@ -1,4 +1,5 @@
 import * as serialization from "./serialization";
+export declare type MessageGuard<A> = serialization.MessageGuard<A>;
 declare type IntersectionOf<A extends any[]> = IntersectionOfUnion<UnionOf<A>>;
 declare type IntersectionOfUnion<A> = (A extends any ? (_: A) => void : never) extends ((_: infer B) => void) ? B : never;
 declare type TupleOf<A extends any[]> = [...A];
@@ -36,6 +37,9 @@ export declare const Object: {
 };
 export declare const Record: {
     of<A extends unknown>(guard: serialization.MessageGuard<A>): serialization.MessageGuard<Record<string, A | undefined>>;
+};
+export declare const Reference: {
+    of<A extends unknown>(guard: () => serialization.MessageGuard<A>): serialization.MessageGuard<A>;
 };
 export declare const String: {
     as(subject: any, path?: string): string;

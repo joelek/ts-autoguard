@@ -19,5 +19,7 @@
 	preceedence3: string | { a: string } & { b: string },
 	preceedence4: { a: string } & { b: string } | string,
 	empty1: [],
-	empty2: {}
+	empty2: {},
+	reference1: reference2,
+	reference2: {}
 }

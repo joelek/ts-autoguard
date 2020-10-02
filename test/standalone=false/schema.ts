@@ -74,7 +74,7 @@ export const MyRecordOfStringType = autoguard.Record.of(autoguard.String);
 
 export type MyReferenceType = MyObjectType;
 
-export const MyReferenceType = MyObjectType;
+export const MyReferenceType = autoguard.Reference.of<MyObjectType>(() => MyObjectType);
 
 export type MyStringType = string;
 
