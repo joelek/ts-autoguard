@@ -191,13 +191,13 @@ serializer.deserialize(serialized, (type, data) => {
 
 ## Configure
 
-Autoguard releases follow semantic versioning and release packages are published using the GitHub platform. Use the following command to install the latest release.
+Releases follow semantic versioning and release packages are published using the GitHub platform. Use the following command to install the latest release.
 
 ```
 npm install joelek/ts-autoguard#semver:^4
 ```
 
-NB: Autoguard currently targets TypeScript 4. Some features may not be supported for older TypeScript versions.
+NB: This project currently targets TypeScript 4. Some features may not be supported for older TypeScript versions.
 
 ## Syntax
 
