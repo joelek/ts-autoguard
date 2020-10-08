@@ -1,5 +1,4 @@
 import * as serialization from "./serialization";
-export declare type MessageGuard<A> = serialization.MessageGuard<A>;
 declare type IntersectionOf<A extends any[]> = IntersectionOfUnion<UnionOf<A>>;
 declare type IntersectionOfUnion<A> = (A extends any ? (_: A) => void : never) extends ((_: infer B) => void) ? B : never;
 declare type TupleOf<A extends any[]> = [...A];
