@@ -19,7 +19,8 @@
 	"scripts": {
 		"build": "rm -rf ./build/ && npx tsc --build",
 		"clean": "rm -rf ./build/ ./node_modules/",
-		"dist": "npm run build && git add ./build/ && git commit -m \"Generate build artifacts.\"",
+		"preversion": "npm run build && git add ./",
+		"postversion": "git push && git push --tags",
 		"test:true": "node ./build/autoguard-cli/index.js --root=./test/standalone=true/ --standalone=true",
 		"test:false": "node ./build/autoguard-cli/index.js --root=./test/standalone=false/ --standalone=false",
 		"test:recursion": "node ./build/autoguard-cli/index.js --root=./test/recursion/ --standalone=false",
