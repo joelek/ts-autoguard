@@ -469,7 +469,8 @@ export class ObjectType implements Type {
 					union.add(type);
 					type = union;
 				}
-				lines.push("		(" + type.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject[\"" + key + "\"], path + \"[\\\"" + key + "\\\"]\");");
+				let tail = /^([a-z][a-z0-9_]*)$/is.test(key) ? "\"." + key + "\"" : "\"[\\\"" + key + "\\\"]\"";
+				lines.push("		(" + type.generateTypeGuard({ ...options, eol: options.eol + "\t\t" }) + ")(subject[\"" + key + "\"], path + " + tail + ");");
 			}
 			lines.push("		return subject;");
 			lines.push("	}");

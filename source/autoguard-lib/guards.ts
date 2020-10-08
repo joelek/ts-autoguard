@@ -163,7 +163,7 @@ export const Object = {
 			as(subject: any, path: string = ""): A {
 				if ((subject != null) && (subject.constructor === globalThis.Object)) {
 					for (let key in guards) {
-						guards[key].as(subject[key], path + "[\"" + key + "\"]");
+						guards[key].as(subject[key], path + /^([a-z][a-z0-9_]*)$/is.test(key) ? "." + key : "[\"" + key + "\"]");
 					}
 					return subject;
 				}

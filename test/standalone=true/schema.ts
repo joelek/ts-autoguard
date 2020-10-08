@@ -123,7 +123,7 @@ export const MyIntersectionType = {
 							return subject as string;
 						}
 						throw "Expected a string at " + path + "!";
-					})(subject["a_string_member"], path + "[\"a_string_member\"]");
+					})(subject["a_string_member"], path + ".a_string_member");
 					return subject;
 				}
 				throw "Expected an object at " + path + "!";
@@ -135,7 +135,7 @@ export const MyIntersectionType = {
 							return subject as string;
 						}
 						throw "Expected a string at " + path + "!";
-					})(subject["another_string_member"], path + "[\"another_string_member\"]");
+					})(subject["another_string_member"], path + ".another_string_member");
 					return subject;
 				}
 				throw "Expected an object at " + path + "!";
@@ -231,7 +231,7 @@ export const MyObjectType = {
 						return subject as string;
 					}
 					throw "Expected a string at " + path + "!";
-				})(subject["string_member"], path + "[\"string_member\"]");
+				})(subject["string_member"], path + ".string_member");
 				((subject, path) => {
 					try {
 						return ((subject, path) => {
@@ -250,7 +250,7 @@ export const MyObjectType = {
 						})(subject, path);
 					} catch (error) {}
 					throw "Expected a union at " + path + "!";
-				})(subject["optional_member"], path + "[\"optional_member\"]");
+				})(subject["optional_member"], path + ".optional_member");
 				((subject, path) => {
 					if ((subject != null) && (subject.constructor === globalThis.String)) {
 						return subject as string;
