@@ -1,0 +1,5 @@
+{
+	ExternalType1: string,
+	ExternalType2: string,
+	ExternalType3: string
+}

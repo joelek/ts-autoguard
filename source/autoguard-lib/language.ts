@@ -1,5 +1,10 @@
 import * as tokenization from "./tokenization";
 
+type Import = {
+	path: string[],
+	typename: string
+};
+
 export type Typename = "Array" | "Intersection" | "Union";
 
 export type Options = {
@@ -10,6 +15,7 @@ export type Options = {
 export interface Type {
 	generateType(options: Options): string;
 	generateTypeGuard(options: Options): string;
+	getImports(): Import[];
 	setTypename?(typename?: string): void;
 };
 
@@ -94,6 +100,10 @@ export class AnyType implements Type {
 		return lines.join(options.eol);
 	}
 
+	getImports(): Import[] {
+		return [];
+	}
+
 	static readonly INSTANCE = new AnyType();
 
 	static parse(tokenizer: tokenization.Tokenizer): AnyType {
@@ -131,6 +141,10 @@ export class ArrayType implements Type {
 			lines.push("autoguard.Array.of(" + this.type.generateTypeGuard({ ...options, eol: options.eol }) + ")");
 		}
 		return lines.join(options.eol);
+	}
+
+	getImports(): Import[] {
+		return this.type.getImports();
 	}
 
 	static parse(tokenizer: tokenization.Tokenizer, ...exclude: Typename[]): ArrayType {
@@ -182,6 +196,10 @@ export class BooleanType implements Type {
 		return lines.join(options.eol);
 	}
 
+	getImports(): Import[] {
+		return [];
+	}
+
 	static readonly INSTANCE = new BooleanType();
 
 	static parse(tokenizer: tokenization.Tokenizer): BooleanType {
@@ -221,6 +239,10 @@ export class BooleanLiteralType implements Type {
 		return lines.join(options.eol);
 	}
 
+	getImports(): Import[] {
+		return [];
+	}
+
 	static parse(tokenizer: tokenization.Tokenizer): BooleanLiteralType {
 		return tokenizer.newContext((read, peek) => {
 			let token = tokenization.expect(read(), [
@@ -249,6 +271,10 @@ export class GroupType implements Type {
 
 	generateTypeGuard(options: Options): string {
 		return this.type.generateTypeGuard(options);
+	}
+
+	getImports(): Import[] {
+		return this.type.getImports();
 	}
 
 	static parse(tokenizer: tokenization.Tokenizer): GroupType {
@@ -300,6 +326,14 @@ export class IntersectionType implements Type {
 		}
 	}
 
+	getImports(): Import[] {
+		let imports = new Array<Import>();
+		for (let type of this.types) {
+			imports.push(...type.getImports());
+		}
+		return imports;
+	}
+
 	static parse(tokenizer: tokenization.Tokenizer, ...exclude: Typename[]): Type {
 		if (exclude.includes("Intersection")) {
 			throw `Recursion prevention!`;
@@ -348,6 +382,10 @@ export class NullType implements Type {
 		return lines.join(options.eol);
 	}
 
+	getImports(): Import[] {
+		return [];
+	}
+
 	static readonly INSTANCE = new NullType();
 
 	static parse(tokenizer: tokenization.Tokenizer): NullType {
@@ -380,6 +418,10 @@ export class NumberType implements Type {
 			lines.push("autoguard.Number");
 		}
 		return lines.join(options.eol);
+	}
+
+	getImports(): Import[] {
+		return [];
 	}
 
 	static readonly INSTANCE = new NumberType();
@@ -416,6 +458,10 @@ export class NumberLiteralType implements Type {
 			lines.push("autoguard.NumberLiteral.of(" + this.generateType({ ...options, eol: options.eol }) + ")");
 		}
 		return lines.join(options.eol);
+	}
+
+	getImports(): Import[] {
+		return [];
 	}
 
 	static parse(tokenizer: tokenization.Tokenizer): NumberLiteralType {
@@ -494,6 +540,15 @@ export class ObjectType implements Type {
 		}
 	}
 
+	getImports(): Import[] {
+		let imports = new Array<Import>();
+		for (let [key, value] of this.members) {
+			let type = value.type;
+			imports.push(...type.getImports());
+		}
+		return imports;
+	}
+
 	setTypename(typename?: string): void {
 		this.typename = typename;
 	}
@@ -569,6 +624,10 @@ export class RecordType implements Type {
 		return lines.join(options.eol);
 	}
 
+	getImports(): Import[] {
+		return this.type.getImports();
+	}
+
 	static parse(tokenizer: tokenization.Tokenizer): RecordType {
 		return tokenizer.newContext((read, peek) => {
 			tokenization.expect(read(), "{");
@@ -580,9 +639,11 @@ export class RecordType implements Type {
 };
 
 export class ReferenceType implements Type {
+	private path: string[];
 	private typename: string;
 
-	constructor(typename: string) {
+	constructor(path: string[], typename: string) {
+		this.path = path;
 		this.typename = typename;
 	}
 
@@ -598,13 +659,36 @@ export class ReferenceType implements Type {
 		}
 	}
 
+	getImports(): Import[] {
+		if (this.path.length > 0) {
+			return [
+				{
+					path: this.path,
+					typename: this.typename
+				}
+			];
+		}
+		return [];
+	}
+
 	static parse(tokenizer: tokenization.Tokenizer): ReferenceType {
 		return tokenizer.newContext((read, peek) => {
 			if (peek()?.family === "@") {
 				tokenization.expect(read(), "@");
 			}
-			let value = tokenization.expect(read(), "IDENTIFIER").value;
-			return new ReferenceType(value);
+			let tokens = new Array<tokenization.Token>();
+			while (true) {
+				let token = read();
+				tokenization.expect(token, [".", "..", "IDENTIFIER"]);
+				tokens.push(token);
+				if (peek()?.family !== "/") {
+					break;
+				}
+				tokenization.expect(read(), "/");
+			}
+			let last = tokens.pop() as tokenization.Token;
+			tokenization.expect(last, "IDENTIFIER");
+			return new ReferenceType(tokens.map((token) => token.value), last.value);
 		});
 	}
 };
@@ -631,6 +715,10 @@ export class StringType implements Type {
 			lines.push("autoguard.String");
 		}
 		return lines.join(options.eol);
+	}
+
+	getImports(): Import[] {
+		return [];
 	}
 
 	static readonly INSTANCE = new StringType();
@@ -667,6 +755,10 @@ export class StringLiteralType implements Type {
 			lines.push("autoguard.StringLiteral.of(\"" + this.value + "\")");
 		}
 		return lines.join(options.eol);
+	}
+
+	getImports(): Import[] {
+		return [];
 	}
 
 	static parse(tokenizer: tokenization.Tokenizer): StringLiteralType {
@@ -721,6 +813,14 @@ export class TupleType implements Type {
 		}
 	}
 
+	getImports(): Import[] {
+		let imports = new Array<Import>();
+		for (let type of this.types) {
+			imports.push(...type.getImports());
+		}
+		return imports;
+	}
+
 	static parse(tokenizer: tokenization.Tokenizer): TupleType {
 		return tokenizer.newContext((read, peek) => {
 			tokenization.expect(read(), "[");
@@ -763,6 +863,10 @@ export class UndefinedType implements Type {
 			lines.push("autoguard.Undefined");
 		}
 		return lines.join(options.eol);
+	}
+
+	getImports(): Import[] {
+		return [];
 	}
 
 	static readonly INSTANCE = new UndefinedType();
@@ -816,6 +920,14 @@ export class UnionType implements Type {
 		}
 	}
 
+	getImports(): Import[] {
+		let imports = new Array<Import>();
+		for (let type of this.types) {
+			imports.push(...type.getImports());
+		}
+		return imports;
+	}
+
 	static parse(tokenizer: tokenization.Tokenizer, ...exclude: Array<Typename>): Type {
 		if (exclude.includes("Union")) {
 			throw `Recursion prevention!`;
@@ -843,6 +955,24 @@ export class UnionType implements Type {
 export class Schema {
 	private types: Map<string, Type>;
 
+	private getImports(): Import[] {
+		let imports = new Map<string, string[]>();
+		for (let [key, value] of this.types) {
+			let entries = value.getImports();
+			for (let entry of entries) {
+				imports.set(entry.typename, entry.path);
+			}
+		}
+		return Array.from(imports.entries())
+			.sort((one, two) => one[0].localeCompare(two[0]))
+			.map((entry) => {
+				return {
+					path: entry[1],
+					typename: entry[0]
+				};
+			});
+	}
+
 	constructor() {
 		this.types = new Map<string, Type>();
 	}
@@ -856,10 +986,14 @@ export class Schema {
 		let lines = new Array<string>();
 		lines.push("// This file was auto-generated by @joelek/ts-autoguard. Edit at own risk.");
 		lines.push("");
+		let imports = this.getImports();
+		for (let entry of imports) {
+			lines.push("import { " + entry.typename + " } from \"" + entry.path.join("/") + "\";");
+		}
 		if (!options.standalone) {
 			lines.push("import { guards as autoguard } from \"@joelek/ts-autoguard\";");
-			lines.push("");
 		}
+		lines.push("");
 		for (let [key, value] of this.types) {
 			lines.push("export type " + key + " = " + value.generateType(options) + ";");
 			lines.push("");
@@ -886,7 +1020,7 @@ export class Schema {
 		let autoguard = new ObjectType();
 		for (let [key, value] of this.types) {
 			autoguard.add(key, {
-				type: new ReferenceType(key),
+				type: new ReferenceType([], key),
 				optional: false
 			});
 		}

@@ -24,7 +24,8 @@
 		"test:true": "node ./build/autoguard-cli/index.js --root=./test/standalone=true/ --standalone=true",
 		"test:false": "node ./build/autoguard-cli/index.js --root=./test/standalone=false/ --standalone=false",
 		"test:recursion": "node ./build/autoguard-cli/index.js --root=./test/recursion/ --standalone=false",
-		"test": "npm run test:true && npm run test:false && npm run test:recursion"
+		"test:modules": "node ./build/autoguard-cli/index.js --root=./test/modules/ --standalone=false",
+		"test": "npm run test:true && npm run test:false && npm run test:recursion && npm run test:modules"
 	},
 	"version": "4.2.7"
 }
