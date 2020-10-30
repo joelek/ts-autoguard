@@ -27,5 +27,5 @@
 		"test:modules": "node ./build/autoguard-cli/index.js --root=./test/modules/ --standalone=false",
 		"test": "npm run test:true && npm run test:false && npm run test:recursion && npm run test:modules"
 	},
-	"version": "4.2.7"
+	"version": "4.3.0"
 }

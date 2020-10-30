@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.expect = exports.Tokenizer = exports.Families = void 0;
-exports.Families = ((...tuple) => tuple)("WS", "(", ")", "[", "]", "{", "}", "?", "|", "&", "@", ",", ":", "any", "boolean", "false", "null", "number", "string", "true", "undefined", "IDENTIFIER", "NUMBER_LITERAL", "STRING_LITERAL");
+exports.Families = ((...tuple) => tuple)("WS", "(", ")", "[", "]", "{", "}", "?", "|", ".", "..", "/", "&", "@", ",", ":", "any", "boolean", "false", "null", "number", "string", "true", "undefined", "IDENTIFIER", "NUMBER_LITERAL", "STRING_LITERAL");
 class Tokenizer {
     constructor(string) {
         let matchers = {
@@ -14,6 +14,9 @@ class Tokenizer {
             "}": /^([\}])/isu,
             "?": /^([\?])/isu,
             "|": /^([\|])/isu,
+            ".": /^([\.])/isu,
+            "..": /^([\.][\.])/isu,
+            "/": /^([\/])/isu,
             "&": /^([&])/isu,
             "@": /^([@])/isu,
             ",": /^([,])/isu,

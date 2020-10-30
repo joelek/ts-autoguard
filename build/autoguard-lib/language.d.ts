@@ -1,4 +1,8 @@
 import * as tokenization from "./tokenization";
+declare type Import = {
+    path: string[];
+    typename: string;
+};
 export declare type Typename = "Array" | "Intersection" | "Union";
 export declare type Options = {
     eol: string;
@@ -7,6 +11,7 @@ export declare type Options = {
 export interface Type {
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
+    getImports(): Import[];
     setTypename?(typename?: string): void;
 }
 export declare const Type: {
@@ -16,6 +21,7 @@ export declare class AnyType implements Type {
     constructor();
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
+    getImports(): Import[];
     static readonly INSTANCE: AnyType;
     static parse(tokenizer: tokenization.Tokenizer): AnyType;
 }
@@ -24,12 +30,14 @@ export declare class ArrayType implements Type {
     constructor(type: Type);
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
+    getImports(): Import[];
     static parse(tokenizer: tokenization.Tokenizer, ...exclude: Typename[]): ArrayType;
 }
 export declare class BooleanType implements Type {
     constructor();
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
+    getImports(): Import[];
     static readonly INSTANCE: BooleanType;
     static parse(tokenizer: tokenization.Tokenizer): BooleanType;
 }
@@ -40,6 +48,7 @@ export declare class BooleanLiteralType implements Type {
     static readonly INSTANCE_TRUE: BooleanLiteralType;
     static readonly INSTANCE_FALSE: BooleanLiteralType;
     generateTypeGuard(options: Options): string;
+    getImports(): Import[];
     static parse(tokenizer: tokenization.Tokenizer): BooleanLiteralType;
 }
 export declare class GroupType implements Type {
@@ -47,6 +56,7 @@ export declare class GroupType implements Type {
     constructor(type: Type);
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
+    getImports(): Import[];
     static parse(tokenizer: tokenization.Tokenizer): GroupType;
 }
 export declare class IntersectionType implements Type {
@@ -55,12 +65,14 @@ export declare class IntersectionType implements Type {
     add(type: Type): this;
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
+    getImports(): Import[];
     static parse(tokenizer: tokenization.Tokenizer, ...exclude: Typename[]): Type;
 }
 export declare class NullType implements Type {
     constructor();
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
+    getImports(): Import[];
     static readonly INSTANCE: NullType;
     static parse(tokenizer: tokenization.Tokenizer): NullType;
 }
@@ -68,6 +80,7 @@ export declare class NumberType implements Type {
     constructor();
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
+    getImports(): Import[];
     static readonly INSTANCE: NumberType;
     static parse(tokenizer: tokenization.Tokenizer): NumberType;
 }
@@ -76,6 +89,7 @@ export declare class NumberLiteralType implements Type {
     constructor(value: number);
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
+    getImports(): Import[];
     static parse(tokenizer: tokenization.Tokenizer): NumberLiteralType;
 }
 export declare type ObjectMember = {
@@ -89,6 +103,7 @@ export declare class ObjectType implements Type {
     add(key: string, value: ObjectMember): this;
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
+    getImports(): Import[];
     setTypename(typename?: string): void;
     static parse(tokenizer: tokenization.Tokenizer): ObjectType;
 }
@@ -97,19 +112,23 @@ export declare class RecordType implements Type {
     constructor(type: Type);
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
+    getImports(): Import[];
     static parse(tokenizer: tokenization.Tokenizer): RecordType;
 }
 export declare class ReferenceType implements Type {
+    private path;
     private typename;
-    constructor(typename: string);
+    constructor(path: string[], typename: string);
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
+    getImports(): Import[];
     static parse(tokenizer: tokenization.Tokenizer): ReferenceType;
 }
 export declare class StringType implements Type {
     constructor();
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
+    getImports(): Import[];
     static readonly INSTANCE: StringType;
     static parse(tokenizer: tokenization.Tokenizer): StringType;
 }
@@ -118,6 +137,7 @@ export declare class StringLiteralType implements Type {
     constructor(value: string);
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
+    getImports(): Import[];
     static parse(tokenizer: tokenization.Tokenizer): StringLiteralType;
 }
 export declare class TupleType implements Type {
@@ -126,12 +146,14 @@ export declare class TupleType implements Type {
     add(type: Type): this;
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
+    getImports(): Import[];
     static parse(tokenizer: tokenization.Tokenizer): TupleType;
 }
 export declare class UndefinedType implements Type {
     constructor();
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
+    getImports(): Import[];
     static readonly INSTANCE: UndefinedType;
     static parse(tokenizer: tokenization.Tokenizer): UndefinedType;
 }
@@ -141,12 +163,15 @@ export declare class UnionType implements Type {
     add(type: Type): this;
     generateType(options: Options): string;
     generateTypeGuard(options: Options): string;
+    getImports(): Import[];
     static parse(tokenizer: tokenization.Tokenizer, ...exclude: Array<Typename>): Type;
 }
 export declare class Schema {
     private types;
+    private getImports;
     constructor();
     add(key: string, value: Type): this;
     generateModule(options: Options): string;
     static parse(tokenizer: tokenization.Tokenizer): Schema;
 }
+export {};
