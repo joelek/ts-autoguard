@@ -562,9 +562,6 @@ export class ReferenceType implements Type {
 
 	static parse(tokenizer: tokenization.Tokenizer): ReferenceType {
 		return tokenizer.newContext((read, peek) => {
-			if (peek()?.family === "@") {
-				tokenization.expect(read(), "@");
-			}
 			let tokens = new Array<tokenization.Token>();
 			while (true) {
 				let token = read();
