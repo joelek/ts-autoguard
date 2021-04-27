@@ -171,7 +171,7 @@ Releases follow semantic versioning and release packages are published using the
 npm install joelek/ts-autoguard#semver:^4
 ```
 
-NB: This project currently targets TypeScript 4. Some features may not be supported for older TypeScript versions.
+NB: This project targets TypeScript 4 in strict mode.
 
 ## Syntax
 
