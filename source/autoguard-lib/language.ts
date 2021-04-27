@@ -1,17 +1,12 @@
 import * as shared from "./shared";
 import * as tokenization from "./tokenization";
 
-type Import = {
-	path: string[],
-	typename: string
-};
-
 export type Typename = "Array" | "Intersection" | "Union";
 
 export interface Type {
 	generateType(options: shared.Options): string;
 	generateTypeGuard(options: shared.Options): string;
-	getImports(): Import[];
+	getImports(): Array<shared.Import>;
 };
 
 export const Type = {
@@ -89,7 +84,7 @@ export class AnyType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Import[] {
+	getImports(): Array<shared.Import> {
 		return [];
 	}
 
@@ -120,7 +115,7 @@ export class ArrayType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Import[] {
+	getImports(): Array<shared.Import> {
 		return this.type.getImports();
 	}
 
@@ -164,7 +159,7 @@ export class BooleanType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Import[] {
+	getImports(): Array<shared.Import> {
 		return [];
 	}
 
@@ -198,7 +193,7 @@ export class BooleanLiteralType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Import[] {
+	getImports(): Array<shared.Import> {
 		return [];
 	}
 
@@ -232,7 +227,7 @@ export class GroupType implements Type {
 		return this.type.generateTypeGuard(options);
 	}
 
-	getImports(): Import[] {
+	getImports(): Array<shared.Import> {
 		return this.type.getImports();
 	}
 
@@ -275,8 +270,8 @@ export class IntersectionType implements Type {
 		return "autoguard.guards.Intersection.of(" + options.eol + lines.join("," + options.eol) + options.eol + ")";
 	}
 
-	getImports(): Import[] {
-		let imports = new Array<Import>();
+	getImports(): Array<shared.Import> {
+		let imports = new Array<shared.Import>();
 		for (let type of this.types) {
 			imports.push(...type.getImports());
 		}
@@ -322,7 +317,7 @@ export class NullType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Import[] {
+	getImports(): Array<shared.Import> {
 		return [];
 	}
 
@@ -351,7 +346,7 @@ export class NumberType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Import[] {
+	getImports(): Array<shared.Import> {
 		return [];
 	}
 
@@ -382,7 +377,7 @@ export class NumberLiteralType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Import[] {
+	getImports(): Array<shared.Import> {
 		return [];
 	}
 
@@ -439,15 +434,14 @@ export class ObjectType implements Type {
 		return "autoguard.guards.Object.of({" + guard + "})";
 	}
 
-	getImports(): Import[] {
-		let imports = new Array<Import>();
+	getImports(): Array<shared.Import> {
+		let imports = new Array<shared.Import>();
 		for (let [key, value] of this.members) {
 			let type = value.type;
 			imports.push(...type.getImports());
 		}
 		return imports;
 	}
-
 
 	static parse(tokenizer: tokenization.Tokenizer): ObjectType {
 		return tokenizer.newContext((read, peek) => {
@@ -508,7 +502,7 @@ export class RecordType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Import[] {
+	getImports(): Array<shared.Import> {
 		return this.type.getImports();
 	}
 
@@ -539,7 +533,7 @@ export class ReferenceType implements Type {
 		return "autoguard.guards.Reference.of(() => " + this.typename + ")";
 	}
 
-	getImports(): Import[] {
+	getImports(): Array<shared.Import> {
 		if (this.path.length > 0) {
 			return [
 				{
@@ -585,7 +579,7 @@ export class StringType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Import[] {
+	getImports(): Array<shared.Import> {
 		return [];
 	}
 
@@ -616,7 +610,7 @@ export class StringLiteralType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Import[] {
+	getImports(): Array<shared.Import> {
 		return [];
 	}
 
@@ -658,8 +652,8 @@ export class TupleType implements Type {
 		return "autoguard.guards.Tuple.of(" + string + ")";
 	}
 
-	getImports(): Import[] {
-		let imports = new Array<Import>();
+	getImports(): Array<shared.Import> {
+		let imports = new Array<shared.Import>();
 		for (let type of this.types) {
 			imports.push(...type.getImports());
 		}
@@ -701,7 +695,7 @@ export class UndefinedType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Import[] {
+	getImports(): Array<shared.Import> {
 		return [];
 	}
 
@@ -744,8 +738,8 @@ export class UnionType implements Type {
 		return "autoguard.guards.Union.of(" + options.eol + lines.join("," + options.eol) + options.eol + ")";
 	}
 
-	getImports(): Import[] {
-		let imports = new Array<Import>();
+	getImports(): Array<shared.Import> {
+		let imports = new Array<shared.Import>();
 		for (let type of this.types) {
 			imports.push(...type.getImports());
 		}
@@ -779,7 +773,7 @@ export class UnionType implements Type {
 export class Schema {
 	types: Map<string, Type>;
 
-	private getImports(): Import[] {
+	private getImports(): Array<shared.Import> {
 		let imports = new Map<string, string[]>();
 		for (let [key, value] of this.types) {
 			let entries = value.getImports();
