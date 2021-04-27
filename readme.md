@@ -104,12 +104,14 @@ export type MyArrayOfStringType = string[];
 
 export const MyArrayOfStringType = autoguard.guards.Array.of(autoguard.guards.String);
 
-export type Autoguard = {
-	"MyArrayOfStringType": MyArrayOfStringType
-};
+export namespace Autoguard {
+	export type Guards = {
+		"MyArrayOfStringType": MyArrayOfStringType
+	};
 
-export const Autoguard = {
-	"MyArrayOfStringType": MyArrayOfStringType
+	export const Guards = {
+		"MyArrayOfStringType": MyArrayOfStringType
+	};
 };
 ```
 

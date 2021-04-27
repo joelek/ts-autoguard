@@ -838,9 +838,11 @@ export class Schema {
 				optional: false
 			});
 		}
-		lines.push("export type Autoguard = " + autoguard.generateType(options) + ";");
+		lines.push("export namespace Autoguard {");
+		lines.push("	" + "export type Guards = " + autoguard.generateType({ ...options, eol: options.eol + "\t" }) + ";");
 		lines.push("");
-		lines.push("export const Autoguard = " + autoguard.generateType(options) + ";");
+		lines.push("	" + "export const Guards = " + autoguard.generateType({ ...options, eol: options.eol + "\t" }) + ";");
+		lines.push("};");
 		lines.push("");
 		return lines.join(options.eol);
 	}
