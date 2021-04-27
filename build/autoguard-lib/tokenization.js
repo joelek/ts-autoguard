@@ -1,37 +1,42 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.expect = exports.Tokenizer = exports.Families = void 0;
-exports.Families = ((...tuple) => tuple)("WS", "(", ")", "[", "]", "{", "}", "?", "|", ".", "..", "/", "&", "@", ",", ":", "any", "boolean", "false", "null", "number", "string", "true", "undefined", "IDENTIFIER", "NUMBER_LITERAL", "STRING_LITERAL");
+exports.Families = ((...tuple) => tuple)("WS", "(", ")", "[", "]", "{", "}", "?", "|", ".", "..", "/", "&", ",", ":", "<", ">", "=>", "<=", "any", "boolean", "false", "guard", "null", "number", "route", "string", "true", "undefined", "IDENTIFIER", "NUMBER_LITERAL", "STRING_LITERAL");
 class Tokenizer {
     constructor(string) {
         let matchers = {
-            "WS": /^([\t\r\n ]+)/isu,
-            "(": /^([\(])/isu,
-            ")": /^([\)])/isu,
-            "[": /^([\[])/isu,
-            "]": /^([\]])/isu,
-            "{": /^([\{])/isu,
-            "}": /^([\}])/isu,
-            "?": /^([\?])/isu,
-            "|": /^([\|])/isu,
-            ".": /^([\.])/isu,
-            "..": /^([\.][\.])/isu,
-            "/": /^([\/])/isu,
-            "&": /^([&])/isu,
-            "@": /^([@])/isu,
-            ",": /^([,])/isu,
-            ":": /^([:])/isu,
-            "any": /^(any)/isu,
-            "boolean": /^(boolean)/isu,
-            "false": /^(false)/isu,
-            "null": /^(null)/isu,
-            "number": /^(number)/isu,
-            "string": /^(string)/isu,
-            "true": /^(true)/isu,
-            "undefined": /^(undefined)/isu,
+            "WS": /^([\t\r\n ]+)/su,
+            "(": /^([\(])/su,
+            ")": /^([\)])/su,
+            "[": /^([\[])/su,
+            "]": /^([\]])/su,
+            "{": /^([\{])/su,
+            "}": /^([\}])/su,
+            "?": /^([\?])/su,
+            "|": /^([\|])/su,
+            ".": /^([\.])/su,
+            "..": /^([\.][\.])/su,
+            "/": /^([\/])/su,
+            "&": /^([&])/su,
+            ",": /^([,])/su,
+            ":": /^([:])/su,
+            "<": /^([<])/su,
+            ">": /^([>])/su,
+            "=>": /^([=][>])/su,
+            "<=": /^([<][=])/su,
+            "any": /^(any)/su,
+            "boolean": /^(boolean)/su,
+            "false": /^(false)/su,
+            "guard": /^(guard)/su,
+            "null": /^(null)/su,
+            "number": /^(number)/su,
+            "route": /^(route)/su,
+            "string": /^(string)/su,
+            "true": /^(true)/su,
+            "undefined": /^(undefined)/su,
             "IDENTIFIER": /^([a-z][a-z0-9_]*)/isu,
-            "NUMBER_LITERAL": /^(([1-9][0-9]+)|([0-9]))/isu,
-            "STRING_LITERAL": /^(["][^"]*["])/isu
+            "NUMBER_LITERAL": /^(([1-9][0-9]+)|([0-9]))/su,
+            "STRING_LITERAL": /^(["][^"]*["])/su
         };
         let tokens = new Array();
         let row = 1;

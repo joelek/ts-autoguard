@@ -1,6 +1,7 @@
-import * as guards from "./guards";
-import * as language from "./language";
-import * as serialization from "./serialization";
-import * as tokenization from "./tokenization";
-declare function transform(string: string, options: language.Options): string;
-export { guards, language, serialization, tokenization, transform };
+export * as api from "./api";
+export * as guards from "./guards";
+export * as is from "./is";
+export * as language from "./language";
+export * as serialization from "./serialization";
+export * as shared from "./shared";
+export * as tokenization from "./tokenization";

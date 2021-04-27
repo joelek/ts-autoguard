@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const libfs = require("fs");
 const libos = require("os");
 const libpath = require("path");
-const autoguard = require("../autoguard-lib");
+const lib = require("../autoguard-lib");
 function findFiles(path, paths = []) {
     let stat = libfs.statSync(path);
     if (stat.isDirectory() && libpath.basename(path) !== "node_modules") {
@@ -22,11 +22,34 @@ function findFiles(path, paths = []) {
 function filename(path) {
     return libpath.basename(path).split(".").slice(0, -1).join(".");
 }
+function transform(string, options) {
+    let tokenizer = new lib.tokenization.Tokenizer(string);
+    try {
+        let schema = lib.language.schema.Schema.parseOld(tokenizer);
+        process.stderr.write(`\tSupport for legacy schemas has been deprecated. Please upgrade using "--upgrade=true".\n`);
+        return schema.generateModule(options);
+    }
+    catch (error) { }
+    ;
+    let schema = lib.language.schema.Schema.parse(tokenizer);
+    return schema.generateModule(options);
+}
+function upgrade(string, options) {
+    let tokenizer = new lib.tokenization.Tokenizer(string);
+    try {
+        let schema = lib.language.schema.Schema.parseOld(tokenizer);
+        return schema.generateSchema(options);
+    }
+    catch (error) { }
+    ;
+    lib.language.schema.Schema.parse(tokenizer);
+    return string;
+}
 function run() {
     let options = {
         eol: libos.EOL,
         root: "./",
-        standalone: true
+        upgrade: false
     };
     let found_unrecognized_argument = false;
     for (let argv of process.argv.slice(2)) {
@@ -39,8 +62,8 @@ function run() {
         else if ((parts = /^--root=(.+)$/.exec(argv)) != null) {
             options.root = parts[1];
         }
-        else if ((parts = /^--standalone=(true|false)$/.exec(argv)) != null) {
-            options.standalone = parts[1] === "true" ? true : false;
+        else if ((parts = /^--upgrade=(true|false)$/.exec(argv)) != null) {
+            options.upgrade = parts[1] === "true" ? true : false;
         }
         else {
             found_unrecognized_argument = true;
@@ -51,20 +74,30 @@ function run() {
         process.stderr.write("Arguments:\n");
         process.stderr.write("	--eol=string\n");
         process.stderr.write("	--root=string\n");
-        process.stderr.write("	--standalone=boolean\n");
+        process.stderr.write("	--upgrade=boolean\n");
         process.exit(0);
     }
     let paths = findFiles(options.root);
     let result = paths.reduce((sum, path) => {
         process.stderr.write("Processing \"" + path + "\"...\n");
         try {
-            let input = libfs.readFileSync(path, "utf8");
-            let start = Date.now();
-            let generated = autoguard.transform(input, options);
-            let duration = Date.now() - start;
-            process.stderr.write("	Transform: " + duration + " ms\n");
-            path = libpath.join(libpath.dirname(path), filename(path) + ".ts");
-            libfs.writeFileSync(path, generated, "utf8");
+            if (options.upgrade) {
+                let input = libfs.readFileSync(path, "utf8");
+                let start = Date.now();
+                let generated = upgrade(input, options);
+                let duration = Date.now() - start;
+                process.stderr.write("	Upgrade: " + duration + " ms\n");
+                libfs.writeFileSync(path, generated, "utf8");
+            }
+            else {
+                let input = libfs.readFileSync(path, "utf8");
+                let start = Date.now();
+                let generated = transform(input, options);
+                let duration = Date.now() - start;
+                process.stderr.write("	Transform: " + duration + " ms\n");
+                path = libpath.join(libpath.dirname(path), filename(path) + ".ts");
+                libfs.writeFileSync(path, generated, "utf8");
+            }
             return sum + 0;
         }
         catch (error) {

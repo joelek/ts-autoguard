@@ -3,6 +3,17 @@ declare type IntersectionOf<A extends any[]> = IntersectionOfUnion<UnionOf<A>>;
 declare type IntersectionOfUnion<A> = (A extends any ? (_: A) => void : never) extends ((_: infer B) => void) ? B : never;
 declare type TupleOf<A extends any[]> = [...A];
 declare type UnionOf<A extends any[]> = A[number];
+declare type RequiredKeys<A> = {
+    [B in keyof A]: undefined extends A[B] ? never : B;
+}[keyof A];
+declare type OptionalKeys<A> = {
+    [B in keyof A]: undefined extends A[B] ? B : never;
+}[keyof A];
+declare type MakeUndefinedOptional<A> = {
+    [B in RequiredKeys<A>]: A[B];
+} & {
+    [B in OptionalKeys<A>]?: A[B];
+};
 export declare const Any: {
     as(subject: any, path?: string): any;
     is(subject: any): subject is any;
@@ -32,7 +43,7 @@ export declare const NumberLiteral: {
     of<A extends number>(value: A): serialization.MessageGuard<A>;
 };
 export declare const Object: {
-    of<A extends import("@joelek/ts-stdlib/build/routing").MessageMap<A>>(guards: Required<serialization.MessageGuardMap<A>>): serialization.MessageGuard<A>;
+    of<A extends import("@joelek/ts-stdlib/build/routing").MessageMap<A>>(guards: serialization.MessageGuardMap<A>): serialization.MessageGuard<MakeUndefinedOptional<A>>;
 };
 export declare const Record: {
     of<A extends unknown>(guard: serialization.MessageGuard<A>): serialization.MessageGuard<Record<string, A | undefined>>;
