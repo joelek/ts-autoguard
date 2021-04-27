@@ -1,11 +1,4 @@
-import * as guards from "./guards";
-import * as language from "./language";
-import * as serialization from "./serialization";
-import * as tokenization from "./tokenization";
-
-export {
-	guards,
-	language,
-	serialization,
-	tokenization
-};
+export * as guards from "./guards";
+export * as language from "./language";
+export * as serialization from "./serialization";
+export * as tokenization from "./tokenization";
