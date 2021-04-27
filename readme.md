@@ -121,6 +121,7 @@ guard MyArrayOfStringType: string[]
 guard MyBooleanType: boolean
 guard MyBooleanliteralType: true
 guard MyGroupType: (any)
+guard MyImportedType: ./module/MyExternalType
 guard MyIntersectionType: {
 	a_string_member: string
 } & {
