@@ -23,7 +23,7 @@ function filename(path: string): string {
 	return libpath.basename(path).split(".").slice(0, -1).join(".");
 }
 
-function transform(string: string, options: lib.language.Options): string {
+function transform(string: string, options: lib.shared.Options): string {
 	let tokenizer = new lib.tokenization.Tokenizer(string);
 	let schema = lib.language.Schema.parse(tokenizer);
 	return schema.generateModule(options);
