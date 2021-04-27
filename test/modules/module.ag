@@ -1,5 +1,5 @@
-{
-	ExternalType1: string,
-	ExternalType2: string,
-	ExternalType3: string
-}
+guard ExternalType1: string
+
+guard ExternalType2: string
+
+guard ExternalType3: string

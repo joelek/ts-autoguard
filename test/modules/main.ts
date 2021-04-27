@@ -3,60 +3,73 @@
 import { ExternalType1 } from "./module";
 import { ExternalType2 } from "../modules/module";
 import { ExternalType3 } from "./dummy/../module/.";
-import { guards as autoguard } from "../../";
+import * as autoguard from "../../";
 
 export type ExternalReference1 = ExternalType1;
 
-export const ExternalReference1 = autoguard.Reference.of<ExternalType1>(() => ExternalType1);
+export const ExternalReference1 = autoguard.guards.Reference.of(() => ExternalType1);
 
 export type ExternalReference2 = ExternalType2;
 
-export const ExternalReference2 = autoguard.Reference.of<ExternalType2>(() => ExternalType2);
+export const ExternalReference2 = autoguard.guards.Reference.of(() => ExternalType2);
 
 export type ExternalReference3 = ExternalType3;
 
-export const ExternalReference3 = autoguard.Reference.of<ExternalType3>(() => ExternalType3);
+export const ExternalReference3 = autoguard.guards.Reference.of(() => ExternalType3);
 
 export type ExternalReference4 = {
 	"key": ExternalType1
 };
 
-export const ExternalReference4 = autoguard.Object.of<ExternalReference4>({
-	"key": autoguard.Reference.of<ExternalType1>(() => ExternalType1)
+export const ExternalReference4 = autoguard.guards.Object.of({
+	"key": autoguard.guards.Reference.of(() => ExternalType1)
 });
 
 export type InternalReference1 = InternalType;
 
-export const InternalReference1 = autoguard.Reference.of<InternalType>(() => InternalType);
+export const InternalReference1 = autoguard.guards.Reference.of(() => InternalType);
 
 export type InternalReference2 = {
 	"key": InternalType
 };
 
-export const InternalReference2 = autoguard.Object.of<InternalReference2>({
-	"key": autoguard.Reference.of<InternalType>(() => InternalType)
+export const InternalReference2 = autoguard.guards.Object.of({
+	"key": autoguard.guards.Reference.of(() => InternalType)
 });
 
 export type InternalType = string;
 
-export const InternalType = autoguard.String;
+export const InternalType = autoguard.guards.String;
 
-export type Autoguard = {
-	"ExternalReference1": ExternalReference1,
-	"ExternalReference2": ExternalReference2,
-	"ExternalReference3": ExternalReference3,
-	"ExternalReference4": ExternalReference4,
-	"InternalReference1": InternalReference1,
-	"InternalReference2": InternalReference2,
-	"InternalType": InternalType
-};
+export namespace Autoguard {
+	export type Guards = {
+		"ExternalReference1": ExternalReference1,
+		"ExternalReference2": ExternalReference2,
+		"ExternalReference3": ExternalReference3,
+		"ExternalReference4": ExternalReference4,
+		"InternalReference1": InternalReference1,
+		"InternalReference2": InternalReference2,
+		"InternalType": InternalType
+	};
 
-export const Autoguard = {
-	"ExternalReference1": ExternalReference1,
-	"ExternalReference2": ExternalReference2,
-	"ExternalReference3": ExternalReference3,
-	"ExternalReference4": ExternalReference4,
-	"InternalReference1": InternalReference1,
-	"InternalReference2": InternalReference2,
-	"InternalType": InternalType
+	export const Guards = {
+		"ExternalReference1": ExternalReference1,
+		"ExternalReference2": ExternalReference2,
+		"ExternalReference3": ExternalReference3,
+		"ExternalReference4": ExternalReference4,
+		"InternalReference1": InternalReference1,
+		"InternalReference2": InternalReference2,
+		"InternalType": InternalType
+	};
+
+	export type Routes = {
+	};
+
+	export const Client = (options?: Partial<{ urlPrefix: string }>): Routes => ({
+	});
+
+	export const Server = (routes: Routes, options?: Partial<{}>): autoguard.api.RequestListener => {
+		let endpoints = new Array<autoguard.api.Endpoint>();
+		return (request, response) => autoguard.api.route(endpoints, request, response);
+	};
 };

@@ -1,13 +1,17 @@
-{
-	ExternalReference1: ./module/ExternalType1,
-	ExternalReference2: ../modules/module/ExternalType2,
-	ExternalReference3: ./dummy/../module/./ExternalType3,
-	ExternalReference4: {
-		key: ./module/ExternalType1
-	},
-	InternalReference1: InternalType,
-	InternalReference2: {
-		key: InternalType
-	},
-	InternalType: string
+guard ExternalReference1: ./module/ExternalType1
+
+guard ExternalReference2: ../modules/module/ExternalType2
+
+guard ExternalReference3: ./dummy/../module/./ExternalType3
+
+guard ExternalReference4: {
+	"key": ExternalType1
 }
+
+guard InternalReference1: InternalType
+
+guard InternalReference2: {
+	"key": InternalType
+}
+
+guard InternalType: string
