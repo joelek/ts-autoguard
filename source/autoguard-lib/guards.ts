@@ -4,6 +4,9 @@ type IntersectionOf<A extends any[]> = IntersectionOfUnion<UnionOf<A>>;
 type IntersectionOfUnion<A> = (A extends any ? (_: A) => void : never) extends ((_: infer B) => void) ? B : never;
 type TupleOf<A extends any[]> = [...A];
 type UnionOf<A extends any[]> = A[number];
+type RequiredKeys<A> = { [B in keyof A]: undefined extends A[B] ? never : B; }[keyof A];
+type OptionalKeys<A> = { [B in keyof A]: undefined extends A[B] ? B : never; }[keyof A];
+type MakeUndefinedOptional<A> = { [B in RequiredKeys<A>]: A[B]; } & { [B in OptionalKeys<A>]?: A[B]; };
 
 export const Any = {
 	as(subject: any, path: string = ""): any {
@@ -158,9 +161,9 @@ export const NumberLiteral = {
 };
 
 export const Object = {
-	of<A extends serialization.MessageMap<A>>(guards: Required<serialization.MessageGuardMap<A>>): serialization.MessageGuard<A> {
+	of<A extends serialization.MessageMap<A>>(guards: serialization.MessageGuardMap<A>): serialization.MessageGuard<MakeUndefinedOptional<A>> {
 		return {
-			as(subject: any, path: string = ""): A {
+			as(subject: any, path: string = ""): MakeUndefinedOptional<A> {
 				if ((subject != null) && (subject.constructor === globalThis.Object)) {
 					for (let key in guards) {
 						guards[key].as(subject[key], path + /^([a-z][a-z0-9_]*)$/is.test(key) ? "." + key : "[\"" + key + "\"]");
@@ -169,7 +172,7 @@ export const Object = {
 				}
 				throw "Expected an object at " + path + "!";
 			},
-			is(subject: any): subject is A {
+			is(subject: any): subject is MakeUndefinedOptional<A> {
 				try {
 					this.as(subject);
 				} catch (error) {
