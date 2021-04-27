@@ -1,3 +1,4 @@
+export * as api from "./api";
 export * as guards from "./guards";
 export * as is from "./is";
 export * as language from "./language";
