@@ -118,29 +118,34 @@ export namespace Autoguard {
 The schema definition below shows all constructs supported by Autoguard.
 
 ```ts
-{
-	MyAnyType: any,
-	MyArrayOfStringType: string[],
-	MyBooleanType: boolean,
-	MyBooleanliteralType: true,
-	MyGroupType: (any),
-	MyIntersectionType: { a_string_member: string } & { another_string_member: string },
-	MyNullType: null,
-	MyNumberType: number,
-	MyNumberLiteralType: 1337,
-	MyObjectType: {
-		string_member: string,
-		optional_member?: string,
-		"quoted-member": string
-	},
-	MyRecordOfStringType: { string },
-	MyReferenceType: MyObjectType,
-	MyStringType: string,
-	MyStringLiteralType: "räksmörgås",
-	MyTupleType: [ string, number ],
-	MyUndefinedType: undefined,
-	MyUnionType: string | null
+guard MyAnyType: any
+guard MyArrayOfStringType: string[]
+guard MyBooleanType: boolean
+guard MyBooleanliteralType: true
+guard MyGroupType: (any)
+guard MyIntersectionType: {
+	a_string_member: string
+} & {
+	another_string_member: string
 }
+guard MyNullType: null
+guard MyNumberType: number
+guard MyNumberLiteralType: 1337
+guard MyObjectType: {
+	string_member: string,
+	optional_member?: string,
+	"quoted-member": string
+}
+guard MyRecordOfStringType: { string }
+guard MyReferenceType: MyObjectType
+guard MyStringType: string
+guard MyStringLiteralType: "räksmörgås"
+guard MyTupleType: [
+	string,
+	number
+]
+guard MyUndefinedType: undefined
+guard MyUnionType: string | null
 ```
 
 ### Serialization and deserialization
@@ -216,8 +221,6 @@ PrimitiveType = AnyType or BooleanType or NullType or NumberType or StringType o
 LiteralType = BooleanLiteralType or NumberLiteralType or StringLiteralType
 ComplexType = ArrayType or GroupType or IntersectionType or ObjectType or RecordType or ReferenceType or TupleType or UnionType
 Type = PrimitiveType or LiteralType or ComplexType
-SchemaKeyValue = Identifier ":" Type
-SchemaBodyTail = "," SchemaKeyValue
-SchemaBody = SchemaKeyValue SchemaBodyTail*
-SchemaDefinition = "{" SchemaBody* "}"
+Guard = "guard" Identifier ":" Type
+Schema = Guard*
 ```
