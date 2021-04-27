@@ -201,9 +201,6 @@ export class BooleanLiteralType implements Type {
 		return "" + this.value;
 	}
 
-	static readonly INSTANCE_TRUE = new BooleanLiteralType(true);
-	static readonly INSTANCE_FALSE = new BooleanLiteralType(false);
-
 	generateTypeGuard(options: shared.Options): string {
 		let lines = new Array<string>();
 		lines.push("autoguard.guards.BooleanLiteral.of(" + this.generateType({ ...options, eol: options.eol }) + ")");
@@ -213,6 +210,9 @@ export class BooleanLiteralType implements Type {
 	getImports(): Array<shared.Import> {
 		return [];
 	}
+
+	static readonly INSTANCE_TRUE = new BooleanLiteralType(true);
+	static readonly INSTANCE_FALSE = new BooleanLiteralType(false);
 
 	static parse(tokenizer: tokenization.Tokenizer): BooleanLiteralType {
 		return tokenizer.newContext((read, peek) => {
