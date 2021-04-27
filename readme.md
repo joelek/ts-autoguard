@@ -89,56 +89,28 @@ A schema definition may look like in the following example.
 }
 ```
 
-Autoguard reads schema definitions from `.ag` files and generates the corresponding `.ts` files. By default, Autoguard will traverse your project and generate a standalone source file for each `.ag` file it encounters.
+Autoguard reads schema definitions from `.ag` files and generates the corresponding `.ts` files. By default, Autoguard will traverse your project and generate a source file for each `.ag` file it encounters.
 
 ```
 npx autoguard
 ```
 
-The schema definition shown in the previous example will generate the following module. This module is quite verbose but there are no runtime dependencies.
+The schema definition shown in the previous example will generate the following module.
 
 ```ts
+import * as autoguard from "@joelek/ts-autoguard";
+
 export type MyArrayOfStringType = string[];
 
-export const MyArrayOfStringType = {
-	as(subject: any, path: string = ""): MyArrayOfStringType {
-		return ((subject, path) => {
-			if ((subject != null) && (subject.constructor === globalThis.Array)) {
-				for (let i = 0; i < subject.length; i++) {
-					((subject, path) => {
-						if ((subject != null) && (subject.constructor === globalThis.String)) {
-							return subject as string;
-						}
-						throw "Expected a string at " + path + "!";
-					})(subject[i], path + "[" + i + "]");
-				}
-				return subject;
-			}
-			throw "Expected an array at " + path + "!";
-		})(subject, path);
-	},
-	is(subject: any): subject is MyArrayOfStringType {
-		try {
-			this.as(subject);
-		} catch (error) {
-			return false;
-		}
-		return true;
-	}
+export const MyArrayOfStringType = autoguard.guards.Array.of(autoguard.guards.String);
+
+export type Autoguard = {
+	"MyArrayOfStringType": MyArrayOfStringType
 };
-```
 
-Autoguard can generate significantly less verbose modules with the addition of a runtime dependency.
-
-```
-npx autoguard --standalone=false
-```
-
-```ts
-import { guards as autoguard } from "@joelek/ts-autoguard";
-
-export type MyArrayOfStringType = string[];
-export const MyArrayOfStringType = autoguard.Array.of(autoguard.String);
+export const Autoguard = {
+	"MyArrayOfStringType": MyArrayOfStringType
+};
 ```
 
 The schema definition below shows all constructs supported by Autoguard.

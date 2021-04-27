@@ -32,8 +32,7 @@ function transform(string: string, options: lib.language.Options): string {
 function run(): void {
 	let options = {
 		eol: libos.EOL,
-		root: "./",
-		standalone: true
+		root: "./"
 	};
 	let found_unrecognized_argument = false;
 	for (let argv of process.argv.slice(2)) {
@@ -43,8 +42,6 @@ function run(): void {
 			options.eol = parts[1];
 		} else if ((parts = /^--root=(.+)$/.exec(argv)) != null) {
 			options.root = parts[1];
-		} else if ((parts = /^--standalone=(true|false)$/.exec(argv)) != null) {
-			options.standalone = parts[1] === "true" ? true : false;
 		} else {
 			found_unrecognized_argument = true;
 			process.stderr.write("Unrecognized argument \"" + argv + "\"!\n");
@@ -54,7 +51,6 @@ function run(): void {
 		process.stderr.write("Arguments:\n");
 		process.stderr.write("	--eol=string\n");
 		process.stderr.write("	--root=string\n");
-		process.stderr.write("	--standalone=boolean\n");
 		process.exit(0);
 	}
 	let paths = findFiles(options.root);
