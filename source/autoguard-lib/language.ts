@@ -15,7 +15,6 @@ export interface Type {
 	generateType(options: Options): string;
 	generateTypeGuard(options: Options): string;
 	getImports(): Import[];
-	setTypename?(typename?: string): void;
 };
 
 export const Type = {
@@ -405,7 +404,6 @@ export type ObjectMember = {
 
 export class ObjectType implements Type {
 	private members: Map<string, ObjectMember>;
-	private typename: string | undefined;
 
 	constructor() {
 		this.members = new Map<string, ObjectMember>();
@@ -440,9 +438,8 @@ export class ObjectType implements Type {
 			}
 			lines.push("	\"" + key + "\": " + type.generateTypeGuard({ ...options, eol: options.eol + "\t" }));
 		}
-		let type = this.typename != null ? this.typename : this.generateType(options);
 		let guard = lines.length > 0 ? options.eol + lines.join("," + options.eol) + options.eol : "";
-		return "autoguard.guards.Object.of<" + type + ">({" + guard + "})";
+		return "autoguard.guards.Object.of({" + guard + "})";
 	}
 
 	getImports(): Import[] {
@@ -454,9 +451,6 @@ export class ObjectType implements Type {
 		return imports;
 	}
 
-	setTypename(typename?: string): void {
-		this.typename = typename;
-	}
 
 	static parse(tokenizer: tokenization.Tokenizer): ObjectType {
 		return tokenizer.newContext((read, peek) => {
@@ -545,7 +539,7 @@ export class ReferenceType implements Type {
 	}
 
 	generateTypeGuard(options: Options): string {
-		return "autoguard.guards.Reference.of<" + this.typename + ">(() => " + this.typename + ")";
+		return "autoguard.guards.Reference.of(() => " + this.typename + ")";
 	}
 
 	getImports(): Import[] {
@@ -856,7 +850,6 @@ export class Schema {
 					let identifier = tokenization.expect(read(), "IDENTIFIER").value;
 					tokenization.expect(read(), ":");
 					let type = Type.parse(tokenizer);
-					type.setTypename?.(identifier);
 					instance.add(identifier, type);
 					if (peek()?.value !== ",") {
 						break;
