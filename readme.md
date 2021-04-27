@@ -174,6 +174,12 @@ Releases follow semantic versioning and release packages are published using the
 npm install joelek/ts-autoguard#semver:^4
 ```
 
+Use the following command to install the very latest build. The very latest build may include breaking changes and should not be used in production environments.
+
+```
+npm install joelek/ts-autoguard#master
+```
+
 NB: This project targets TypeScript 4 in strict mode.
 
 ## Syntax
