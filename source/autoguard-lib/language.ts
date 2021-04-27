@@ -104,7 +104,7 @@ export class AnyType implements Type {
 };
 
 export class ArrayType implements Type {
-	private type: Type;
+	type: Type;
 
 	constructor(type: Type) {
 		this.type = type;
@@ -179,7 +179,7 @@ export class BooleanType implements Type {
 };
 
 export class BooleanLiteralType implements Type {
-	private value: boolean;
+	value: boolean;
 
 	constructor(value: boolean) {
 		this.value = value;
@@ -218,7 +218,7 @@ export class BooleanLiteralType implements Type {
 };
 
 export class GroupType implements Type {
-	private type: Type;
+	type: Type;
 
 	constructor(type: Type) {
 		this.type = type;
@@ -247,7 +247,7 @@ export class GroupType implements Type {
 };
 
 export class IntersectionType implements Type {
-	private types: Set<Type>;
+	types: Set<Type>;
 
 	constructor() {
 		this.types = new Set<Type>();
@@ -366,7 +366,7 @@ export class NumberType implements Type {
 };
 
 export class NumberLiteralType implements Type {
-	private value: number;
+	value: number;
 
 	constructor(value: number) {
 		this.value = value;
@@ -400,7 +400,7 @@ export type ObjectMember = {
 };
 
 export class ObjectType implements Type {
-	private members: Map<string, ObjectMember>;
+	members: Map<string, ObjectMember>;
 
 	constructor() {
 		this.members = new Map<string, ObjectMember>();
@@ -492,7 +492,7 @@ export class ObjectType implements Type {
 };
 
 export class RecordType implements Type {
-	private type: Type;
+	type: Type;
 
 	constructor(type: Type) {
 		this.type = type;
@@ -523,8 +523,8 @@ export class RecordType implements Type {
 };
 
 export class ReferenceType implements Type {
-	private path: string[];
-	private typename: string;
+	path: string[];
+	typename: string;
 
 	constructor(path: string[], typename: string) {
 		this.path = path;
@@ -600,7 +600,7 @@ export class StringType implements Type {
 };
 
 export class StringLiteralType implements Type {
-	private value: string;
+	value: string;
 
 	constructor(value: string) {
 		this.value = value;
@@ -629,7 +629,7 @@ export class StringLiteralType implements Type {
 };
 
 export class TupleType implements Type {
-	private types: Array<Type>;
+	types: Array<Type>;
 
 	constructor() {
 		this.types = new Array<Type>();
@@ -716,7 +716,7 @@ export class UndefinedType implements Type {
 };
 
 export class UnionType implements Type {
-	private types: Set<Type>;
+	types: Set<Type>;
 
 	constructor() {
 		this.types = new Set<Type>();
@@ -777,7 +777,7 @@ export class UnionType implements Type {
 };
 
 export class Schema {
-	private types: Map<string, Type>;
+	types: Map<string, Type>;
 
 	private getImports(): Import[] {
 		let imports = new Map<string, string[]>();
