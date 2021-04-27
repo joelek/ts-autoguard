@@ -3,7 +3,7 @@
 import * as libfs from "fs";
 import * as libos from "os";
 import * as libpath from "path";
-import * as autoguard from "../autoguard-lib";
+import * as lib from "../autoguard-lib";
 
 function findFiles(path: string, paths: Array<string> = []): Array<string> {
 	let stat = libfs.statSync(path);
@@ -21,6 +21,12 @@ function findFiles(path: string, paths: Array<string> = []): Array<string> {
 
 function filename(path: string): string {
 	return libpath.basename(path).split(".").slice(0, -1).join(".");
+}
+
+function transform(string: string, options: lib.language.Options): string {
+	let tokenizer = new lib.tokenization.Tokenizer(string);
+	let schema = lib.language.Schema.parse(tokenizer);
+	return schema.generateModule(options);
 }
 
 function run(): void {
@@ -57,7 +63,7 @@ function run(): void {
 		try {
 			let input = libfs.readFileSync(path, "utf8");
 			let start = Date.now();
-			let generated = autoguard.transform(input, options);
+			let generated = transform(input, options);
 			let duration = Date.now() - start;
 			process.stderr.write("	Transform: " + duration + " ms\n");
 			path = libpath.join(libpath.dirname(path), filename(path) + ".ts");
