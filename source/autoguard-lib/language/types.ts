@@ -4,6 +4,7 @@ import * as tokenization from "../tokenization";
 export type Typename = "Array" | "Intersection" | "Union";
 
 export interface Type {
+	generateSchema(options: shared.Options): string;
 	generateType(options: shared.Options): string;
 	generateTypeGuard(options: shared.Options): string;
 	getImports(): Array<shared.Import>;
@@ -74,6 +75,10 @@ export class AnyType implements Type {
 
 	}
 
+	generateSchema(options: shared.Options): string {
+		return this.generateType(options);
+	}
+
 	generateType(options: shared.Options): string {
 		return "any";
 	}
@@ -103,6 +108,10 @@ export class ArrayType implements Type {
 
 	constructor(type: Type) {
 		this.type = type;
+	}
+
+	generateSchema(options: shared.Options): string {
+		return this.generateType(options);
 	}
 
 	generateType(options: shared.Options): string {
@@ -149,6 +158,10 @@ export class BooleanType implements Type {
 
 	}
 
+	generateSchema(options: shared.Options): string {
+		return this.generateType(options);
+	}
+
 	generateType(options: shared.Options): string {
 		return "boolean";
 	}
@@ -178,6 +191,10 @@ export class BooleanLiteralType implements Type {
 
 	constructor(value: boolean) {
 		this.value = value;
+	}
+
+	generateSchema(options: shared.Options): string {
+		return this.generateType(options);
 	}
 
 	generateType(options: shared.Options): string {
@@ -219,6 +236,10 @@ export class GroupType implements Type {
 		this.type = type;
 	}
 
+	generateSchema(options: shared.Options): string {
+		return this.generateType(options);
+	}
+
 	generateType(options: shared.Options): string {
 		return "(" + this.type.generateType(options) + ")";
 	}
@@ -251,6 +272,10 @@ export class IntersectionType implements Type {
 	add(type: Type): this {
 		this.types.add(type);
 		return this;
+	}
+
+	generateSchema(options: shared.Options): string {
+		return this.generateType(options);
 	}
 
 	generateType(options: shared.Options): string {
@@ -307,6 +332,10 @@ export class NullType implements Type {
 
 	}
 
+	generateSchema(options: shared.Options): string {
+		return this.generateType(options);
+	}
+
 	generateType(options: shared.Options): string {
 		return "null";
 	}
@@ -334,6 +363,10 @@ export class NullType implements Type {
 export class NumberType implements Type {
 	constructor() {
 
+	}
+
+	generateSchema(options: shared.Options): string {
+		return this.generateType(options);
 	}
 
 	generateType(options: shared.Options): string {
@@ -365,6 +398,10 @@ export class NumberLiteralType implements Type {
 
 	constructor(value: number) {
 		this.value = value;
+	}
+
+	generateSchema(options: shared.Options): string {
+		return this.generateType(options);
 	}
 
 	generateType(options: shared.Options): string {
@@ -404,6 +441,10 @@ export class ObjectType implements Type {
 	add(key: string, value: ObjectMember): this {
 		this.members.set(key, value);
 		return this;
+	}
+
+	generateSchema(options: shared.Options): string {
+		return this.generateType(options);
 	}
 
 	generateType(options: shared.Options): string {
@@ -492,6 +533,10 @@ export class RecordType implements Type {
 		this.type = type;
 	}
 
+	generateSchema(options: shared.Options): string {
+		return "{ " + this.type.generateSchema(options) + " }";
+	}
+
 	generateType(options: shared.Options): string {
 		return "Record<string, undefined | " + this.type.generateType(options) + ">";
 	}
@@ -523,6 +568,10 @@ export class ReferenceType implements Type {
 	constructor(path: string[], typename: string) {
 		this.path = path;
 		this.typename = typename;
+	}
+
+	generateSchema(options: shared.Options): string {
+		return this.path.join("/") + this.typename;
 	}
 
 	generateType(options: shared.Options): string {
@@ -569,6 +618,10 @@ export class StringType implements Type {
 
 	}
 
+	generateSchema(options: shared.Options): string {
+		return this.generateType(options);
+	}
+
 	generateType(options: shared.Options): string {
 		return "string";
 	}
@@ -598,6 +651,10 @@ export class StringLiteralType implements Type {
 
 	constructor(value: string) {
 		this.value = value;
+	}
+
+	generateSchema(options: shared.Options): string {
+		return this.generateType(options);
 	}
 
 	generateType(options: shared.Options): string {
@@ -632,6 +689,10 @@ export class TupleType implements Type {
 	add(type: Type): this {
 		this.types.push(type);
 		return this;
+	}
+
+	generateSchema(options: shared.Options): string {
+		return this.generateType(options);
 	}
 
 	generateType(options: shared.Options): string {
@@ -685,6 +746,10 @@ export class UndefinedType implements Type {
 
 	}
 
+	generateSchema(options: shared.Options): string {
+		return this.generateType(options);
+	}
+
 	generateType(options: shared.Options): string {
 		return "undefined";
 	}
@@ -719,6 +784,10 @@ export class UnionType implements Type {
 	add(type: Type): this {
 		this.types.add(type);
 		return this;
+	}
+
+	generateSchema(options: shared.Options): string {
+		return this.generateType(options);
 	}
 
 	generateType(options: shared.Options): string {

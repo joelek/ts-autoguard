@@ -1,3 +1,4 @@
+import * as shared from "../shared";
 import * as tokenization from "../tokenization";
 import * as types from "./types";
 
@@ -8,6 +9,12 @@ export class Guard {
 	constructor(typename: string, type: types.Type) {
 		this.typename = typename;
 		this.type = type;
+	}
+
+	generateSchema(options: shared.Options): string {
+		let lines = new Array<string>();
+		lines.push(`guard ${this.typename}: ${this.type.generateSchema(options)}`);
+		return lines.join(options.eol);
 	}
 
 	static parse(tokenizer: tokenization.Tokenizer): Guard {
