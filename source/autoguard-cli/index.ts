@@ -25,7 +25,7 @@ function filename(path: string): string {
 
 function transform(string: string, options: lib.shared.Options): string {
 	let tokenizer = new lib.tokenization.Tokenizer(string);
-	let schema = lib.language.types.Schema.parse(tokenizer);
+	let schema = lib.language.schema.Schema.parse(tokenizer);
 	return schema.generateModule(options);
 }
 
