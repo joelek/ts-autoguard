@@ -573,7 +573,7 @@ export class ReferenceType implements Type {
 	}
 
 	generateSchema(options: shared.Options): string {
-		return this.path.join("/") + this.typename;
+		return [...this.path, ""].join("/") + this.typename;
 	}
 
 	generateType(options: shared.Options): string {

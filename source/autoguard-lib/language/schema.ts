@@ -162,8 +162,8 @@ export class Schema {
 		let lines = new Array<string>();
 		for (let guard of this.guards) {
 			lines.push(guard.generateSchema(options));
+			lines.push(``);
 		}
-		lines.push(``);
 		return lines.join(options.eol);
 	}
 
