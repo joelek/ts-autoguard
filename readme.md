@@ -84,9 +84,7 @@ Autoguard can generate TypeScript type definitions and type guards from schema d
 A schema definition may look like in the following example.
 
 ```ts
-{
-	MyArrayOfStringType: string[]
-}
+guard MyArrayOfStringType: string[]
 ```
 
 Autoguard reads schema definitions from `.ag` files and generates the corresponding `.ts` files. By default, Autoguard will traverse your project and generate a source file for each `.ag` file it encounters.
