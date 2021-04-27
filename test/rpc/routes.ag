@@ -1,0 +1,77 @@
+route GET:/
+
+route POST:/
+
+route GET:/one
+
+route GET:/one/
+
+route GET:/one/two
+
+route GET:/<dynamic_boolean_component:boolean>
+
+route GET:/<dynamic_number_component:number>
+
+route GET:/<dynamic_string_component:string>
+
+route GET:/<dynamic_component_one:string>/<dynamic_component_two:string>
+
+route GET:/parameters01 ? <{}>
+
+route GET:/parameters02 ? <{ required_boolean_parameter: boolean }>
+
+route GET:/parameters03 ? <{ optional_boolean_parameter?: boolean }>
+
+route GET:/parameters04 ? <{ required_number_parameter: number }>
+
+route GET:/parameters05 ? <{ optional_number_parameter?: number }>
+
+route GET:/parameters06 ? <{ required_string_parameter: string }>
+
+route GET:/parameters07 ? <{ optional_string_parameter?: string }>
+
+route GET:/parameters08 ? <{ parameter_one: string, parameter_two: string }>
+
+route GET:/request_headers01 <= <{}>
+
+route GET:/request_headers02 <= <{ required_boolean_request_header: boolean }>
+
+route GET:/request_headers03 <= <{ optional_boolean_request_header?: boolean }>
+
+route GET:/request_headers04 <= <{ required_number_request_header: number }>
+
+route GET:/request_headers05 <= <{ optional_number_request_header?: number }>
+
+route GET:/request_headers06 <= <{ required_string_request_header: string }>
+
+route GET:/request_headers07 <= <{ optional_string_request_header?: string }>
+
+route GET:/request_headers08 <= <{ request_header_one: string, request_header_two: string }>
+
+route GET:/response_headers01 => <{}>
+
+route GET:/response_headers02 => <{ required_boolean_response_header: boolean }>
+
+route GET:/response_headers03 => <{ optional_boolean_response_header?: boolean }>
+
+route GET:/response_headers04 => <{ required_number_response_header: number }>
+
+route GET:/response_headers05 => <{ optional_number_response_header?: number }>
+
+route GET:/response_headers06 => <{ required_string_response_header: string }>
+
+route GET:/response_headers07 => <{ optional_string_response_header?: string }>
+
+route GET:/response_headers08 => <{ response_header_one: string, response_header_two: string }>
+
+route GET:/request_payload01 <= { required_request_member: string }
+
+route GET:/request_payload02 <= { optional_request_member?: string }
+
+route GET:/response_payload01 => { required_request_member: string }
+
+route GET:/response_payload02 => { optional_request_member?: string }
+
+route GET:/full_example ? <{ parameter: string }>
+	<= <{ request_header: string }> { in_request_payload: string }
+	=> <{ response_header: string }> { in_response_payload: string }

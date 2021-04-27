@@ -24,7 +24,8 @@
 		"test:guards": "node ./build/autoguard-cli/index.js --root=./test/guards/",
 		"test:recursion": "node ./build/autoguard-cli/index.js --root=./test/recursion/",
 		"test:modules": "node ./build/autoguard-cli/index.js --root=./test/modules/",
-		"test": "npm run test:guards && npm run test:recursion && npm run test:modules"
+		"test:rpc": "node ./build/autoguard-cli/index.js --root=./test/rpc/",
+		"test": "npm run test:guards && npm run test:recursion && npm run test:modules && npm run test:rpc"
 	},
 	"version": "4.3.0"
 }
