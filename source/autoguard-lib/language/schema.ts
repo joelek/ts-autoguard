@@ -164,6 +164,10 @@ export class Schema {
 			lines.push(guard.generateSchema(options));
 			lines.push(``);
 		}
+		for (let route of this.routes) {
+			lines.push(route.generateSchema(options));
+			lines.push(``);
+		}
 		return lines.join(options.eol);
 	}
 
