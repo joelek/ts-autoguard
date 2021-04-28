@@ -1,12 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Route = exports.Message = exports.Headers = exports.Parameters = exports.Parameter = exports.Method = exports.Path = exports.Component = void 0;
+const is = require("../is");
 const tokenization = require("../tokenization");
 const types = require("./types");
 class Component {
     constructor(name, type) {
         this.name = name;
         this.type = type;
+    }
+    generateSchema(options) {
+        if (is.present(this.type)) {
+            return "<" + this.name + ":" + this.type + ">";
+        }
+        else {
+            return this.name;
+        }
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
@@ -35,6 +44,13 @@ class Path {
     constructor(components) {
         this.components = components;
     }
+    generateSchema(options) {
+        let parts = new Array();
+        for (let component of this.components) {
+            parts.push(component.generateSchema(options));
+        }
+        return "/" + parts.join("/");
+    }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
             var _a;
@@ -57,6 +73,9 @@ class Method {
     constructor(method) {
         this.method = method;
     }
+    generateSchema(options) {
+        return this.method;
+    }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
             let method = tokenization.expect(read(), "IDENTIFIER").value;
@@ -71,6 +90,9 @@ class Parameter {
         this.name = name;
         this.type = type;
         this.optional = optional;
+    }
+    generateSchema(options) {
+        return this.name + (this.optional ? "?" : "") + ": " + this.type;
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
@@ -92,6 +114,16 @@ exports.Parameter = Parameter;
 class Parameters {
     constructor(parameters) {
         this.parameters = parameters;
+    }
+    generateSchema(options) {
+        if (this.parameters.length === 0) {
+            return "";
+        }
+        let parts = new Array();
+        for (let parameter of this.parameters) {
+            parts.push(parameter.generateSchema(options));
+        }
+        return " ? <{ " + parts.join(", ") + " }>";
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
@@ -120,6 +152,16 @@ exports.Parameters = Parameters;
 class Headers {
     constructor(headers) {
         this.headers = headers;
+    }
+    generateSchema(options) {
+        if (this.headers.length === 0) {
+            return "";
+        }
+        let parts = new Array();
+        for (let header of this.headers) {
+            parts.push(header.generateSchema(options));
+        }
+        return "<{ " + parts.join(", ") + " }>";
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
@@ -150,6 +192,19 @@ class Message {
         this.headers = headers;
         this.payload = payload;
     }
+    generateSchema(options) {
+        let lines = new Array();
+        let parts = new Array();
+        let headers = this.headers.generateSchema(options);
+        if (headers !== "") {
+            parts.push(headers);
+        }
+        if (this.payload !== types.UndefinedType.INSTANCE) {
+            parts.push(this.payload.generateSchema(options));
+        }
+        lines.push(parts.join(" "));
+        return lines.join(options.eol);
+    }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
             var _a;
@@ -175,6 +230,19 @@ class Route {
         this.parameters = parameters;
         this.request = request;
         this.response = response;
+    }
+    generateSchema(options) {
+        let lines = new Array();
+        lines.push(`route ${this.method.generateSchema(options)}:${this.path.generateSchema(options)}${this.parameters.generateSchema(options)}`);
+        let request = this.request.generateSchema(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" }));
+        if (request !== "") {
+            lines.push(`\t<= ${request}`);
+        }
+        let response = this.response.generateSchema(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" }));
+        if (response !== "") {
+            lines.push(`\t=> ${response}`);
+        }
+        return lines.join(options.eol);
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
