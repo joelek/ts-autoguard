@@ -2,408 +2,255 @@
 
 import * as autoguard from "../../../";
 
+export type Object = {
+	"object_id": string,
+	"name": string
+};
+
+export const Object = autoguard.guards.Object.of({
+	"object_id": autoguard.guards.String,
+	"name": autoguard.guards.String
+});
+
 export namespace Autoguard {
-	export type Guards = {};
+	export type Guards = {
+		"Object": Object
+	};
 
-	export const Guards = {};
+	export const Guards = {
+		"Object": Object
+	};
 
-	export type Routes = {
-		"GET:/": (request: {
+	export type Requests = {
+		"GET:/": {
 			"options"?: {},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"POST:/": (request: {
+		},
+		"POST:/": {
 			"options"?: {},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/one": (request: {
+		},
+		"GET:/one": {
 			"options"?: {},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/one/": (request: {
+		},
+		"GET:/one/": {
 			"options"?: {},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/one/two": (request: {
+		},
+		"GET:/one/two": {
 			"options"?: {},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/<dynamic_boolean_component>": (request: {
+		},
+		"GET:/<dynamic_boolean_component>": {
 			"options": {
 				"dynamic_boolean_component": boolean
 			},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/<dynamic_number_component>": (request: {
+		},
+		"GET:/<dynamic_number_component>": {
 			"options": {
 				"dynamic_number_component": number
 			},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/<dynamic_string_component>": (request: {
+		},
+		"GET:/<dynamic_string_component>": {
 			"options": {
 				"dynamic_string_component": string
 			},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/<dynamic_component_one>/<dynamic_component_two>": (request: {
+		},
+		"GET:/<dynamic_component_one>/<dynamic_component_two>": {
 			"options": {
 				"dynamic_component_one": string,
 				"dynamic_component_two": string
 			},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/parameters01": (request: {
+		},
+		"GET:/parameters01": {
 			"options"?: {},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/parameters02": (request: {
+		},
+		"GET:/parameters02": {
 			"options": {
 				"required_boolean_parameter": boolean
 			},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/parameters03": (request: {
+		},
+		"GET:/parameters03": {
 			"options"?: {
 				"optional_boolean_parameter"?: boolean
 			},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/parameters04": (request: {
+		},
+		"GET:/parameters04": {
 			"options": {
 				"required_number_parameter": number
 			},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/parameters05": (request: {
+		},
+		"GET:/parameters05": {
 			"options"?: {
 				"optional_number_parameter"?: number
 			},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/parameters06": (request: {
+		},
+		"GET:/parameters06": {
 			"options": {
 				"required_string_parameter": string
 			},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/parameters07": (request: {
+		},
+		"GET:/parameters07": {
 			"options"?: {
 				"optional_string_parameter"?: string
 			},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/parameters08": (request: {
+		},
+		"GET:/parameters08": {
 			"options": {
 				"parameter_one": string,
 				"parameter_two": string
 			},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/request_headers01": (request: {
+		},
+		"GET:/request_headers01": {
 			"options"?: {},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/request_headers02": (request: {
+		},
+		"GET:/request_headers02": {
 			"options"?: {},
 			"headers": {
 				"required_boolean_request_header": boolean
 			},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/request_headers03": (request: {
+		},
+		"GET:/request_headers03": {
 			"options"?: {},
 			"headers"?: {
 				"optional_boolean_request_header"?: boolean
 			},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/request_headers04": (request: {
+		},
+		"GET:/request_headers04": {
 			"options"?: {},
 			"headers": {
 				"required_number_request_header": number
 			},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/request_headers05": (request: {
+		},
+		"GET:/request_headers05": {
 			"options"?: {},
 			"headers"?: {
 				"optional_number_request_header"?: number
 			},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/request_headers06": (request: {
+		},
+		"GET:/request_headers06": {
 			"options"?: {},
 			"headers": {
 				"required_string_request_header": string
 			},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/request_headers07": (request: {
+		},
+		"GET:/request_headers07": {
 			"options"?: {},
 			"headers"?: {
 				"optional_string_request_header"?: string
 			},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/request_headers08": (request: {
+		},
+		"GET:/request_headers08": {
 			"options"?: {},
 			"headers": {
 				"request_header_one": string,
 				"request_header_two": string
 			},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/response_headers01": (request: {
+		},
+		"GET:/response_headers01": {
 			"options"?: {},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/response_headers02": (request: {
+		},
+		"GET:/response_headers02": {
 			"options"?: {},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers": {
-				"required_boolean_response_header": boolean
-			},
-			"payload"?: undefined
-		}>;
-		"GET:/response_headers03": (request: {
+		},
+		"GET:/response_headers03": {
 			"options"?: {},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {
-				"optional_boolean_response_header"?: boolean
-			},
-			"payload"?: undefined
-		}>;
-		"GET:/response_headers04": (request: {
+		},
+		"GET:/response_headers04": {
 			"options"?: {},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers": {
-				"required_number_response_header": number
-			},
-			"payload"?: undefined
-		}>;
-		"GET:/response_headers05": (request: {
+		},
+		"GET:/response_headers05": {
 			"options"?: {},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {
-				"optional_number_response_header"?: number
-			},
-			"payload"?: undefined
-		}>;
-		"GET:/response_headers06": (request: {
+		},
+		"GET:/response_headers06": {
 			"options"?: {},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers": {
-				"required_string_response_header": string
-			},
-			"payload"?: undefined
-		}>;
-		"GET:/response_headers07": (request: {
+		},
+		"GET:/response_headers07": {
 			"options"?: {},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {
-				"optional_string_response_header"?: string
-			},
-			"payload"?: undefined
-		}>;
-		"GET:/response_headers08": (request: {
+		},
+		"GET:/response_headers08": {
 			"options"?: {},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers": {
-				"response_header_one": string,
-				"response_header_two": string
-			},
-			"payload"?: undefined
-		}>;
-		"GET:/request_payload01": (request: {
+		},
+		"GET:/request_payload01": {
 			"options"?: {},
 			"headers"?: {},
 			"payload": {
 				"required_request_member": string
 			}
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/request_payload02": (request: {
+		},
+		"GET:/request_payload02": {
 			"options"?: {},
 			"headers"?: {},
 			"payload": {
 				"optional_request_member"?: string
 			}
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload"?: undefined
-		}>;
-		"GET:/response_payload01": (request: {
+		},
+		"GET:/response_payload01": {
 			"options"?: {},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload": {
-				"required_request_member": string
-			}
-		}>;
-		"GET:/response_payload02": (request: {
+		},
+		"GET:/response_payload02": {
 			"options"?: {},
 			"headers"?: {},
 			"payload"?: undefined
-		}) => Promise<{
-			"status"?: number,
-			"headers"?: {},
-			"payload": {
-				"optional_request_member"?: string
-			}
-		}>;
-		"GET:/full_example": (request: {
+		},
+		"GET:/full_example": {
 			"options": {
 				"parameter": string
 			},
@@ -413,7 +260,752 @@ export namespace Autoguard {
 			"payload": {
 				"in_request_payload": string
 			}
-		}) => Promise<{
+		},
+		"GET:/reference": {
+			"options"?: {},
+			"headers"?: {},
+			"payload"?: undefined
+		}
+	};
+
+	export const Requests = {
+		"GET:/": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"POST:/": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/one": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/one/": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/one/two": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/<dynamic_boolean_component>": autoguard.guards.Object.of({
+			"options": autoguard.guards.Object.of({
+				"dynamic_boolean_component": autoguard.guards.Boolean
+			}),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/<dynamic_number_component>": autoguard.guards.Object.of({
+			"options": autoguard.guards.Object.of({
+				"dynamic_number_component": autoguard.guards.Number
+			}),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/<dynamic_string_component>": autoguard.guards.Object.of({
+			"options": autoguard.guards.Object.of({
+				"dynamic_string_component": autoguard.guards.String
+			}),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/<dynamic_component_one>/<dynamic_component_two>": autoguard.guards.Object.of({
+			"options": autoguard.guards.Object.of({
+				"dynamic_component_one": autoguard.guards.String,
+				"dynamic_component_two": autoguard.guards.String
+			}),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/parameters01": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/parameters02": autoguard.guards.Object.of({
+			"options": autoguard.guards.Object.of({
+				"required_boolean_parameter": autoguard.guards.Boolean
+			}),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/parameters03": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({
+					"optional_boolean_parameter": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.Boolean
+					)
+				})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/parameters04": autoguard.guards.Object.of({
+			"options": autoguard.guards.Object.of({
+				"required_number_parameter": autoguard.guards.Number
+			}),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/parameters05": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({
+					"optional_number_parameter": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.Number
+					)
+				})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/parameters06": autoguard.guards.Object.of({
+			"options": autoguard.guards.Object.of({
+				"required_string_parameter": autoguard.guards.String
+			}),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/parameters07": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({
+					"optional_string_parameter": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.String
+					)
+				})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/parameters08": autoguard.guards.Object.of({
+			"options": autoguard.guards.Object.of({
+				"parameter_one": autoguard.guards.String,
+				"parameter_two": autoguard.guards.String
+			}),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/request_headers01": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/request_headers02": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Object.of({
+				"required_boolean_request_header": autoguard.guards.Boolean
+			}),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/request_headers03": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({
+					"optional_boolean_request_header": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.Boolean
+					)
+				})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/request_headers04": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Object.of({
+				"required_number_request_header": autoguard.guards.Number
+			}),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/request_headers05": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({
+					"optional_number_request_header": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.Number
+					)
+				})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/request_headers06": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Object.of({
+				"required_string_request_header": autoguard.guards.String
+			}),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/request_headers07": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({
+					"optional_string_request_header": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.String
+					)
+				})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/request_headers08": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Object.of({
+				"request_header_one": autoguard.guards.String,
+				"request_header_two": autoguard.guards.String
+			}),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/response_headers01": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/response_headers02": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/response_headers03": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/response_headers04": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/response_headers05": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/response_headers06": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/response_headers07": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/response_headers08": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/request_payload01": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Object.of({
+				"required_request_member": autoguard.guards.String
+			})
+		}),
+		"GET:/request_payload02": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Object.of({
+				"optional_request_member": autoguard.guards.Union.of(
+					autoguard.guards.Undefined,
+					autoguard.guards.String
+				)
+			})
+		}),
+		"GET:/response_payload01": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/response_payload02": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/full_example": autoguard.guards.Object.of({
+			"options": autoguard.guards.Object.of({
+				"parameter": autoguard.guards.String
+			}),
+			"headers": autoguard.guards.Object.of({
+				"request_header": autoguard.guards.String
+			}),
+			"payload": autoguard.guards.Object.of({
+				"in_request_payload": autoguard.guards.String
+			})
+		}),
+		"GET:/reference": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		})
+	};
+
+	export type Responses = {
+		"GET:/": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"POST:/": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/one": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/one/": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/one/two": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/<dynamic_boolean_component>": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/<dynamic_number_component>": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/<dynamic_string_component>": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/<dynamic_component_one>/<dynamic_component_two>": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/parameters01": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/parameters02": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/parameters03": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/parameters04": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/parameters05": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/parameters06": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/parameters07": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/parameters08": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/request_headers01": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/request_headers02": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/request_headers03": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/request_headers04": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/request_headers05": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/request_headers06": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/request_headers07": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/request_headers08": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/response_headers01": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/response_headers02": {
+			"status"?: number,
+			"headers": {
+				"required_boolean_response_header": boolean
+			},
+			"payload"?: undefined
+		},
+		"GET:/response_headers03": {
+			"status"?: number,
+			"headers"?: {
+				"optional_boolean_response_header"?: boolean
+			},
+			"payload"?: undefined
+		},
+		"GET:/response_headers04": {
+			"status"?: number,
+			"headers": {
+				"required_number_response_header": number
+			},
+			"payload"?: undefined
+		},
+		"GET:/response_headers05": {
+			"status"?: number,
+			"headers"?: {
+				"optional_number_response_header"?: number
+			},
+			"payload"?: undefined
+		},
+		"GET:/response_headers06": {
+			"status"?: number,
+			"headers": {
+				"required_string_response_header": string
+			},
+			"payload"?: undefined
+		},
+		"GET:/response_headers07": {
+			"status"?: number,
+			"headers"?: {
+				"optional_string_response_header"?: string
+			},
+			"payload"?: undefined
+		},
+		"GET:/response_headers08": {
+			"status"?: number,
+			"headers": {
+				"response_header_one": string,
+				"response_header_two": string
+			},
+			"payload"?: undefined
+		},
+		"GET:/request_payload01": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/request_payload02": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/response_payload01": {
+			"status"?: number,
+			"headers"?: {},
+			"payload": {
+				"required_request_member": string
+			}
+		},
+		"GET:/response_payload02": {
+			"status"?: number,
+			"headers"?: {},
+			"payload": {
+				"optional_request_member"?: string
+			}
+		},
+		"GET:/full_example": {
 			"status"?: number,
 			"headers": {
 				"response_header": string
@@ -421,6 +1013,575 @@ export namespace Autoguard {
 			"payload": {
 				"in_response_payload": string
 			}
-		}>;
+		},
+		"GET:/reference": {
+			"status"?: number,
+			"headers"?: {},
+			"payload": Object
+		}
+	};
+
+	export const Responses = {
+		"GET:/": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"POST:/": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/one": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/one/": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/one/two": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/<dynamic_boolean_component>": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/<dynamic_number_component>": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/<dynamic_string_component>": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/<dynamic_component_one>/<dynamic_component_two>": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/parameters01": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/parameters02": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/parameters03": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/parameters04": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/parameters05": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/parameters06": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/parameters07": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/parameters08": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/request_headers01": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/request_headers02": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/request_headers03": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/request_headers04": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/request_headers05": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/request_headers06": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/request_headers07": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/request_headers08": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/response_headers01": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/response_headers02": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Object.of({
+				"required_boolean_response_header": autoguard.guards.Boolean
+			}),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/response_headers03": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({
+					"optional_boolean_response_header": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.Boolean
+					)
+				})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/response_headers04": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Object.of({
+				"required_number_response_header": autoguard.guards.Number
+			}),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/response_headers05": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({
+					"optional_number_response_header": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.Number
+					)
+				})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/response_headers06": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Object.of({
+				"required_string_response_header": autoguard.guards.String
+			}),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/response_headers07": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({
+					"optional_string_response_header": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.String
+					)
+				})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/response_headers08": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Object.of({
+				"response_header_one": autoguard.guards.String,
+				"response_header_two": autoguard.guards.String
+			}),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/request_payload01": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/request_payload02": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/response_payload01": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Object.of({
+				"required_request_member": autoguard.guards.String
+			})
+		}),
+		"GET:/response_payload02": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Object.of({
+				"optional_request_member": autoguard.guards.Union.of(
+					autoguard.guards.Undefined,
+					autoguard.guards.String
+				)
+			})
+		}),
+		"GET:/full_example": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Object.of({
+				"response_header": autoguard.guards.String
+			}),
+			"payload": autoguard.guards.Object.of({
+				"in_response_payload": autoguard.guards.String
+			})
+		}),
+		"GET:/reference": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Reference.of(() => Object)
+		})
+	};
+
+	export type Routes = {
+		"GET:/": (request: Requests["GET:/"]) => Promise<Responses["GET:/"]>;
+		"POST:/": (request: Requests["POST:/"]) => Promise<Responses["POST:/"]>;
+		"GET:/one": (request: Requests["GET:/one"]) => Promise<Responses["GET:/one"]>;
+		"GET:/one/": (request: Requests["GET:/one/"]) => Promise<Responses["GET:/one/"]>;
+		"GET:/one/two": (request: Requests["GET:/one/two"]) => Promise<Responses["GET:/one/two"]>;
+		"GET:/<dynamic_boolean_component>": (request: Requests["GET:/<dynamic_boolean_component>"]) => Promise<Responses["GET:/<dynamic_boolean_component>"]>;
+		"GET:/<dynamic_number_component>": (request: Requests["GET:/<dynamic_number_component>"]) => Promise<Responses["GET:/<dynamic_number_component>"]>;
+		"GET:/<dynamic_string_component>": (request: Requests["GET:/<dynamic_string_component>"]) => Promise<Responses["GET:/<dynamic_string_component>"]>;
+		"GET:/<dynamic_component_one>/<dynamic_component_two>": (request: Requests["GET:/<dynamic_component_one>/<dynamic_component_two>"]) => Promise<Responses["GET:/<dynamic_component_one>/<dynamic_component_two>"]>;
+		"GET:/parameters01": (request: Requests["GET:/parameters01"]) => Promise<Responses["GET:/parameters01"]>;
+		"GET:/parameters02": (request: Requests["GET:/parameters02"]) => Promise<Responses["GET:/parameters02"]>;
+		"GET:/parameters03": (request: Requests["GET:/parameters03"]) => Promise<Responses["GET:/parameters03"]>;
+		"GET:/parameters04": (request: Requests["GET:/parameters04"]) => Promise<Responses["GET:/parameters04"]>;
+		"GET:/parameters05": (request: Requests["GET:/parameters05"]) => Promise<Responses["GET:/parameters05"]>;
+		"GET:/parameters06": (request: Requests["GET:/parameters06"]) => Promise<Responses["GET:/parameters06"]>;
+		"GET:/parameters07": (request: Requests["GET:/parameters07"]) => Promise<Responses["GET:/parameters07"]>;
+		"GET:/parameters08": (request: Requests["GET:/parameters08"]) => Promise<Responses["GET:/parameters08"]>;
+		"GET:/request_headers01": (request: Requests["GET:/request_headers01"]) => Promise<Responses["GET:/request_headers01"]>;
+		"GET:/request_headers02": (request: Requests["GET:/request_headers02"]) => Promise<Responses["GET:/request_headers02"]>;
+		"GET:/request_headers03": (request: Requests["GET:/request_headers03"]) => Promise<Responses["GET:/request_headers03"]>;
+		"GET:/request_headers04": (request: Requests["GET:/request_headers04"]) => Promise<Responses["GET:/request_headers04"]>;
+		"GET:/request_headers05": (request: Requests["GET:/request_headers05"]) => Promise<Responses["GET:/request_headers05"]>;
+		"GET:/request_headers06": (request: Requests["GET:/request_headers06"]) => Promise<Responses["GET:/request_headers06"]>;
+		"GET:/request_headers07": (request: Requests["GET:/request_headers07"]) => Promise<Responses["GET:/request_headers07"]>;
+		"GET:/request_headers08": (request: Requests["GET:/request_headers08"]) => Promise<Responses["GET:/request_headers08"]>;
+		"GET:/response_headers01": (request: Requests["GET:/response_headers01"]) => Promise<Responses["GET:/response_headers01"]>;
+		"GET:/response_headers02": (request: Requests["GET:/response_headers02"]) => Promise<Responses["GET:/response_headers02"]>;
+		"GET:/response_headers03": (request: Requests["GET:/response_headers03"]) => Promise<Responses["GET:/response_headers03"]>;
+		"GET:/response_headers04": (request: Requests["GET:/response_headers04"]) => Promise<Responses["GET:/response_headers04"]>;
+		"GET:/response_headers05": (request: Requests["GET:/response_headers05"]) => Promise<Responses["GET:/response_headers05"]>;
+		"GET:/response_headers06": (request: Requests["GET:/response_headers06"]) => Promise<Responses["GET:/response_headers06"]>;
+		"GET:/response_headers07": (request: Requests["GET:/response_headers07"]) => Promise<Responses["GET:/response_headers07"]>;
+		"GET:/response_headers08": (request: Requests["GET:/response_headers08"]) => Promise<Responses["GET:/response_headers08"]>;
+		"GET:/request_payload01": (request: Requests["GET:/request_payload01"]) => Promise<Responses["GET:/request_payload01"]>;
+		"GET:/request_payload02": (request: Requests["GET:/request_payload02"]) => Promise<Responses["GET:/request_payload02"]>;
+		"GET:/response_payload01": (request: Requests["GET:/response_payload01"]) => Promise<Responses["GET:/response_payload01"]>;
+		"GET:/response_payload02": (request: Requests["GET:/response_payload02"]) => Promise<Responses["GET:/response_payload02"]>;
+		"GET:/full_example": (request: Requests["GET:/full_example"]) => Promise<Responses["GET:/full_example"]>;
+		"GET:/reference": (request: Requests["GET:/reference"]) => Promise<Responses["GET:/reference"]>;
 	};
 };

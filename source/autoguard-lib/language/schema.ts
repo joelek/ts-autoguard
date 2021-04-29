@@ -180,9 +180,9 @@ export class Schema {
 		lines.push(``);
 		lines.push(`export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autoguard.Routes => ({`);
 		for (let route of this.routes) {
-			let request = getRequestType(route);
-			lines.push(`\t"${makeRouteTag(route)}": async (request) => {`);
-			lines.push(`\t\tlet guard = ${request.generateTypeGuard({ ...options, eol: options.eol + "\t\t" })};`);
+			let tag = makeRouteTag(route);
+			lines.push(`\t"${tag}": async (request) => {`);
+			lines.push(`\t\tlet guard = shared.Autoguard.Requests["${tag}"];`);
 			lines.push(`\t\tguard.as(request, "request");`);
 			lines.push(`\t\tlet method = "${route.method.method}";`);
 			lines.push(`\t\tlet components = new Array<string>();`);
@@ -211,15 +211,15 @@ export class Schema {
 			lines.push(`\t\turl += autoguard.api.serializeParameters(parameters);`);
 			lines.push(`\t\tlet response = await autoguard.api.fetch(method, url, headers, payload);`);
 			lines.push(`\t\t{`);
+			lines.push(`\t\t\tlet status = response.status;`);
 			lines.push(`\t\t\tlet headers = {`);
 			for (let header of route.response.headers.headers) {
 				lines.push(`\t\t\t\t"${header.name}": autoguard.api.${makeParser(header.type, header.optional)}(response.headers, "${header.name}"),`);
 			}
 			lines.push(`\t\t\t};`);
-			lines.push(`\t\t\tlet guard = ${route.response.payload.generateTypeGuard({ ...options, eol: options.eol + "\t\t\t" })};`);
-			lines.push(`\t\t\tlet json = response.payload !== undefined ? JSON.parse(response.payload) : undefined;`);
-			lines.push(`\t\t\tlet payload = guard.as(json);`);
-			lines.push(`\t\t\treturn { headers, payload };`);
+			lines.push(`\t\t\tlet payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;`);
+			lines.push(`\t\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);
+			lines.push(`\t\t\treturn guard.as({ status, headers, payload });`);
 			lines.push(`\t\t}`);
 			lines.push(`\t},`);
 		}
@@ -238,7 +238,7 @@ export class Schema {
 		lines.push(`export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): autoguard.api.RequestListener => {`);
 		lines.push(`\tlet endpoints = new Array<autoguard.api.Endpoint>();`);
 		for (let route of this.routes) {
-			let response = getResponseType(route);
+			let tag = makeRouteTag(route);
 			lines.push(`\tendpoints.push(async (request) => {`);
 			lines.push(`\t\tlet components = new Array<[string, string]>();`);
 			for (let [index, component] of route.path.components.entries()) {
@@ -270,8 +270,8 @@ export class Schema {
 			lines.push(`\t\t\tlet json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;`);
 			lines.push(`\t\t\tlet payload = guard.as(json);`);
 			lines.push(`\t\t\ttry {`);
-			lines.push(`\t\t\t\tlet response = await routes["${makeRouteTag(route)}"]({ options, headers, payload });`);
-			lines.push(`\t\t\t\tlet guard = ${response.generateTypeGuard({ ...options, eol: options.eol + "\t\t\t\t" })};`);
+			lines.push(`\t\t\t\tlet response = await routes["${tag}"]({ options, headers, payload });`);
+			lines.push(`\t\t\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);
 			lines.push(`\t\t\t\tguard.as(response, "response");`);
 			lines.push(`\t\t\t\treturn autoguard.api.transformResponse(response);`);
 			lines.push(`\t\t\t} catch (error) {`);
@@ -318,11 +318,34 @@ export class Schema {
 		lines.push(``);
 		lines.push(`\texport const Guards = ${guards.generateType({ ...options, eol: options.eol + "\t" })};`);
 		lines.push(``);
-		lines.push(`\texport type Routes = {`);
+		let request_types = new Array<string>();
+		let request_guards = new Array<string>();
 		for (let route of this.routes) {
 			let request = getRequestType(route);
+			let tag = makeRouteTag(route);
+			request_types.push(`\t\t"${tag}": ${request.generateType({ ...options, eol: options.eol + "\t\t" })}`);
+			request_guards.push(`\t\t"${tag}": ${request.generateTypeGuard({ ...options, eol: options.eol + "\t\t" })}`);
+		}
+		lines.push(`\texport type Requests = {${request_types.length > 0 ? options.eol + request_types.join("," + options.eol) + options.eol + "\t" : ""}};`);
+		lines.push(``);
+		lines.push(`\texport const Requests = {${request_guards.length > 0 ? options.eol + request_guards.join("," + options.eol) + options.eol + "\t" : ""}};`);
+		lines.push(``);
+		let response_types = new Array<string>();
+		let response_guards = new Array<string>();
+		for (let route of this.routes) {
 			let response = getResponseType(route);
-			lines.push(`\t\t"${makeRouteTag(route)}": (request: ${request.generateType({ ...options, eol: options.eol + "\t\t" })}) => Promise<${response.generateType({ ...options, eol: options.eol + "\t\t" })}>;`);
+			let tag = makeRouteTag(route);
+			response_types.push(`\t\t"${tag}": ${response.generateType({ ...options, eol: options.eol + "\t\t" })}`);
+			response_guards.push(`\t\t"${tag}": ${response.generateTypeGuard({ ...options, eol: options.eol + "\t\t" })}`);
+		}
+		lines.push(`\texport type Responses = {${response_types.length > 0 ? options.eol + response_types.join("," + options.eol) + options.eol + "\t" : ""}};`);
+		lines.push(``);
+		lines.push(`\texport const Responses = {${response_guards.length > 0 ? options.eol + response_guards.join("," + options.eol) + options.eol + "\t" : ""}};`);
+		lines.push(``);
+		lines.push(`\texport type Routes = {`);
+		for (let route of this.routes) {
+			let tag = makeRouteTag(route);
+			lines.push(`\t\t"${tag}": (request: Requests["${tag}"]) => Promise<Responses["${tag}"]>;`);
 		}
 		lines.push(`\t};`);
 		lines.push(`};`);

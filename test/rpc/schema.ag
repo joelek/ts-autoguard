@@ -75,3 +75,10 @@ route GET:/response_payload02 => { optional_request_member?: string }
 route GET:/full_example ? <{ parameter: string }>
 	<= <{ request_header: string }> { in_request_payload: string }
 	=> <{ response_header: string }> { in_response_payload: string }
+
+guard Object: {
+	object_id: string,
+	name: string
+}
+
+route GET:/reference => Object

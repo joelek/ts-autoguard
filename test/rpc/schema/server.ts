@@ -24,19 +24,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -65,19 +53,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["POST:/"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["POST:/"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -106,19 +82,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/one"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/one"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -148,19 +112,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/one/"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/one/"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -190,19 +142,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/one/two"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/one/two"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -232,19 +172,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/<dynamic_boolean_component>"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/<dynamic_boolean_component>"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -274,19 +202,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/<dynamic_number_component>"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/<dynamic_number_component>"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -316,19 +232,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/<dynamic_string_component>"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/<dynamic_string_component>"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -360,19 +264,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/<dynamic_component_one>/<dynamic_component_two>"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/<dynamic_component_one>/<dynamic_component_two>"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -401,19 +293,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/parameters01"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/parameters01"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -443,19 +323,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/parameters02"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/parameters02"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -485,19 +353,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/parameters03"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/parameters03"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -527,19 +383,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/parameters04"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/parameters04"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -569,19 +413,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/parameters05"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/parameters05"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -611,19 +443,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/parameters06"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/parameters06"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -653,19 +473,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/parameters07"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/parameters07"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -696,19 +504,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/parameters08"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/parameters08"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -737,19 +533,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/request_headers01"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/request_headers01"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -779,19 +563,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/request_headers02"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/request_headers02"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -821,19 +593,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/request_headers03"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/request_headers03"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -863,19 +623,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/request_headers04"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/request_headers04"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -905,19 +653,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/request_headers05"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/request_headers05"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -947,19 +683,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/request_headers06"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/request_headers06"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -989,19 +713,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/request_headers07"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/request_headers07"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -1032,19 +744,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/request_headers08"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/request_headers08"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -1073,19 +773,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/response_headers01"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/response_headers01"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -1114,18 +802,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/response_headers02"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Object.of({
-						"required_boolean_response_header": autoguard.guards.Boolean
-					}),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/response_headers02"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -1154,24 +831,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/response_headers03"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({
-							"optional_boolean_response_header": autoguard.guards.Union.of(
-								autoguard.guards.Undefined,
-								autoguard.guards.Boolean
-							)
-						})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/response_headers03"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -1200,18 +860,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/response_headers04"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Object.of({
-						"required_number_response_header": autoguard.guards.Number
-					}),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/response_headers04"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -1240,24 +889,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/response_headers05"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({
-							"optional_number_response_header": autoguard.guards.Union.of(
-								autoguard.guards.Undefined,
-								autoguard.guards.Number
-							)
-						})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/response_headers05"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -1286,18 +918,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/response_headers06"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Object.of({
-						"required_string_response_header": autoguard.guards.String
-					}),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/response_headers06"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -1326,24 +947,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/response_headers07"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({
-							"optional_string_response_header": autoguard.guards.Union.of(
-								autoguard.guards.Undefined,
-								autoguard.guards.String
-							)
-						})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/response_headers07"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -1372,19 +976,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/response_headers08"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Object.of({
-						"response_header_one": autoguard.guards.String,
-						"response_header_two": autoguard.guards.String
-					}),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/response_headers08"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -1415,19 +1007,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/request_payload01"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/request_payload01"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -1461,19 +1041,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/request_payload02"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Union.of(
-						autoguard.guards.Undefined
-					)
-				});
+				let guard = shared.Autoguard.Responses["GET:/request_payload02"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -1502,19 +1070,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/response_payload01"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Object.of({
-						"required_request_member": autoguard.guards.String
-					})
-				});
+				let guard = shared.Autoguard.Responses["GET:/response_payload01"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -1543,22 +1099,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/response_payload02"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Object.of({})
-					),
-					"payload": autoguard.guards.Object.of({
-						"optional_request_member": autoguard.guards.Union.of(
-							autoguard.guards.Undefined,
-							autoguard.guards.String
-						)
-					})
-				});
+				let guard = shared.Autoguard.Responses["GET:/response_payload02"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
@@ -1591,18 +1132,36 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			let payload = guard.as(json);
 			try {
 				let response = await routes["GET:/full_example"]({ options, headers, payload });
-				let guard = autoguard.guards.Object.of({
-					"status": autoguard.guards.Union.of(
-						autoguard.guards.Undefined,
-						autoguard.guards.Number
-					),
-					"headers": autoguard.guards.Object.of({
-						"response_header": autoguard.guards.String
-					}),
-					"payload": autoguard.guards.Object.of({
-						"in_response_payload": autoguard.guards.String
-					})
-				});
+				let guard = shared.Autoguard.Responses["GET:/full_example"];
+				guard.as(response, "response");
+				return autoguard.api.transformResponse(response);
+			} catch (error) {
+				return { status: 500, headers: [] };
+			}
+		} catch (error) {
+			return { status: 400, headers: [] };
+		}
+	});
+	endpoints.push(async (request) => {
+		let components = new Array<[string, string]>();
+		components.push(["", request.components[0]]);
+		if (!autoguard.api.checkComponents(request.components, components)) {
+			return { status: 404, headers: [] };
+		}
+		if (request.method !== "GET") {
+			return { status: 405, headers: [] };
+		}
+		try {
+			let options = {
+			};
+			let headers = {
+			};
+			let guard = autoguard.guards.Undefined;
+			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
+			let payload = guard.as(json);
+			try {
+				let response = await routes["GET:/reference"]({ options, headers, payload });
+				let guard = shared.Autoguard.Responses["GET:/reference"];
 				guard.as(response, "response");
 				return autoguard.api.transformResponse(response);
 			} catch (error) {
