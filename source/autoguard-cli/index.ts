@@ -34,26 +34,34 @@ function filename(path: string): string {
 	return libpath.basename(path).split(".").slice(0, -1).join(".");
 }
 
-function transform(string: string, options: lib.shared.Options): { client: string, server: string, shared: string } {
+function transform(filename: string, string: string, options: lib.shared.Options): { client: string, index: string, proxy: string, server: string, shared: string } {
 	let tokenizer = new lib.tokenization.Tokenizer(string);
 	try {
 		let schema = lib.language.schema.Schema.parseOld(tokenizer);
 		process.stderr.write(`\tSupport for legacy schemas has been deprecated. Please upgrade using "--upgrade=true".\n`);
 		let client = schema.generateClient(options);
 		let server = schema.generateServer(options);
+		let index = generateIndex(options);
+		let proxy = schema.generateProxy(filename, options);
 		let shared = schema.generateShared(options);
 		return {
 			client,
+			index,
+			proxy,
 			server,
 			shared
 		};
 	} catch (error) {};
 	let schema = lib.language.schema.Schema.parse(tokenizer);
 	let client = schema.generateClient(options);
+	let index = generateIndex(options);
+	let proxy = schema.generateProxy(filename, options);
 	let server = schema.generateServer(options);
 	let shared = schema.generateShared(options);
 	return {
 		client,
+		index,
+		proxy,
 		server,
 		shared
 	};
@@ -111,7 +119,7 @@ function run(): void {
 			} else {
 				let input = libfs.readFileSync(path, "utf8");
 				let start = Date.now();
-				let generated = transform(input, options);
+				let generated = transform(filename(path), input, options);
 				let duration = Date.now() - start;
 				process.stderr.write("	Transform: " + duration + " ms\n");
 				let directory = libpath.join(libpath.dirname(path), filename(path));
@@ -119,9 +127,10 @@ function run(): void {
 				libfs.rmSync(libpath.join(libpath.dirname(path), filename(path) + ".ts"), { force: true, recursive: true });
 				libfs.mkdirSync(directory, { recursive: true });
 				libfs.writeFileSync(libpath.join(directory, "client.ts"), generated.client, "utf8");
+				libfs.writeFileSync(libpath.join(directory, "index.ts"), generated.index, "utf8");
 				libfs.writeFileSync(libpath.join(directory, "server.ts"), generated.server, "utf8");
 				libfs.writeFileSync(libpath.join(directory, "shared.ts"), generated.shared, "utf8");
-				libfs.writeFileSync(libpath.join(directory, "index.ts"), generateIndex(options), "utf8");
+				libfs.writeFileSync(libpath.join(libpath.dirname(path), filename(path) + ".ts"), generated.proxy, "utf8");
 			}
 			return sum + 0;
 		} catch (error) {
