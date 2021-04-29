@@ -120,6 +120,8 @@ function run() {
                 let duration = Date.now() - start;
                 process.stderr.write("	Transform: " + duration + " ms\n");
                 let directory = libpath.join(libpath.dirname(path), filename(path));
+                libfs.rmSync(directory, { force: true, recursive: true });
+                libfs.rmSync(libpath.join(libpath.dirname(path), filename(path) + ".ts"), { force: true, recursive: true });
                 libfs.mkdirSync(directory, { recursive: true });
                 libfs.writeFileSync(libpath.join(directory, "client.ts"), generated.client, "utf8");
                 libfs.writeFileSync(libpath.join(directory, "server.ts"), generated.server, "utf8");
