@@ -286,6 +286,7 @@ class Schema {
         for (let guard of this.guards) {
             lines.push(`export { ${guard.typename} } from "./${filename}/shared";`);
         }
+        lines.push(`export { Autoguard } from "./${filename}/shared";`);
         lines.push(``);
         return lines.join(options.eol);
     }
