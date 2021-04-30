@@ -239,7 +239,7 @@ Component = StaticComponent or DynamicComponent
 Path = "/" Component Path*
 Method = Identifier
 Headers = Options
-Payload = Type
+Payload = Type or "binary"
 Parameters = "?" Options
 Request = "<=" Headers? Payload?
 Response = "=>" Headers? Payload?

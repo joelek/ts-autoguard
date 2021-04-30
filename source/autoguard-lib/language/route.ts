@@ -200,9 +200,9 @@ export class Headers {
 
 export class Message {
 	headers: Headers;
-	payload: types.Type;
+	payload: types.Type | types.Binary;
 
-	constructor(headers: Headers, payload: types.Type) {
+	constructor(headers: Headers, payload: types.Type | types.Binary) {
 		this.headers = headers;
 		this.payload = payload;
 	}
@@ -227,10 +227,15 @@ export class Message {
 			if (peek()?.family === "<") {
 				headers = Headers.parse(tokenizer);
 			}
-			let payload = types.UndefinedType.INSTANCE;
-			try {
-				payload = types.Type.parse(tokenizer);
-			} catch (error) {}
+			let payload: types.Type | types.Binary = types.UndefinedType.INSTANCE;
+			if (peek()?.family === "binary") {
+				tokenization.expect(read(), "binary");
+				payload = types.Binary.INSTANCE;
+			} else {
+				try {
+					payload = types.Type.parse(tokenizer);
+				} catch (error) {}
+			}
 			return new Message(headers, payload);
 		});
 	}

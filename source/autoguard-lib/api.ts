@@ -2,6 +2,7 @@ import * as guards from "./guards";
 
 export type Primitive = boolean | number | string;
 export type JSON = null | Primitive | JSON[] | { [key: string]: JSON };
+export type Binary = AsyncIterable<Uint8Array>;
 
 export type RequestLike = {
 	[Symbol.asyncIterator](): AsyncIterableIterator<any>;
@@ -12,8 +13,9 @@ export type RequestLike = {
 
 export type ResponseLike = {
 	end(): void;
+	once(type: string, callback: () => void): void;
 	setHeader(key: string, value: string): void;
-	write(payload: string): void;
+	write(payload: Uint8Array): boolean;
 	writeHead(status: number): void;
 };
 
@@ -87,21 +89,21 @@ export type RawRequest = {
 	components: Array<string>;
 	parameters: Array<[string, string]>;
 	headers: Array<[string, string]>;
-	payload?: string;
+	payload: Binary;
 };
 
 export type RawResponse = {
 	status: number;
 	headers: Array<[string, string]>;
-	payload?: string;
+	payload: Binary;
 };
 
 export type Endpoint = (raw: RawRequest) => {
 	acceptsComponents(): boolean;
 	acceptsMethod(): boolean;
-	prepareRequest(): {
+	prepareRequest(): Promise<{
 		handleRequest(): Promise<EndpointResponse>;
-	}
+	}>
 };
 
 export function getComponents(url: string): Array<string> {
@@ -143,7 +145,46 @@ export function getHeaders(headers: Array<string>): Array<[string, string]> {
 export type EndpointResponse = {
 	status?: number;
 	headers?: Record<string, Primitive | undefined>;
-	payload?: JSON;
+	payload?: JSON | Binary;
+};
+
+export function wrapArray(array: Uint8Array): Binary {
+	async function* generator() {
+		yield array;
+	}
+	return {
+		[Symbol.asyncIterator]: generator
+	};
+};
+
+export async function unwrapArray(binary: Binary): Promise<Uint8Array> {
+	let chunks = new Array<Uint8Array>();
+	let length = 0;
+	for await (let chunk of binary) {
+		chunks.push(chunk);
+		length += chunk.length;
+	}
+	let payload = new Uint8Array(length);
+	let offset = 0;
+	for (let chunk of chunks) {
+		payload.set(chunk, offset);
+		offset += chunk.length;
+	}
+	return payload;
+};
+
+export function serializePayload(payload: JSON | undefined): Binary {
+	let string = JSON.stringify(payload ?? "");
+	let encoder = new TextEncoder();
+	let array = encoder.encode(string);
+	return wrapArray(array);
+};
+
+export async function deserializePayload(binary: Binary): Promise<JSON | undefined> {
+	let buffer = await unwrapArray(binary);
+	let decoder = new TextDecoder();
+	let string = decoder.decode(buffer);
+	return string === "" ? undefined : JSON.parse(string);
 };
 
 export function transformResponse<A extends EndpointResponse>(response: A): RawResponse {
@@ -151,7 +192,7 @@ export function transformResponse<A extends EndpointResponse>(response: A): RawR
 	let headers = Object.entries(response.headers ?? {}).map<[string, string]>((entry) => {
 		return [entry[0], String(entry)];
 	});
-	let payload = JSON.stringify(response.payload);
+	let payload = guards.Binary.is(response.payload) ? response.payload : serializePayload(response.payload);
 	return {
 		status: status,
 		headers: headers,
@@ -178,15 +219,15 @@ export function acceptsMethod(one: string, two: string): boolean {
 	return one === two;
 };
 
-export function fetch(method: string, url: string, headers: Array<[string, string]>, payload: string | undefined): Promise<RawResponse> {
-	return new Promise((resolve, reject) => {
+export function fetch(method: string, url: string, headers: Array<[string, string]>, payload: Binary): Promise<RawResponse> {
+	return new Promise(async (resolve, reject) => {
 		let xhr = new XMLHttpRequest();
 		xhr.onerror = reject;
 		xhr.onabort = reject;
 		xhr.onload = () => {
 			let status = xhr.status;
 			let headers = getHeaders(xhr.getAllResponseHeaders().split("\r\n").slice(0, -1));
-			let payload = xhr.responseText || undefined;
+			let payload = wrapArray(new Uint8Array(xhr.response as ArrayBuffer));
 			resolve({
 				status,
 				headers,
@@ -194,10 +235,25 @@ export function fetch(method: string, url: string, headers: Array<[string, strin
 			});
 		};
 		xhr.open(method, url, true);
+		xhr.responseType = "arraybuffer";
 		for (let header of headers) {
 			xhr.setRequestHeader(header[0], header[1]);
 		}
-		xhr.send(payload);
+		xhr.send(await unwrapArray(payload));
+	});
+};
+
+export async function sendPayload(httpResponse: ResponseLike, payload: Binary): Promise<void> {
+	for await (let chunk of payload) {
+		if (!httpResponse.write(chunk)) {
+			await new Promise<void>((resolve, reject) => {
+				httpResponse.once("drain", resolve);
+			});
+		}
+	}
+	httpResponse.end();
+	await new Promise<void>((resolve, reject) => {
+		httpResponse.once("finish", resolve);
 	});
 };
 
@@ -207,15 +263,10 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 	let components = getComponents(url);
 	let parameters = getParameters(url);
 	let headers = getHeaders(httpRequest.rawHeaders);
-	let payload = await (async () => {
-		let chunks = new Array<Buffer>();
-		for await (let chunk of httpRequest) {
-			chunks.push(chunk)
-		}
-		let buffer = Buffer.concat(chunks);
-		return buffer.toString();
-	})() || undefined;
-	let raw = {
+	let payload = {
+		[Symbol.asyncIterator]: () => httpRequest[Symbol.asyncIterator]()
+	};
+	let raw: RawRequest = {
 		method,
 		components,
 		parameters,
@@ -226,32 +277,36 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 	filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsComponents());
 	if (filteredEndpoints.length === 0) {
 		httpResponse.writeHead(404);
-		return httpResponse.end();
+		httpResponse.end();
+		return;
 	}
 	filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsMethod());
 	if (filteredEndpoints.length === 0) {
 		httpResponse.writeHead(405);
-		return httpResponse.end();
+		httpResponse.end();
+		return;
 	}
 	let endpoint = filteredEndpoints[0];
 	try {
-		let prepared = endpoint.prepareRequest();
+		let prepared = await endpoint.prepareRequest();
 		try {
 			let response = await prepared.handleRequest();
-			let raw = transformResponse(response);
-			for (let header of raw.headers) {
+			let { status, headers, payload } = transformResponse(response);
+			for (let header of headers) {
 				httpResponse.setHeader(header[0], header[1]);
 			}
-			httpResponse.writeHead(raw.status);
-			httpResponse.write(raw.payload ?? "");
-			return httpResponse.end();
+			httpResponse.writeHead(status);
+			await sendPayload(httpResponse, payload);
+			return;
 		} catch (error) {
 			httpResponse.writeHead(500);
-			return httpResponse.end();
+			httpResponse.end();
+			return;
 		}
 	} catch (error) {
 		httpResponse.writeHead(400);
-		httpResponse.write(String(error));
-		return httpResponse.end();
+		let payload = serializePayload(String(error));
+		await sendPayload(httpResponse, payload);
+		return;
 	}
 };

@@ -193,7 +193,11 @@ export class Schema {
 				lines.push("\t\t\t" + `headers.push(["${header.name}", String(request.headers?.["${header.name}"])]);`);
 				lines.push("\t\t" + `}`);
 			}
-			lines.push(`\t\tlet payload = JSON.stringify(request.payload) as string | undefined;`);
+			if (route.request.payload === types.Binary.INSTANCE) {
+				lines.push(`\t\tlet payload = request.payload;`);
+			} else {
+				lines.push(`\t\tlet payload = autoguard.api.serializePayload(request.payload);`);
+			}
 			lines.push(`\t\tlet url = (options?.urlPrefix ?? "");`);
 			lines.push(`\t\turl += autoguard.api.serializeComponents(components);`);
 			lines.push(`\t\turl += autoguard.api.serializeParameters(parameters);`);
@@ -204,7 +208,11 @@ export class Schema {
 			for (let header of route.response.headers.headers) {
 				lines.push(`\t\t\theaders["${header.name}"] = autoguard.api.${makeParser(header.type)}(raw.headers, "${header.name}");`);
 			}
-			lines.push(`\t\t\tlet payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;`);
+			if (route.response.payload === types.Binary.INSTANCE) {
+				lines.push(`\t\t\tlet payload = raw.payload;`);
+			} else {
+				lines.push(`\t\t\tlet payload = await autoguard.api.deserializePayload(raw.payload);`);
+			}
 			lines.push(`\t\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);
 			lines.push(`\t\t\tlet response = guard.as({ status, headers, payload }, "response");`);
 			lines.push(`\t\t\treturn response;`);
@@ -240,7 +248,7 @@ export class Schema {
 			lines.push(`\t\treturn {`);
 			lines.push(`\t\t\tacceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),`);
 			lines.push(`\t\t\tacceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),`);
-			lines.push(`\t\t\tprepareRequest: () => {`);
+			lines.push(`\t\t\tprepareRequest: async () => {`);
 			lines.push(`\t\t\t\tlet options: Record<string, autoguard.api.Primitive | undefined> = {};`);
 			for (let component of route.path.components) {
 				if (is.present(component.type)) {
@@ -254,7 +262,11 @@ export class Schema {
 			for (let header of route.request.headers.headers) {
 				lines.push(`\t\t\t\theaders["${header.name}"] = autoguard.api.${makeParser(header.type)}(raw.parameters, "${header.name}");`);
 			}
-			lines.push(`\t\t\t\tlet payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;`);
+			if (route.request.payload === types.Binary.INSTANCE) {
+				lines.push(`\t\t\t\tlet payload = raw.payload;`);
+			} else {
+				lines.push(`\t\t\t\tlet payload = await autoguard.api.deserializePayload(raw.payload);`);
+			}
 			lines.push(`\t\t\t\tlet guard = shared.Autoguard.Requests["${tag}"];`);
 			lines.push(`\t\t\t\tlet request = guard.as({ options, headers, payload }, "request");`);
 			lines.push(`\t\t\t\treturn {`);

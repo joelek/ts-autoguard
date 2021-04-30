@@ -153,6 +153,37 @@ export class ArrayType implements Type {
 	}
 };
 
+export class Binary implements Type {
+	constructor() {
+
+	}
+
+	generateSchema(options: shared.Options): string {
+		return "binary";
+	}
+
+	generateType(options: shared.Options): string {
+		return "autguard.guards.Binary";
+	}
+
+	generateTypeGuard(options: shared.Options): string {
+		return "autoguard.guards.Binary";
+	}
+
+	getImports(): shared.Import[] {
+		return [];
+	}
+
+	static readonly INSTANCE = new Binary();
+
+	static parse(tokenizer: tokenization.Tokenizer): UndefinedType {
+		return tokenizer.newContext((read, peek) => {
+			tokenization.expect(read(), "binary");
+			return Binary.INSTANCE;
+		});
+	}
+};
+
 export class BooleanType implements Type {
 	constructor() {
 
@@ -493,6 +524,7 @@ export class ObjectType implements Type {
 					let optional = false;
 					let token = tokenization.expect(read(), [
 						"any",
+						"binary",
 						"boolean",
 						"false",
 						"guard",
