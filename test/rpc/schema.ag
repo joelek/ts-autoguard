@@ -82,3 +82,7 @@ guard Object: {
 }
 
 route GET:/reference => Object
+
+route GET:/binary_request <= binary
+
+route GET:/binary_response => binary

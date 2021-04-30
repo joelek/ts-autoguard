@@ -265,6 +265,16 @@ export namespace Autoguard {
 			"options"?: {},
 			"headers"?: {},
 			"payload"?: undefined
+		},
+		"GET:/binary_request": {
+			"options"?: {},
+			"headers"?: {},
+			"payload": autguard.guards.Binary
+		},
+		"GET:/binary_response": {
+			"options"?: {},
+			"headers"?: {},
+			"payload"?: undefined
 		}
 	};
 
@@ -797,6 +807,30 @@ export namespace Autoguard {
 			"payload": autoguard.guards.Union.of(
 				autoguard.guards.Undefined
 			)
+		}),
+		"GET:/binary_request": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Binary
+		}),
+		"GET:/binary_response": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
 		})
 	};
 
@@ -1018,6 +1052,16 @@ export namespace Autoguard {
 			"status"?: number,
 			"headers"?: {},
 			"payload": Object
+		},
+		"GET:/binary_request": {
+			"status"?: number,
+			"headers"?: {},
+			"payload"?: undefined
+		},
+		"GET:/binary_response": {
+			"status"?: number,
+			"headers"?: {},
+			"payload": autguard.guards.Binary
 		}
 	};
 
@@ -1540,6 +1584,30 @@ export namespace Autoguard {
 				autoguard.guards.Object.of({})
 			),
 			"payload": autoguard.guards.Reference.of(() => Object)
+		}),
+		"GET:/binary_request": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/binary_response": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Object.of({})
+			),
+			"payload": autoguard.guards.Binary
 		})
 	};
 
@@ -1583,5 +1651,7 @@ export namespace Autoguard {
 		"GET:/response_payload02": (request: Requests["GET:/response_payload02"]) => Promise<Responses["GET:/response_payload02"]>;
 		"GET:/full_example": (request: Requests["GET:/full_example"]) => Promise<Responses["GET:/full_example"]>;
 		"GET:/reference": (request: Requests["GET:/reference"]) => Promise<Responses["GET:/reference"]>;
+		"GET:/binary_request": (request: Requests["GET:/binary_request"]) => Promise<Responses["GET:/binary_request"]>;
+		"GET:/binary_response": (request: Requests["GET:/binary_response"]) => Promise<Responses["GET:/binary_response"]>;
 	};
 };
