@@ -287,7 +287,7 @@ class Schema {
         let imports = this.getImports();
         if (imports.length > 0) {
             for (let entry of imports) {
-                lines.push(`import { ${entry.typename} } from "${["..", ...entry.path, "shared"].join("/")}";`);
+                lines.push(`import { ${entry.typename} } from "${["..", ...entry.path].join("/")}";`);
             }
         }
         lines.push(``);
