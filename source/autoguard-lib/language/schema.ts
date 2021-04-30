@@ -231,7 +231,11 @@ export class Schema {
 			lines.push(`\t\tlet method = "${route.method.method}";`);
 			lines.push(`\t\tlet components = new Array<[string, string]>();`);
 			for (let [index, component] of route.path.components.entries()) {
-				lines.push(`\t\tcomponents.push(["${is.present(component.type) ? component.name : ""}", raw.components[${index}]]);`);
+				if (is.present(component.type)) {
+					lines.push(`\t\tcomponents.push(["${component.name}", raw.components[${index}]]);`);
+				} else {
+					lines.push(`\t\tcomponents.push(["", "${component.name}"]);`);
+				}
 			}
 			lines.push(`\t\treturn {`);
 			lines.push(`\t\t\tacceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),`);
