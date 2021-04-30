@@ -643,7 +643,7 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		{
 			let status = raw.status;
 			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
-			headers["required_boolean_response_header"] = autoguard.api.getRequiredBoolean(raw.headers, "required_boolean_response_header");
+			headers["required_boolean_response_header"] = autoguard.api.getBooleanOption(raw.headers, "required_boolean_response_header");
 			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/response_headers02"];
 			let response = guard.as({ status, headers, payload }, "response");
@@ -666,7 +666,7 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		{
 			let status = raw.status;
 			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
-			headers["optional_boolean_response_header"] = autoguard.api.getOptionalBoolean(raw.headers, "optional_boolean_response_header");
+			headers["optional_boolean_response_header"] = autoguard.api.getBooleanOption(raw.headers, "optional_boolean_response_header");
 			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/response_headers03"];
 			let response = guard.as({ status, headers, payload }, "response");
@@ -689,7 +689,7 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		{
 			let status = raw.status;
 			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
-			headers["required_number_response_header"] = autoguard.api.getRequiredNumber(raw.headers, "required_number_response_header");
+			headers["required_number_response_header"] = autoguard.api.getNumberOption(raw.headers, "required_number_response_header");
 			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/response_headers04"];
 			let response = guard.as({ status, headers, payload }, "response");
@@ -712,7 +712,7 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		{
 			let status = raw.status;
 			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
-			headers["optional_number_response_header"] = autoguard.api.getOptionalNumber(raw.headers, "optional_number_response_header");
+			headers["optional_number_response_header"] = autoguard.api.getNumberOption(raw.headers, "optional_number_response_header");
 			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/response_headers05"];
 			let response = guard.as({ status, headers, payload }, "response");
@@ -735,7 +735,7 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		{
 			let status = raw.status;
 			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
-			headers["required_string_response_header"] = autoguard.api.getRequiredString(raw.headers, "required_string_response_header");
+			headers["required_string_response_header"] = autoguard.api.getStringOption(raw.headers, "required_string_response_header");
 			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/response_headers06"];
 			let response = guard.as({ status, headers, payload }, "response");
@@ -758,7 +758,7 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		{
 			let status = raw.status;
 			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
-			headers["optional_string_response_header"] = autoguard.api.getOptionalString(raw.headers, "optional_string_response_header");
+			headers["optional_string_response_header"] = autoguard.api.getStringOption(raw.headers, "optional_string_response_header");
 			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/response_headers07"];
 			let response = guard.as({ status, headers, payload }, "response");
@@ -781,8 +781,8 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		{
 			let status = raw.status;
 			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
-			headers["response_header_one"] = autoguard.api.getRequiredString(raw.headers, "response_header_one");
-			headers["response_header_two"] = autoguard.api.getRequiredString(raw.headers, "response_header_two");
+			headers["response_header_one"] = autoguard.api.getStringOption(raw.headers, "response_header_one");
+			headers["response_header_two"] = autoguard.api.getStringOption(raw.headers, "response_header_two");
 			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/response_headers08"];
 			let response = guard.as({ status, headers, payload }, "response");
@@ -899,7 +899,7 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		{
 			let status = raw.status;
 			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
-			headers["response_header"] = autoguard.api.getRequiredString(raw.headers, "response_header");
+			headers["response_header"] = autoguard.api.getStringOption(raw.headers, "response_header");
 			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/full_example"];
 			let response = guard.as({ status, headers, payload }, "response");

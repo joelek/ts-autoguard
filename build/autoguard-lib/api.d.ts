@@ -18,12 +18,9 @@ export declare type RequestListener = (request: RequestLike, response: ResponseL
 export declare function serializeComponents(components: Array<string>): string;
 export declare function extractKeyValuePairs(record: Record<string, Primitive | undefined>): Array<[string, string]>;
 export declare function serializeParameters(parameters: Array<[string, string]>): string;
-export declare function getOptionalString(pairs: Iterable<[string, string]>, key: string): string | undefined;
-export declare function getRequiredString(pairs: Iterable<[string, string]>, key: string): string;
-export declare function getOptionalNumber(pairs: Iterable<[string, string]>, key: string): number | undefined;
-export declare function getRequiredNumber(pairs: Iterable<[string, string]>, key: string): number;
-export declare function getOptionalBoolean(pairs: Iterable<[string, string]>, key: string): boolean | undefined;
-export declare function getRequiredBoolean(pairs: Iterable<[string, string]>, key: string): boolean;
+export declare function getStringOption(pairs: Iterable<[string, string]>, key: string): string | undefined;
+export declare function getNumberOption(pairs: Iterable<[string, string]>, key: string): number | undefined;
+export declare function getBooleanOption(pairs: Iterable<[string, string]>, key: string): boolean | undefined;
 export declare type RawRequest = {
     method: string;
     components: Array<string>;

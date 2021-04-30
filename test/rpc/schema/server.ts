@@ -136,7 +136,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			prepareRequest: () => {
 				let options: Record<string, autoguard.api.Primitive | undefined> = {};
-				options["dynamic_boolean_component"] = autoguard.api.getRequiredBoolean(components, "dynamic_boolean_component");
+				options["dynamic_boolean_component"] = autoguard.api.getBooleanOption(components, "dynamic_boolean_component");
 				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
 				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 				let guard = shared.Autoguard.Requests["GET:/<dynamic_boolean_component>"];
@@ -161,7 +161,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			prepareRequest: () => {
 				let options: Record<string, autoguard.api.Primitive | undefined> = {};
-				options["dynamic_number_component"] = autoguard.api.getRequiredNumber(components, "dynamic_number_component");
+				options["dynamic_number_component"] = autoguard.api.getNumberOption(components, "dynamic_number_component");
 				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
 				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 				let guard = shared.Autoguard.Requests["GET:/<dynamic_number_component>"];
@@ -186,7 +186,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			prepareRequest: () => {
 				let options: Record<string, autoguard.api.Primitive | undefined> = {};
-				options["dynamic_string_component"] = autoguard.api.getRequiredString(components, "dynamic_string_component");
+				options["dynamic_string_component"] = autoguard.api.getStringOption(components, "dynamic_string_component");
 				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
 				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 				let guard = shared.Autoguard.Requests["GET:/<dynamic_string_component>"];
@@ -212,8 +212,8 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			prepareRequest: () => {
 				let options: Record<string, autoguard.api.Primitive | undefined> = {};
-				options["dynamic_component_one"] = autoguard.api.getRequiredString(components, "dynamic_component_one");
-				options["dynamic_component_two"] = autoguard.api.getRequiredString(components, "dynamic_component_two");
+				options["dynamic_component_one"] = autoguard.api.getStringOption(components, "dynamic_component_one");
+				options["dynamic_component_two"] = autoguard.api.getStringOption(components, "dynamic_component_two");
 				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
 				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 				let guard = shared.Autoguard.Requests["GET:/<dynamic_component_one>/<dynamic_component_two>"];
@@ -262,7 +262,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			prepareRequest: () => {
 				let options: Record<string, autoguard.api.Primitive | undefined> = {};
-				options["required_boolean_parameter"] = autoguard.api.getRequiredBoolean(raw.parameters, "required_boolean_parameter");
+				options["required_boolean_parameter"] = autoguard.api.getBooleanOption(raw.parameters, "required_boolean_parameter");
 				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
 				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 				let guard = shared.Autoguard.Requests["GET:/parameters02"];
@@ -287,7 +287,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			prepareRequest: () => {
 				let options: Record<string, autoguard.api.Primitive | undefined> = {};
-				options["optional_boolean_parameter"] = autoguard.api.getOptionalBoolean(raw.parameters, "optional_boolean_parameter");
+				options["optional_boolean_parameter"] = autoguard.api.getBooleanOption(raw.parameters, "optional_boolean_parameter");
 				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
 				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 				let guard = shared.Autoguard.Requests["GET:/parameters03"];
@@ -312,7 +312,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			prepareRequest: () => {
 				let options: Record<string, autoguard.api.Primitive | undefined> = {};
-				options["required_number_parameter"] = autoguard.api.getRequiredNumber(raw.parameters, "required_number_parameter");
+				options["required_number_parameter"] = autoguard.api.getNumberOption(raw.parameters, "required_number_parameter");
 				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
 				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 				let guard = shared.Autoguard.Requests["GET:/parameters04"];
@@ -337,7 +337,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			prepareRequest: () => {
 				let options: Record<string, autoguard.api.Primitive | undefined> = {};
-				options["optional_number_parameter"] = autoguard.api.getOptionalNumber(raw.parameters, "optional_number_parameter");
+				options["optional_number_parameter"] = autoguard.api.getNumberOption(raw.parameters, "optional_number_parameter");
 				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
 				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 				let guard = shared.Autoguard.Requests["GET:/parameters05"];
@@ -362,7 +362,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			prepareRequest: () => {
 				let options: Record<string, autoguard.api.Primitive | undefined> = {};
-				options["required_string_parameter"] = autoguard.api.getRequiredString(raw.parameters, "required_string_parameter");
+				options["required_string_parameter"] = autoguard.api.getStringOption(raw.parameters, "required_string_parameter");
 				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
 				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 				let guard = shared.Autoguard.Requests["GET:/parameters06"];
@@ -387,7 +387,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			prepareRequest: () => {
 				let options: Record<string, autoguard.api.Primitive | undefined> = {};
-				options["optional_string_parameter"] = autoguard.api.getOptionalString(raw.parameters, "optional_string_parameter");
+				options["optional_string_parameter"] = autoguard.api.getStringOption(raw.parameters, "optional_string_parameter");
 				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
 				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 				let guard = shared.Autoguard.Requests["GET:/parameters07"];
@@ -412,8 +412,8 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			prepareRequest: () => {
 				let options: Record<string, autoguard.api.Primitive | undefined> = {};
-				options["parameter_one"] = autoguard.api.getRequiredString(raw.parameters, "parameter_one");
-				options["parameter_two"] = autoguard.api.getRequiredString(raw.parameters, "parameter_two");
+				options["parameter_one"] = autoguard.api.getStringOption(raw.parameters, "parameter_one");
+				options["parameter_two"] = autoguard.api.getStringOption(raw.parameters, "parameter_two");
 				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
 				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 				let guard = shared.Autoguard.Requests["GET:/parameters08"];
@@ -463,7 +463,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			prepareRequest: () => {
 				let options: Record<string, autoguard.api.Primitive | undefined> = {};
 				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
-				headers["required_boolean_request_header"] = autoguard.api.getRequiredBoolean(raw.parameters, "required_boolean_request_header");
+				headers["required_boolean_request_header"] = autoguard.api.getBooleanOption(raw.parameters, "required_boolean_request_header");
 				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 				let guard = shared.Autoguard.Requests["GET:/request_headers02"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -488,7 +488,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			prepareRequest: () => {
 				let options: Record<string, autoguard.api.Primitive | undefined> = {};
 				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
-				headers["optional_boolean_request_header"] = autoguard.api.getOptionalBoolean(raw.parameters, "optional_boolean_request_header");
+				headers["optional_boolean_request_header"] = autoguard.api.getBooleanOption(raw.parameters, "optional_boolean_request_header");
 				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 				let guard = shared.Autoguard.Requests["GET:/request_headers03"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -513,7 +513,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			prepareRequest: () => {
 				let options: Record<string, autoguard.api.Primitive | undefined> = {};
 				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
-				headers["required_number_request_header"] = autoguard.api.getRequiredNumber(raw.parameters, "required_number_request_header");
+				headers["required_number_request_header"] = autoguard.api.getNumberOption(raw.parameters, "required_number_request_header");
 				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 				let guard = shared.Autoguard.Requests["GET:/request_headers04"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -538,7 +538,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			prepareRequest: () => {
 				let options: Record<string, autoguard.api.Primitive | undefined> = {};
 				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
-				headers["optional_number_request_header"] = autoguard.api.getOptionalNumber(raw.parameters, "optional_number_request_header");
+				headers["optional_number_request_header"] = autoguard.api.getNumberOption(raw.parameters, "optional_number_request_header");
 				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 				let guard = shared.Autoguard.Requests["GET:/request_headers05"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -563,7 +563,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			prepareRequest: () => {
 				let options: Record<string, autoguard.api.Primitive | undefined> = {};
 				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
-				headers["required_string_request_header"] = autoguard.api.getRequiredString(raw.parameters, "required_string_request_header");
+				headers["required_string_request_header"] = autoguard.api.getStringOption(raw.parameters, "required_string_request_header");
 				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 				let guard = shared.Autoguard.Requests["GET:/request_headers06"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -588,7 +588,7 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			prepareRequest: () => {
 				let options: Record<string, autoguard.api.Primitive | undefined> = {};
 				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
-				headers["optional_string_request_header"] = autoguard.api.getOptionalString(raw.parameters, "optional_string_request_header");
+				headers["optional_string_request_header"] = autoguard.api.getStringOption(raw.parameters, "optional_string_request_header");
 				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 				let guard = shared.Autoguard.Requests["GET:/request_headers07"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -613,8 +613,8 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			prepareRequest: () => {
 				let options: Record<string, autoguard.api.Primitive | undefined> = {};
 				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
-				headers["request_header_one"] = autoguard.api.getRequiredString(raw.parameters, "request_header_one");
-				headers["request_header_two"] = autoguard.api.getRequiredString(raw.parameters, "request_header_two");
+				headers["request_header_one"] = autoguard.api.getStringOption(raw.parameters, "request_header_one");
+				headers["request_header_two"] = autoguard.api.getStringOption(raw.parameters, "request_header_two");
 				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 				let guard = shared.Autoguard.Requests["GET:/request_headers08"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -926,9 +926,9 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			prepareRequest: () => {
 				let options: Record<string, autoguard.api.Primitive | undefined> = {};
-				options["parameter"] = autoguard.api.getRequiredString(raw.parameters, "parameter");
+				options["parameter"] = autoguard.api.getStringOption(raw.parameters, "parameter");
 				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
-				headers["request_header"] = autoguard.api.getRequiredString(raw.parameters, "request_header");
+				headers["request_header"] = autoguard.api.getStringOption(raw.parameters, "request_header");
 				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 				let guard = shared.Autoguard.Requests["GET:/full_example"];
 				let request = guard.as({ options, headers, payload }, "request");

@@ -6,28 +6,15 @@ const is = require("../is");
 const route = require("./route");
 const tokenization = require("../tokenization");
 const types = require("./types");
-function makeParser(type, optional) {
-    if (optional) {
-        if (type === "boolean") {
-            return "getOptionalBoolean";
-        }
-        if (type === "number") {
-            return "getOptionalNumber";
-        }
-        if (type === "string") {
-            return "getOptionalString";
-        }
+function makeParser(type) {
+    if (type === "boolean") {
+        return "getBooleanOption";
     }
-    else {
-        if (type === "boolean") {
-            return "getRequiredBoolean";
-        }
-        if (type === "number") {
-            return "getRequiredNumber";
-        }
-        if (type === "string") {
-            return "getRequiredString";
-        }
+    if (type === "number") {
+        return "getNumberOption";
+    }
+    if (type === "string") {
+        return "getStringOption";
     }
     throw `Expected "${type}" to be a supported parameter type!`;
 }
@@ -207,7 +194,7 @@ class Schema {
             lines.push(`\t\t\tlet status = raw.status;`);
             lines.push(`\t\t\tlet headers: Record<string, autoguard.api.Primitive | undefined> = {};`);
             for (let header of route.response.headers.headers) {
-                lines.push(`\t\t\theaders["${header.name}"] = autoguard.api.${makeParser(header.type, header.optional)}(raw.headers, "${header.name}");`);
+                lines.push(`\t\t\theaders["${header.name}"] = autoguard.api.${makeParser(header.type)}(raw.headers, "${header.name}");`);
             }
             lines.push(`\t\t\tlet payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;`);
             lines.push(`\t\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);
@@ -244,15 +231,15 @@ class Schema {
             lines.push(`\t\t\t\tlet options: Record<string, autoguard.api.Primitive | undefined> = {};`);
             for (let component of route.path.components) {
                 if (is.present(component.type)) {
-                    lines.push(`\t\t\t\toptions["${component.name}"] = autoguard.api.${makeParser(component.type, false)}(components, "${component.name}");`);
+                    lines.push(`\t\t\t\toptions["${component.name}"] = autoguard.api.${makeParser(component.type)}(components, "${component.name}");`);
                 }
             }
             for (let parameter of route.parameters.parameters) {
-                lines.push(`\t\t\t\toptions["${parameter.name}"] = autoguard.api.${makeParser(parameter.type, parameter.optional)}(raw.parameters, "${parameter.name}");`);
+                lines.push(`\t\t\t\toptions["${parameter.name}"] = autoguard.api.${makeParser(parameter.type)}(raw.parameters, "${parameter.name}");`);
             }
             lines.push(`\t\t\t\tlet headers: Record<string, autoguard.api.Primitive | undefined> = {};`);
             for (let header of route.request.headers.headers) {
-                lines.push(`\t\t\t\theaders["${header.name}"] = autoguard.api.${makeParser(header.type, header.optional)}(raw.parameters, "${header.name}");`);
+                lines.push(`\t\t\t\theaders["${header.name}"] = autoguard.api.${makeParser(header.type)}(raw.parameters, "${header.name}");`);
             }
             lines.push(`\t\t\t\tlet payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;`);
             lines.push(`\t\t\t\tlet guard = shared.Autoguard.Requests["${tag}"];`);

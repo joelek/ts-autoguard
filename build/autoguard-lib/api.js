@@ -16,9 +16,8 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.route = exports.fetch = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getRequiredBoolean = exports.getOptionalBoolean = exports.getRequiredNumber = exports.getOptionalNumber = exports.getRequiredString = exports.getOptionalString = exports.serializeParameters = exports.extractKeyValuePairs = exports.serializeComponents = void 0;
+exports.route = exports.fetch = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.extractKeyValuePairs = exports.serializeComponents = void 0;
 const guards = require("./guards");
-const is = require("./is");
 function serializeComponents(components) {
     return "/" + components
         .map((component) => {
@@ -52,68 +51,41 @@ function serializeParameters(parameters) {
 }
 exports.serializeParameters = serializeParameters;
 ;
-function getOptionalString(pairs, key) {
+function getStringOption(pairs, key) {
     for (let pair of pairs) {
         if (pair[0] === key) {
             let value = pair[1];
-            return value;
+            if (guards.String.is(value)) {
+                return value;
+            }
         }
     }
 }
-exports.getOptionalString = getOptionalString;
+exports.getStringOption = getStringOption;
 ;
-function getRequiredString(pairs, key) {
-    let value = getOptionalString(pairs, key);
-    if (is.present(value)) {
-        return value;
-    }
-    throw `Expected a string for key "${key}"!`;
-}
-exports.getRequiredString = getRequiredString;
-;
-function getOptionalNumber(pairs, key) {
+function getNumberOption(pairs, key) {
     for (let pair of pairs) {
         if (pair[0] === key) {
             let value = JSON.parse(pair[1]);
-            if (!guards.Number.is(value)) {
-                throw `Expected ${value} to be a number!`;
+            if (guards.Number.is(value)) {
+                return value;
             }
-            return value;
         }
     }
 }
-exports.getOptionalNumber = getOptionalNumber;
+exports.getNumberOption = getNumberOption;
 ;
-function getRequiredNumber(pairs, key) {
-    let value = getOptionalNumber(pairs, key);
-    if (is.present(value)) {
-        return value;
-    }
-    throw `Expected a number for key "${key}"!`;
-}
-exports.getRequiredNumber = getRequiredNumber;
-;
-function getOptionalBoolean(pairs, key) {
+function getBooleanOption(pairs, key) {
     for (let pair of pairs) {
         if (pair[0] === key) {
             let value = JSON.parse(pair[1]);
-            if (!guards.Boolean.is(value)) {
-                throw `Expected ${value} to be a boolean!`;
+            if (guards.Boolean.is(value)) {
+                return value;
             }
-            return value;
         }
     }
 }
-exports.getOptionalBoolean = getOptionalBoolean;
-;
-function getRequiredBoolean(pairs, key) {
-    let value = getOptionalBoolean(pairs, key);
-    if (is.present(value)) {
-        return value;
-    }
-    throw `Expected a boolean for key "${key}"!`;
-}
-exports.getRequiredBoolean = getRequiredBoolean;
+exports.getBooleanOption = getBooleanOption;
 ;
 function getComponents(url) {
     return url.split("?")[0].split("/").map((part) => {

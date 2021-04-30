@@ -1,5 +1,4 @@
 import * as guards from "./guards";
-import * as is from "./is";
 
 export type Primitive = boolean | number | string;
 export type JSON = null | Primitive | JSON[] | { [key: string]: JSON };
@@ -50,62 +49,37 @@ export function serializeParameters(parameters: Array<[string, string]>): string
 	return `?${parts.join("&")}`;
 };
 
-export function getOptionalString(pairs: Iterable<[string, string]>, key: string): string | undefined {
+export function getStringOption(pairs: Iterable<[string, string]>, key: string): string | undefined {
 	for (let pair of pairs) {
 		if (pair[0] === key) {
 			let value = pair[1];
-			return value;
+			if (guards.String.is(value)) {
+				return value;
+			}
 		}
 	}
 };
 
-export function getRequiredString(pairs: Iterable<[string, string]>, key: string): string {
-	let value = getOptionalString(pairs, key);
-	if (is.present(value)) {
-		return value;
-	}
-	throw `Expected a string for key "${key}"!`;
-};
-
-export function getOptionalNumber(pairs: Iterable<[string, string]>, key: string): number | undefined {
+export function getNumberOption(pairs: Iterable<[string, string]>, key: string): number | undefined {
 	for (let pair of pairs) {
 		if (pair[0] === key) {
 			let value = JSON.parse(pair[1]);
-			if (!guards.Number.is(value)) {
-				throw `Expected ${value} to be a number!`;
+			if (guards.Number.is(value)) {
+				return value;
 			}
-			return value;
 		}
 	}
 };
 
-export function getRequiredNumber(pairs: Iterable<[string, string]>, key: string): number {
-	let value = getOptionalNumber(pairs, key);
-	if (is.present(value)) {
-		return value;
-	}
-	throw `Expected a number for key "${key}"!`;
-};
-
-
-export function getOptionalBoolean(pairs: Iterable<[string, string]>, key: string): boolean | undefined {
+export function getBooleanOption(pairs: Iterable<[string, string]>, key: string): boolean | undefined {
 	for (let pair of pairs) {
 		if (pair[0] === key) {
 			let value = JSON.parse(pair[1]);
-			if (!guards.Boolean.is(value)) {
-				throw `Expected ${value} to be a boolean!`;
+			if (guards.Boolean.is(value)) {
+				return value;
 			}
-			return value;
 		}
 	}
-};
-
-export function getRequiredBoolean(pairs: Iterable<[string, string]>, key: string): boolean {
-	let value = getOptionalBoolean(pairs, key);
-	if (is.present(value)) {
-		return value;
-	}
-	throw `Expected a boolean for key "${key}"!`;
 };
 
 export type RawRequest = {
