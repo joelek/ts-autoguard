@@ -14,12 +14,17 @@ declare type MakeUndefinedOptional<A> = {
 } & {
     [B in OptionalKeys<A>]?: A[B];
 };
+export declare type Binary = AsyncIterable<Uint8Array> & {};
 export declare const Any: {
     as(subject: any, path?: string): any;
     is(subject: any): subject is any;
 };
 export declare const Array: {
     of<A extends unknown>(guard: serialization.MessageGuard<A>): serialization.MessageGuard<A[]>;
+};
+export declare const Binary: {
+    as(subject: any, path?: string): AsyncIterable<Uint8Array>;
+    is(subject: any): subject is AsyncIterable<Uint8Array>;
 };
 export declare const Boolean: {
     as(subject: any, path?: string): boolean;

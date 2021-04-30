@@ -28,6 +28,15 @@ export declare class ArrayType implements Type {
     getImports(): Array<shared.Import>;
     static parse(tokenizer: tokenization.Tokenizer, ...exclude: Typename[]): ArrayType;
 }
+export declare class Binary implements Type {
+    constructor();
+    generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
+    generateTypeGuard(options: shared.Options): string;
+    getImports(): shared.Import[];
+    static readonly INSTANCE: Binary;
+    static parse(tokenizer: tokenization.Tokenizer): UndefinedType;
+}
 export declare class BooleanType implements Type {
     constructor();
     generateSchema(options: shared.Options): string;

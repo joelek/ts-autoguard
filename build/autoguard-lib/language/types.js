@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UnionType = exports.UndefinedType = exports.TupleType = exports.StringLiteralType = exports.StringType = exports.ReferenceType = exports.RecordType = exports.ObjectType = exports.NumberLiteralType = exports.NumberType = exports.NullType = exports.IntersectionType = exports.GroupType = exports.BooleanLiteralType = exports.BooleanType = exports.ArrayType = exports.AnyType = exports.Type = void 0;
+exports.UnionType = exports.UndefinedType = exports.TupleType = exports.StringLiteralType = exports.StringType = exports.ReferenceType = exports.RecordType = exports.ObjectType = exports.NumberLiteralType = exports.NumberType = exports.NullType = exports.IntersectionType = exports.GroupType = exports.BooleanLiteralType = exports.BooleanType = exports.Binary = exports.ArrayType = exports.AnyType = exports.Type = void 0;
 const tokenization = require("../tokenization");
 ;
 exports.Type = {
@@ -150,6 +150,31 @@ class ArrayType {
     }
 }
 exports.ArrayType = ArrayType;
+;
+class Binary {
+    constructor() {
+    }
+    generateSchema(options) {
+        return "binary";
+    }
+    generateType(options) {
+        return "autguard.guards.Binary";
+    }
+    generateTypeGuard(options) {
+        return "autoguard.guards.Binary";
+    }
+    getImports() {
+        return [];
+    }
+    static parse(tokenizer) {
+        return tokenizer.newContext((read, peek) => {
+            tokenization.expect(read(), "binary");
+            return Binary.INSTANCE;
+        });
+    }
+}
+exports.Binary = Binary;
+Binary.INSTANCE = new Binary();
 ;
 class BooleanType {
     constructor() {
@@ -437,6 +462,7 @@ class ObjectType {
                     let optional = false;
                     let token = tokenization.expect(read(), [
                         "any",
+                        "binary",
                         "boolean",
                         "false",
                         "guard",

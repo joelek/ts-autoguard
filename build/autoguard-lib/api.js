@@ -8,6 +8,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
+var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+};
 var __asyncValues = (this && this.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator], i;
@@ -16,7 +28,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.route = exports.fetch = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.extractKeyValuePairs = exports.serializeComponents = void 0;
+exports.route = exports.sendPayload = exports.fetch = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.deserializePayload = exports.serializePayload = exports.unwrapArray = exports.wrapArray = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.extractKeyValuePairs = exports.serializeComponents = void 0;
 const guards = require("./guards");
 function serializeComponents(components) {
     return "/" + components
@@ -128,13 +140,74 @@ function getHeaders(headers) {
 }
 exports.getHeaders = getHeaders;
 ;
+function wrapArray(array) {
+    function generator() {
+        return __asyncGenerator(this, arguments, function* generator_1() {
+            yield yield __await(array);
+        });
+    }
+    return {
+        [Symbol.asyncIterator]: generator
+    };
+}
+exports.wrapArray = wrapArray;
+;
+function unwrapArray(binary) {
+    var binary_1, binary_1_1;
+    var e_1, _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        let chunks = new Array();
+        let length = 0;
+        try {
+            for (binary_1 = __asyncValues(binary); binary_1_1 = yield binary_1.next(), !binary_1_1.done;) {
+                let chunk = binary_1_1.value;
+                chunks.push(chunk);
+                length += chunk.length;
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (binary_1_1 && !binary_1_1.done && (_a = binary_1.return)) yield _a.call(binary_1);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        let payload = new Uint8Array(length);
+        let offset = 0;
+        for (let chunk of chunks) {
+            payload.set(chunk, offset);
+            offset += chunk.length;
+        }
+        return payload;
+    });
+}
+exports.unwrapArray = unwrapArray;
+;
+function serializePayload(payload) {
+    let string = JSON.stringify(payload !== null && payload !== void 0 ? payload : "");
+    let encoder = new TextEncoder();
+    let array = encoder.encode(string);
+    return wrapArray(array);
+}
+exports.serializePayload = serializePayload;
+;
+function deserializePayload(binary) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let buffer = yield unwrapArray(binary);
+        let decoder = new TextDecoder();
+        let string = decoder.decode(buffer);
+        return string === "" ? undefined : JSON.parse(string);
+    });
+}
+exports.deserializePayload = deserializePayload;
+;
 function transformResponse(response) {
     var _a, _b;
     let status = (_a = response.status) !== null && _a !== void 0 ? _a : 200;
     let headers = Object.entries((_b = response.headers) !== null && _b !== void 0 ? _b : {}).map((entry) => {
         return [entry[0], String(entry)];
     });
-    let payload = JSON.stringify(response.payload);
+    let payload = guards.Binary.is(response.payload) ? response.payload : serializePayload(response.payload);
     return {
         status: status,
         headers: headers,
@@ -165,14 +238,14 @@ function acceptsMethod(one, two) {
 exports.acceptsMethod = acceptsMethod;
 ;
 function fetch(method, url, headers, payload) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
         let xhr = new XMLHttpRequest();
         xhr.onerror = reject;
         xhr.onabort = reject;
         xhr.onload = () => {
             let status = xhr.status;
             let headers = getHeaders(xhr.getAllResponseHeaders().split("\r\n").slice(0, -1));
-            let payload = xhr.responseText || undefined;
+            let payload = wrapArray(new Uint8Array(xhr.response));
             resolve({
                 status,
                 headers,
@@ -180,41 +253,55 @@ function fetch(method, url, headers, payload) {
             });
         };
         xhr.open(method, url, true);
+        xhr.responseType = "arraybuffer";
         for (let header of headers) {
             xhr.setRequestHeader(header[0], header[1]);
         }
-        xhr.send(payload);
-    });
+        xhr.send(yield unwrapArray(payload));
+    }));
 }
 exports.fetch = fetch;
 ;
+function sendPayload(httpResponse, payload) {
+    var payload_1, payload_1_1;
+    var e_2, _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            for (payload_1 = __asyncValues(payload); payload_1_1 = yield payload_1.next(), !payload_1_1.done;) {
+                let chunk = payload_1_1.value;
+                if (!httpResponse.write(chunk)) {
+                    yield new Promise((resolve, reject) => {
+                        httpResponse.once("drain", resolve);
+                    });
+                }
+            }
+        }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (payload_1_1 && !payload_1_1.done && (_a = payload_1.return)) yield _a.call(payload_1);
+            }
+            finally { if (e_2) throw e_2.error; }
+        }
+        httpResponse.end();
+        yield new Promise((resolve, reject) => {
+            httpResponse.once("finish", resolve);
+        });
+    });
+}
+exports.sendPayload = sendPayload;
+;
 function route(endpoints, httpRequest, httpResponse) {
-    var _a, _b, _c;
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         let method = (_a = httpRequest.method) !== null && _a !== void 0 ? _a : "GET";
         let url = (_b = httpRequest.url) !== null && _b !== void 0 ? _b : "";
         let components = getComponents(url);
         let parameters = getParameters(url);
         let headers = getHeaders(httpRequest.rawHeaders);
-        let payload = (yield (() => __awaiter(this, void 0, void 0, function* () {
-            var e_1, _d;
-            let chunks = new Array();
-            try {
-                for (var httpRequest_1 = __asyncValues(httpRequest), httpRequest_1_1; httpRequest_1_1 = yield httpRequest_1.next(), !httpRequest_1_1.done;) {
-                    let chunk = httpRequest_1_1.value;
-                    chunks.push(chunk);
-                }
-            }
-            catch (e_1_1) { e_1 = { error: e_1_1 }; }
-            finally {
-                try {
-                    if (httpRequest_1_1 && !httpRequest_1_1.done && (_d = httpRequest_1.return)) yield _d.call(httpRequest_1);
-                }
-                finally { if (e_1) throw e_1.error; }
-            }
-            let buffer = Buffer.concat(chunks);
-            return buffer.toString();
-        }))()) || undefined;
+        let payload = {
+            [Symbol.asyncIterator]: () => httpRequest[Symbol.asyncIterator]()
+        };
         let raw = {
             method,
             components,
@@ -226,35 +313,39 @@ function route(endpoints, httpRequest, httpResponse) {
         filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsComponents());
         if (filteredEndpoints.length === 0) {
             httpResponse.writeHead(404);
-            return httpResponse.end();
+            httpResponse.end();
+            return;
         }
         filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsMethod());
         if (filteredEndpoints.length === 0) {
             httpResponse.writeHead(405);
-            return httpResponse.end();
+            httpResponse.end();
+            return;
         }
         let endpoint = filteredEndpoints[0];
         try {
-            let prepared = endpoint.prepareRequest();
+            let prepared = yield endpoint.prepareRequest();
             try {
                 let response = yield prepared.handleRequest();
-                let raw = transformResponse(response);
-                for (let header of raw.headers) {
+                let { status, headers, payload } = transformResponse(response);
+                for (let header of headers) {
                     httpResponse.setHeader(header[0], header[1]);
                 }
-                httpResponse.writeHead(raw.status);
-                httpResponse.write((_c = raw.payload) !== null && _c !== void 0 ? _c : "");
-                return httpResponse.end();
+                httpResponse.writeHead(status);
+                yield sendPayload(httpResponse, payload);
+                return;
             }
             catch (error) {
                 httpResponse.writeHead(500);
-                return httpResponse.end();
+                httpResponse.end();
+                return;
             }
         }
         catch (error) {
             httpResponse.writeHead(400);
-            httpResponse.write(String(error));
-            return httpResponse.end();
+            let payload = serializePayload(String(error));
+            yield sendPayload(httpResponse, payload);
+            return;
         }
     });
 }

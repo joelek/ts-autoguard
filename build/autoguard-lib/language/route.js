@@ -207,16 +207,22 @@ class Message {
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
-            var _a;
+            var _a, _b;
             let headers = new Headers([]);
             if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) === "<") {
                 headers = Headers.parse(tokenizer);
             }
             let payload = types.UndefinedType.INSTANCE;
-            try {
-                payload = types.Type.parse(tokenizer);
+            if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === "binary") {
+                tokenization.expect(read(), "binary");
+                payload = types.Binary.INSTANCE;
             }
-            catch (error) { }
+            else {
+                try {
+                    payload = types.Type.parse(tokenizer);
+                }
+                catch (error) { }
+            }
             return new Message(headers, payload);
         });
     }
