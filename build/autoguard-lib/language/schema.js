@@ -202,17 +202,17 @@ class Schema {
             lines.push(`\t\tlet url = (options?.urlPrefix ?? "");`);
             lines.push(`\t\turl += autoguard.api.serializeComponents(components);`);
             lines.push(`\t\turl += autoguard.api.serializeParameters(parameters);`);
-            lines.push(`\t\tlet response = await autoguard.api.fetch(method, url, headers, payload);`);
+            lines.push(`\t\tlet raw = await autoguard.api.fetch(method, url, headers, payload);`);
             lines.push(`\t\t{`);
-            lines.push(`\t\t\tlet status = response.status;`);
-            lines.push(`\t\t\tlet headers = {`);
+            lines.push(`\t\t\tlet status = raw.status;`);
+            lines.push(`\t\t\tlet headers: Record<string, autoguard.api.Primitive | undefined> = {};`);
             for (let header of route.response.headers.headers) {
-                lines.push(`\t\t\t\t"${header.name}": autoguard.api.${makeParser(header.type, header.optional)}(response.headers, "${header.name}"),`);
+                lines.push(`\t\t\theaders["${header.name}"] = autoguard.api.${makeParser(header.type, header.optional)}(raw.headers, "${header.name}");`);
             }
-            lines.push(`\t\t\t};`);
-            lines.push(`\t\t\tlet payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;`);
+            lines.push(`\t\t\tlet payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;`);
             lines.push(`\t\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);
-            lines.push(`\t\t\treturn guard.as({ status, headers, payload });`);
+            lines.push(`\t\t\tlet response = guard.as({ status, headers, payload }, "response");`);
+            lines.push(`\t\t\treturn response;`);
             lines.push(`\t\t}`);
             lines.push(`\t},`);
         }

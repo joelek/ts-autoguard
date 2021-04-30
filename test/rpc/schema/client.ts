@@ -16,14 +16,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"POST:/": async (request) => {
@@ -38,14 +38,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["POST:/"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/one": async (request) => {
@@ -60,14 +60,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/one"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/one/": async (request) => {
@@ -83,14 +83,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/one/"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/one/two": async (request) => {
@@ -106,14 +106,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/one/two"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/<dynamic_boolean_component>": async (request) => {
@@ -128,14 +128,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/<dynamic_boolean_component>"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/<dynamic_number_component>": async (request) => {
@@ -150,14 +150,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/<dynamic_number_component>"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/<dynamic_string_component>": async (request) => {
@@ -172,14 +172,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/<dynamic_string_component>"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/<dynamic_component_one>/<dynamic_component_two>": async (request) => {
@@ -195,14 +195,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/<dynamic_component_one>/<dynamic_component_two>"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/parameters01": async (request) => {
@@ -217,14 +217,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/parameters01"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/parameters02": async (request) => {
@@ -242,14 +242,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/parameters02"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/parameters03": async (request) => {
@@ -267,14 +267,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/parameters03"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/parameters04": async (request) => {
@@ -292,14 +292,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/parameters04"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/parameters05": async (request) => {
@@ -317,14 +317,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/parameters05"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/parameters06": async (request) => {
@@ -342,14 +342,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/parameters06"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/parameters07": async (request) => {
@@ -367,14 +367,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/parameters07"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/parameters08": async (request) => {
@@ -395,14 +395,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/parameters08"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/request_headers01": async (request) => {
@@ -417,14 +417,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/request_headers01"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/request_headers02": async (request) => {
@@ -442,14 +442,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/request_headers02"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/request_headers03": async (request) => {
@@ -467,14 +467,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/request_headers03"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/request_headers04": async (request) => {
@@ -492,14 +492,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/request_headers04"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/request_headers05": async (request) => {
@@ -517,14 +517,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/request_headers05"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/request_headers06": async (request) => {
@@ -542,14 +542,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/request_headers06"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/request_headers07": async (request) => {
@@ -567,14 +567,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/request_headers07"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/request_headers08": async (request) => {
@@ -595,14 +595,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/request_headers08"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/response_headers01": async (request) => {
@@ -617,14 +617,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/response_headers01"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/response_headers02": async (request) => {
@@ -639,15 +639,15 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-				"required_boolean_response_header": autoguard.api.getRequiredBoolean(response.headers, "required_boolean_response_header"),
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			headers["required_boolean_response_header"] = autoguard.api.getRequiredBoolean(raw.headers, "required_boolean_response_header");
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/response_headers02"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/response_headers03": async (request) => {
@@ -662,15 +662,15 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-				"optional_boolean_response_header": autoguard.api.getOptionalBoolean(response.headers, "optional_boolean_response_header"),
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			headers["optional_boolean_response_header"] = autoguard.api.getOptionalBoolean(raw.headers, "optional_boolean_response_header");
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/response_headers03"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/response_headers04": async (request) => {
@@ -685,15 +685,15 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-				"required_number_response_header": autoguard.api.getRequiredNumber(response.headers, "required_number_response_header"),
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			headers["required_number_response_header"] = autoguard.api.getRequiredNumber(raw.headers, "required_number_response_header");
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/response_headers04"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/response_headers05": async (request) => {
@@ -708,15 +708,15 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-				"optional_number_response_header": autoguard.api.getOptionalNumber(response.headers, "optional_number_response_header"),
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			headers["optional_number_response_header"] = autoguard.api.getOptionalNumber(raw.headers, "optional_number_response_header");
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/response_headers05"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/response_headers06": async (request) => {
@@ -731,15 +731,15 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-				"required_string_response_header": autoguard.api.getRequiredString(response.headers, "required_string_response_header"),
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			headers["required_string_response_header"] = autoguard.api.getRequiredString(raw.headers, "required_string_response_header");
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/response_headers06"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/response_headers07": async (request) => {
@@ -754,15 +754,15 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-				"optional_string_response_header": autoguard.api.getOptionalString(response.headers, "optional_string_response_header"),
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			headers["optional_string_response_header"] = autoguard.api.getOptionalString(raw.headers, "optional_string_response_header");
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/response_headers07"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/response_headers08": async (request) => {
@@ -777,16 +777,16 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-				"response_header_one": autoguard.api.getRequiredString(response.headers, "response_header_one"),
-				"response_header_two": autoguard.api.getRequiredString(response.headers, "response_header_two"),
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			headers["response_header_one"] = autoguard.api.getRequiredString(raw.headers, "response_header_one");
+			headers["response_header_two"] = autoguard.api.getRequiredString(raw.headers, "response_header_two");
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/response_headers08"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/request_payload01": async (request) => {
@@ -801,14 +801,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/request_payload01"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/request_payload02": async (request) => {
@@ -823,14 +823,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/request_payload02"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/response_payload01": async (request) => {
@@ -845,14 +845,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/response_payload01"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/response_payload02": async (request) => {
@@ -867,14 +867,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/response_payload02"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/full_example": async (request) => {
@@ -895,15 +895,15 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-				"response_header": autoguard.api.getRequiredString(response.headers, "response_header"),
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			headers["response_header"] = autoguard.api.getRequiredString(raw.headers, "response_header");
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/full_example"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 	"GET:/reference": async (request) => {
@@ -918,14 +918,14 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 		let url = (options?.urlPrefix ?? "");
 		url += autoguard.api.serializeComponents(components);
 		url += autoguard.api.serializeParameters(parameters);
-		let response = await autoguard.api.fetch(method, url, headers, payload);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
 		{
-			let status = response.status;
-			let headers = {
-			};
-			let payload = response.payload !== undefined ? JSON.parse(response.payload) : undefined;
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
 			let guard = shared.Autoguard.Responses["GET:/reference"];
-			return guard.as({ status, headers, payload });
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
 		}
 	},
 });
