@@ -269,7 +269,7 @@ export namespace Autoguard {
 		"GET:/binary_request": {
 			"options"?: {},
 			"headers"?: {},
-			"payload": autguard.guards.Binary
+			"payload": autoguard.guards.Binary
 		},
 		"GET:/binary_response": {
 			"options"?: {},
@@ -1061,7 +1061,7 @@ export namespace Autoguard {
 		"GET:/binary_response": {
 			"status"?: number,
 			"headers"?: {},
-			"payload": autguard.guards.Binary
+			"payload": autoguard.guards.Binary
 		}
 	};
 

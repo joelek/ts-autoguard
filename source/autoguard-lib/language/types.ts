@@ -163,7 +163,7 @@ export class Binary implements Type {
 	}
 
 	generateType(options: shared.Options): string {
-		return "autguard.guards.Binary";
+		return "autoguard.guards.Binary";
 	}
 
 	generateTypeGuard(options: shared.Options): string {

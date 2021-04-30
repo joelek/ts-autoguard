@@ -158,7 +158,7 @@ class Binary {
         return "binary";
     }
     generateType(options) {
-        return "autguard.guards.Binary";
+        return "autoguard.guards.Binary";
     }
     generateTypeGuard(options) {
         return "autoguard.guards.Binary";
