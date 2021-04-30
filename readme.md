@@ -2,6 +2,10 @@
 
 Auto-generated unintrusive type guards for TypeScript.
 
+## News
+
+The next major version is currently under development and will include a brand new interface descriptor language. The new language greatly simplifies the development and consumption of APIs through automatic generation of boiler-plate parsing, routing and type checking code.
+
 ## Motivation
 
 JSON is a standardized and commonly used format for which JavaScript runtimes contain built-in serialization functionality. The TypeScript return type of the deserialization function `JSON.parse()` is `any` since there is no way for the TypeScript compiler to know what the serialized data consists of. The TypeScript `any` type is flexible and allows you to treat it as pretty much anything. This is both extremely useful and incredibly dangerous for the runtime safety of an application.
@@ -146,6 +150,10 @@ guard MyTupleType: [
 guard MyUndefinedType: undefined
 guard MyUnionType: string | null
 ```
+
+### Interface descriptor language
+
+Coming soon...
 
 ### Serialization and deserialization
 
