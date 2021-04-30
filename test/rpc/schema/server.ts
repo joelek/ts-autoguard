@@ -5,1171 +5,967 @@ import * as shared from "./index";
 
 export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): autoguard.api.RequestListener => {
 	let endpoints = new Array<autoguard.api.Endpoint>();
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/"](request);
+						let guard = shared.Autoguard.Responses["GET:/"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "POST";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "POST") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["POST:/"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["POST:/"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["POST:/"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["POST:/"](request);
+						let guard = shared.Autoguard.Responses["POST:/"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/one"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/one"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/one"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/one"](request);
+						let guard = shared.Autoguard.Responses["GET:/one"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		components.push(["", request.components[1]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/one/"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/one/"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		components.push(["", raw.components[1]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/one/"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/one/"](request);
+						let guard = shared.Autoguard.Responses["GET:/one/"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		components.push(["", request.components[1]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/one/two"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/one/two"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		components.push(["", raw.components[1]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/one/two"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/one/two"](request);
+						let guard = shared.Autoguard.Responses["GET:/one/two"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["dynamic_boolean_component", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-				"dynamic_boolean_component": autoguard.api.getRequiredBoolean(components, "dynamic_boolean_component"),
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/<dynamic_boolean_component>"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/<dynamic_boolean_component>"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["dynamic_boolean_component", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				options["dynamic_boolean_component"] = autoguard.api.getRequiredBoolean(components, "dynamic_boolean_component");
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/<dynamic_boolean_component>"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/<dynamic_boolean_component>"](request);
+						let guard = shared.Autoguard.Responses["GET:/<dynamic_boolean_component>"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["dynamic_number_component", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-				"dynamic_number_component": autoguard.api.getRequiredNumber(components, "dynamic_number_component"),
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/<dynamic_number_component>"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/<dynamic_number_component>"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["dynamic_number_component", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				options["dynamic_number_component"] = autoguard.api.getRequiredNumber(components, "dynamic_number_component");
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/<dynamic_number_component>"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/<dynamic_number_component>"](request);
+						let guard = shared.Autoguard.Responses["GET:/<dynamic_number_component>"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["dynamic_string_component", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-				"dynamic_string_component": autoguard.api.getRequiredString(components, "dynamic_string_component"),
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/<dynamic_string_component>"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/<dynamic_string_component>"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["dynamic_string_component", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				options["dynamic_string_component"] = autoguard.api.getRequiredString(components, "dynamic_string_component");
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/<dynamic_string_component>"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/<dynamic_string_component>"](request);
+						let guard = shared.Autoguard.Responses["GET:/<dynamic_string_component>"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["dynamic_component_one", request.components[0]]);
-		components.push(["dynamic_component_two", request.components[1]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-				"dynamic_component_one": autoguard.api.getRequiredString(components, "dynamic_component_one"),
-				"dynamic_component_two": autoguard.api.getRequiredString(components, "dynamic_component_two"),
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/<dynamic_component_one>/<dynamic_component_two>"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/<dynamic_component_one>/<dynamic_component_two>"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["dynamic_component_one", raw.components[0]]);
+		components.push(["dynamic_component_two", raw.components[1]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				options["dynamic_component_one"] = autoguard.api.getRequiredString(components, "dynamic_component_one");
+				options["dynamic_component_two"] = autoguard.api.getRequiredString(components, "dynamic_component_two");
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/<dynamic_component_one>/<dynamic_component_two>"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/<dynamic_component_one>/<dynamic_component_two>"](request);
+						let guard = shared.Autoguard.Responses["GET:/<dynamic_component_one>/<dynamic_component_two>"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/parameters01"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/parameters01"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/parameters01"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/parameters01"](request);
+						let guard = shared.Autoguard.Responses["GET:/parameters01"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-				"required_boolean_parameter": autoguard.api.getRequiredBoolean(request.parameters, "required_boolean_parameter"),
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/parameters02"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/parameters02"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				options["required_boolean_parameter"] = autoguard.api.getRequiredBoolean(raw.parameters, "required_boolean_parameter");
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/parameters02"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/parameters02"](request);
+						let guard = shared.Autoguard.Responses["GET:/parameters02"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-				"optional_boolean_parameter": autoguard.api.getOptionalBoolean(request.parameters, "optional_boolean_parameter"),
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/parameters03"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/parameters03"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				options["optional_boolean_parameter"] = autoguard.api.getOptionalBoolean(raw.parameters, "optional_boolean_parameter");
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/parameters03"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/parameters03"](request);
+						let guard = shared.Autoguard.Responses["GET:/parameters03"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-				"required_number_parameter": autoguard.api.getRequiredNumber(request.parameters, "required_number_parameter"),
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/parameters04"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/parameters04"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				options["required_number_parameter"] = autoguard.api.getRequiredNumber(raw.parameters, "required_number_parameter");
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/parameters04"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/parameters04"](request);
+						let guard = shared.Autoguard.Responses["GET:/parameters04"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-				"optional_number_parameter": autoguard.api.getOptionalNumber(request.parameters, "optional_number_parameter"),
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/parameters05"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/parameters05"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				options["optional_number_parameter"] = autoguard.api.getOptionalNumber(raw.parameters, "optional_number_parameter");
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/parameters05"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/parameters05"](request);
+						let guard = shared.Autoguard.Responses["GET:/parameters05"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-				"required_string_parameter": autoguard.api.getRequiredString(request.parameters, "required_string_parameter"),
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/parameters06"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/parameters06"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				options["required_string_parameter"] = autoguard.api.getRequiredString(raw.parameters, "required_string_parameter");
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/parameters06"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/parameters06"](request);
+						let guard = shared.Autoguard.Responses["GET:/parameters06"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-				"optional_string_parameter": autoguard.api.getOptionalString(request.parameters, "optional_string_parameter"),
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/parameters07"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/parameters07"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				options["optional_string_parameter"] = autoguard.api.getOptionalString(raw.parameters, "optional_string_parameter");
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/parameters07"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/parameters07"](request);
+						let guard = shared.Autoguard.Responses["GET:/parameters07"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-				"parameter_one": autoguard.api.getRequiredString(request.parameters, "parameter_one"),
-				"parameter_two": autoguard.api.getRequiredString(request.parameters, "parameter_two"),
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/parameters08"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/parameters08"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				options["parameter_one"] = autoguard.api.getRequiredString(raw.parameters, "parameter_one");
+				options["parameter_two"] = autoguard.api.getRequiredString(raw.parameters, "parameter_two");
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/parameters08"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/parameters08"](request);
+						let guard = shared.Autoguard.Responses["GET:/parameters08"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/request_headers01"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/request_headers01"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/request_headers01"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/request_headers01"](request);
+						let guard = shared.Autoguard.Responses["GET:/request_headers01"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-				"required_boolean_request_header": autoguard.api.getRequiredBoolean(request.parameters, "required_boolean_request_header"),
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/request_headers02"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/request_headers02"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				headers["required_boolean_request_header"] = autoguard.api.getRequiredBoolean(raw.parameters, "required_boolean_request_header");
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/request_headers02"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/request_headers02"](request);
+						let guard = shared.Autoguard.Responses["GET:/request_headers02"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-				"optional_boolean_request_header": autoguard.api.getOptionalBoolean(request.parameters, "optional_boolean_request_header"),
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/request_headers03"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/request_headers03"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				headers["optional_boolean_request_header"] = autoguard.api.getOptionalBoolean(raw.parameters, "optional_boolean_request_header");
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/request_headers03"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/request_headers03"](request);
+						let guard = shared.Autoguard.Responses["GET:/request_headers03"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-				"required_number_request_header": autoguard.api.getRequiredNumber(request.parameters, "required_number_request_header"),
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/request_headers04"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/request_headers04"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				headers["required_number_request_header"] = autoguard.api.getRequiredNumber(raw.parameters, "required_number_request_header");
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/request_headers04"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/request_headers04"](request);
+						let guard = shared.Autoguard.Responses["GET:/request_headers04"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-				"optional_number_request_header": autoguard.api.getOptionalNumber(request.parameters, "optional_number_request_header"),
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/request_headers05"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/request_headers05"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				headers["optional_number_request_header"] = autoguard.api.getOptionalNumber(raw.parameters, "optional_number_request_header");
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/request_headers05"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/request_headers05"](request);
+						let guard = shared.Autoguard.Responses["GET:/request_headers05"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-				"required_string_request_header": autoguard.api.getRequiredString(request.parameters, "required_string_request_header"),
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/request_headers06"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/request_headers06"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				headers["required_string_request_header"] = autoguard.api.getRequiredString(raw.parameters, "required_string_request_header");
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/request_headers06"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/request_headers06"](request);
+						let guard = shared.Autoguard.Responses["GET:/request_headers06"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-				"optional_string_request_header": autoguard.api.getOptionalString(request.parameters, "optional_string_request_header"),
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/request_headers07"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/request_headers07"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				headers["optional_string_request_header"] = autoguard.api.getOptionalString(raw.parameters, "optional_string_request_header");
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/request_headers07"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/request_headers07"](request);
+						let guard = shared.Autoguard.Responses["GET:/request_headers07"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-				"request_header_one": autoguard.api.getRequiredString(request.parameters, "request_header_one"),
-				"request_header_two": autoguard.api.getRequiredString(request.parameters, "request_header_two"),
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/request_headers08"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/request_headers08"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				headers["request_header_one"] = autoguard.api.getRequiredString(raw.parameters, "request_header_one");
+				headers["request_header_two"] = autoguard.api.getRequiredString(raw.parameters, "request_header_two");
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/request_headers08"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/request_headers08"](request);
+						let guard = shared.Autoguard.Responses["GET:/request_headers08"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/response_headers01"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/response_headers01"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/response_headers01"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/response_headers01"](request);
+						let guard = shared.Autoguard.Responses["GET:/response_headers01"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/response_headers02"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/response_headers02"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/response_headers02"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/response_headers02"](request);
+						let guard = shared.Autoguard.Responses["GET:/response_headers02"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/response_headers03"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/response_headers03"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/response_headers03"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/response_headers03"](request);
+						let guard = shared.Autoguard.Responses["GET:/response_headers03"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/response_headers04"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/response_headers04"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/response_headers04"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/response_headers04"](request);
+						let guard = shared.Autoguard.Responses["GET:/response_headers04"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/response_headers05"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/response_headers05"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/response_headers05"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/response_headers05"](request);
+						let guard = shared.Autoguard.Responses["GET:/response_headers05"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/response_headers06"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/response_headers06"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/response_headers06"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/response_headers06"](request);
+						let guard = shared.Autoguard.Responses["GET:/response_headers06"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/response_headers07"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/response_headers07"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/response_headers07"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/response_headers07"](request);
+						let guard = shared.Autoguard.Responses["GET:/response_headers07"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/response_headers08"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/response_headers08"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/response_headers08"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/response_headers08"](request);
+						let guard = shared.Autoguard.Responses["GET:/response_headers08"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Object.of({
-				"required_request_member": autoguard.guards.String
-			});
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/request_payload01"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/request_payload01"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/request_payload01"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/request_payload01"](request);
+						let guard = shared.Autoguard.Responses["GET:/request_payload01"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Object.of({
-				"optional_request_member": autoguard.guards.Union.of(
-					autoguard.guards.Undefined,
-					autoguard.guards.String
-				)
-			});
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/request_payload02"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/request_payload02"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/request_payload02"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/request_payload02"](request);
+						let guard = shared.Autoguard.Responses["GET:/request_payload02"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/response_payload01"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/response_payload01"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/response_payload01"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/response_payload01"](request);
+						let guard = shared.Autoguard.Responses["GET:/response_payload01"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/response_payload02"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/response_payload02"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/response_payload02"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/response_payload02"](request);
+						let guard = shared.Autoguard.Responses["GET:/response_payload02"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-				"parameter": autoguard.api.getRequiredString(request.parameters, "parameter"),
-			};
-			let headers = {
-				"request_header": autoguard.api.getRequiredString(request.parameters, "request_header"),
-			};
-			let guard = autoguard.guards.Object.of({
-				"in_request_payload": autoguard.guards.String
-			});
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/full_example"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/full_example"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				options["parameter"] = autoguard.api.getRequiredString(raw.parameters, "parameter");
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				headers["request_header"] = autoguard.api.getRequiredString(raw.parameters, "request_header");
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/full_example"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/full_example"](request);
+						let guard = shared.Autoguard.Responses["GET:/full_example"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
-	endpoints.push(async (request) => {
+	endpoints.push((raw) => {
+		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", request.components[0]]);
-		if (!autoguard.api.checkComponents(request.components, components)) {
-			return { status: 404, headers: [] };
-		}
-		if (request.method !== "GET") {
-			return { status: 405, headers: [] };
-		}
-		try {
-			let options = {
-			};
-			let headers = {
-			};
-			let guard = autoguard.guards.Undefined;
-			let json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;
-			let payload = guard.as(json);
-			try {
-				let response = await routes["GET:/reference"]({ options, headers, payload });
-				let guard = shared.Autoguard.Responses["GET:/reference"];
-				guard.as(response, "response");
-				return autoguard.api.transformResponse(response);
-			} catch (error) {
-				return { status: 500, headers: [] };
+		components.push(["", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;
+				let guard = shared.Autoguard.Requests["GET:/reference"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/reference"](request);
+						let guard = shared.Autoguard.Responses["GET:/reference"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
 			}
-		} catch (error) {
-			return { status: 400, headers: [] };
-		}
+		};
 	});
 	return (request, response) => autoguard.api.route(endpoints, request, response);
 };

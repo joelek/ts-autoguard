@@ -36,15 +36,23 @@ export declare type RawResponse = {
     headers: Array<[string, string]>;
     payload?: string;
 };
-export declare type Endpoint = (request: RawRequest) => Promise<RawResponse>;
+export declare type Endpoint = (raw: RawRequest) => {
+    acceptsComponents(): boolean;
+    acceptsMethod(): boolean;
+    prepareRequest(): {
+        handleRequest(): Promise<EndpointResponse>;
+    };
+};
 export declare function getComponents(url: string): Array<string>;
 export declare function getParameters(url: string): Array<[string, string]>;
 export declare function getHeaders(headers: Array<string>): Array<[string, string]>;
-export declare function transformResponse<A extends {
+export declare type EndpointResponse = {
     status?: number;
     headers?: Record<string, Primitive | undefined>;
     payload?: JSON;
-}>(response: A): RawResponse;
-export declare function checkComponents(one: Array<string>, two: Array<[string, string]>): boolean;
+};
+export declare function transformResponse<A extends EndpointResponse>(response: A): RawResponse;
+export declare function acceptsComponents(one: Array<string>, two: Array<[string, string]>): boolean;
+export declare function acceptsMethod(one: string, two: string): boolean;
 export declare function fetch(method: string, url: string, headers: Array<[string, string]>, payload: string | undefined): Promise<RawResponse>;
 export declare function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike): Promise<void>;

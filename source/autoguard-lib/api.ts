@@ -122,7 +122,13 @@ export type RawResponse = {
 	payload?: string;
 };
 
-export type Endpoint = (request: RawRequest) => Promise<RawResponse>;
+export type Endpoint = (raw: RawRequest) => {
+	acceptsComponents(): boolean;
+	acceptsMethod(): boolean;
+	prepareRequest(): {
+		handleRequest(): Promise<EndpointResponse>;
+	}
+};
 
 export function getComponents(url: string): Array<string> {
 	return url.split("?")[0].split("/").map((part) => {
@@ -160,11 +166,13 @@ export function getHeaders(headers: Array<string>): Array<[string, string]> {
 	});
 };
 
-export function transformResponse<A extends {
+export type EndpointResponse = {
 	status?: number;
 	headers?: Record<string, Primitive | undefined>;
 	payload?: JSON;
-}>(response: A): RawResponse {
+};
+
+export function transformResponse<A extends EndpointResponse>(response: A): RawResponse {
 	let status = response.status ?? 200;
 	let headers = Object.entries(response.headers ?? {}).map<[string, string]>((entry) => {
 		return [entry[0], String(entry)];
@@ -177,7 +185,7 @@ export function transformResponse<A extends {
 	};
 };
 
-export function checkComponents(one: Array<string>, two: Array<[string, string]>): boolean {
+export function acceptsComponents(one: Array<string>, two: Array<[string, string]>): boolean {
 	if (one.length !== two.length) {
 		return false;
 	}
@@ -190,6 +198,10 @@ export function checkComponents(one: Array<string>, two: Array<[string, string]>
 		}
 	}
 	return true;
+};
+
+export function acceptsMethod(one: string, two: string): boolean {
+	return one === two;
 };
 
 export function fetch(method: string, url: string, headers: Array<[string, string]>, payload: string | undefined): Promise<RawResponse> {
@@ -229,25 +241,43 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 		let buffer = Buffer.concat(chunks);
 		return buffer.toString();
 	})() || undefined;
-	let request = {
+	let raw = {
 		method,
 		components,
 		parameters,
 		headers,
 		payload
 	};
-	for (let endpoint of endpoints) {
-		let response = await endpoint(request);
-		if (response.status === 404) {
-			continue;
-		}
-		for (let header of response.headers ?? []) {
-			httpResponse.setHeader(header[0], header[1]);
-		}
-		httpResponse.writeHead(response.status);
-		httpResponse.write(response.payload ?? "");
+	let filteredEndpoints = endpoints.map((endpoint) => endpoint(raw));
+	filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsComponents());
+	if (filteredEndpoints.length === 0) {
+		httpResponse.writeHead(404);
 		return httpResponse.end();
 	}
-	httpResponse.writeHead(404);
-	return httpResponse.end();
+	filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsMethod());
+	if (filteredEndpoints.length === 0) {
+		httpResponse.writeHead(405);
+		return httpResponse.end();
+	}
+	let endpoint = filteredEndpoints[0];
+	try {
+		let prepared = endpoint.prepareRequest();
+		try {
+			let response = await prepared.handleRequest();
+			let raw = transformResponse(response);
+			for (let header of raw.headers) {
+				httpResponse.setHeader(header[0], header[1]);
+			}
+			httpResponse.writeHead(raw.status);
+			httpResponse.write(raw.payload ?? "");
+			return httpResponse.end();
+		} catch (error) {
+			httpResponse.writeHead(500);
+			return httpResponse.end();
+		}
+	} catch (error) {
+		httpResponse.writeHead(400);
+		httpResponse.write(String(error));
+		return httpResponse.end();
+	}
 };

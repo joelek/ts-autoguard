@@ -239,47 +239,42 @@ export class Schema {
 		lines.push(`\tlet endpoints = new Array<autoguard.api.Endpoint>();`);
 		for (let route of this.routes) {
 			let tag = makeRouteTag(route);
-			lines.push(`\tendpoints.push(async (request) => {`);
+			lines.push(`\tendpoints.push((raw) => {`);
+			lines.push(`\t\tlet method = "${route.method.method}";`);
 			lines.push(`\t\tlet components = new Array<[string, string]>();`);
 			for (let [index, component] of route.path.components.entries()) {
-				lines.push(`\t\tcomponents.push(["${is.present(component.type) ? component.name : ""}", request.components[${index}]]);`);
+				lines.push(`\t\tcomponents.push(["${is.present(component.type) ? component.name : ""}", raw.components[${index}]]);`);
 			}
-			lines.push(`\t\tif (!autoguard.api.checkComponents(request.components, components)) {`);
-			lines.push(`\t\t\treturn { status: 404, headers: [] };`);
-			lines.push(`\t\t}`);
-			lines.push(`\t\tif (request.method !== "${route.method.method}") {`);
-			lines.push(`\t\t\treturn { status: 405, headers: [] };`);
-			lines.push(`\t\t}`);
-			lines.push(`\t\ttry {`);
-			lines.push(`\t\t\tlet options = {`);
+			lines.push(`\t\treturn {`);
+			lines.push(`\t\t\tacceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),`);
+			lines.push(`\t\t\tacceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),`);
+			lines.push(`\t\t\tprepareRequest: () => {`);
+			lines.push(`\t\t\t\tlet options: Record<string, autoguard.api.Primitive | undefined> = {};`);
 			for (let component of route.path.components) {
 				if (is.present(component.type)) {
-					lines.push(`\t\t\t\t"${component.name}": autoguard.api.${makeParser(component.type, false)}(components, "${component.name}"),`);
+					lines.push(`\t\t\t\toptions["${component.name}"] = autoguard.api.${makeParser(component.type, false)}(components, "${component.name}");`);
 				}
 			}
 			for (let parameter of route.parameters.parameters) {
-				lines.push(`\t\t\t\t"${parameter.name}": autoguard.api.${makeParser(parameter.type, parameter.optional)}(request.parameters, "${parameter.name}"),`);
+				lines.push(`\t\t\t\toptions["${parameter.name}"] = autoguard.api.${makeParser(parameter.type, parameter.optional)}(raw.parameters, "${parameter.name}");`);
 			}
-			lines.push(`\t\t\t};`);
-			lines.push(`\t\t\tlet headers = {`);
+			lines.push(`\t\t\t\tlet headers: Record<string, autoguard.api.Primitive | undefined> = {};`);
 			for (let header of route.request.headers.headers) {
-				lines.push(`\t\t\t\t"${header.name}": autoguard.api.${makeParser(header.type, header.optional)}(request.parameters, "${header.name}"),`);
+				lines.push(`\t\t\t\theaders["${header.name}"] = autoguard.api.${makeParser(header.type, header.optional)}(raw.parameters, "${header.name}");`);
 			}
-			lines.push(`\t\t\t};`);
-			lines.push(`\t\t\tlet guard = ${route.request.payload.generateTypeGuard({ ...options, eol: options.eol + "\t\t\t" })};`);
-			lines.push(`\t\t\tlet json = request.payload !== undefined ? JSON.parse(request.payload) : undefined;`);
-			lines.push(`\t\t\tlet payload = guard.as(json);`);
-			lines.push(`\t\t\ttry {`);
-			lines.push(`\t\t\t\tlet response = await routes["${tag}"]({ options, headers, payload });`);
-			lines.push(`\t\t\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);
-			lines.push(`\t\t\t\tguard.as(response, "response");`);
-			lines.push(`\t\t\t\treturn autoguard.api.transformResponse(response);`);
-			lines.push(`\t\t\t} catch (error) {`);
-			lines.push(`\t\t\t\treturn { status: 500, headers: [] };`);
+			lines.push(`\t\t\t\tlet payload = raw.payload !== undefined ? JSON.parse(raw.payload) : undefined;`);
+			lines.push(`\t\t\t\tlet guard = shared.Autoguard.Requests["${tag}"];`);
+			lines.push(`\t\t\t\tlet request = guard.as({ options, headers, payload }, "request");`);
+			lines.push(`\t\t\t\treturn {`);
+			lines.push(`\t\t\t\t\thandleRequest: async () => {`);
+			lines.push(`\t\t\t\t\t\tlet response = await routes["${tag}"](request);`);
+			lines.push(`\t\t\t\t\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);
+			lines.push(`\t\t\t\t\t\tguard.as(response, "response");`);
+			lines.push(`\t\t\t\t\t\treturn response;`);
+			lines.push(`\t\t\t\t\t}`);
+			lines.push(`\t\t\t\t};`);
 			lines.push(`\t\t\t}`);
-			lines.push(`\t\t} catch (error) {`);
-			lines.push(`\t\t\treturn { status: 400, headers: [] };`);
-			lines.push(`\t\t}`);
+			lines.push(`\t\t};`);
 			lines.push(`\t});`);
 		}
 		lines.push(`\treturn (request, response) => autoguard.api.route(endpoints, request, response);`);

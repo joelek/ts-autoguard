@@ -16,7 +16,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.route = exports.fetch = exports.checkComponents = exports.transformResponse = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getRequiredBoolean = exports.getOptionalBoolean = exports.getRequiredNumber = exports.getOptionalNumber = exports.getRequiredString = exports.getOptionalString = exports.serializeParameters = exports.extractKeyValuePairs = exports.serializeComponents = void 0;
+exports.route = exports.fetch = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getRequiredBoolean = exports.getOptionalBoolean = exports.getRequiredNumber = exports.getOptionalNumber = exports.getRequiredString = exports.getOptionalString = exports.serializeParameters = exports.extractKeyValuePairs = exports.serializeComponents = void 0;
 const guards = require("./guards");
 const is = require("./is");
 function serializeComponents(components) {
@@ -171,7 +171,7 @@ function transformResponse(response) {
 }
 exports.transformResponse = transformResponse;
 ;
-function checkComponents(one, two) {
+function acceptsComponents(one, two) {
     if (one.length !== two.length) {
         return false;
     }
@@ -185,7 +185,12 @@ function checkComponents(one, two) {
     }
     return true;
 }
-exports.checkComponents = checkComponents;
+exports.acceptsComponents = acceptsComponents;
+;
+function acceptsMethod(one, two) {
+    return one === two;
+}
+exports.acceptsMethod = acceptsMethod;
 ;
 function fetch(method, url, headers, payload) {
     return new Promise((resolve, reject) => {
@@ -212,7 +217,7 @@ function fetch(method, url, headers, payload) {
 exports.fetch = fetch;
 ;
 function route(endpoints, httpRequest, httpResponse) {
-    var _a, _b, _c, _d;
+    var _a, _b, _c;
     return __awaiter(this, void 0, void 0, function* () {
         let method = (_a = httpRequest.method) !== null && _a !== void 0 ? _a : "GET";
         let url = (_b = httpRequest.url) !== null && _b !== void 0 ? _b : "";
@@ -220,7 +225,7 @@ function route(endpoints, httpRequest, httpResponse) {
         let parameters = getParameters(url);
         let headers = getHeaders(httpRequest.rawHeaders);
         let payload = (yield (() => __awaiter(this, void 0, void 0, function* () {
-            var e_1, _e;
+            var e_1, _d;
             let chunks = new Array();
             try {
                 for (var httpRequest_1 = __asyncValues(httpRequest), httpRequest_1_1; httpRequest_1_1 = yield httpRequest_1.next(), !httpRequest_1_1.done;) {
@@ -231,34 +236,54 @@ function route(endpoints, httpRequest, httpResponse) {
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
             finally {
                 try {
-                    if (httpRequest_1_1 && !httpRequest_1_1.done && (_e = httpRequest_1.return)) yield _e.call(httpRequest_1);
+                    if (httpRequest_1_1 && !httpRequest_1_1.done && (_d = httpRequest_1.return)) yield _d.call(httpRequest_1);
                 }
                 finally { if (e_1) throw e_1.error; }
             }
             let buffer = Buffer.concat(chunks);
             return buffer.toString();
         }))()) || undefined;
-        let request = {
+        let raw = {
             method,
             components,
             parameters,
             headers,
             payload
         };
-        for (let endpoint of endpoints) {
-            let response = yield endpoint(request);
-            if (response.status === 404) {
-                continue;
-            }
-            for (let header of (_c = response.headers) !== null && _c !== void 0 ? _c : []) {
-                httpResponse.setHeader(header[0], header[1]);
-            }
-            httpResponse.writeHead(response.status);
-            httpResponse.write((_d = response.payload) !== null && _d !== void 0 ? _d : "");
+        let filteredEndpoints = endpoints.map((endpoint) => endpoint(raw));
+        filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsComponents());
+        if (filteredEndpoints.length === 0) {
+            httpResponse.writeHead(404);
             return httpResponse.end();
         }
-        httpResponse.writeHead(404);
-        return httpResponse.end();
+        filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsMethod());
+        if (filteredEndpoints.length === 0) {
+            httpResponse.writeHead(405);
+            return httpResponse.end();
+        }
+        let endpoint = filteredEndpoints[0];
+        try {
+            let prepared = endpoint.prepareRequest();
+            try {
+                let response = yield prepared.handleRequest();
+                let raw = transformResponse(response);
+                for (let header of raw.headers) {
+                    httpResponse.setHeader(header[0], header[1]);
+                }
+                httpResponse.writeHead(raw.status);
+                httpResponse.write((_c = raw.payload) !== null && _c !== void 0 ? _c : "");
+                return httpResponse.end();
+            }
+            catch (error) {
+                httpResponse.writeHead(500);
+                return httpResponse.end();
+            }
+        }
+        catch (error) {
+            httpResponse.writeHead(400);
+            httpResponse.write(String(error));
+            return httpResponse.end();
+        }
     });
 }
 exports.route = route;
