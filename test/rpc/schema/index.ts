@@ -802,179 +802,179 @@ export namespace Autoguard {
 
 	export type Responses = {
 		"GET:/": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"POST:/": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/one": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/one/": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/one/two": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/<dynamic_boolean_component>": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/<dynamic_number_component>": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/<dynamic_string_component>": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/<dynamic_component_one>/<dynamic_component_two>": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/parameters01": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/parameters02": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/parameters03": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/parameters04": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/parameters05": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/parameters06": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/parameters07": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/parameters08": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/request_headers01": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/request_headers02": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/request_headers03": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/request_headers04": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/request_headers05": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/request_headers06": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/request_headers07": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/request_headers08": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/response_headers01": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/response_headers02": {
-			"status": number,
+			"status"?: number,
 			"headers": {
 				"required_boolean_response_header": boolean
 			},
 			"payload"?: undefined
 		},
 		"GET:/response_headers03": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {
 				"optional_boolean_response_header"?: boolean
 			},
 			"payload"?: undefined
 		},
 		"GET:/response_headers04": {
-			"status": number,
+			"status"?: number,
 			"headers": {
 				"required_number_response_header": number
 			},
 			"payload"?: undefined
 		},
 		"GET:/response_headers05": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {
 				"optional_number_response_header"?: number
 			},
 			"payload"?: undefined
 		},
 		"GET:/response_headers06": {
-			"status": number,
+			"status"?: number,
 			"headers": {
 				"required_string_response_header": string
 			},
 			"payload"?: undefined
 		},
 		"GET:/response_headers07": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {
 				"optional_string_response_header"?: string
 			},
 			"payload"?: undefined
 		},
 		"GET:/response_headers08": {
-			"status": number,
+			"status"?: number,
 			"headers": {
 				"response_header_one": string,
 				"response_header_two": string
@@ -982,31 +982,31 @@ export namespace Autoguard {
 			"payload"?: undefined
 		},
 		"GET:/request_payload01": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/request_payload02": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload"?: undefined
 		},
 		"GET:/response_payload01": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload": {
 				"required_request_member": string
 			}
 		},
 		"GET:/response_payload02": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload": {
 				"optional_request_member"?: string
 			}
 		},
 		"GET:/full_example": {
-			"status": number,
+			"status"?: number,
 			"headers": {
 				"response_header": string
 			},
@@ -1015,7 +1015,7 @@ export namespace Autoguard {
 			}
 		},
 		"GET:/reference": {
-			"status": number,
+			"status"?: number,
 			"headers"?: {},
 			"payload": Object
 		}
@@ -1023,7 +1023,10 @@ export namespace Autoguard {
 
 	export const Responses = {
 		"GET:/": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1033,7 +1036,10 @@ export namespace Autoguard {
 			)
 		}),
 		"POST:/": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1043,7 +1049,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/one": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1053,7 +1062,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/one/": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1063,7 +1075,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/one/two": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1073,7 +1088,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/<dynamic_boolean_component>": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1083,7 +1101,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/<dynamic_number_component>": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1093,7 +1114,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/<dynamic_string_component>": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1103,7 +1127,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/<dynamic_component_one>/<dynamic_component_two>": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1113,7 +1140,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/parameters01": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1123,7 +1153,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/parameters02": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1133,7 +1166,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/parameters03": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1143,7 +1179,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/parameters04": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1153,7 +1192,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/parameters05": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1163,7 +1205,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/parameters06": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1173,7 +1218,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/parameters07": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1183,7 +1231,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/parameters08": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1193,7 +1244,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/request_headers01": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1203,7 +1257,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/request_headers02": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1213,7 +1270,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/request_headers03": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1223,7 +1283,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/request_headers04": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1233,7 +1296,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/request_headers05": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1243,7 +1309,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/request_headers06": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1253,7 +1322,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/request_headers07": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1263,7 +1335,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/request_headers08": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1273,7 +1348,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/response_headers01": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1283,7 +1361,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/response_headers02": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Object.of({
 				"required_boolean_response_header": autoguard.guards.Boolean
 			}),
@@ -1292,7 +1373,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/response_headers03": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({
@@ -1307,7 +1391,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/response_headers04": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Object.of({
 				"required_number_response_header": autoguard.guards.Number
 			}),
@@ -1316,7 +1403,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/response_headers05": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({
@@ -1331,7 +1421,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/response_headers06": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Object.of({
 				"required_string_response_header": autoguard.guards.String
 			}),
@@ -1340,7 +1433,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/response_headers07": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({
@@ -1355,7 +1451,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/response_headers08": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Object.of({
 				"response_header_one": autoguard.guards.String,
 				"response_header_two": autoguard.guards.String
@@ -1365,7 +1464,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/request_payload01": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1375,7 +1477,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/request_payload02": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1385,7 +1490,10 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/response_payload01": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1395,7 +1503,10 @@ export namespace Autoguard {
 			})
 		}),
 		"GET:/response_payload02": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})
@@ -1408,7 +1519,10 @@ export namespace Autoguard {
 			})
 		}),
 		"GET:/full_example": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Object.of({
 				"response_header": autoguard.guards.String
 			}),
@@ -1417,7 +1531,10 @@ export namespace Autoguard {
 			})
 		}),
 		"GET:/reference": autoguard.guards.Object.of({
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
 			"headers": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Object.of({})

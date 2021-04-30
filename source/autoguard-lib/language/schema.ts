@@ -89,7 +89,7 @@ function getResponseType(route: route.Route): types.Type {
 	}
 	response.add("status", {
 		type: types.NumberType.INSTANCE,
-		optional: false
+		optional: true
 	});
 	response.add("headers", {
 		type: headers,
