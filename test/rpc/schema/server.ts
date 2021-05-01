@@ -1015,5 +1015,32 @@ export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): 
 			}
 		};
 	});
+	endpoints.push((raw) => {
+		let method = "GET";
+		let components = new Array<[string, string]>();
+		components.push(["", "number"]);
+		components.push(["number", raw.components[1]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			prepareRequest: async () => {
+				let options: Record<string, autoguard.api.Primitive | undefined> = {};
+				options["number"] = autoguard.api.getNumberOption(components, "number");
+				options["number"] = autoguard.api.getNumberOption(raw.parameters, "number");
+				let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let guard = shared.Autoguard.Requests["GET:/number/<number>"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/number/<number>"](request);
+						let guard = shared.Autoguard.Responses["GET:/number/<number>"];
+						guard.as(response, "response");
+						return response;
+					}
+				};
+			}
+		};
+	});
 	return (request, response) => autoguard.api.route(endpoints, request, response);
 };

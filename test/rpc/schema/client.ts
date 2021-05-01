@@ -972,4 +972,30 @@ export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autogua
 			return response;
 		}
 	},
+	"GET:/number/<number>": async (request) => {
+		let guard = shared.Autoguard.Requests["GET:/number/<number>"];
+		guard.as(request, "request");
+		let method = "GET";
+		let components = new Array<string>();
+		components.push("number");
+		components.push(String(request.options["number"]));
+		let parameters = new Array<[string, string]>();
+		if (request.options?.["number"] !== undefined) {
+			parameters.push(["number", String(request.options?.["number"])]);
+		}
+		let headers = new Array<[string, string]>();
+		let payload = autoguard.api.serializePayload(request.payload);
+		let url = (options?.urlPrefix ?? "");
+		url += autoguard.api.serializeComponents(components);
+		url += autoguard.api.serializeParameters(parameters);
+		let raw = await autoguard.api.fetch(method, url, headers, payload);
+		{
+			let status = raw.status;
+			let headers: Record<string, autoguard.api.Primitive | undefined> = {};
+			let payload = await autoguard.api.deserializePayload(raw.payload);
+			let guard = shared.Autoguard.Responses["GET:/number/<number>"];
+			let response = guard.as({ status, headers, payload }, "response");
+			return response;
+		}
+	},
 });
