@@ -10,7 +10,7 @@ class Guard {
     }
     generateSchema(options) {
         let lines = new Array();
-        lines.push(`guard ${this.typename}: ${this.type.generateSchema(options)}`);
+        lines.push(`guard ${this.typename}: ${this.type.generateSchema(options)};`);
         return lines.join(options.eol);
     }
     static parse(tokenizer) {
@@ -19,6 +19,7 @@ class Guard {
             let typename = tokenization.expect(read(), "IDENTIFIER").value;
             tokenization.expect(read(), ":");
             let type = types.Type.parse(tokenizer);
+            tokenization.expect(read(), ";");
             return new Guard(typename, type);
         });
     }

@@ -234,7 +234,7 @@ PrimitiveType = AnyType or BooleanType or NullType or NumberType or StringType o
 LiteralType = BooleanLiteralType or NumberLiteralType or StringLiteralType
 ComplexType = ArrayType or GroupType or IntersectionType or ObjectType or RecordType or ReferenceType or TupleType or UnionType
 Type = PrimitiveType or LiteralType or ComplexType
-Guard = "guard" Identifier ":" Type
+Guard = "guard" Identifier ":" Type ";"
 OptionsType = BooleanType | NumberType | StringType
 OptionsKey = Identifier
 OptionsKeyValue = OptionsKey "?"? ":" OptionsType
@@ -251,6 +251,6 @@ Payload = Type or "binary"
 Parameters = "?" Options
 Request = "<=" Headers? Payload?
 Response = "=>" Headers? Payload?
-Route = "route" Method ":" Path Parameters? Request? Response?
+Route = "route" Method ":" Path Parameters? Request? Response? ";"
 Schema = (Guard or Route)*
 ```

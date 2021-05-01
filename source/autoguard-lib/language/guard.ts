@@ -13,7 +13,7 @@ export class Guard {
 
 	generateSchema(options: shared.Options): string {
 		let lines = new Array<string>();
-		lines.push(`guard ${this.typename}: ${this.type.generateSchema(options)}`);
+		lines.push(`guard ${this.typename}: ${this.type.generateSchema(options)};`);
 		return lines.join(options.eol);
 	}
 
@@ -23,6 +23,7 @@ export class Guard {
 			let typename = tokenization.expect(read(), "IDENTIFIER").value;
 			tokenization.expect(read(), ":");
 			let type = types.Type.parse(tokenizer);
+			tokenization.expect(read(), ";");
 			return new Guard(typename, type);
 		});
 	}

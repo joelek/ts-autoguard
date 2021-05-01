@@ -14,6 +14,7 @@ export const Families = (<A extends string[]>(...tuple: A): [...A] => tuple)(
 	"&",
 	",",
 	":",
+	";",
 	"<",
 	">",
 	"=>",
@@ -37,6 +38,21 @@ export const Families = (<A extends string[]>(...tuple: A): [...A] => tuple)(
 export type Families = typeof Families;
 
 export type Family = typeof Families[number];
+
+export const IdentifierFamilies = (<A extends string[]>(...tuple: A): [...A] => tuple)(
+	"any",
+	"binary",
+	"boolean",
+	"false",
+	"guard",
+	"null",
+	"number",
+	"route",
+	"string",
+	"true",
+	"undefined",
+	"IDENTIFIER"
+);
 
 export type Token = {
 	row: number,
@@ -81,6 +97,7 @@ export class Tokenizer {
 			"&": /^([&])/su,
 			",": /^([,])/su,
 			":": /^([:])/su,
+			";": /^([;])/su,
 			"<": /^([<])/su,
 			">": /^([>])/su,
 			"=>": /^([=][>])/su,

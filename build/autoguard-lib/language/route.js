@@ -22,7 +22,7 @@ class Component {
             var _a, _b;
             if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) === "<") {
                 tokenization.expect(read(), "<");
-                let name = tokenization.expect(read(), "IDENTIFIER").value;
+                let name = tokenization.expect(read(), tokenization.IdentifierFamilies).value;
                 tokenization.expect(read(), ":");
                 let type = tokenization.expect(read(), ["boolean", "number", "string"]).value;
                 tokenization.expect(read(), ">");
@@ -30,8 +30,8 @@ class Component {
             }
             else {
                 let name = "";
-                if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === "IDENTIFIER") {
-                    name = tokenization.expect(read(), "IDENTIFIER").value;
+                if (tokenization.IdentifierFamilies.includes((_b = peek()) === null || _b === void 0 ? void 0 : _b.family)) {
+                    name = tokenization.expect(read(), tokenization.IdentifierFamilies).value;
                 }
                 return new Component(name);
             }
@@ -97,7 +97,7 @@ class Parameter {
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
             var _a;
-            let name = tokenization.expect(read(), "IDENTIFIER").value;
+            let name = tokenization.expect(read(), tokenization.IdentifierFamilies).value;
             let optional = false;
             if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) === "?") {
                 tokenization.expect(read(), "?");
@@ -248,7 +248,7 @@ class Route {
         if (response !== "") {
             lines.push(`\t=> ${response}`);
         }
-        return lines.join(options.eol);
+        return lines.join(options.eol) + ";";
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
@@ -272,6 +272,7 @@ class Route {
                 tokenization.expect(read(), "=>");
                 response = Message.parse(tokenizer);
             }
+            tokenization.expect(read(), ";");
             return new Route(method, path, parameters, request, response);
         });
     }

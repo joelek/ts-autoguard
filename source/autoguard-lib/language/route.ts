@@ -24,15 +24,15 @@ export class Component {
 		return tokenizer.newContext((read, peek) => {
 			if (peek()?.family === "<") {
 				tokenization.expect(read(), "<");
-				let name = tokenization.expect(read(), "IDENTIFIER").value;
+				let name = tokenization.expect(read(), tokenization.IdentifierFamilies).value;
 				tokenization.expect(read(), ":");
 				let type = tokenization.expect(read(), ["boolean", "number", "string"]).value;
 				tokenization.expect(read(), ">");
 				return new Component(name, type);
 			} else {
 				let name = "";
-				if (peek()?.family === "IDENTIFIER") {
-					name = tokenization.expect(read(), "IDENTIFIER").value;
+				if ((tokenization.IdentifierFamilies as Array<string | undefined>).includes(peek()?.family)) {
+					name = tokenization.expect(read(), tokenization.IdentifierFamilies).value;
 				}
 				return new Component(name);
 			}
@@ -107,7 +107,7 @@ export class Parameter {
 
 	static parse(tokenizer: tokenization.Tokenizer): Parameter {
 		return tokenizer.newContext((read, peek) => {
-			let name = tokenization.expect(read(), "IDENTIFIER").value;
+			let name = tokenization.expect(read(), tokenization.IdentifierFamilies).value;
 			let optional = false;
 			if (peek()?.family === "?") {
 				tokenization.expect(read(), "?");
@@ -267,7 +267,7 @@ export class Route {
 		if (response !== "") {
 			lines.push(`\t=> ${response}`);
 		}
-		return lines.join(options.eol);
+		return lines.join(options.eol) + ";";
 	}
 
 	static parse(tokenizer: tokenization.Tokenizer): Route {
@@ -291,6 +291,7 @@ export class Route {
 				tokenization.expect(read(), "=>");
 				response = Message.parse(tokenizer);
 			}
+			tokenization.expect(read(), ";");
 			return new Route(method, path, parameters, request, response);
 		});
 	}

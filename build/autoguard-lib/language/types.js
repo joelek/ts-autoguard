@@ -461,18 +461,7 @@ class ObjectType {
                 while (true) {
                     let optional = false;
                     let token = tokenization.expect(read(), [
-                        "any",
-                        "binary",
-                        "boolean",
-                        "false",
-                        "guard",
-                        "null",
-                        "number",
-                        "route",
-                        "string",
-                        "true",
-                        "undefined",
-                        "IDENTIFIER",
+                        ...tokenization.IdentifierFamilies,
                         "STRING_LITERAL"
                     ]);
                     let key = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
