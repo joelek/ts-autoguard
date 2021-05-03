@@ -166,7 +166,7 @@ export class Schema {
 		lines.push(`import * as autoguard from "@joelek/ts-autoguard";`);
 		lines.push(`import * as shared from "./index";`);
 		lines.push(``);
-		lines.push(`export const Client = (options?: Partial<{ urlPrefix: string }>): shared.Autoguard.Routes => ({`);
+		lines.push(`export const makeClient = (options?: Partial<{ urlPrefix: string }>): shared.Autoguard.Routes => ({`);
 		for (let route of this.routes) {
 			let tag = makeRouteTag(route);
 			lines.push(`\t"${tag}": async (request) => {`);
@@ -231,7 +231,7 @@ export class Schema {
 		lines.push(`import * as autoguard from "@joelek/ts-autoguard";`);
 		lines.push(`import * as shared from "./index";`);
 		lines.push(``);
-		lines.push(`export const Server = (routes: shared.Autoguard.Routes, options?: Partial<{}>): autoguard.api.RequestListener => {`);
+		lines.push(`export const makeServer = (routes: shared.Autoguard.Routes, options?: Partial<{}>): autoguard.api.RequestListener => {`);
 		lines.push(`\tlet endpoints = new Array<autoguard.api.Endpoint>();`);
 		for (let route of this.routes) {
 			let tag = makeRouteTag(route);
