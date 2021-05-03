@@ -299,7 +299,11 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 			await sendPayload(httpResponse, payload);
 			return;
 		} catch (error) {
-			httpResponse.writeHead(500);
+			let status = 500;
+			if (Number.isInteger(error) && error >= 100 && error <= 999) {
+				status = error;
+			}
+			httpResponse.writeHead(status);
 			httpResponse.end();
 			return;
 		}
