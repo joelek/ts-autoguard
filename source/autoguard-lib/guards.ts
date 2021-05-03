@@ -8,8 +8,6 @@ type RequiredKeys<A> = { [B in keyof A]: undefined extends A[B] ? never : B; }[k
 type OptionalKeys<A> = { [B in keyof A]: undefined extends A[B] ? B : never; }[keyof A];
 type MakeUndefinedOptional<A> = { [B in RequiredKeys<A>]: A[B]; } & { [B in OptionalKeys<A>]?: A[B]; };
 
-export type Binary = AsyncIterable<Uint8Array> & {};
-
 export const Any = {
 	as(subject: any, path: string = ""): any {
 		return subject;
@@ -45,26 +43,6 @@ export const Array = {
 				return true;
 			}
 		};
-	}
-};
-
-export const Binary = {
-	as(subject: any, path: string = ""): Binary {
-		if (subject != null) {
-			let member = subject[Symbol.asyncIterator];
-			if (member != null && member.constructor === globalThis.Function) {
-				return subject;
-			}
-		}
-		throw "Expected undefined at " + path + "!";
-	},
-	is(subject: any): subject is Binary {
-		try {
-			this.as(subject);
-		} catch (error) {
-			return false;
-		}
-		return true;
 	}
 };
 

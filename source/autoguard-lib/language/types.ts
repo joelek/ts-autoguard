@@ -163,11 +163,11 @@ export class Binary implements Type {
 	}
 
 	generateType(options: shared.Options): string {
-		return "autoguard.guards.Binary";
+		return "autoguard.api.Binary";
 	}
 
 	generateTypeGuard(options: shared.Options): string {
-		return "autoguard.guards.Binary";
+		return "autoguard.api.Binary";
 	}
 
 	getImports(): shared.Import[] {
