@@ -230,9 +230,7 @@ export async function deserializePayload(binary: Binary): Promise<JSON | undefin
 
 export function transformResponse<A extends EndpointResponse>(response: A): RawResponse {
 	let status = response.status ?? 200;
-	let headers = Object.entries(response.headers ?? {}).map<[string, string]>((entry) => {
-		return [entry[0], String(entry)];
-	});
+	let headers = extractKeyValuePairs(response.headers ?? {});
 	let payload = Binary.is(response.payload) ? response.payload : serializePayload(response.payload);
 	return {
 		status: status,
