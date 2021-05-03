@@ -389,7 +389,10 @@ export class Schema {
 					routes.push(route.Route.parse(tokenizer));
 					continue;
 				} catch (error) {}
-				throw `Expected code to be unreachable!`;
+				return tokenizer.newContext((read, peek) => {
+					let token = read();
+					throw `Unexpected ${token.family} at row ${token.row}, col ${token.col}!`;
+				});
 			}
 			return new Schema(guards, routes);
 		});
