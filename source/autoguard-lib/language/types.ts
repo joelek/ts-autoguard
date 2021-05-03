@@ -296,8 +296,8 @@ export class GroupType implements Type {
 export class IntersectionType implements Type {
 	types: Set<Type>;
 
-	constructor() {
-		this.types = new Set<Type>();
+	constructor(types: Iterable<Type> = []) {
+		this.types = new Set<Type>(types);
 	}
 
 	add(type: Type): this {
@@ -465,8 +465,8 @@ export type ObjectMember = {
 export class ObjectType implements Type {
 	members: Map<string, ObjectMember>;
 
-	constructor() {
-		this.members = new Map<string, ObjectMember>();
+	constructor(members: Iterable<[string, ObjectMember]> = []) {
+		this.members = new Map<string, ObjectMember>(members);
 	}
 
 	add(key: string, value: ObjectMember): this {
@@ -705,8 +705,8 @@ export class StringLiteralType implements Type {
 export class TupleType implements Type {
 	types: Array<Type>;
 
-	constructor() {
-		this.types = new Array<Type>();
+	constructor(types: Iterable<Type> = []) {
+		this.types = Array.from(types);
 	}
 
 	add(type: Type): this {
@@ -800,8 +800,8 @@ export class UndefinedType implements Type {
 export class UnionType implements Type {
 	types: Set<Type>;
 
-	constructor() {
-		this.types = new Set<Type>();
+	constructor(types: Iterable<Type> = []) {
+		this.types = new Set<Type>(types);
 	}
 
 	add(type: Type): this {

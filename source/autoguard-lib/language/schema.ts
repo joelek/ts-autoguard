@@ -38,6 +38,16 @@ function makeRouteTag(route: route.Route): string {
 	return `${route.method.method}:${components.join("")}`;
 }
 
+function makeOptionType(): types.Type {
+	return new types.RecordType(
+		new types.UnionType([
+			types.BooleanType.INSTANCE,
+			types.NumberType.INSTANCE,
+			types.StringType.INSTANCE
+		])
+	);
+}
+
 function getRequestType(route: route.Route): types.Type {
 	let request = new types.ObjectType();
 	let options = new types.ObjectType();
@@ -56,7 +66,10 @@ function getRequestType(route: route.Route): types.Type {
 		});
 	}
 	request.add("options", {
-		type: options,
+		type: new types.IntersectionType([
+			new types.ReferenceType([], "Options"),
+			options
+		]),
 		optional: areAllMembersOptional(options)
 	});
 	let headers = new types.ObjectType();
@@ -67,7 +80,10 @@ function getRequestType(route: route.Route): types.Type {
 		});
 	}
 	request.add("headers", {
-		type: headers,
+		type: new types.IntersectionType([
+			new types.ReferenceType([], "Headers"),
+			headers
+		]),
 		optional: areAllMembersOptional(headers)
 	});
 	let payload = route.request.payload;
@@ -92,7 +108,10 @@ function getResponseType(route: route.Route): types.Type {
 		optional: true
 	});
 	response.add("headers", {
-		type: headers,
+		type: new types.IntersectionType([
+			new types.ReferenceType([], "Headers"),
+			headers
+		]),
 		optional: areAllMembersOptional(headers)
 	});
 	let payload = route.response.payload;
@@ -181,18 +200,15 @@ export class Schema {
 					lines.push(`\t\tcomponents.push(String(request.options["${component.name}"]));`);
 				}
 			}
-			lines.push(`\t\tlet parameters = new Array<[string, string]>();`);
-			for (let parameter of route.parameters.parameters) {
-				lines.push("\t\t" + `if (request.options?.["${parameter.name}"] !== undefined) {`);
-				lines.push("\t\t\t" + `parameters.push(["${parameter.name}", String(request.options?.["${parameter.name}"])]);`);
-				lines.push("\t\t" + `}`);
+			lines.push(`\t\tlet parameters = autoguard.api.extractKeyValuePairs(request.options ?? {});`);
+			let exclude = new Array<string>();
+			for (let component of route.path.components) {
+				if (is.present(component.type)) {
+					exclude.push(`"${component.name}"`);
+				}
 			}
-			lines.push(`\t\tlet headers = new Array<[string, string]>();`);
-			for (let header of route.request.headers.headers) {
-				lines.push("\t\t" + `if (request.headers?.["${header.name}"] !== undefined) {`);
-				lines.push("\t\t\t" + `headers.push(["${header.name}", String(request.headers?.["${header.name}"])]);`);
-				lines.push("\t\t" + `}`);
-			}
+			lines.push(`\t\tparameters = parameters.filter((parameter) => ![${exclude.join(",")}].includes(parameter[0]));`);
+			lines.push(`\t\tlet headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});`);
 			if (route.request.payload === types.Binary.INSTANCE) {
 				lines.push(`\t\tlet payload = request.payload;`);
 			} else {
@@ -204,7 +220,7 @@ export class Schema {
 			lines.push(`\t\tlet raw = await autoguard.api.fetch(method, url, headers, payload);`);
 			lines.push(`\t\t{`);
 			lines.push(`\t\t\tlet status = raw.status;`);
-			lines.push(`\t\t\tlet headers: Record<string, autoguard.api.Primitive | undefined> = {};`);
+			lines.push(`\t\t\tlet headers = autoguard.api.combineKeyValuePairs(raw.headers);`);
 			for (let header of route.response.headers.headers) {
 				lines.push(`\t\t\theaders["${header.name}"] = autoguard.api.${makeParser(header.type)}(raw.headers, "${header.name}");`);
 			}
@@ -249,7 +265,7 @@ export class Schema {
 			lines.push(`\t\t\tacceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),`);
 			lines.push(`\t\t\tacceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),`);
 			lines.push(`\t\t\tprepareRequest: async () => {`);
-			lines.push(`\t\t\t\tlet options: Record<string, autoguard.api.Primitive | undefined> = {};`);
+			lines.push(`\t\t\t\tlet options = autoguard.api.combineKeyValuePairs(raw.parameters);`);
 			for (let component of route.path.components) {
 				if (is.present(component.type)) {
 					lines.push(`\t\t\t\toptions["${component.name}"] = autoguard.api.${makeParser(component.type)}(components, "${component.name}");`);
@@ -258,7 +274,7 @@ export class Schema {
 			for (let parameter of route.parameters.parameters) {
 				lines.push(`\t\t\t\toptions["${parameter.name}"] = autoguard.api.${makeParser(parameter.type)}(raw.parameters, "${parameter.name}");`);
 			}
-			lines.push(`\t\t\t\tlet headers: Record<string, autoguard.api.Primitive | undefined> = {};`);
+			lines.push(`\t\t\t\tlet headers = autoguard.api.combineKeyValuePairs(raw.headers);`);
 			for (let header of route.request.headers.headers) {
 				lines.push(`\t\t\t\theaders["${header.name}"] = autoguard.api.${makeParser(header.type)}(raw.parameters, "${header.name}");`);
 			}
@@ -316,6 +332,14 @@ export class Schema {
 		lines.push(`\texport type Guards = ${guards.generateType({ ...options, eol: options.eol + "\t" })};`);
 		lines.push(``);
 		lines.push(`\texport const Guards = ${guards.generateType({ ...options, eol: options.eol + "\t" })};`);
+		lines.push(``);
+		lines.push(`\texport type Options = ${makeOptionType().generateType({ ...options, eol: options.eol + "\t" })};`);
+		lines.push(``);
+		lines.push(`\texport const Options = ${makeOptionType().generateTypeGuard({ ...options, eol: options.eol + "\t" })};`);
+		lines.push(``);
+		lines.push(`\texport type Headers = ${makeOptionType().generateType({ ...options, eol: options.eol + "\t" })};`);
+		lines.push(``);
+		lines.push(`\texport const Headers = ${makeOptionType().generateTypeGuard({ ...options, eol: options.eol + "\t" })};`);
 		lines.push(``);
 		let request_types = new Array<string>();
 		let request_guards = new Array<string>();

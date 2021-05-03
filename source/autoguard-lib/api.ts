@@ -89,6 +89,14 @@ export function extractKeyValuePairs(record: Record<string, Primitive | undefine
 	return pairs;
 };
 
+export function combineKeyValuePairs(pairs: Array<[string, string]>): Record<string, Primitive | undefined> {
+	let record: Record<string, Primitive | undefined> = {};
+	for (let pair of pairs) {
+		record[pair[0]] = pair[1];
+	}
+	return record;
+};
+
 export function serializeParameters(parameters: Array<[string, string]>): string {
 	let parts = parameters.map((parameters) => {
 			let key = encodeURIComponent(parameters[0]);
