@@ -189,8 +189,9 @@ export const Record = {
 		return {
 			as(subject: any, path: string = ""): Record<string, undefined | A> {
 				if ((subject != null) && (subject.constructor === globalThis.Object)) {
+					let wrapped = Union.of(Undefined, guard);
 					for (let key of globalThis.Object.keys(subject)) {
-						guard.as(subject[key], path + "[\"" + key + "\"]");
+						wrapped.as(subject[key], path + "[\"" + key + "\"]");
 					}
 					return subject;
 				}
