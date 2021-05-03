@@ -1,18 +1,18 @@
 import * as guards from "./guards";
 
-export type Binary = AsyncIterable<Uint8Array> & {};
+export type AsyncBinary = AsyncIterable<Uint8Array>;
 
-export const Binary = {
-	as(subject: any, path: string = ""): Binary {
+export const AsyncBinary = {
+	as(subject: any, path: string = ""): AsyncBinary {
 		if (subject != null) {
 			let member = subject[Symbol.asyncIterator];
 			if (member != null && member.constructor === globalThis.Function) {
 				return subject;
 			}
 		}
-		throw "Expected Binary at " + path + "!";
+		throw "Expected AsyncBinary at " + path + "!";
 	},
-	is(subject: any): subject is Binary {
+	is(subject: any): subject is AsyncBinary {
 		try {
 			this.as(subject);
 		} catch (error) {
@@ -21,6 +21,35 @@ export const Binary = {
 		return true;
 	}
 };
+
+export type SyncBinary = Iterable<Uint8Array>;
+
+export const SyncBinary = {
+	as(subject: any, path: string = ""): SyncBinary {
+		if (subject != null) {
+			let member = subject[Symbol.iterator];
+			if (member != null && member.constructor === globalThis.Function) {
+				return subject;
+			}
+		}
+		throw "Expected SyncBinary at " + path + "!";
+	},
+	is(subject: any): subject is SyncBinary {
+		try {
+			this.as(subject);
+		} catch (error) {
+			return false;
+		}
+		return true;
+	}
+};
+
+export const Binary = guards.Union.of(
+	AsyncBinary,
+	SyncBinary
+);
+
+export type Binary = ReturnType<typeof Binary.as>;
 
 export type Primitive = boolean | number | string;
 export type JSON = null | Primitive | JSON[] | { [key: string]: JSON };
@@ -169,16 +198,7 @@ export type EndpointResponse = {
 	payload?: JSON | Binary;
 };
 
-export function wrapArray(array: Uint8Array): Binary {
-	async function* generator() {
-		yield array;
-	}
-	return {
-		[Symbol.asyncIterator]: generator
-	};
-};
-
-export async function unwrapArray(binary: Binary): Promise<Uint8Array> {
+export async function collectPayload(binary: Binary): Promise<Uint8Array> {
 	let chunks = new Array<Uint8Array>();
 	let length = 0;
 	for await (let chunk of binary) {
@@ -198,11 +218,11 @@ export function serializePayload(payload: JSON | undefined): Binary {
 	let string = JSON.stringify(payload ?? "");
 	let encoder = new TextEncoder();
 	let array = encoder.encode(string);
-	return wrapArray(array);
+	return [array];
 };
 
 export async function deserializePayload(binary: Binary): Promise<JSON | undefined> {
-	let buffer = await unwrapArray(binary);
+	let buffer = await collectPayload(binary);
 	let decoder = new TextDecoder();
 	let string = decoder.decode(buffer);
 	return string === "" ? undefined : JSON.parse(string);
@@ -248,7 +268,7 @@ export function fetch(method: string, url: string, headers: Array<[string, strin
 		xhr.onload = () => {
 			let status = xhr.status;
 			let headers = getHeaders(xhr.getAllResponseHeaders().split("\r\n").slice(0, -1));
-			let payload = wrapArray(new Uint8Array(xhr.response as ArrayBuffer));
+			let payload = [new Uint8Array(xhr.response as ArrayBuffer)];
 			resolve({
 				status,
 				headers,
@@ -260,7 +280,7 @@ export function fetch(method: string, url: string, headers: Array<[string, strin
 		for (let header of headers) {
 			xhr.setRequestHeader(header[0], header[1]);
 		}
-		xhr.send(await unwrapArray(payload));
+		xhr.send(await collectPayload(payload));
 	});
 };
 
