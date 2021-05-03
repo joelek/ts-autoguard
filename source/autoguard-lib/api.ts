@@ -303,7 +303,10 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 	let url = httpRequest.url ?? "";
 	let components = getComponents(url);
 	let parameters = getParameters(url);
-	let headers = getHeaders(httpRequest.rawHeaders);
+	let headers = new Array<[string, string]>();
+	for (let i = 0; i < httpRequest.rawHeaders.length; i += 2) {
+		headers.push([httpRequest.rawHeaders[i+0], httpRequest.rawHeaders[i+1]]);
+	}
 	let payload = {
 		[Symbol.asyncIterator]: () => httpRequest[Symbol.asyncIterator]()
 	};
