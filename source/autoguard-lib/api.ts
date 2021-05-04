@@ -112,10 +112,12 @@ export function serializeParameters(parameters: Array<[string, string]>): string
 export function getStringOption(pairs: Iterable<[string, string]>, key: string): string | undefined {
 	for (let pair of pairs) {
 		if (pair[0] === key) {
-			let value = pair[1];
-			if (guards.String.is(value)) {
-				return value;
-			}
+			try {
+				let value = pair[1];
+				if (guards.String.is(value)) {
+					return value;
+				}
+			} catch (error) {}
 		}
 	}
 };
@@ -123,10 +125,12 @@ export function getStringOption(pairs: Iterable<[string, string]>, key: string):
 export function getNumberOption(pairs: Iterable<[string, string]>, key: string): number | undefined {
 	for (let pair of pairs) {
 		if (pair[0] === key) {
-			let value = JSON.parse(pair[1]);
-			if (guards.Number.is(value)) {
-				return value;
-			}
+			try {
+				let value = JSON.parse(pair[1]);
+				if (guards.Number.is(value)) {
+					return value;
+				}
+			} catch (error) {}
 		}
 	}
 };
@@ -134,10 +138,12 @@ export function getNumberOption(pairs: Iterable<[string, string]>, key: string):
 export function getBooleanOption(pairs: Iterable<[string, string]>, key: string): boolean | undefined {
 	for (let pair of pairs) {
 		if (pair[0] === key) {
-			let value = JSON.parse(pair[1]);
-			if (guards.Boolean.is(value)) {
-				return value;
-			}
+			try {
+				let value = JSON.parse(pair[1]);
+				if (guards.Boolean.is(value)) {
+					return value;
+				}
+			} catch (error) {}
 		}
 	}
 };
