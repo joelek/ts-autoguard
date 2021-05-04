@@ -16,7 +16,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.route = exports.sendPayload = exports.fetch = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.deserializePayload = exports.serializePayload = exports.collectPayload = exports.makeClientRequest = exports.makeServerResponse = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = void 0;
+exports.route = exports.combineRawHeaders = exports.sendPayload = exports.fetch = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.serializePayload = exports.collectPayload = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = void 0;
 const guards = require("./guards");
 exports.AsyncBinary = {
     as(subject, path = "") {
@@ -165,12 +165,12 @@ function getHeaders(headers) {
     return headers.map((part) => {
         let parts = part.split(":");
         if (parts.length === 1) {
-            let key = parts[0];
+            let key = parts[0].toLowerCase();
             let value = "";
             return [key, value];
         }
         else {
-            let key = parts[0];
+            let key = parts[0].toLowerCase();
             let value = parts.slice(1).join(":").trim();
             return [key, value];
         }
@@ -178,34 +178,47 @@ function getHeaders(headers) {
 }
 exports.getHeaders = getHeaders;
 ;
-function makeServerResponse(response) {
-    var _a;
-    return __awaiter(this, void 0, void 0, function* () {
-        let status = (_a = response.status) !== null && _a !== void 0 ? _a : 200;
-        let headers = Object.assign({}, response.headers);
-        let payload = exports.Binary.is(response.payload) ? yield collectPayload(response.payload) : response.payload;
-        return {
-            status: status,
-            headers: headers,
-            payload: payload
-        };
-    });
+class ClientRequest {
+    constructor(request) {
+        this.request = request;
+    }
+    options() {
+        let options = this.request.options;
+        return Object.assign({}, options);
+    }
+    headers() {
+        let headers = this.request.headers;
+        return Object.assign({}, headers);
+    }
+    payload() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let payload = this.request.payload;
+            return (exports.Binary.is(payload) ? yield collectPayload(payload) : payload);
+        });
+    }
 }
-exports.makeServerResponse = makeServerResponse;
+exports.ClientRequest = ClientRequest;
 ;
-function makeClientRequest(request) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let options = Object.assign({}, request.options);
-        let headers = Object.assign({}, request.headers);
-        let payload = exports.Binary.is(request.payload) ? yield collectPayload(request.payload) : request.payload;
-        return {
-            options: options,
-            headers: headers,
-            payload: payload
-        };
-    });
+class ServerResponse {
+    constructor(response) {
+        this.response = response;
+    }
+    status() {
+        let status = this.response.status;
+        return status !== null && status !== void 0 ? status : 200;
+    }
+    headers() {
+        let headers = this.response.headers;
+        return Object.assign({}, headers);
+    }
+    payload() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let payload = this.response.payload;
+            return (exports.Binary.is(payload) ? yield collectPayload(payload) : payload);
+        });
+    }
 }
-exports.makeClientRequest = makeClientRequest;
+exports.ServerResponse = ServerResponse;
 ;
 function collectPayload(binary) {
     var binary_1, binary_1_1;
@@ -256,10 +269,26 @@ function deserializePayload(binary) {
 }
 exports.deserializePayload = deserializePayload;
 ;
+function getContentType(payload) {
+    if (exports.Binary.is(payload) || payload === undefined) {
+        return "application/octet-stream";
+    }
+    else {
+        return "application/json; charset=utf-8";
+    }
+}
+exports.getContentType = getContentType;
+;
 function transformResponse(response) {
     var _a, _b;
     let status = (_a = response.status) !== null && _a !== void 0 ? _a : 200;
     let headers = extractKeyValuePairs((_b = response.headers) !== null && _b !== void 0 ? _b : {});
+    let contentType = headers.find((header) => {
+        return header[0].toLowerCase() === "content-type";
+    });
+    if (contentType === undefined) {
+        headers.push(["Content-Type", getContentType(response.payload)]);
+    }
     let payload = exports.Binary.is(response.payload) ? response.payload : serializePayload(response.payload);
     return {
         status: status,
@@ -344,6 +373,15 @@ function sendPayload(httpResponse, payload) {
 }
 exports.sendPayload = sendPayload;
 ;
+function combineRawHeaders(raw) {
+    let headers = new Array();
+    for (let i = 0; i < raw.length; i += 2) {
+        headers.push(`${raw[i + 0]}: ${raw[i + 1]}`);
+    }
+    return headers;
+}
+exports.combineRawHeaders = combineRawHeaders;
+;
 function route(endpoints, httpRequest, httpResponse) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
@@ -351,10 +389,7 @@ function route(endpoints, httpRequest, httpResponse) {
         let url = (_b = httpRequest.url) !== null && _b !== void 0 ? _b : "";
         let components = getComponents(url);
         let parameters = getParameters(url);
-        let headers = new Array();
-        for (let i = 0; i < httpRequest.rawHeaders.length; i += 2) {
-            headers.push([httpRequest.rawHeaders[i + 0], httpRequest.rawHeaders[i + 1]]);
-        }
+        let headers = getHeaders(combineRawHeaders(httpRequest.rawHeaders));
         let payload = {
             [Symbol.asyncIterator]: () => httpRequest[Symbol.asyncIterator]()
         };

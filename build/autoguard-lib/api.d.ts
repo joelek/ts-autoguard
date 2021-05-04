@@ -69,16 +69,20 @@ export declare type EndpointResponse = {
     headers?: Record<string, Primitive | undefined>;
     payload?: Payload;
 };
-export declare type ClientRequest<A extends EndpointRequest> = {
-    options: {} & A["options"];
-    headers: {} & A["headers"];
-    payload: CollectedPayload<A["payload"]>;
-};
-export declare type ServerResponse<A extends EndpointResponse> = {
-    status: number;
-    headers: {} & A["headers"];
-    payload: CollectedPayload<A["payload"]>;
-};
+export declare class ClientRequest<A extends EndpointRequest> {
+    private request;
+    constructor(request: A);
+    options(): {} & A["options"];
+    headers(): {} & A["headers"];
+    payload(): Promise<CollectedPayload<A["payload"]>>;
+}
+export declare class ServerResponse<A extends EndpointResponse> {
+    private response;
+    constructor(response: A);
+    status(): number;
+    headers(): {} & A["headers"];
+    payload(): Promise<CollectedPayload<A["payload"]>>;
+}
 export declare type RequestMap<A extends RequestMap<A>> = {
     [B in keyof A]: EndpointRequest;
 };
@@ -91,14 +95,14 @@ export declare type Client<A extends RequestMap<A>, B extends ResponseMap<B>> = 
 export declare type Server<A extends RequestMap<A>, B extends ResponseMap<B>> = {
     [C in keyof A & keyof B]: (request: ClientRequest<A[C]>) => Promise<B[C]>;
 };
-export declare function makeServerResponse<A extends EndpointResponse>(response: A): Promise<ServerResponse<A>>;
-export declare function makeClientRequest<A extends EndpointRequest>(request: A): Promise<ClientRequest<A>>;
 export declare function collectPayload(binary: Binary): Promise<Uint8Array>;
 export declare function serializePayload(payload: JSON | undefined): Binary;
 export declare function deserializePayload(binary: Binary): Promise<JSON | undefined>;
+export declare function getContentType(payload: Payload): string;
 export declare function transformResponse<A extends EndpointResponse>(response: A): RawResponse;
 export declare function acceptsComponents(one: Array<string>, two: Array<[string, string]>): boolean;
 export declare function acceptsMethod(one: string, two: string): boolean;
 export declare function fetch(method: string, url: string, headers: Array<[string, string]>, payload: Binary): Promise<RawResponse>;
 export declare function sendPayload(httpResponse: ResponseLike, payload: Binary): Promise<void>;
+export declare function combineRawHeaders(raw: Array<string>): Array<string>;
 export declare function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike): Promise<void>;

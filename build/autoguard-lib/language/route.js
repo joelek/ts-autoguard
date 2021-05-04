@@ -22,7 +22,11 @@ class Component {
             var _a, _b;
             if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) === "<") {
                 tokenization.expect(read(), "<");
-                let name = tokenization.expect(read(), tokenization.IdentifierFamilies).value;
+                let token = tokenization.expect(read(), [
+                    ...tokenization.IdentifierFamilies,
+                    "STRING_LITERAL"
+                ]);
+                let name = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
                 tokenization.expect(read(), ":");
                 let type = tokenization.expect(read(), ["boolean", "number", "string"]).value;
                 tokenization.expect(read(), ">");
@@ -30,8 +34,12 @@ class Component {
             }
             else {
                 let name = "";
-                if (tokenization.IdentifierFamilies.includes((_b = peek()) === null || _b === void 0 ? void 0 : _b.family)) {
-                    name = tokenization.expect(read(), tokenization.IdentifierFamilies).value;
+                if ([...tokenization.IdentifierFamilies, "PATH_COMPONENT"].includes((_b = peek()) === null || _b === void 0 ? void 0 : _b.family)) {
+                    let token = tokenization.expect(read(), [
+                        ...tokenization.IdentifierFamilies,
+                        "PATH_COMPONENT"
+                    ]);
+                    name = token.family === "PATH_COMPONENT" ? decodeURIComponent(token.value) : token.value;
                 }
                 return new Component(name);
             }
@@ -97,7 +105,11 @@ class Parameter {
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
             var _a;
-            let name = tokenization.expect(read(), tokenization.IdentifierFamilies).value;
+            let token = tokenization.expect(read(), [
+                ...tokenization.IdentifierFamilies,
+                "STRING_LITERAL"
+            ]);
+            let name = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
             let optional = false;
             if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) === "?") {
                 tokenization.expect(read(), "?");
@@ -171,6 +183,7 @@ class Headers {
             tokenization.expect(read(), "{");
             while (((_a = peek()) === null || _a === void 0 ? void 0 : _a.value) !== "}") {
                 let header = Parameter.parse(tokenizer);
+                header.name = header.name.toLowerCase();
                 headers.push(header);
                 if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === ",") {
                     tokenization.expect(read(), ",");

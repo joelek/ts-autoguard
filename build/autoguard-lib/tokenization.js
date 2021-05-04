@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.expect = exports.Tokenizer = exports.IdentifierFamilies = exports.Families = void 0;
-exports.Families = ((...tuple) => tuple)("WS", "(", ")", "[", "]", "{", "}", "?", "|", ".", "..", "/", "&", ",", ":", ";", "<", ">", "=>", "<=", "any", "binary", "boolean", "false", "guard", "null", "number", "route", "string", "true", "undefined", "IDENTIFIER", "NUMBER_LITERAL", "STRING_LITERAL");
+exports.Families = ((...tuple) => tuple)("WS", "(", ")", "[", "]", "{", "}", "?", "|", ".", "..", "/", "&", ",", ":", ";", "<", ">", "=>", "<=", "any", "binary", "boolean", "false", "guard", "null", "number", "route", "string", "true", "undefined", "IDENTIFIER", "NUMBER_LITERAL", "STRING_LITERAL", "PATH_COMPONENT");
 exports.IdentifierFamilies = ((...tuple) => tuple)("any", "binary", "boolean", "false", "guard", "null", "number", "route", "string", "true", "undefined", "IDENTIFIER");
 class Tokenizer {
     constructor(string) {
@@ -39,7 +39,8 @@ class Tokenizer {
             "undefined": /^(undefined)/su,
             "IDENTIFIER": /^([a-z][a-z0-9_]*)/isu,
             "NUMBER_LITERAL": /^(([1-9][0-9]+)|([0-9]))/su,
-            "STRING_LITERAL": /^(["][^"]*["])/su
+            "STRING_LITERAL": /^(["][^"]*["])/su,
+            "PATH_COMPONENT": /^(([a-zA-Z0-9_.~-]|[%][0-9a-fA-F]{2})+)/su
         };
         let tokens = new Array();
         let row = 1;
