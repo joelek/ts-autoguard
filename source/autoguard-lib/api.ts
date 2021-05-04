@@ -215,16 +215,56 @@ export type EndpointResponse = {
 	payload?: Payload;
 };
 
-export type ClientRequest<A extends EndpointRequest> = {
-	options: {} & A["options"];
-	headers: {} & A["headers"];
-	payload: CollectedPayload<A["payload"]>;
+export class ClientRequest<A extends EndpointRequest> {
+	private request: A;
+
+	constructor(request: A) {
+		this.request = request;
+	}
+
+	options(): {} & A["options"] {
+		let options = this.request.options;
+		return {
+			...options
+		};
+	}
+
+	headers(): {} & A["headers"] {
+		let headers = this.request.headers;
+		return {
+			...headers
+		};
+	}
+
+	async payload(): Promise<CollectedPayload<A["payload"]>> {
+		let payload = this.request.payload;
+		return (Binary.is(payload) ? await collectPayload(payload) : payload) as any;
+	}
 };
 
-export type ServerResponse<A extends EndpointResponse> = {
-	status: number;
-	headers: {} & A["headers"];
-	payload: CollectedPayload<A["payload"]>;
+export class ServerResponse<A extends EndpointResponse> {
+	private response: A;
+
+	constructor(response: A) {
+		this.response = response;
+	}
+
+	status(): number {
+		let status = this.response.status;
+		return status ?? 200;
+	}
+
+	headers(): {} & A["headers"] {
+		let headers = this.response.headers;
+		return {
+			...headers
+		};
+	}
+
+	async payload(): Promise<CollectedPayload<A["payload"]>> {
+		let payload = this.response.payload;
+		return (Binary.is(payload) ? await collectPayload(payload) : payload) as any;
+	}
 };
 
 export type RequestMap<A extends RequestMap<A>> = {
@@ -241,34 +281,6 @@ export type Client<A extends RequestMap<A>, B extends ResponseMap<B>> = {
 
 export type Server<A extends RequestMap<A>, B extends ResponseMap<B>> = {
 	[C in keyof A & keyof B]: (request: ClientRequest<A[C]>) => Promise<B[C]>;
-};
-
-export async function makeServerResponse<A extends EndpointResponse>(response: A): Promise<ServerResponse<A>> {
-	let status = response.status ?? 200;
-	let headers = {
-		...response.headers
-	};
-	let payload = Binary.is(response.payload) ? await collectPayload(response.payload) : response.payload;
-	return {
-		status: status,
-		headers: headers,
-		payload: payload as any
-	};
-};
-
-export async function makeClientRequest<A extends EndpointRequest>(request: A): Promise<ClientRequest<A>> {
-	let options = {
-		...request.options
-	};
-	let headers = {
-		...request.headers
-	};
-	let payload = Binary.is(request.payload) ? await collectPayload(request.payload) : request.payload;
-	return {
-		options: options,
-		headers: headers,
-		payload: payload as any
-	};
 };
 
 export async function collectPayload(binary: Binary): Promise<Uint8Array> {

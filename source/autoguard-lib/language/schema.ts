@@ -230,7 +230,7 @@ export class Schema {
 			}
 			lines.push(`\t\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);
 			lines.push(`\t\t\tlet response = guard.as({ status, headers, payload }, "response");`);
-			lines.push(`\t\t\treturn autoguard.api.makeServerResponse(response);`);
+			lines.push(`\t\t\treturn new autoguard.api.ServerResponse(response);`);
 			lines.push(`\t\t}`);
 			lines.push(`\t},`);
 		}
@@ -286,7 +286,7 @@ export class Schema {
 			lines.push(`\t\t\t\tlet request = guard.as({ options, headers, payload }, "request");`);
 			lines.push(`\t\t\t\treturn {`);
 			lines.push(`\t\t\t\t\thandleRequest: async () => {`);
-			lines.push(`\t\t\t\t\t\tlet response = await routes["${tag}"](await autoguard.api.makeClientRequest(request));`);
+			lines.push(`\t\t\t\t\t\tlet response = await routes["${tag}"](new autoguard.api.ClientRequest(request));`);
 			lines.push(`\t\t\t\t\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);
 			lines.push(`\t\t\t\t\t\tguard.as(response, "response");`);
 			lines.push(`\t\t\t\t\t\treturn response;`);
