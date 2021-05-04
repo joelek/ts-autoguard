@@ -92,6 +92,18 @@ export namespace Autoguard {
 			"headers"?: Headers & {},
 			"payload"?: undefined
 		},
+		"GET:/<quoted key>": {
+			"options": Options & {
+				"quoted key": string
+			},
+			"headers"?: Headers & {},
+			"payload"?: undefined
+		},
+		"GET:/url-encoded%20component": {
+			"options"?: Options & {},
+			"headers"?: Headers & {},
+			"payload"?: undefined
+		},
 		"GET:/parameters01": {
 			"options"?: Options & {},
 			"headers"?: Headers & {},
@@ -143,6 +155,13 @@ export namespace Autoguard {
 			"options": Options & {
 				"parameter_one": string,
 				"parameter_two": string
+			},
+			"headers"?: Headers & {},
+			"payload"?: undefined
+		},
+		"GET:/parameters09": {
+			"options": Options & {
+				"quoted key": string
 			},
 			"headers"?: Headers & {},
 			"payload"?: undefined
@@ -202,6 +221,13 @@ export namespace Autoguard {
 			},
 			"payload"?: undefined
 		},
+		"GET:/request_headers09": {
+			"options"?: Options & {},
+			"headers": Headers & {
+				"quoted key": string
+			},
+			"payload"?: undefined
+		},
 		"GET:/response_headers01": {
 			"options"?: Options & {},
 			"headers"?: Headers & {},
@@ -238,6 +264,11 @@ export namespace Autoguard {
 			"payload"?: undefined
 		},
 		"GET:/response_headers08": {
+			"options"?: Options & {},
+			"headers"?: Headers & {},
+			"payload"?: undefined
+		},
+		"GET:/response_headers09": {
 			"options"?: Options & {},
 			"headers"?: Headers & {},
 			"payload"?: undefined
@@ -470,6 +501,43 @@ export namespace Autoguard {
 				autoguard.guards.Undefined
 			)
 		}),
+		"GET:/<quoted key>": autoguard.guards.Object.of({
+			"options": autoguard.guards.Intersection.of(
+				autoguard.guards.Reference.of(() => Options),
+				autoguard.guards.Object.of({
+					"quoted key": autoguard.guards.String
+				})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Intersection.of(
+					autoguard.guards.Reference.of(() => Headers),
+					autoguard.guards.Object.of({})
+				)
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/url-encoded%20component": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Intersection.of(
+					autoguard.guards.Reference.of(() => Options),
+					autoguard.guards.Object.of({})
+				)
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Intersection.of(
+					autoguard.guards.Reference.of(() => Headers),
+					autoguard.guards.Object.of({})
+				)
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
 		"GET:/parameters01": autoguard.guards.Object.of({
 			"options": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
@@ -621,6 +689,24 @@ export namespace Autoguard {
 				autoguard.guards.Object.of({
 					"parameter_one": autoguard.guards.String,
 					"parameter_two": autoguard.guards.String
+				})
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Intersection.of(
+					autoguard.guards.Reference.of(() => Headers),
+					autoguard.guards.Object.of({})
+				)
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/parameters09": autoguard.guards.Object.of({
+			"options": autoguard.guards.Intersection.of(
+				autoguard.guards.Reference.of(() => Options),
+				autoguard.guards.Object.of({
+					"quoted key": autoguard.guards.String
 				})
 			),
 			"headers": autoguard.guards.Union.of(
@@ -798,6 +884,24 @@ export namespace Autoguard {
 				autoguard.guards.Undefined
 			)
 		}),
+		"GET:/request_headers09": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Intersection.of(
+					autoguard.guards.Reference.of(() => Options),
+					autoguard.guards.Object.of({})
+				)
+			),
+			"headers": autoguard.guards.Intersection.of(
+				autoguard.guards.Reference.of(() => Headers),
+				autoguard.guards.Object.of({
+					"quoted key": autoguard.guards.String
+				})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
 		"GET:/response_headers01": autoguard.guards.Object.of({
 			"options": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
@@ -932,6 +1036,25 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/response_headers08": autoguard.guards.Object.of({
+			"options": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Intersection.of(
+					autoguard.guards.Reference.of(() => Options),
+					autoguard.guards.Object.of({})
+				)
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Intersection.of(
+					autoguard.guards.Reference.of(() => Headers),
+					autoguard.guards.Object.of({})
+				)
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/response_headers09": autoguard.guards.Object.of({
 			"options": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Intersection.of(
@@ -1167,6 +1290,16 @@ export namespace Autoguard {
 			"headers"?: Headers & {},
 			"payload"?: undefined
 		},
+		"GET:/<quoted key>": {
+			"status"?: number,
+			"headers"?: Headers & {},
+			"payload"?: undefined
+		},
+		"GET:/url-encoded%20component": {
+			"status"?: number,
+			"headers"?: Headers & {},
+			"payload"?: undefined
+		},
 		"GET:/parameters01": {
 			"status"?: number,
 			"headers"?: Headers & {},
@@ -1207,6 +1340,11 @@ export namespace Autoguard {
 			"headers"?: Headers & {},
 			"payload"?: undefined
 		},
+		"GET:/parameters09": {
+			"status"?: number,
+			"headers"?: Headers & {},
+			"payload"?: undefined
+		},
 		"GET:/request_headers01": {
 			"status"?: number,
 			"headers"?: Headers & {},
@@ -1243,6 +1381,11 @@ export namespace Autoguard {
 			"payload"?: undefined
 		},
 		"GET:/request_headers08": {
+			"status"?: number,
+			"headers"?: Headers & {},
+			"payload"?: undefined
+		},
+		"GET:/request_headers09": {
 			"status"?: number,
 			"headers"?: Headers & {},
 			"payload"?: undefined
@@ -1299,6 +1442,13 @@ export namespace Autoguard {
 			"headers": Headers & {
 				"response_header_one": string,
 				"response_header_two": string
+			},
+			"payload"?: undefined
+		},
+		"GET:/response_headers09": {
+			"status"?: number,
+			"headers": Headers & {
+				"quoted key": string
 			},
 			"payload"?: undefined
 		},
@@ -1502,6 +1652,38 @@ export namespace Autoguard {
 				autoguard.guards.Undefined
 			)
 		}),
+		"GET:/<quoted key>": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Intersection.of(
+					autoguard.guards.Reference.of(() => Headers),
+					autoguard.guards.Object.of({})
+				)
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/url-encoded%20component": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Intersection.of(
+					autoguard.guards.Reference.of(() => Headers),
+					autoguard.guards.Object.of({})
+				)
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
 		"GET:/parameters01": autoguard.guards.Object.of({
 			"status": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
@@ -1630,6 +1812,22 @@ export namespace Autoguard {
 				autoguard.guards.Undefined
 			)
 		}),
+		"GET:/parameters09": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Intersection.of(
+					autoguard.guards.Reference.of(() => Headers),
+					autoguard.guards.Object.of({})
+				)
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
 		"GET:/request_headers01": autoguard.guards.Object.of({
 			"status": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
@@ -1743,6 +1941,22 @@ export namespace Autoguard {
 			)
 		}),
 		"GET:/request_headers08": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Intersection.of(
+					autoguard.guards.Reference.of(() => Headers),
+					autoguard.guards.Object.of({})
+				)
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/request_headers09": autoguard.guards.Object.of({
 			"status": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Number
@@ -1892,6 +2106,21 @@ export namespace Autoguard {
 				autoguard.guards.Object.of({
 					"response_header_one": autoguard.guards.String,
 					"response_header_two": autoguard.guards.String
+				})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined
+			)
+		}),
+		"GET:/response_headers09": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Intersection.of(
+				autoguard.guards.Reference.of(() => Headers),
+				autoguard.guards.Object.of({
+					"quoted key": autoguard.guards.String
 				})
 			),
 			"payload": autoguard.guards.Union.of(
