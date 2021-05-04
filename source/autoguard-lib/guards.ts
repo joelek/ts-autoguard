@@ -166,7 +166,7 @@ export const Object = {
 			as(subject: any, path: string = ""): MakeUndefinedOptional<A> {
 				if ((subject != null) && (subject.constructor === globalThis.Object)) {
 					for (let key in guards) {
-						guards[key].as(subject[key], path + /^([a-z][a-z0-9_]*)$/isu.test(key) ? "." + key : "[\"" + key + "\"]");
+						guards[key].as(subject[key], path + (/^([a-z][a-z0-9_]*)$/isu.test(key) ? "." + key : "[\"" + key + "\"]"));
 					}
 					return subject;
 				}
