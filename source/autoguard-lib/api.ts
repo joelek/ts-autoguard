@@ -313,9 +313,23 @@ export async function deserializePayload(binary: Binary): Promise<JSON | undefin
 	return string === "" ? undefined : JSON.parse(string);
 };
 
+export function getContentType(payload: Payload): string {
+	if (Binary.is(payload) || payload === undefined) {
+		return "application/octet-stream";
+	} else {
+		return "application/json; charset=utf-8";
+	}
+};
+
 export function transformResponse<A extends EndpointResponse>(response: A): RawResponse {
 	let status = response.status ?? 200;
 	let headers = extractKeyValuePairs(response.headers ?? {});
+	let contentType = headers.find((header) => {
+		return header[0].toLowerCase() === "content-type";
+	});
+	if (contentType === undefined) {
+		headers.push(["Content-Type", getContentType(response.payload)]);
+	}
 	let payload = Binary.is(response.payload) ? response.payload : serializePayload(response.payload);
 	return {
 		status: status,
