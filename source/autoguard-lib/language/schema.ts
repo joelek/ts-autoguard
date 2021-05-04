@@ -200,14 +200,13 @@ export class Schema {
 					lines.push(`\t\tcomponents.push(String(request.options["${component.name}"]));`);
 				}
 			}
-			lines.push(`\t\tlet parameters = autoguard.api.extractKeyValuePairs(request.options ?? {});`);
 			let exclude = new Array<string>();
 			for (let component of route.path.components) {
 				if (is.present(component.type)) {
 					exclude.push(`"${component.name}"`);
 				}
 			}
-			lines.push(`\t\tparameters = parameters.filter((parameter) => ![${exclude.join(",")}].includes(parameter[0]));`);
+			lines.push(`\t\tlet parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, [${exclude.join(",")}]);`);
 			lines.push(`\t\tlet headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});`);
 			if (route.request.payload === types.Binary.INSTANCE) {
 				lines.push(`\t\tlet payload = request.payload;`);

@@ -79,10 +79,10 @@ export function serializeComponents(components: Array<string>): string {
 		.join("/");
 };
 
-export function extractKeyValuePairs(record: Record<string, Primitive | undefined>): Array<[string, string]> {
+export function extractKeyValuePairs(record: Record<string, Primitive | undefined>, exclude: Array<string> = []): Array<[string, string]> {
 	let pairs = new Array<[string, string]>();
 	for (let [key, value] of Object.entries(record)) {
-		if (value !== undefined) {
+		if (value !== undefined && !exclude.includes(key)) {
 			pairs.push([key, String(value)]);
 		}
 	}
