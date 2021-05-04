@@ -35,8 +35,12 @@ export class Component {
 				return new Component(name, type);
 			} else {
 				let name = "";
-				if ((tokenization.IdentifierFamilies as Array<string | undefined>).includes(peek()?.family)) {
-					name = tokenization.expect(read(), tokenization.IdentifierFamilies).value;
+				if (([...tokenization.IdentifierFamilies, "PATH_COMPONENT"] as Array<string | undefined>).includes(peek()?.family)) {
+					let token = tokenization.expect(read(), [
+						...tokenization.IdentifierFamilies,
+						"PATH_COMPONENT"
+					]);
+					name = token.family === "PATH_COMPONENT" ? decodeURIComponent(token.value) : token.value;
 				}
 				return new Component(name);
 			}

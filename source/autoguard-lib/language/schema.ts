@@ -32,7 +32,7 @@ function makeRouteTag(route: route.Route): string {
 		if (is.present(component.type)) {
 			return `/<${component.name}>`;
 		} else {
-			return `/${component.name}`;
+			return `/${encodeURIComponent(component.name)}`;
 		}
 	});
 	return `${route.method.method}:${components.join("")}`;
