@@ -158,10 +158,10 @@ class Binary {
         return "binary";
     }
     generateType(options) {
-        return "autoguard.guards.Binary";
+        return "autoguard.api.Binary";
     }
     generateTypeGuard(options) {
-        return "autoguard.guards.Binary";
+        return "autoguard.api.Binary";
     }
     getImports() {
         return [];
@@ -268,8 +268,8 @@ class GroupType {
 exports.GroupType = GroupType;
 ;
 class IntersectionType {
-    constructor() {
-        this.types = new Set();
+    constructor(types = []) {
+        this.types = new Set(types);
     }
     add(type) {
         this.types.add(type);
@@ -408,8 +408,8 @@ class NumberLiteralType {
 exports.NumberLiteralType = NumberLiteralType;
 ;
 class ObjectType {
-    constructor() {
-        this.members = new Map();
+    constructor(members = []) {
+        this.members = new Map(members);
     }
     add(key, value) {
         this.members.set(key, value);
@@ -618,8 +618,8 @@ class StringLiteralType {
 exports.StringLiteralType = StringLiteralType;
 ;
 class TupleType {
-    constructor() {
-        this.types = new Array();
+    constructor(types = []) {
+        this.types = Array.from(types);
     }
     add(type) {
         this.types.push(type);
@@ -701,8 +701,8 @@ exports.UndefinedType = UndefinedType;
 UndefinedType.INSTANCE = new UndefinedType();
 ;
 class UnionType {
-    constructor() {
-        this.types = new Set();
+    constructor(types = []) {
+        this.types = new Set(types);
     }
     add(type) {
         this.types.add(type);

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Union = exports.Undefined = exports.Tuple = exports.StringLiteral = exports.String = exports.Reference = exports.Record = exports.Object = exports.NumberLiteral = exports.Number = exports.Null = exports.Intersection = exports.BooleanLiteral = exports.Boolean = exports.Binary = exports.Array = exports.Any = void 0;
+exports.Union = exports.Undefined = exports.Tuple = exports.StringLiteral = exports.String = exports.Reference = exports.Record = exports.Object = exports.NumberLiteral = exports.Number = exports.Null = exports.Intersection = exports.BooleanLiteral = exports.Boolean = exports.Array = exports.Any = void 0;
 exports.Any = {
     as(subject, path = "") {
         return subject;
@@ -37,26 +37,6 @@ exports.Array = {
                 return true;
             }
         };
-    }
-};
-exports.Binary = {
-    as(subject, path = "") {
-        if (subject != null) {
-            let member = subject[Symbol.asyncIterator];
-            if (member != null && member.constructor === globalThis.Function) {
-                return subject;
-            }
-        }
-        throw "Expected undefined at " + path + "!";
-    },
-    is(subject) {
-        try {
-            this.as(subject);
-        }
-        catch (error) {
-            return false;
-        }
-        return true;
     }
 };
 exports.Boolean = {
@@ -202,8 +182,9 @@ exports.Record = {
         return {
             as(subject, path = "") {
                 if ((subject != null) && (subject.constructor === globalThis.Object)) {
+                    let wrapped = exports.Union.of(exports.Undefined, guard);
                     for (let key of globalThis.Object.keys(subject)) {
-                        guard.as(subject[key], path + "[\"" + key + "\"]");
+                        wrapped.as(subject[key], path + "[\"" + key + "\"]");
                     }
                     return subject;
                 }

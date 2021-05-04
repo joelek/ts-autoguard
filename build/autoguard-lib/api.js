@@ -8,18 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
-var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
-    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-    var g = generator.apply(thisArg, _arguments || []), i, q = [];
-    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
-    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
-    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
-    function fulfill(value) { resume("next", value); }
-    function reject(value) { resume("throw", value); }
-    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-};
 var __asyncValues = (this && this.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator], i;
@@ -28,8 +16,49 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.route = exports.sendPayload = exports.fetch = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.deserializePayload = exports.serializePayload = exports.unwrapArray = exports.wrapArray = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.extractKeyValuePairs = exports.serializeComponents = void 0;
+exports.route = exports.sendPayload = exports.fetch = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.deserializePayload = exports.serializePayload = exports.collectPayload = exports.makeClientRequest = exports.makeServerResponse = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = void 0;
 const guards = require("./guards");
+exports.AsyncBinary = {
+    as(subject, path = "") {
+        if (subject != null) {
+            let member = subject[Symbol.asyncIterator];
+            if (member != null && member.constructor === globalThis.Function) {
+                return subject;
+            }
+        }
+        throw "Expected AsyncBinary at " + path + "!";
+    },
+    is(subject) {
+        try {
+            this.as(subject);
+        }
+        catch (error) {
+            return false;
+        }
+        return true;
+    }
+};
+exports.SyncBinary = {
+    as(subject, path = "") {
+        if (subject != null) {
+            let member = subject[Symbol.iterator];
+            if (member != null && member.constructor === globalThis.Function) {
+                return subject;
+            }
+        }
+        throw "Expected SyncBinary at " + path + "!";
+    },
+    is(subject) {
+        try {
+            this.as(subject);
+        }
+        catch (error) {
+            return false;
+        }
+        return true;
+    }
+};
+exports.Binary = guards.Union.of(exports.AsyncBinary, exports.SyncBinary);
 function serializeComponents(components) {
     return "/" + components
         .map((component) => {
@@ -39,16 +68,25 @@ function serializeComponents(components) {
 }
 exports.serializeComponents = serializeComponents;
 ;
-function extractKeyValuePairs(record) {
+function extractKeyValuePairs(record, exclude = []) {
     let pairs = new Array();
     for (let [key, value] of Object.entries(record)) {
-        if (value !== undefined) {
+        if (value !== undefined && !exclude.includes(key)) {
             pairs.push([key, String(value)]);
         }
     }
     return pairs;
 }
 exports.extractKeyValuePairs = extractKeyValuePairs;
+;
+function combineKeyValuePairs(pairs) {
+    let record = {};
+    for (let pair of pairs) {
+        record[pair[0]] = pair[1];
+    }
+    return record;
+}
+exports.combineKeyValuePairs = combineKeyValuePairs;
 ;
 function serializeParameters(parameters) {
     let parts = parameters.map((parameters) => {
@@ -140,19 +178,36 @@ function getHeaders(headers) {
 }
 exports.getHeaders = getHeaders;
 ;
-function wrapArray(array) {
-    function generator() {
-        return __asyncGenerator(this, arguments, function* generator_1() {
-            yield yield __await(array);
-        });
-    }
-    return {
-        [Symbol.asyncIterator]: generator
-    };
+function makeServerResponse(response) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        let status = (_a = response.status) !== null && _a !== void 0 ? _a : 200;
+        let headers = Object.assign({}, response.headers);
+        let payload = exports.Binary.is(response.payload) ? yield collectPayload(response.payload) : response.payload;
+        return {
+            status: status,
+            headers: headers,
+            payload: payload
+        };
+    });
 }
-exports.wrapArray = wrapArray;
+exports.makeServerResponse = makeServerResponse;
 ;
-function unwrapArray(binary) {
+function makeClientRequest(request) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let options = Object.assign({}, request.options);
+        let headers = Object.assign({}, request.headers);
+        let payload = exports.Binary.is(request.payload) ? yield collectPayload(request.payload) : request.payload;
+        return {
+            options: options,
+            headers: headers,
+            payload: payload
+        };
+    });
+}
+exports.makeClientRequest = makeClientRequest;
+;
+function collectPayload(binary) {
     var binary_1, binary_1_1;
     var e_1, _a;
     return __awaiter(this, void 0, void 0, function* () {
@@ -181,19 +236,19 @@ function unwrapArray(binary) {
         return payload;
     });
 }
-exports.unwrapArray = unwrapArray;
+exports.collectPayload = collectPayload;
 ;
 function serializePayload(payload) {
     let string = JSON.stringify(payload !== null && payload !== void 0 ? payload : "");
     let encoder = new TextEncoder();
     let array = encoder.encode(string);
-    return wrapArray(array);
+    return [array];
 }
 exports.serializePayload = serializePayload;
 ;
 function deserializePayload(binary) {
     return __awaiter(this, void 0, void 0, function* () {
-        let buffer = yield unwrapArray(binary);
+        let buffer = yield collectPayload(binary);
         let decoder = new TextDecoder();
         let string = decoder.decode(buffer);
         return string === "" ? undefined : JSON.parse(string);
@@ -204,10 +259,8 @@ exports.deserializePayload = deserializePayload;
 function transformResponse(response) {
     var _a, _b;
     let status = (_a = response.status) !== null && _a !== void 0 ? _a : 200;
-    let headers = Object.entries((_b = response.headers) !== null && _b !== void 0 ? _b : {}).map((entry) => {
-        return [entry[0], String(entry)];
-    });
-    let payload = guards.Binary.is(response.payload) ? response.payload : serializePayload(response.payload);
+    let headers = extractKeyValuePairs((_b = response.headers) !== null && _b !== void 0 ? _b : {});
+    let payload = exports.Binary.is(response.payload) ? response.payload : serializePayload(response.payload);
     return {
         status: status,
         headers: headers,
@@ -245,7 +298,7 @@ function fetch(method, url, headers, payload) {
         xhr.onload = () => {
             let status = xhr.status;
             let headers = getHeaders(xhr.getAllResponseHeaders().split("\r\n").slice(0, -1));
-            let payload = wrapArray(new Uint8Array(xhr.response));
+            let payload = [new Uint8Array(xhr.response)];
             resolve({
                 status,
                 headers,
@@ -257,7 +310,7 @@ function fetch(method, url, headers, payload) {
         for (let header of headers) {
             xhr.setRequestHeader(header[0], header[1]);
         }
-        xhr.send(yield unwrapArray(payload));
+        xhr.send(yield collectPayload(payload));
     }));
 }
 exports.fetch = fetch;
@@ -298,7 +351,10 @@ function route(endpoints, httpRequest, httpResponse) {
         let url = (_b = httpRequest.url) !== null && _b !== void 0 ? _b : "";
         let components = getComponents(url);
         let parameters = getParameters(url);
-        let headers = getHeaders(httpRequest.rawHeaders);
+        let headers = new Array();
+        for (let i = 0; i < httpRequest.rawHeaders.length; i += 2) {
+            headers.push([httpRequest.rawHeaders[i + 0], httpRequest.rawHeaders[i + 1]]);
+        }
         let payload = {
             [Symbol.asyncIterator]: () => httpRequest[Symbol.asyncIterator]()
         };
@@ -336,7 +392,11 @@ function route(endpoints, httpRequest, httpResponse) {
                 return;
             }
             catch (error) {
-                httpResponse.writeHead(500);
+                let status = 500;
+                if (Number.isInteger(error) && error >= 100 && error <= 999) {
+                    status = error;
+                }
+                httpResponse.writeHead(status);
                 httpResponse.end();
                 return;
             }

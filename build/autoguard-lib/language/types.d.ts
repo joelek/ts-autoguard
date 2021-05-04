@@ -68,7 +68,7 @@ export declare class GroupType implements Type {
 }
 export declare class IntersectionType implements Type {
     types: Set<Type>;
-    constructor();
+    constructor(types?: Iterable<Type>);
     add(type: Type): this;
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
@@ -109,7 +109,7 @@ export declare type ObjectMember = {
 };
 export declare class ObjectType implements Type {
     members: Map<string, ObjectMember>;
-    constructor();
+    constructor(members?: Iterable<[string, ObjectMember]>);
     add(key: string, value: ObjectMember): this;
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
@@ -156,7 +156,7 @@ export declare class StringLiteralType implements Type {
 }
 export declare class TupleType implements Type {
     types: Array<Type>;
-    constructor();
+    constructor(types?: Iterable<Type>);
     add(type: Type): this;
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
@@ -175,7 +175,7 @@ export declare class UndefinedType implements Type {
 }
 export declare class UnionType implements Type {
     types: Set<Type>;
-    constructor();
+    constructor(types?: Iterable<Type>);
     add(type: Type): this;
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
