@@ -2,6 +2,12 @@
 
 Auto-generated unintrusive type guards for TypeScript.
 
+## Sponsorship
+
+The continued development of this software is dependent upon voluntary sponsorship. Please consider sponsoring this project if you find that the software creates value for you and your company.
+
+The sponsor button can be used to view the different sponsoring options. Thank you for your contribution!
+
 ## News
 
 The next major version is currently under development and will include a brand new interface descriptor language. The new language greatly simplifies the development and consumption of APIs through automatic generation of boiler-plate parsing, routing and type checking code.
@@ -175,7 +181,7 @@ serializer.deserialize(serialized, (type, data) => {
 });
 ```
 
-## Configure
+## Installation
 
 Releases follow semantic versioning and release packages are published using the GitHub platform. Use the following command to install the latest release.
 
@@ -257,3 +263,13 @@ Response = "=>" Headers? Payload?
 Route = "route" Method ":" Path Parameters? Request? Response? ";"
 Schema = (Guard or Route)*
 ```
+
+## Upcoming features
+
+* Add support for responding without payload for error cases.
+* Modernize code to use string templates.
+* Structure code using TypeScript subprojects.
+* Create middleware to combine several APIs on the server side.
+* Add support for pluggable transport that can be used to aid unit testing.
+* Add meta route that allows the schema to be downloaded.
+* Add support for generating JavaScript code directly.
