@@ -32,6 +32,8 @@ route GET:/parameters07 ? <{ optional_string_parameter?: string }>;
 
 route GET:/parameters08 ? <{ parameter_one: string, parameter_two: string }>;
 
+route GET:/parameters09 ? <{ "quoted key": string }>;
+
 route GET:/request_headers01 <= <{}>;
 
 route GET:/request_headers02 <= <{ required_boolean_request_header: boolean }>;
@@ -48,6 +50,8 @@ route GET:/request_headers07 <= <{ optional_string_request_header?: string }>;
 
 route GET:/request_headers08 <= <{ request_header_one: string, request_header_two: string }>;
 
+route GET:/request_headers09 <= <{ "quoted key": string }>;
+
 route GET:/response_headers01 => <{}>;
 
 route GET:/response_headers02 => <{ required_boolean_response_header: boolean }>;
@@ -63,6 +67,8 @@ route GET:/response_headers06 => <{ required_string_response_header: string }>;
 route GET:/response_headers07 => <{ optional_string_response_header?: string }>;
 
 route GET:/response_headers08 => <{ response_header_one: string, response_header_two: string }>;
+
+route GET:/response_headers09 => <{ "quoted key": string }>;
 
 route GET:/request_payload01 <= { required_request_member: string };
 

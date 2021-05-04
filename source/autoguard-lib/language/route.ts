@@ -107,7 +107,11 @@ export class Parameter {
 
 	static parse(tokenizer: tokenization.Tokenizer): Parameter {
 		return tokenizer.newContext((read, peek) => {
-			let name = tokenization.expect(read(), tokenization.IdentifierFamilies).value;
+			let token = tokenization.expect(read(), [
+				...tokenization.IdentifierFamilies,
+				"STRING_LITERAL"
+			]);
+			let name = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
 			let optional = false;
 			if (peek()?.family === "?") {
 				tokenization.expect(read(), "?");
