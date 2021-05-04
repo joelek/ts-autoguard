@@ -200,10 +200,75 @@ export function getHeaders(headers: Array<string>): Array<[string, string]> {
 	});
 };
 
+export type Payload = JSON | Binary | undefined;
+export type CollectedPayload<A extends Payload> = A extends Binary ? Uint8Array : A;
+
+export type EndpointRequest = {
+	options?: Record<string, Primitive | undefined>;
+	headers?: Record<string, Primitive | undefined>;
+	payload?: Payload;
+};
+
 export type EndpointResponse = {
 	status?: number;
 	headers?: Record<string, Primitive | undefined>;
-	payload?: JSON | Binary;
+	payload?: Payload;
+};
+
+export type ClientRequest<A extends EndpointRequest> = {
+	options: {} & A["options"];
+	headers: {} & A["headers"];
+	payload: CollectedPayload<A["payload"]>;
+};
+
+export type ServerResponse<A extends EndpointResponse> = {
+	status: number;
+	headers: {} & A["headers"];
+	payload: CollectedPayload<A["payload"]>;
+};
+
+export type RequestMap<A extends RequestMap<A>> = {
+	[B in keyof A]: EndpointRequest;
+};
+
+export type ResponseMap<A extends ResponseMap<A>> = {
+	[B in keyof A]: EndpointResponse;
+};
+
+export type Client<A extends RequestMap<A>, B extends ResponseMap<B>> = {
+	[C in keyof A & keyof B]: (request: A[C]) => Promise<ServerResponse<B[C]>>;
+};
+
+export type Server<A extends RequestMap<A>, B extends ResponseMap<B>> = {
+	[C in keyof A & keyof B]: (request: ClientRequest<A[C]>) => Promise<B[C]>;
+};
+
+export async function makeServerResponse<A extends EndpointResponse>(response: A): Promise<ServerResponse<A>> {
+	let status = response.status ?? 200;
+	let headers = {
+		...response.headers
+	};
+	let payload = Binary.is(response.payload) ? await collectPayload(response.payload) : response.payload;
+	return {
+		status: status,
+		headers: headers,
+		payload: payload as any
+	};
+};
+
+export async function makeClientRequest<A extends EndpointRequest>(request: A): Promise<ClientRequest<A>> {
+	let options = {
+		...request.options
+	};
+	let headers = {
+		...request.headers
+	};
+	let payload = Binary.is(request.payload) ? await collectPayload(request.payload) : request.payload;
+	return {
+		options: options,
+		headers: headers,
+		payload: payload as any
+	};
 };
 
 export async function collectPayload(binary: Binary): Promise<Uint8Array> {

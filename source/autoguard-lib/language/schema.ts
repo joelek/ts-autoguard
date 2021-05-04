@@ -185,7 +185,7 @@ export class Schema {
 		lines.push(`import * as autoguard from "@joelek/ts-autoguard";`);
 		lines.push(`import * as shared from "./index";`);
 		lines.push(``);
-		lines.push(`export const makeClient = (options?: Partial<{ urlPrefix: string }>): shared.Autoguard.Routes => ({`);
+		lines.push(`export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.api.Client<shared.Autoguard.Requests, shared.Autoguard.Responses> => ({`);
 		for (let route of this.routes) {
 			let tag = makeRouteTag(route);
 			lines.push(`\t"${tag}": async (request) => {`);
@@ -230,7 +230,7 @@ export class Schema {
 			}
 			lines.push(`\t\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);
 			lines.push(`\t\t\tlet response = guard.as({ status, headers, payload }, "response");`);
-			lines.push(`\t\t\treturn response;`);
+			lines.push(`\t\t\treturn autoguard.api.makeServerResponse(response);`);
 			lines.push(`\t\t}`);
 			lines.push(`\t},`);
 		}
@@ -246,7 +246,7 @@ export class Schema {
 		lines.push(`import * as autoguard from "@joelek/ts-autoguard";`);
 		lines.push(`import * as shared from "./index";`);
 		lines.push(``);
-		lines.push(`export const makeServer = (routes: shared.Autoguard.Routes, options?: Partial<{}>): autoguard.api.RequestListener => {`);
+		lines.push(`export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Requests, shared.Autoguard.Responses>, options?: Partial<{}>): autoguard.api.RequestListener => {`);
 		lines.push(`\tlet endpoints = new Array<autoguard.api.Endpoint>();`);
 		for (let route of this.routes) {
 			let tag = makeRouteTag(route);
@@ -286,7 +286,7 @@ export class Schema {
 			lines.push(`\t\t\t\tlet request = guard.as({ options, headers, payload }, "request");`);
 			lines.push(`\t\t\t\treturn {`);
 			lines.push(`\t\t\t\t\thandleRequest: async () => {`);
-			lines.push(`\t\t\t\t\t\tlet response = await routes["${tag}"](request);`);
+			lines.push(`\t\t\t\t\t\tlet response = await routes["${tag}"](await autoguard.api.makeClientRequest(request));`);
 			lines.push(`\t\t\t\t\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);
 			lines.push(`\t\t\t\t\t\tguard.as(response, "response");`);
 			lines.push(`\t\t\t\t\t\treturn response;`);
@@ -363,13 +363,6 @@ export class Schema {
 		lines.push(`\texport type Responses = {${response_types.length > 0 ? options.eol + response_types.join("," + options.eol) + options.eol + "\t" : ""}};`);
 		lines.push(``);
 		lines.push(`\texport const Responses = {${response_guards.length > 0 ? options.eol + response_guards.join("," + options.eol) + options.eol + "\t" : ""}};`);
-		lines.push(``);
-		lines.push(`\texport type Routes = {`);
-		for (let route of this.routes) {
-			let tag = makeRouteTag(route);
-			lines.push(`\t\t"${tag}": (request: Requests["${tag}"]) => Promise<Responses["${tag}"]>;`);
-		}
-		lines.push(`\t};`);
 		lines.push(`};`);
 		lines.push(``);
 		return lines.join(options.eol);
