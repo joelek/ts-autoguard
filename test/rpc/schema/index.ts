@@ -2041,49 +2041,4 @@ export namespace Autoguard {
 			)
 		})
 	};
-
-	export type Routes = {
-		"GET:/": (request: Requests["GET:/"]) => Promise<Responses["GET:/"]>;
-		"POST:/": (request: Requests["POST:/"]) => Promise<Responses["POST:/"]>;
-		"GET:/one": (request: Requests["GET:/one"]) => Promise<Responses["GET:/one"]>;
-		"GET:/one/": (request: Requests["GET:/one/"]) => Promise<Responses["GET:/one/"]>;
-		"GET:/one/two": (request: Requests["GET:/one/two"]) => Promise<Responses["GET:/one/two"]>;
-		"GET:/<dynamic_boolean_component>": (request: Requests["GET:/<dynamic_boolean_component>"]) => Promise<Responses["GET:/<dynamic_boolean_component>"]>;
-		"GET:/<dynamic_number_component>": (request: Requests["GET:/<dynamic_number_component>"]) => Promise<Responses["GET:/<dynamic_number_component>"]>;
-		"GET:/<dynamic_string_component>": (request: Requests["GET:/<dynamic_string_component>"]) => Promise<Responses["GET:/<dynamic_string_component>"]>;
-		"GET:/<dynamic_component_one>/<dynamic_component_two>": (request: Requests["GET:/<dynamic_component_one>/<dynamic_component_two>"]) => Promise<Responses["GET:/<dynamic_component_one>/<dynamic_component_two>"]>;
-		"GET:/parameters01": (request: Requests["GET:/parameters01"]) => Promise<Responses["GET:/parameters01"]>;
-		"GET:/parameters02": (request: Requests["GET:/parameters02"]) => Promise<Responses["GET:/parameters02"]>;
-		"GET:/parameters03": (request: Requests["GET:/parameters03"]) => Promise<Responses["GET:/parameters03"]>;
-		"GET:/parameters04": (request: Requests["GET:/parameters04"]) => Promise<Responses["GET:/parameters04"]>;
-		"GET:/parameters05": (request: Requests["GET:/parameters05"]) => Promise<Responses["GET:/parameters05"]>;
-		"GET:/parameters06": (request: Requests["GET:/parameters06"]) => Promise<Responses["GET:/parameters06"]>;
-		"GET:/parameters07": (request: Requests["GET:/parameters07"]) => Promise<Responses["GET:/parameters07"]>;
-		"GET:/parameters08": (request: Requests["GET:/parameters08"]) => Promise<Responses["GET:/parameters08"]>;
-		"GET:/request_headers01": (request: Requests["GET:/request_headers01"]) => Promise<Responses["GET:/request_headers01"]>;
-		"GET:/request_headers02": (request: Requests["GET:/request_headers02"]) => Promise<Responses["GET:/request_headers02"]>;
-		"GET:/request_headers03": (request: Requests["GET:/request_headers03"]) => Promise<Responses["GET:/request_headers03"]>;
-		"GET:/request_headers04": (request: Requests["GET:/request_headers04"]) => Promise<Responses["GET:/request_headers04"]>;
-		"GET:/request_headers05": (request: Requests["GET:/request_headers05"]) => Promise<Responses["GET:/request_headers05"]>;
-		"GET:/request_headers06": (request: Requests["GET:/request_headers06"]) => Promise<Responses["GET:/request_headers06"]>;
-		"GET:/request_headers07": (request: Requests["GET:/request_headers07"]) => Promise<Responses["GET:/request_headers07"]>;
-		"GET:/request_headers08": (request: Requests["GET:/request_headers08"]) => Promise<Responses["GET:/request_headers08"]>;
-		"GET:/response_headers01": (request: Requests["GET:/response_headers01"]) => Promise<Responses["GET:/response_headers01"]>;
-		"GET:/response_headers02": (request: Requests["GET:/response_headers02"]) => Promise<Responses["GET:/response_headers02"]>;
-		"GET:/response_headers03": (request: Requests["GET:/response_headers03"]) => Promise<Responses["GET:/response_headers03"]>;
-		"GET:/response_headers04": (request: Requests["GET:/response_headers04"]) => Promise<Responses["GET:/response_headers04"]>;
-		"GET:/response_headers05": (request: Requests["GET:/response_headers05"]) => Promise<Responses["GET:/response_headers05"]>;
-		"GET:/response_headers06": (request: Requests["GET:/response_headers06"]) => Promise<Responses["GET:/response_headers06"]>;
-		"GET:/response_headers07": (request: Requests["GET:/response_headers07"]) => Promise<Responses["GET:/response_headers07"]>;
-		"GET:/response_headers08": (request: Requests["GET:/response_headers08"]) => Promise<Responses["GET:/response_headers08"]>;
-		"GET:/request_payload01": (request: Requests["GET:/request_payload01"]) => Promise<Responses["GET:/request_payload01"]>;
-		"GET:/request_payload02": (request: Requests["GET:/request_payload02"]) => Promise<Responses["GET:/request_payload02"]>;
-		"GET:/response_payload01": (request: Requests["GET:/response_payload01"]) => Promise<Responses["GET:/response_payload01"]>;
-		"GET:/response_payload02": (request: Requests["GET:/response_payload02"]) => Promise<Responses["GET:/response_payload02"]>;
-		"GET:/full_example": (request: Requests["GET:/full_example"]) => Promise<Responses["GET:/full_example"]>;
-		"GET:/reference": (request: Requests["GET:/reference"]) => Promise<Responses["GET:/reference"]>;
-		"GET:/binary_request": (request: Requests["GET:/binary_request"]) => Promise<Responses["GET:/binary_request"]>;
-		"GET:/binary_response": (request: Requests["GET:/binary_response"]) => Promise<Responses["GET:/binary_response"]>;
-		"GET:/number/<number>": (request: Requests["GET:/number/<number>"]) => Promise<Responses["GET:/number/<number>"]>;
-	};
 };
