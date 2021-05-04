@@ -16,6 +16,8 @@ route GET:/<dynamic_string_component:string>;
 
 route GET:/<dynamic_component_one:string>/<dynamic_component_two:string>;
 
+route GET:/<"quoted key":string>;
+
 route GET:/parameters01 ? <{}>;
 
 route GET:/parameters02 ? <{ required_boolean_parameter: boolean }>;

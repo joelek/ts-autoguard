@@ -24,7 +24,11 @@ export class Component {
 		return tokenizer.newContext((read, peek) => {
 			if (peek()?.family === "<") {
 				tokenization.expect(read(), "<");
-				let name = tokenization.expect(read(), tokenization.IdentifierFamilies).value;
+				let token = tokenization.expect(read(), [
+					...tokenization.IdentifierFamilies,
+					"STRING_LITERAL"
+				]);
+				let name = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
 				tokenization.expect(read(), ":");
 				let type = tokenization.expect(read(), ["boolean", "number", "string"]).value;
 				tokenization.expect(read(), ">");
