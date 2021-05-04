@@ -104,10 +104,13 @@ exports.serializeParameters = serializeParameters;
 function getStringOption(pairs, key) {
     for (let pair of pairs) {
         if (pair[0] === key) {
-            let value = pair[1];
-            if (guards.String.is(value)) {
-                return value;
+            try {
+                let value = pair[1];
+                if (guards.String.is(value)) {
+                    return value;
+                }
             }
+            catch (error) { }
         }
     }
 }
@@ -116,10 +119,13 @@ exports.getStringOption = getStringOption;
 function getNumberOption(pairs, key) {
     for (let pair of pairs) {
         if (pair[0] === key) {
-            let value = JSON.parse(pair[1]);
-            if (guards.Number.is(value)) {
-                return value;
+            try {
+                let value = JSON.parse(pair[1]);
+                if (guards.Number.is(value)) {
+                    return value;
+                }
             }
+            catch (error) { }
         }
     }
 }
@@ -128,10 +134,13 @@ exports.getNumberOption = getNumberOption;
 function getBooleanOption(pairs, key) {
     for (let pair of pairs) {
         if (pair[0] === key) {
-            let value = JSON.parse(pair[1]);
-            if (guards.Boolean.is(value)) {
-                return value;
+            try {
+                let value = JSON.parse(pair[1]);
+                if (guards.Boolean.is(value)) {
+                    return value;
+                }
             }
+            catch (error) { }
         }
     }
 }
