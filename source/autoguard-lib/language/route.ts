@@ -196,6 +196,7 @@ export class Headers {
 			tokenization.expect(read(), "{");
 			while (peek()?.value !== "}") {
 				let header = Parameter.parse(tokenizer);
+				header.name = header.name.toLowerCase();
 				headers.push(header);
 				if (peek()?.family === ",") {
 					tokenization.expect(read(), ",");

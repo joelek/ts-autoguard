@@ -189,11 +189,11 @@ export function getHeaders(headers: Array<string>): Array<[string, string]> {
 	return headers.map((part) => {
 		let parts = part.split(":");
 		if (parts.length === 1) {
-			let key = parts[0];
+			let key = parts[0].toLowerCase();
 			let value = "";
 			return [key, value];
 		} else {
-			let key = parts[0];
+			let key = parts[0].toLowerCase();
 			let value = parts.slice(1).join(":").trim();
 			return [key, value];
 		}
@@ -381,15 +381,20 @@ export async function sendPayload(httpResponse: ResponseLike, payload: Binary): 
 	});
 };
 
+export function combineRawHeaders(raw: Array<string>): Array<string> {
+	let headers = new Array<string>();
+	for (let i = 0; i < raw.length; i += 2) {
+		headers.push(`${raw[i+0]}: ${raw[i+1]}`);
+	}
+	return headers;
+};
+
 export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike): Promise<void> {
 	let method = httpRequest.method ?? "GET";
 	let url = httpRequest.url ?? "";
 	let components = getComponents(url);
 	let parameters = getParameters(url);
-	let headers = new Array<[string, string]>();
-	for (let i = 0; i < httpRequest.rawHeaders.length; i += 2) {
-		headers.push([httpRequest.rawHeaders[i+0], httpRequest.rawHeaders[i+1]]);
-	}
+	let headers = getHeaders(combineRawHeaders(httpRequest.rawHeaders));
 	let payload = {
 		[Symbol.asyncIterator]: () => httpRequest[Symbol.asyncIterator]()
 	};
