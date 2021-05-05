@@ -266,7 +266,7 @@ class Schema {
             }
             lines.push(`\t\t\t\tlet headers = autoguard.api.combineKeyValuePairs(raw.headers);`);
             for (let header of route.request.headers.headers) {
-                lines.push(`\t\t\t\theaders["${header.name}"] = autoguard.api.${makeParser(header.type)}(raw.parameters, "${header.name}");`);
+                lines.push(`\t\t\t\theaders["${header.name}"] = autoguard.api.${makeParser(header.type)}(raw.headers, "${header.name}");`);
             }
             if (route.request.payload === types.Binary.INSTANCE) {
                 lines.push(`\t\t\t\tlet payload = raw.payload;`);
