@@ -154,7 +154,8 @@ function getComponents(url) {
 exports.getComponents = getComponents;
 ;
 function getParameters(url) {
-    return url.split("?").slice(1).join("?").split("&").map((part) => {
+    let query = url.split("?").slice(1).join("?");
+    return query === "" ? [] : query.split("&").map((part) => {
         let parts = part.split("=");
         if (parts.length === 1) {
             let key = decodeURIComponent(parts[0]);
