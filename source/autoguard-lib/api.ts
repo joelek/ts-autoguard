@@ -307,7 +307,10 @@ export async function collectPayload(binary: Binary): Promise<Uint8Array> {
 };
 
 export function serializePayload(payload: JSON | undefined): Binary {
-	let string = JSON.stringify(payload ?? "");
+	if (payload === undefined) {
+		return [];
+	}
+	let string = JSON.stringify(payload);
 	let encoder = new TextEncoder();
 	let array = encoder.encode(string);
 	return [array];

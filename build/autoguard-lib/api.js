@@ -262,7 +262,10 @@ function collectPayload(binary) {
 exports.collectPayload = collectPayload;
 ;
 function serializePayload(payload) {
-    let string = JSON.stringify(payload !== null && payload !== void 0 ? payload : "");
+    if (payload === undefined) {
+        return [];
+    }
+    let string = JSON.stringify(payload);
     let encoder = new TextEncoder();
     let array = encoder.encode(string);
     return [array];
