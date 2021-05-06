@@ -114,7 +114,7 @@ export class Tokenizer {
 			"string": /^(string)/su,
 			"true": /^(true)/su,
 			"undefined": /^(undefined)/su,
-			"IDENTIFIER": /^([a-z][a-z0-9_]*)/isu,
+			"IDENTIFIER": /^([a-zA-Z][a-zA-Z0-9_]*)/su,
 			"NUMBER_LITERAL": /^(([1-9][0-9]+)|([0-9]))/su,
 			"STRING_LITERAL": /^(["][^"]*["])/su,
 			"PATH_COMPONENT": /^(([a-zA-Z0-9_.~-]|[%][0-9a-fA-F]{2})+)/su
