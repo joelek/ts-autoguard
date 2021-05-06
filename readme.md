@@ -24,7 +24,7 @@ JSON is a standardized and commonly used format for which JavaScript runtimes co
 Type assertions are TypeScript constructs used for asserting type information that is only informally known. It is not uncommon to see JSON deserialization followed by a type assertion in code handling API communication or file IO.
 
 ```ts
-const numbers = [ 0, 1, 2 ];
+const numbers = [0, 1, 2];
 const serialized = JSON.stringify(numbers);
 const deserialized = JSON.parse(serialized) as number[];
 const sum = deserialized.reduce((sum, number) => {
@@ -35,7 +35,7 @@ const sum = deserialized.reduce((sum, number) => {
 The logic of the example shown above is perfectly sound but the code is prone to errors. We can change the original list of numbers to a list of strings without the TypeScript compiler noticing the error introduced. This has some major implications.
 
 ```ts
-const numbers = [ "0", "1", "2" ];
+const numbers = ["0", "1", "2"];
 const serialized = JSON.stringify(numbers);
 const deserialized = JSON.parse(serialized) as number[];
 const sum = deserialized.reduce((sum, number) => {
@@ -226,6 +226,7 @@ NB: This project targets TypeScript 4 in strict mode.
 
 ## Roadmap
 
+* Update all tests.
 * Release new major version.
 * Provide better type guard error messages for complex types.
 * Extend type guards with functionality for deep structured cloning.
