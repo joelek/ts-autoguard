@@ -861,3 +861,51 @@ export class UnionType implements Type {
 		});
 	}
 };
+
+export class Headers implements Type {
+	constructor() {
+
+	}
+
+	generateSchema(options: shared.Options): string {
+		throw `Method not implemented!`;
+	}
+
+	generateType(options: shared.Options): string {
+		return "autoguard.api.Headers";
+	}
+
+	generateTypeGuard(options: shared.Options): string {
+		return "autoguard.api.Headers";
+	}
+
+	getImports(): shared.Import[] {
+		return [];
+	}
+
+	static readonly INSTANCE = new Headers();
+};
+
+export class Options implements Type {
+	constructor() {
+
+	}
+
+	generateSchema(options: shared.Options): string {
+		throw `Method not implemented!`;
+	}
+
+	generateType(options: shared.Options): string {
+		return "autoguard.api.Options";
+	}
+
+	generateTypeGuard(options: shared.Options): string {
+		return "autoguard.api.Options";
+	}
+
+	getImports(): shared.Import[] {
+		return [];
+	}
+
+	static readonly INSTANCE = new Options();
+};

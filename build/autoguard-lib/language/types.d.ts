@@ -183,3 +183,19 @@ export declare class UnionType implements Type {
     getImports(): Array<shared.Import>;
     static parse(tokenizer: tokenization.Tokenizer, ...exclude: Array<Typename>): Type;
 }
+export declare class Headers implements Type {
+    constructor();
+    generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
+    generateTypeGuard(options: shared.Options): string;
+    getImports(): shared.Import[];
+    static readonly INSTANCE: Headers;
+}
+export declare class Options implements Type {
+    constructor();
+    generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
+    generateTypeGuard(options: shared.Options): string;
+    getImports(): shared.Import[];
+    static readonly INSTANCE: Options;
+}

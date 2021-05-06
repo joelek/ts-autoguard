@@ -1,3 +1,7 @@
+export declare const Options: import("./serialization").MessageGuard<Record<string, string | number | boolean | undefined>>;
+export declare type Options = ReturnType<typeof Headers.as>;
+export declare const Headers: import("./serialization").MessageGuard<Record<string, string | number | boolean | undefined>>;
+export declare type Headers = ReturnType<typeof Headers.as>;
 export declare type AsyncBinary = AsyncIterable<Uint8Array>;
 export declare const AsyncBinary: {
     as(subject: any, path?: string): AsyncBinary;

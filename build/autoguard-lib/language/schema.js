@@ -63,7 +63,7 @@ function getRequestType(route) {
     }
     request.add("options", {
         type: new types.IntersectionType([
-            new types.ReferenceType([], "Options"),
+            types.Options.INSTANCE,
             options
         ]),
         optional: areAllMembersOptional(options)
@@ -77,7 +77,7 @@ function getRequestType(route) {
     }
     request.add("headers", {
         type: new types.IntersectionType([
-            new types.ReferenceType([], "Headers"),
+            types.Headers.INSTANCE,
             headers
         ]),
         optional: areAllMembersOptional(headers)
@@ -104,7 +104,7 @@ function getResponseType(route) {
     });
     response.add("headers", {
         type: new types.IntersectionType([
-            new types.ReferenceType([], "Headers"),
+            types.Headers.INSTANCE,
             headers
         ]),
         optional: areAllMembersOptional(headers)
@@ -322,14 +322,6 @@ class Schema {
         lines.push(`\texport type Guards = ${guards.generateType(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" }))};`);
         lines.push(``);
         lines.push(`\texport const Guards = ${guards.generateType(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" }))};`);
-        lines.push(``);
-        lines.push(`\texport type Options = ${makeOptionType().generateType(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" }))};`);
-        lines.push(``);
-        lines.push(`\texport const Options = ${makeOptionType().generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" }))};`);
-        lines.push(``);
-        lines.push(`\texport type Headers = ${makeOptionType().generateType(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" }))};`);
-        lines.push(``);
-        lines.push(`\texport const Headers = ${makeOptionType().generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" }))};`);
         lines.push(``);
         let request_types = new Array();
         let request_guards = new Array();

@@ -67,7 +67,7 @@ function getRequestType(route: route.Route): types.Type {
 	}
 	request.add("options", {
 		type: new types.IntersectionType([
-			new types.ReferenceType([], "Options"),
+			types.Options.INSTANCE,
 			options
 		]),
 		optional: areAllMembersOptional(options)
@@ -81,7 +81,7 @@ function getRequestType(route: route.Route): types.Type {
 	}
 	request.add("headers", {
 		type: new types.IntersectionType([
-			new types.ReferenceType([], "Headers"),
+			types.Headers.INSTANCE,
 			headers
 		]),
 		optional: areAllMembersOptional(headers)
@@ -109,7 +109,7 @@ function getResponseType(route: route.Route): types.Type {
 	});
 	response.add("headers", {
 		type: new types.IntersectionType([
-			new types.ReferenceType([], "Headers"),
+			types.Headers.INSTANCE,
 			headers
 		]),
 		optional: areAllMembersOptional(headers)
@@ -331,14 +331,6 @@ export class Schema {
 		lines.push(`\texport type Guards = ${guards.generateType({ ...options, eol: options.eol + "\t" })};`);
 		lines.push(``);
 		lines.push(`\texport const Guards = ${guards.generateType({ ...options, eol: options.eol + "\t" })};`);
-		lines.push(``);
-		lines.push(`\texport type Options = ${makeOptionType().generateType({ ...options, eol: options.eol + "\t" })};`);
-		lines.push(``);
-		lines.push(`\texport const Options = ${makeOptionType().generateTypeGuard({ ...options, eol: options.eol + "\t" })};`);
-		lines.push(``);
-		lines.push(`\texport type Headers = ${makeOptionType().generateType({ ...options, eol: options.eol + "\t" })};`);
-		lines.push(``);
-		lines.push(`\texport const Headers = ${makeOptionType().generateTypeGuard({ ...options, eol: options.eol + "\t" })};`);
 		lines.push(``);
 		let request_types = new Array<string>();
 		let request_guards = new Array<string>();

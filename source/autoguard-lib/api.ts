@@ -1,5 +1,21 @@
 import * as guards from "./guards";
 
+export const Options = guards.Record.of(guards.Union.of(
+	guards.Boolean,
+	guards.Number,
+	guards.String
+));
+
+export type Options = ReturnType<typeof Headers.as>;
+
+export const Headers = guards.Record.of(guards.Union.of(
+	guards.Boolean,
+	guards.Number,
+	guards.String
+));
+
+export type Headers = ReturnType<typeof Headers.as>;
+
 export type AsyncBinary = AsyncIterable<Uint8Array>;
 
 export const AsyncBinary = {

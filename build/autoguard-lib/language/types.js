@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UnionType = exports.UndefinedType = exports.TupleType = exports.StringLiteralType = exports.StringType = exports.ReferenceType = exports.RecordType = exports.ObjectType = exports.NumberLiteralType = exports.NumberType = exports.NullType = exports.IntersectionType = exports.GroupType = exports.BooleanLiteralType = exports.BooleanType = exports.Binary = exports.ArrayType = exports.AnyType = exports.Type = void 0;
+exports.Options = exports.Headers = exports.UnionType = exports.UndefinedType = exports.TupleType = exports.StringLiteralType = exports.StringType = exports.ReferenceType = exports.RecordType = exports.ObjectType = exports.NumberLiteralType = exports.NumberType = exports.NullType = exports.IntersectionType = exports.GroupType = exports.BooleanLiteralType = exports.BooleanType = exports.Binary = exports.ArrayType = exports.AnyType = exports.Type = void 0;
 const tokenization = require("../tokenization");
 ;
 exports.Type = {
@@ -758,4 +758,42 @@ class UnionType {
     }
 }
 exports.UnionType = UnionType;
+;
+class Headers {
+    constructor() {
+    }
+    generateSchema(options) {
+        throw `Method not implemented!`;
+    }
+    generateType(options) {
+        return "autoguard.api.Headers";
+    }
+    generateTypeGuard(options) {
+        return "autoguard.api.Headers";
+    }
+    getImports() {
+        return [];
+    }
+}
+exports.Headers = Headers;
+Headers.INSTANCE = new Headers();
+;
+class Options {
+    constructor() {
+    }
+    generateSchema(options) {
+        throw `Method not implemented!`;
+    }
+    generateType(options) {
+        return "autoguard.api.Options";
+    }
+    generateTypeGuard(options) {
+        return "autoguard.api.Options";
+    }
+    getImports() {
+        return [];
+    }
+}
+exports.Options = Options;
+Options.INSTANCE = new Options();
 ;
