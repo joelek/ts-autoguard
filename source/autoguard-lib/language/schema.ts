@@ -195,7 +195,7 @@ export class Schema {
 			lines.push(`\t\tlet components = new Array<string>();`);
 			for (let component of route.path.components) {
 				if (is.absent(component.type)) {
-					lines.push(`\t\tcomponents.push("${component.name}");`);
+					lines.push(`\t\tcomponents.push(decodeURIComponent("${encodeURIComponent(component.name)}"));`);
 				} else {
 					lines.push(`\t\tcomponents.push(String(request.options["${component.name}"]));`);
 				}
@@ -257,7 +257,7 @@ export class Schema {
 				if (is.present(component.type)) {
 					lines.push(`\t\tcomponents.push(["${component.name}", raw.components[${index}]]);`);
 				} else {
-					lines.push(`\t\tcomponents.push(["", "${component.name}"]);`);
+					lines.push(`\t\tcomponents.push(["", decodeURIComponent("${encodeURIComponent(component.name)}")]);`);
 				}
 			}
 			lines.push(`\t\treturn {`);
