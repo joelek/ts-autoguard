@@ -334,7 +334,7 @@ function acceptsMethod(one, two) {
 }
 exports.acceptsMethod = acceptsMethod;
 ;
-function fetch(method, url, headers, payload) {
+function fetch(raw, urlPrefix) {
     return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
         let xhr = new XMLHttpRequest();
         xhr.onerror = reject;
@@ -349,12 +349,15 @@ function fetch(method, url, headers, payload) {
                 payload
             });
         };
-        xhr.open(method, url, true);
+        let url = urlPrefix !== null && urlPrefix !== void 0 ? urlPrefix : "";
+        url += serializeComponents(raw.components);
+        url += serializeParameters(raw.parameters);
+        xhr.open(raw.method, url, true);
         xhr.responseType = "arraybuffer";
-        for (let header of headers) {
+        for (let header of raw.headers) {
             xhr.setRequestHeader(header[0], header[1]);
         }
-        xhr.send(yield collectPayload(payload));
+        xhr.send(yield collectPayload(raw.payload));
     }));
 }
 exports.fetch = fetch;

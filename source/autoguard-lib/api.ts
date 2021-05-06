@@ -382,7 +382,7 @@ export function acceptsMethod(one: string, two: string): boolean {
 	return one === two;
 };
 
-export function fetch(method: string, url: string, headers: Array<[string, string]>, payload: Binary): Promise<RawResponse> {
+export function fetch(raw: RawRequest, urlPrefix?: string): Promise<RawResponse> {
 	return new Promise(async (resolve, reject) => {
 		let xhr = new XMLHttpRequest();
 		xhr.onerror = reject;
@@ -397,12 +397,15 @@ export function fetch(method: string, url: string, headers: Array<[string, strin
 				payload
 			});
 		};
-		xhr.open(method, url, true);
+		let url = urlPrefix ?? "";
+		url += serializeComponents(raw.components);
+		url += serializeParameters(raw.parameters);
+		xhr.open(raw.method, url, true);
 		xhr.responseType = "arraybuffer";
-		for (let header of headers) {
+		for (let header of raw.headers) {
 			xhr.setRequestHeader(header[0], header[1]);
 		}
-		xhr.send(await collectPayload(payload));
+		xhr.send(await collectPayload(raw.payload));
 	});
 };
 

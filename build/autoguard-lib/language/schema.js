@@ -203,10 +203,7 @@ class Schema {
             else {
                 lines.push(`\t\tlet payload = autoguard.api.serializePayload(request.payload);`);
             }
-            lines.push(`\t\tlet url = (options?.urlPrefix ?? "");`);
-            lines.push(`\t\turl += autoguard.api.serializeComponents(components);`);
-            lines.push(`\t\turl += autoguard.api.serializeParameters(parameters);`);
-            lines.push(`\t\tlet raw = await autoguard.api.fetch(method, url, headers, payload);`);
+            lines.push(`\t\tlet raw = await autoguard.api.fetch({ method, components, parameters, headers, payload }, options?.urlPrefix);`);
             lines.push(`\t\t{`);
             lines.push(`\t\t\tlet status = raw.status;`);
             lines.push(`\t\t\tlet headers = autoguard.api.combineKeyValuePairs(raw.headers);`);

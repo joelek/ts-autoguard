@@ -105,7 +105,7 @@ export declare function getContentType(payload: Payload): string;
 export declare function transformResponse<A extends EndpointResponse>(response: A): RawResponse;
 export declare function acceptsComponents(one: Array<string>, two: Array<[string, string]>): boolean;
 export declare function acceptsMethod(one: string, two: string): boolean;
-export declare function fetch(method: string, url: string, headers: Array<[string, string]>, payload: Binary): Promise<RawResponse>;
+export declare function fetch(raw: RawRequest, urlPrefix?: string): Promise<RawResponse>;
 export declare function sendPayload(httpResponse: ResponseLike, payload: Binary): Promise<void>;
 export declare function combineRawHeaders(raw: Array<string>): Array<string>;
 export declare function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike): Promise<void>;
