@@ -8,7 +8,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", ""]);
+		components.push(["", decodeURIComponent("")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -17,12 +17,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -32,7 +32,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "POST";
 		let components = new Array<[string, string]>();
-		components.push(["", ""]);
+		components.push(["", decodeURIComponent("")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -41,12 +41,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["POST:/"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["POST:/"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["POST:/"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -56,7 +56,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "one"]);
+		components.push(["", decodeURIComponent("one")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -65,12 +65,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/one"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/one"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/one"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -80,8 +80,8 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "one"]);
-		components.push(["", ""]);
+		components.push(["", decodeURIComponent("one")]);
+		components.push(["", decodeURIComponent("")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -90,12 +90,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/one/"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/one/"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/one/"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -105,8 +105,8 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "one"]);
-		components.push(["", "two"]);
+		components.push(["", decodeURIComponent("one")]);
+		components.push(["", decodeURIComponent("two")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -115,12 +115,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/one/two"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/one/two"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/one/two"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -140,12 +140,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/<dynamic_boolean_component>"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/<dynamic_boolean_component>"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/<dynamic_boolean_component>"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -165,12 +165,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/<dynamic_number_component>"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/<dynamic_number_component>"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/<dynamic_number_component>"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -190,12 +190,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/<dynamic_string_component>"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/<dynamic_string_component>"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/<dynamic_string_component>"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -217,12 +217,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/<dynamic_component_one>/<dynamic_component_two>"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/<dynamic_component_one>/<dynamic_component_two>"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/<dynamic_component_one>/<dynamic_component_two>"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -242,12 +242,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/<quoted key>"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/<quoted key>"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/<quoted key>"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -257,7 +257,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "url-encoded component"]);
+		components.push(["", decodeURIComponent("%22r%C3%A4ksm%C3%B6rg%C3%A5s%22")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -265,13 +265,13 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
-				let guard = shared.Autoguard.Requests["GET:/url-encoded%20component"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let guard = shared.Autoguard.Requests["GET:/%22r%C3%A4ksm%C3%B6rg%C3%A5s%22"];
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/url-encoded%20component"](new autoguard.api.ClientRequest(request));
-						let guard = shared.Autoguard.Responses["GET:/url-encoded%20component"];
-						guard.as(response, "response");
+						let response = await routes["GET:/%22r%C3%A4ksm%C3%B6rg%C3%A5s%22"](new autoguard.api.ClientRequest(request));
+						let guard = shared.Autoguard.Responses["GET:/%22r%C3%A4ksm%C3%B6rg%C3%A5s%22"];
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -281,7 +281,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "parameters01"]);
+		components.push(["", decodeURIComponent("parameters01")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -290,12 +290,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters01"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/parameters01"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/parameters01"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -305,7 +305,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "parameters02"]);
+		components.push(["", decodeURIComponent("parameters02")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -315,12 +315,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters02"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/parameters02"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/parameters02"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -330,7 +330,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "parameters03"]);
+		components.push(["", decodeURIComponent("parameters03")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -340,12 +340,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters03"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/parameters03"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/parameters03"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -355,7 +355,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "parameters04"]);
+		components.push(["", decodeURIComponent("parameters04")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -365,12 +365,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters04"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/parameters04"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/parameters04"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -380,7 +380,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "parameters05"]);
+		components.push(["", decodeURIComponent("parameters05")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -390,12 +390,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters05"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/parameters05"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/parameters05"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -405,7 +405,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "parameters06"]);
+		components.push(["", decodeURIComponent("parameters06")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -415,12 +415,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters06"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/parameters06"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/parameters06"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -430,7 +430,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "parameters07"]);
+		components.push(["", decodeURIComponent("parameters07")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -440,12 +440,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters07"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/parameters07"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/parameters07"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -455,7 +455,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "parameters08"]);
+		components.push(["", decodeURIComponent("parameters08")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -466,12 +466,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters08"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/parameters08"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/parameters08"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -481,7 +481,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "parameters09"]);
+		components.push(["", decodeURIComponent("parameters09")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -491,12 +491,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters09"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/parameters09"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/parameters09"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -506,7 +506,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "request_headers01"]);
+		components.push(["", decodeURIComponent("request_headers01")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -515,12 +515,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers01"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/request_headers01"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/request_headers01"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -530,7 +530,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "request_headers02"]);
+		components.push(["", decodeURIComponent("request_headers02")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -540,12 +540,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				headers["required_boolean_request_header"] = autoguard.api.getBooleanOption(raw.headers, "required_boolean_request_header");
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers02"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/request_headers02"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/request_headers02"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -555,7 +555,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "request_headers03"]);
+		components.push(["", decodeURIComponent("request_headers03")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -565,12 +565,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				headers["optional_boolean_request_header"] = autoguard.api.getBooleanOption(raw.headers, "optional_boolean_request_header");
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers03"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/request_headers03"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/request_headers03"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -580,7 +580,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "request_headers04"]);
+		components.push(["", decodeURIComponent("request_headers04")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -590,12 +590,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				headers["required_number_request_header"] = autoguard.api.getNumberOption(raw.headers, "required_number_request_header");
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers04"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/request_headers04"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/request_headers04"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -605,7 +605,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "request_headers05"]);
+		components.push(["", decodeURIComponent("request_headers05")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -615,12 +615,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				headers["optional_number_request_header"] = autoguard.api.getNumberOption(raw.headers, "optional_number_request_header");
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers05"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/request_headers05"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/request_headers05"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -630,7 +630,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "request_headers06"]);
+		components.push(["", decodeURIComponent("request_headers06")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -640,12 +640,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				headers["required_string_request_header"] = autoguard.api.getStringOption(raw.headers, "required_string_request_header");
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers06"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/request_headers06"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/request_headers06"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -655,7 +655,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "request_headers07"]);
+		components.push(["", decodeURIComponent("request_headers07")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -665,12 +665,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				headers["optional_string_request_header"] = autoguard.api.getStringOption(raw.headers, "optional_string_request_header");
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers07"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/request_headers07"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/request_headers07"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -680,7 +680,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "request_headers08"]);
+		components.push(["", decodeURIComponent("request_headers08")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -691,12 +691,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				headers["request_header_two"] = autoguard.api.getStringOption(raw.headers, "request_header_two");
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers08"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/request_headers08"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/request_headers08"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -706,7 +706,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "request_headers09"]);
+		components.push(["", decodeURIComponent("request_headers09")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -716,12 +716,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				headers["quoted key"] = autoguard.api.getStringOption(raw.headers, "quoted key");
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers09"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/request_headers09"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/request_headers09"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -731,7 +731,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "response_headers01"]);
+		components.push(["", decodeURIComponent("response_headers01")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -740,12 +740,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/response_headers01"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/response_headers01"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/response_headers01"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -755,7 +755,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "response_headers02"]);
+		components.push(["", decodeURIComponent("response_headers02")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -764,12 +764,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/response_headers02"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/response_headers02"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/response_headers02"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -779,7 +779,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "response_headers03"]);
+		components.push(["", decodeURIComponent("response_headers03")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -788,12 +788,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/response_headers03"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/response_headers03"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/response_headers03"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -803,7 +803,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "response_headers04"]);
+		components.push(["", decodeURIComponent("response_headers04")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -812,12 +812,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/response_headers04"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/response_headers04"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/response_headers04"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -827,7 +827,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "response_headers05"]);
+		components.push(["", decodeURIComponent("response_headers05")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -836,12 +836,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/response_headers05"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/response_headers05"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/response_headers05"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -851,7 +851,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "response_headers06"]);
+		components.push(["", decodeURIComponent("response_headers06")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -860,12 +860,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/response_headers06"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/response_headers06"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/response_headers06"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -875,7 +875,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "response_headers07"]);
+		components.push(["", decodeURIComponent("response_headers07")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -884,12 +884,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/response_headers07"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/response_headers07"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/response_headers07"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -899,7 +899,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "response_headers08"]);
+		components.push(["", decodeURIComponent("response_headers08")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -908,12 +908,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/response_headers08"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/response_headers08"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/response_headers08"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -923,7 +923,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "response_headers09"]);
+		components.push(["", decodeURIComponent("response_headers09")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -932,12 +932,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/response_headers09"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/response_headers09"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/response_headers09"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -947,7 +947,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "request_payload01"]);
+		components.push(["", decodeURIComponent("request_payload01")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -956,12 +956,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_payload01"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/request_payload01"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/request_payload01"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -971,7 +971,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "request_payload02"]);
+		components.push(["", decodeURIComponent("request_payload02")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -980,12 +980,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_payload02"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/request_payload02"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/request_payload02"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -995,7 +995,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "response_payload01"]);
+		components.push(["", decodeURIComponent("response_payload01")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -1004,12 +1004,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/response_payload01"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/response_payload01"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/response_payload01"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -1019,7 +1019,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "response_payload02"]);
+		components.push(["", decodeURIComponent("response_payload02")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -1028,12 +1028,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/response_payload02"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/response_payload02"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/response_payload02"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -1043,7 +1043,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "full_example"]);
+		components.push(["", decodeURIComponent("full_example")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -1054,12 +1054,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				headers["request_header"] = autoguard.api.getStringOption(raw.headers, "request_header");
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/full_example"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/full_example"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/full_example"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -1069,7 +1069,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "reference"]);
+		components.push(["", decodeURIComponent("reference")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -1078,12 +1078,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/reference"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/reference"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/reference"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -1093,7 +1093,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "binary_request"]);
+		components.push(["", decodeURIComponent("binary_request")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -1102,12 +1102,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/binary_request"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/binary_request"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/binary_request"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -1117,7 +1117,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "binary_response"]);
+		components.push(["", decodeURIComponent("binary_response")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -1126,12 +1126,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/binary_response"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/binary_response"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/binary_response"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};
@@ -1141,7 +1141,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
-		components.push(["", "number"]);
+		components.push(["", decodeURIComponent("number")]);
 		components.push(["number", raw.components[1]]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
@@ -1153,12 +1153,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/number/<number>"];
-				let request = guard.as({ options, headers, payload }, "request");
+				let request = guard.as({ options, headers, payload }, "SERVER:request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["GET:/number/<number>"](new autoguard.api.ClientRequest(request));
 						let guard = shared.Autoguard.Responses["GET:/number/<number>"];
-						guard.as(response, "response");
+						guard.as(response, "SERVER:response");
 						return response;
 					}
 				};

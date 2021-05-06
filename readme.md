@@ -226,7 +226,6 @@ NB: This project targets TypeScript 4 in strict mode.
 
 ## Roadmap
 
-* Update all tests.
 * Release new major version.
 * Provide better type guard error messages for complex types.
 * Extend type guards with functionality for deep structured cloning.

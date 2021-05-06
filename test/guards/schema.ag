@@ -1,44 +1,44 @@
-guard MyAnyType: any
+guard MyAnyType: any;
 
-guard MyArrayOfStringType: string[]
+guard MyArrayOfStringType: string[];
 
-guard MyBooleanType: boolean
+guard MyBooleanType: boolean;
 
-guard MyBooleanliteralType: true
+guard MyBooleanliteralType: true;
 
-guard MyGroupType: (any)
+guard MyGroupType: (any);
 
 guard MyIntersectionType: {
 	"a_string_member": string
 } & {
 	"another_string_member": string
-}
+};
 
-guard MyNullType: null
+guard MyNullType: null;
 
-guard MyNumberType: number
+guard MyNumberType: number;
 
-guard MyNumberLiteralType: 1337
+guard MyNumberLiteralType: 1337;
 
 guard MyObjectType: {
 	"string_member": string,
 	"optional_member"?: string,
 	"quoted-member": string
-}
+};
 
-guard MyRecordOfStringType: { string }
+guard MyRecordOfStringType: { string };
 
-guard MyReferenceType: MyObjectType
+guard MyReferenceType: MyObjectType;
 
-guard MyStringType: string
+guard MyStringType: string;
 
-guard MyStringLiteralType: "räksmörgås"
+guard MyStringLiteralType: "räksmörgås";
 
 guard MyTupleType: [
 	string,
 	number
-]
+];
 
-guard MyUndefinedType: undefined
+guard MyUndefinedType: undefined;
 
-guard MyUnionType: string | null
+guard MyUnionType: string | null;

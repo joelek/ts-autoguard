@@ -1,53 +1,53 @@
-guard array1: string[]
+guard array1: string[];
 
-guard array2: string[][]
+guard array2: string[][];
 
-guard array3: string[][][]
+guard array3: string[][][];
 
-guard array4: string[][][][]
+guard array4: string[][][][];
 
-guard array5: string[][][][][]
+guard array5: string[][][][][];
 
-guard intersection1: {}
+guard intersection1: {};
 
-guard intersection2: {} & {}
+guard intersection2: {} & {};
 
-guard intersection3: {} & {} & {}
+guard intersection3: {} & {} & {};
 
-guard intersection4: {} & {} & {} & {}
+guard intersection4: {} & {} & {} & {};
 
-guard intersection5: {} & {} & {} & {} & {}
+guard intersection5: {} & {} & {} & {} & {};
 
-guard union1: string
+guard union1: string;
 
-guard union2: string
+guard union2: string;
 
-guard union3: string
+guard union3: string;
 
-guard union4: string
+guard union4: string;
 
-guard union5: string
+guard union5: string;
 
-guard preceedence1: string[] | string
+guard preceedence1: string[] | string;
 
-guard preceedence2: string | string[]
+guard preceedence2: string | string[];
 
 guard preceedence3: string | {
 	"a": string
 } & {
 	"b": string
-}
+};
 
 guard preceedence4: {
 	"a": string
 } & {
 	"b": string
-} | string
+} | string;
 
-guard empty1: []
+guard empty1: [];
 
-guard empty2: {}
+guard empty2: {};
 
-guard reference1: reference2
+guard reference1: reference2;
 
-guard reference2: {}
+guard reference2: {};

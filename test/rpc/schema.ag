@@ -18,7 +18,7 @@ route GET:/<dynamic_component_one:string>/<dynamic_component_two:string>;
 
 route GET:/<"quoted key":string>;
 
-route GET:/url-encoded%20component;
+route GET:/%22r%C3%A4ksm%C3%B6rg%C3%A5s%22;
 
 route GET:/parameters01 ? <{}>;
 
