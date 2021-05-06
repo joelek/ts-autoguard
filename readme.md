@@ -1,34 +1,23 @@
 # @joelek/ts-autoguard
 
-Auto-generated unintrusive type guards for TypeScript.
+Interface descriptor language and code-generation tool for type-safe and robust web applications.
 
-## News
+```
+guard Object: {
+	object_id: string,
+	title: string
+};
 
-The next major version is currently under development and will include a brand new interface descriptor language. The new language greatly simplifies the development and consumption of APIs through automatic generation of boiler-plate parsing, routing and type checking code.
+route GET:/objects/<object_id:string>/ => Object;
+```
 
 ## Sponsorship
 
-The continued development of this software is dependent upon voluntary sponsorship. Please consider sponsoring this project if you find that the software creates value for you and your company.
+The continued development of this software depends on your sponsorship. Please consider sponsoring this project if you find that the software creates value for you and your organization.
 
-The sponsor button can be used to view the different sponsoring options. Thank you for your contribution!
+The sponsor button can be used to view the different sponsoring options. All contributions are appreciated and welcomed. Thank you for your contribution!
 
-### Planned features
-
-* Write documentation on RPC functionality.
-* Release new major version.
-* Set up separate template project with client and server.
-* Create middleware for handling range requests.
-* Create middleware for handling static requests.
-* Add support for default parameter and header values.
-* Add support for responding without payload for error cases.
-* Modernize code to use string templates.
-* Structure code using TypeScript subprojects.
-* Create middleware to combine several APIs on the server side.
-* Add support for pluggable transport that can be used to aid unit testing.
-* Add meta route that allows the schema to be downloaded.
-* Add support for generating JavaScript code directly.
-
-## Motivation
+## Background
 
 JSON is a standardized and commonly used format for which JavaScript runtimes contain built-in serialization functionality. The TypeScript return type of the deserialization function `JSON.parse()` is `any` since there is no way for the TypeScript compiler to know what the serialized data consists of. The TypeScript `any` type is flexible and allows you to treat it as pretty much anything. This is both extremely useful and incredibly dangerous for the runtime safety of an application.
 
@@ -54,7 +43,7 @@ const sum = deserialized.reduce((sum, number) => {
 }, 0);
 ```
 
-Since the type assertion is performed at compile-time, TypeScript still infers the type of sum as `number` while the runtime type has changed to `string`. The sum changes from the number 3 to the string "0012". Experienced JavaScript developers may notice the error since the error is introduced locally.
+Since the type assertion is performed at compile-time, TypeScript still infers the type of `sum` as `number` while the runtime type has changed to `string`. The value of `sum` changes from the number 3 to the string "0012". Experienced JavaScript developers may notice the error since the error is introduced locally.
 
 A real-world example will most likely consist of serialization and deserialization occuring in separate applications, often executing on two different devices connected through a network.
 
@@ -74,9 +63,9 @@ It is not uncommon for the producing application to be maintained by an entirely
 Type guards are intended to prevent from the consequences of broken contracts by embedding runtime assertions into JavaScript code. This guarantees that the consuming application executes with correct type information as the developer intended.
 
 ```ts
-import { guards as autoguard } from "@joelek/ts-autoguard";
+import { guards } from "@joelek/ts-autoguard";
 
-const guard = autoguard.Array.of(autoguard.Number);
+const guard = guards.Array.of(guards.Number);
 const deserialized = guard.as(JSON.parse(serialized));
 const sum = deserialized.reduce((sum, number) => {
 	return sum + number;
@@ -89,112 +78,134 @@ Type guards also support checking using `guard.is(...)` for use in branching dec
 
 ## Features
 
-### Type guards
+Autoguard is a utility and not a framework. It is unintrusive and modular in its design allowing it to be used to assist the design of your application rather than forcing your application to be designed around the utility.
 
-Autoguard can be used to manually create type guards for your data.
+### Manual type guards
 
-```ts
-import { guards as autoguard } from "@joelek/ts-autoguard";
-
-const guard = autoguard.Array.of(autoguard.Object.of({
-	id: autoguard.String,
-	name: autoguard.String,
-	age: autoguard.Number
-}));
-```
-
-### Code generation
-
-Autoguard can generate TypeScript type definitions and type guards from schema definitions. Type definitions can be used to annotate TypeScript code and will disappear when transpiled to JavaScript.
-
-A schema definition may look like in the following example.
+Autoguard can be used to manually create type guards for your application. The `guards` module contains type guards for primitive data types as well as building blocks that can be used to construct type guards for complex types.
 
 ```ts
-guard MyArrayOfStringType: string[]
+import { guards } from "@joelek/ts-autoguard";
+
+const guard = guards.Array.of(
+	guards.Object.of({
+		id: guards.String,
+		name: guards.String,
+		age: guards.Number
+	})
+);
+
+type guard = ReturnType<typeof guard.as>;
 ```
 
-Autoguard reads schema definitions from `.ag` files and generates the corresponding `.ts` files. By default, Autoguard will traverse your project and generate a source file for each `.ag` file it encounters.
+### Interface descriptor language
+
+Autoguard defines a custom interface descriptor language (IDL) from which robust and powerful source code can be generated. An example of a schema writted using the language is shown below.
+
+```
+guard Object: {
+	object_id: string,
+	title: string
+};
+
+route GET:/objects/<object_id:string>/ => Object;
+```
+
+Autoguard reads schemas from `.ag` files and generates source files for integration in your application. By default, Autoguard will traverse the directories of your project and generate TypeScript source files for the `.ag` files it encounters.
 
 ```
 npx autoguard
 ```
 
-The schema definition shown in the previous example will generate the following module.
+Schemas may contain any number of `guard` constructs. These define types and will generate type guards for runtime type assertions and type checks.
 
-```ts
-import * as autoguard from "@joelek/ts-autoguard";
+Schemas may contain any number of `route` constructs. These define API functionality and will generate fully-functional methods that execute on a remote system or process when called (RPC). Autoguard also generates server-side functionality that only requires the actual business logic in order to create fully-functional API servers.
 
-export type MyArrayOfStringType = string[];
+The generated code handles runtime type-checking of requests as well as of responses. Serialization, transport and deserialization is delegated to shared functionality shipped togheter with Autoguard.
 
-export const MyArrayOfStringType = autoguard.guards.Array.of(autoguard.guards.String);
+The API functionality is designed to be fully compatible with the standardized HTTP protocol. Although preferred for maximum type-safety and robustness, Autoguard does _not_ require both the client and the server to be implemented using Autoguard. The client or server may be implemented using different technologies as long as they employ standard HTTP transport.
 
-export namespace Autoguard {
-	export type Guards = {
-		"MyArrayOfStringType": MyArrayOfStringType
-	};
+#### Guards
 
-	export const Guards = {
-		"MyArrayOfStringType": MyArrayOfStringType
-	};
-};
+The following example illustrates how the `guard` construct can be used.
+
 ```
+guard MyAnyType: any;
 
-The schema definition below shows all constructs supported by Autoguard.
+guard MyArrayOfStringType: string[];
 
-```ts
-guard MyAnyType: any
-guard MyArrayOfStringType: string[]
-guard MyBooleanType: boolean
-guard MyBooleanliteralType: true
-guard MyGroupType: (any)
-guard MyImportedType: ./module/MyExternalType
+guard MyBooleanType: boolean;
+
+guard MyBooleanliteralType: true;
+
+guard MyGroupType: (any);
+
+guard MyImportedType: ./module/MyExternalType;
+
 guard MyIntersectionType: {
 	a_string_member: string
 } & {
 	another_string_member: string
-}
-guard MyNullType: null
-guard MyNumberType: number
-guard MyNumberLiteralType: 1337
+};
+
+guard MyNullType: null;
+
+guard MyNumberType: number;
+
+guard MyNumberLiteralType: 1337;
+
 guard MyObjectType: {
 	string_member: string,
 	optional_member?: string,
 	"quoted-member": string
-}
-guard MyRecordOfStringType: { string }
-guard MyReferenceType: MyObjectType
-guard MyStringType: string
-guard MyStringLiteralType: "räksmörgås"
+};
+
+guard MyRecordOfStringType: { string };
+
+guard MyReferenceType: MyObjectType;
+
+guard MyStringType: string;
+
+guard MyStringLiteralType: "räksmörgås";
+
 guard MyTupleType: [
 	string,
 	number
-]
-guard MyUndefinedType: undefined
-guard MyUnionType: string | null
+];
+
+guard MyUndefinedType: undefined;
+
+guard MyUnionType: string | null;
 ```
 
-### Interface descriptor language
+#### Routes
 
-Coming soon...
+The following example illustrates how the `route` construct can be used.
+
+```
+route POST:/encoded%20path%20component/<id:string>/ ? <{ parameter: string }>
+	<= <{ request_header: string }> { request_payload_member: string }
+	=> <{ response_header: string }> { response_payload_member: string };
+
+route POST:/upload <= binary;
+```
 
 ### Serialization and deserialization
 
-Autoguard provides components for type-safe serialization and deserialization of messages.
+Autoguard provides a module for type-safe serialization and deserialization of messages.
 
 ```ts
 import { Autoguard } from "./myschema";
 import * as autoguard from "@joelek/ts-autoguard";
 
-let serializer = new autoguard.serialization.MessageSerializer<Autoguard>(Autoguard);
+let serializer = new autoguard.serialization.MessageSerializer(Autoguard.Guards);
 let serialized = serializer.serialize("MyType", "Hello!");
 ```
 
 The serialized value may be stored on disk or transmitted through a network and can be recovered using the `.deserialize()` method.
 
 ```ts
-serializer.deserialize(serialized, (type, data) => {
-
-});
+serializer.deserialize(serialized, (type, data) => { /* ... */ });
 ```
 
 ## Installation
@@ -213,9 +224,28 @@ npm install joelek/ts-autoguard#master
 
 NB: This project targets TypeScript 4 in strict mode.
 
+## Roadmap
+
+* Release new major version.
+* Provide better type guard error messages for complex types.
+* Extend type guards with functionality for deep structured cloning.
+* Set up template project with client and server.
+* Create middleware for handling range requests.
+* Create middleware for handling static requests.
+* Add support for default parameter and header values.
+* Add support for responding without a payload on error.
+* Modernize code to use string templates.
+* Structure code using TypeScript project references.
+* Create middleware to combine several APIs into one.
+* Add support for pluggable transport that can be used to aid unit testing.
+* Add meta route that allows the schema to be downloaded.
+* Add support for generating JavaScript code directly.
+
 ## Syntax
 
-The type language is formally defined as a language that shares similarities with the type language in TypeScript. White space may occur between non-terminal tokens and is considered insignificant.
+The interface descriptor language is formally defined as a language that shares similarities with the type language in TypeScript.
+
+White space may occur between non-terminal tokens and is considered insignificant.
 
 ```
 AsciiLetterLowercase = "a" to "z"
