@@ -76,7 +76,7 @@ export class AnyType implements Type {
 	}
 
 	generateSchema(options: shared.Options): string {
-		return this.generateType(options);
+		return "any";
 	}
 
 	generateType(options: shared.Options): string {
@@ -111,7 +111,7 @@ export class ArrayType implements Type {
 	}
 
 	generateSchema(options: shared.Options): string {
-		return this.generateType(options);
+		return this.type.generateSchema(options) + "[]";
 	}
 
 	generateType(options: shared.Options): string {
@@ -190,7 +190,7 @@ export class BooleanType implements Type {
 	}
 
 	generateSchema(options: shared.Options): string {
-		return this.generateType(options);
+		return "boolean";
 	}
 
 	generateType(options: shared.Options): string {
@@ -225,7 +225,7 @@ export class BooleanLiteralType implements Type {
 	}
 
 	generateSchema(options: shared.Options): string {
-		return this.generateType(options);
+		return "" + this.value;
 	}
 
 	generateType(options: shared.Options): string {
@@ -268,7 +268,7 @@ export class GroupType implements Type {
 	}
 
 	generateSchema(options: shared.Options): string {
-		return this.generateType(options);
+		return "(" + this.type.generateSchema(options) + ")";
 	}
 
 	generateType(options: shared.Options): string {
@@ -306,7 +306,12 @@ export class IntersectionType implements Type {
 	}
 
 	generateSchema(options: shared.Options): string {
-		return this.generateType(options);
+		let lines = new Array<string>();
+		for (let type of this.types) {
+			lines.push(type.generateSchema(options));
+		}
+		let string = lines.join(" & ");
+		return string;
 	}
 
 	generateType(options: shared.Options): string {
@@ -315,7 +320,7 @@ export class IntersectionType implements Type {
 			lines.push(type.generateType(options));
 		}
 		let string = lines.join(" & ");
-		return string
+		return string;
 	}
 
 	generateTypeGuard(options: shared.Options): string {
@@ -364,7 +369,7 @@ export class NullType implements Type {
 	}
 
 	generateSchema(options: shared.Options): string {
-		return this.generateType(options);
+		return "null";
 	}
 
 	generateType(options: shared.Options): string {
@@ -397,7 +402,7 @@ export class NumberType implements Type {
 	}
 
 	generateSchema(options: shared.Options): string {
-		return this.generateType(options);
+		return "number";
 	}
 
 	generateType(options: shared.Options): string {
@@ -432,7 +437,7 @@ export class NumberLiteralType implements Type {
 	}
 
 	generateSchema(options: shared.Options): string {
-		return this.generateType(options);
+		return "" + this.value;
 	}
 
 	generateType(options: shared.Options): string {
@@ -475,7 +480,15 @@ export class ObjectType implements Type {
 	}
 
 	generateSchema(options: shared.Options): string {
-		return this.generateType(options);
+		if (this.members.size === 0) {
+			return "{}";
+		}
+		let lines = new Array<string>();
+		for (let [key, value] of this.members) {
+			lines.push("	\"" + key + "\"" + (value.optional ? "?" : "") + ": " + value.type.generateSchema({ ...options, eol: options.eol + "\t" }));
+		}
+		let string = lines.length > 0 ? options.eol + lines.join("," + options.eol) + options.eol : "";
+		return "{" + string + "}";
 	}
 
 	generateType(options: shared.Options): string {
@@ -642,7 +655,7 @@ export class StringType implements Type {
 	}
 
 	generateSchema(options: shared.Options): string {
-		return this.generateType(options);
+		return "string";
 	}
 
 	generateType(options: shared.Options): string {
@@ -677,7 +690,7 @@ export class StringLiteralType implements Type {
 	}
 
 	generateSchema(options: shared.Options): string {
-		return this.generateType(options);
+		return "\"" + this.value + "\"";
 	}
 
 	generateType(options: shared.Options): string {
@@ -715,7 +728,12 @@ export class TupleType implements Type {
 	}
 
 	generateSchema(options: shared.Options): string {
-		return this.generateType(options);
+		let strings = new Array<string>();
+		for (let type of this.types) {
+			strings.push("	" + type.generateSchema({ ...options, eol: options.eol + "\t" }));
+		}
+		let string = strings.length > 0 ? options.eol + strings.join("," + options.eol) + options.eol : "";
+		return "[" + string + "]";
 	}
 
 	generateType(options: shared.Options): string {
@@ -770,7 +788,7 @@ export class UndefinedType implements Type {
 	}
 
 	generateSchema(options: shared.Options): string {
-		return this.generateType(options);
+		return "undefined";
 	}
 
 	generateType(options: shared.Options): string {
@@ -810,7 +828,12 @@ export class UnionType implements Type {
 	}
 
 	generateSchema(options: shared.Options): string {
-		return this.generateType(options);
+		let lines = new Array<string>();
+		for (let type of this.types) {
+			lines.push(type.generateSchema(options));
+		}
+		let string = lines.join(" | ");
+		return string;
 	}
 
 	generateType(options: shared.Options): string {
@@ -819,7 +842,7 @@ export class UnionType implements Type {
 			lines.push(type.generateType(options));
 		}
 		let string = lines.join(" | ");
-		return string
+		return string;
 	}
 
 	generateTypeGuard(options: shared.Options): string {
