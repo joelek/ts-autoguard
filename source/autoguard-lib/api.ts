@@ -70,8 +70,7 @@ export type Binary = ReturnType<typeof Binary.as>;
 export type Primitive = boolean | number | string;
 export type JSON = null | Primitive | JSON[] | { [key: string]: JSON };
 
-export type RequestLike = {
-	[Symbol.asyncIterator](): AsyncIterableIterator<any>;
+export type RequestLike = AsyncBinary & {
 	method?: string;
 	rawHeaders: string[];
 	url?: string;
