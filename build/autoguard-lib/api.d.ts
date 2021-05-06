@@ -18,8 +18,7 @@ export declare type Primitive = boolean | number | string;
 export declare type JSON = null | Primitive | JSON[] | {
     [key: string]: JSON;
 };
-export declare type RequestLike = {
-    [Symbol.asyncIterator](): AsyncIterableIterator<any>;
+export declare type RequestLike = AsyncBinary & {
     method?: string;
     rawHeaders: string[];
     url?: string;
