@@ -30,7 +30,7 @@ export declare type ResponseLike = {
     write(payload: Uint8Array): boolean;
     writeHead(status: number): void;
 };
-export declare type RequestListener = (request: RequestLike, response: ResponseLike) => void;
+export declare type RequestListener = (request: RequestLike, response: ResponseLike) => Promise<void>;
 export declare function serializeComponents(components: Array<string>): string;
 export declare function extractKeyValuePairs(record: Record<string, Primitive | undefined>, exclude?: Array<string>): Array<[string, string]>;
 export declare function combineKeyValuePairs(pairs: Array<[string, string]>): Record<string, Primitive | undefined>;

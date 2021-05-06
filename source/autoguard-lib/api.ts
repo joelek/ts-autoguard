@@ -84,7 +84,7 @@ export type ResponseLike = {
 	writeHead(status: number): void;
 };
 
-export type RequestListener = (request: RequestLike, response: ResponseLike) => void;
+export type RequestListener = (request: RequestLike, response: ResponseLike) => Promise<void>;
 
 export function serializeComponents(components: Array<string>): string {
 	return "/" + components
