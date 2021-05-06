@@ -315,46 +315,40 @@ export class Schema {
 		}
 		lines.push(``);
 		for (let guard of this.guards) {
-			lines.push(`export type ${guard.typename} = ${guard.type.generateType(options)};`);
-			lines.push(``);
 			lines.push(`export const ${guard.typename} = ${guard.type.generateTypeGuard({ ...options, eol: options.eol })};`);
 			lines.push(``);
+			lines.push(`export type ${guard.typename} = ReturnType<typeof ${guard.typename}["as"]>;`);
+			lines.push(``);
 		}
-		let guards = new types.ObjectType();
+		let guards = new Array<string>();
 		for (let guard of this.guards) {
-			guards.add(guard.typename, {
-				type: new types.ReferenceType([], guard.typename),
-				optional: false
-			});
+			let reference = new types.ReferenceType([], guard.typename);
+			guards.push(`\t\t"${guard.typename}": ${reference.generateTypeGuard({ ...options, eol: options.eol + "\t\t" })}`);
 		}
 		lines.push(`export namespace Autoguard {`);
-		lines.push(`\texport type Guards = ${guards.generateType({ ...options, eol: options.eol + "\t" })};`);
+		lines.push(`\texport const Guards = {${guards.length > 0 ? options.eol + guards.join("," + options.eol) + options.eol + "\t" : ""}};`);
 		lines.push(``);
-		lines.push(`\texport const Guards = ${guards.generateType({ ...options, eol: options.eol + "\t" })};`);
+		lines.push(`\texport type Guards = { [A in keyof typeof Guards]: ReturnType<typeof Guards[A]["as"]>; };`);
 		lines.push(``);
-		let request_types = new Array<string>();
-		let request_guards = new Array<string>();
+		let requests = new Array<string>();
 		for (let route of this.routes) {
 			let request = getRequestType(route);
 			let tag = makeRouteTag(route);
-			request_types.push(`\t\t"${tag}": ${request.generateType({ ...options, eol: options.eol + "\t\t" })}`);
-			request_guards.push(`\t\t"${tag}": ${request.generateTypeGuard({ ...options, eol: options.eol + "\t\t" })}`);
+			requests.push(`\t\t"${tag}": ${request.generateTypeGuard({ ...options, eol: options.eol + "\t\t" })}`);
 		}
-		lines.push(`\texport type Requests = {${request_types.length > 0 ? options.eol + request_types.join("," + options.eol) + options.eol + "\t" : ""}};`);
+		lines.push(`\texport const Requests = {${requests.length > 0 ? options.eol + requests.join("," + options.eol) + options.eol + "\t" : ""}};`);
 		lines.push(``);
-		lines.push(`\texport const Requests = {${request_guards.length > 0 ? options.eol + request_guards.join("," + options.eol) + options.eol + "\t" : ""}};`);
+		lines.push(`\texport type Requests = { [A in keyof typeof Requests]: ReturnType<typeof Requests[A]["as"]>; };`);
 		lines.push(``);
-		let response_types = new Array<string>();
-		let response_guards = new Array<string>();
+		let responses = new Array<string>();
 		for (let route of this.routes) {
 			let response = getResponseType(route);
 			let tag = makeRouteTag(route);
-			response_types.push(`\t\t"${tag}": ${response.generateType({ ...options, eol: options.eol + "\t\t" })}`);
-			response_guards.push(`\t\t"${tag}": ${response.generateTypeGuard({ ...options, eol: options.eol + "\t\t" })}`);
+			responses.push(`\t\t"${tag}": ${response.generateTypeGuard({ ...options, eol: options.eol + "\t\t" })}`);
 		}
-		lines.push(`\texport type Responses = {${response_types.length > 0 ? options.eol + response_types.join("," + options.eol) + options.eol + "\t" : ""}};`);
+		lines.push(`\texport const Responses = {${responses.length > 0 ? options.eol + responses.join("," + options.eol) + options.eol + "\t" : ""}};`);
 		lines.push(``);
-		lines.push(`\texport const Responses = {${response_guards.length > 0 ? options.eol + response_guards.join("," + options.eol) + options.eol + "\t" : ""}};`);
+		lines.push(`\texport type Responses = { [A in keyof typeof Responses]: ReturnType<typeof Responses[A]["as"]>; };`);
 		lines.push(`};`);
 		lines.push(``);
 		return lines.join(options.eol);
