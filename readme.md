@@ -4,11 +4,11 @@ Interface descriptor language and code-generation tool for type-safe and robust 
 
 ```
 guard Object: {
-	object_id: string,
+	object_id: number,
 	title: string
 };
 
-route GET:/objects/<object_id:string>/ => Object;
+route GET:/objects/<object_id:number>/ => Object;
 ```
 
 ## Sponsorship
@@ -104,11 +104,11 @@ Autoguard defines a custom interface descriptor language (IDL) from which robust
 
 ```
 guard Object: {
-	object_id: string,
+	object_id: number,
 	title: string
 };
 
-route GET:/objects/<object_id:string>/ => Object;
+route GET:/objects/<object_id:number>/ => Object;
 ```
 
 Autoguard reads schemas from `.ag` files and generates source files for integration in your application. By default, Autoguard will traverse the directories of your project and generate TypeScript source files for the `.ag` files it encounters.
@@ -124,6 +124,40 @@ Schemas may contain any number of `route` constructs. These define API functiona
 The generated code handles runtime type-checking of requests as well as of responses. Serialization, transport and deserialization is delegated to shared functionality shipped togheter with Autoguard.
 
 The API functionality is designed to be fully compatible with the standardized HTTP protocol. Although preferred for maximum type-safety and robustness, Autoguard does _not_ require both the client and the server to be implemented using Autoguard. The client or server may be implemented using different technologies as long as they employ standard HTTP transport.
+
+#### Integration
+
+The generated server module can be turned into a NodeJS web server as shown in this bare-minimum example. Autoguard lets you focus on the business logic by handling routing, deserialization, type-checking and serialization for all requests delegated to the server instance.
+
+You can choose to implement parts of your NodeJS web server using Autoguard by inspecting the URL of the incoming requests before deciding whether to delegate them to the server instance or not.
+
+```ts
+import * as libhttp from "http";
+import * as libserver from "./myschema/server";
+
+libhttp.createServer(libserver.makeServer({
+	"GET:/objects/<object_id>/": async (request) => ({
+		payload: {
+			object_id: request.options().object_id,
+			title: "räksmörgås"
+		}
+	})
+}));
+```
+
+The generated client module can be used to consume data from any API honoring the contract described in the schema from which the module was created. Autoguard lets you focus on the business logic by handling deserialization, type-checking and serialization for all requests sent through the client instance.
+
+```ts
+import * as libclient from "./myschema/client";
+
+const client = libclient.makeClient({ urlPrefix: "" });
+const response = await client["GET:/objects/<object_id>/"]({
+	options: {
+		object_id: 1337
+	}
+});
+const payload = await response.payload();
+```
 
 #### Guards
 
