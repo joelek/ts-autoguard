@@ -16,7 +16,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.route = exports.combineRawHeaders = exports.sendPayload = exports.fetch = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.serializePayload = exports.collectPayload = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
+exports.route = exports.combineRawHeaders = exports.sendPayload = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.serializePayload = exports.collectPayload = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
 const guards = require("./guards");
 exports.Options = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
 exports.Headers = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
@@ -334,7 +334,7 @@ function acceptsMethod(one, two) {
 }
 exports.acceptsMethod = acceptsMethod;
 ;
-function fetch(raw, urlPrefix) {
+function xhr(raw, urlPrefix) {
     return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
         let xhr = new XMLHttpRequest();
         xhr.onerror = reject;
@@ -360,7 +360,7 @@ function fetch(raw, urlPrefix) {
         xhr.send(yield collectPayload(raw.payload));
     }));
 }
-exports.fetch = fetch;
+exports.xhr = xhr;
 ;
 function sendPayload(httpResponse, payload) {
     var payload_1, payload_1_1;

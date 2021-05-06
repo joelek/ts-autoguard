@@ -213,7 +213,7 @@ export class Schema {
 			} else {
 				lines.push(`\t\tlet payload = autoguard.api.serializePayload(request.payload);`);
 			}
-			lines.push(`\t\tlet raw = await autoguard.api.fetch({ method, components, parameters, headers, payload }, options?.urlPrefix);`);
+			lines.push(`\t\tlet raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);`);
 			lines.push(`\t\t{`);
 			lines.push(`\t\t\tlet status = raw.status;`);
 			lines.push(`\t\t\tlet headers = autoguard.api.combineKeyValuePairs(raw.headers);`);
