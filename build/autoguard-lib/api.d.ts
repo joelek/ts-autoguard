@@ -106,6 +106,6 @@ export declare function transformResponse<A extends EndpointResponse>(response: 
 export declare function acceptsComponents(one: Array<string>, two: Array<[string, string]>): boolean;
 export declare function acceptsMethod(one: string, two: string): boolean;
 export declare function xhr(raw: RawRequest, urlPrefix?: string): Promise<RawResponse>;
-export declare function sendPayload(httpResponse: ResponseLike, payload: Binary): Promise<void>;
+export declare function respond(httpResponse: ResponseLike, raw: RawResponse): Promise<void>;
 export declare function combineRawHeaders(raw: Array<string>): Array<string>;
 export declare function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike): Promise<void>;

@@ -409,8 +409,12 @@ export function xhr(raw: RawRequest, urlPrefix?: string): Promise<RawResponse> {
 	});
 };
 
-export async function sendPayload(httpResponse: ResponseLike, payload: Binary): Promise<void> {
-	for await (let chunk of payload) {
+export async function respond(httpResponse: ResponseLike, raw: RawResponse): Promise<void> {
+	for (let header of raw.headers) {
+		httpResponse.setHeader(header[0], header[1]);
+	}
+	httpResponse.writeHead(raw.status);
+	for await (let chunk of raw.payload) {
 		if (!httpResponse.write(chunk)) {
 			await new Promise<void>((resolve, reject) => {
 				httpResponse.once("drain", resolve);
@@ -450,41 +454,45 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 	let filteredEndpoints = endpoints.map((endpoint) => endpoint(raw));
 	filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsComponents());
 	if (filteredEndpoints.length === 0) {
-		httpResponse.writeHead(404);
-		httpResponse.end();
-		return;
+		return respond(httpResponse, {
+			status: 404,
+			headers: [],
+			payload: []
+		});
 	}
 	filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsMethod());
 	if (filteredEndpoints.length === 0) {
-		httpResponse.writeHead(405);
-		httpResponse.end();
-		return;
+		return respond(httpResponse, {
+			status: 405,
+			headers: [],
+			payload: []
+		});
 	}
 	let endpoint = filteredEndpoints[0];
 	try {
 		let prepared = await endpoint.prepareRequest();
 		try {
 			let response = await prepared.handleRequest();
-			let { status, headers, payload } = transformResponse(response);
-			for (let header of headers) {
-				httpResponse.setHeader(header[0], header[1]);
-			}
-			httpResponse.writeHead(status);
-			await sendPayload(httpResponse, payload);
+			let raw = transformResponse(response);
+			await respond(httpResponse, raw);
 			return;
 		} catch (error) {
 			let status = 500;
 			if (Number.isInteger(error) && error >= 100 && error <= 999) {
 				status = error;
 			}
-			httpResponse.writeHead(status);
-			httpResponse.end();
-			return;
+			return respond(httpResponse, {
+				status: status,
+				headers: [],
+				payload: []
+			});
 		}
 	} catch (error) {
-		httpResponse.writeHead(400);
 		let payload = serializePayload(String(error));
-		await sendPayload(httpResponse, payload);
-		return;
+		return respond(httpResponse, {
+			status: 400,
+			headers: [],
+			payload: payload
+		});
 	}
 };
