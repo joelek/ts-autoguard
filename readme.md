@@ -247,7 +247,7 @@ serializer.deserialize(serialized, (type, data) => { /* ... */ });
 Releases follow semantic versioning and release packages are published using the GitHub platform. Use the following command to install the latest release.
 
 ```
-npm install joelek/ts-autoguard#semver:^4
+npm install joelek/ts-autoguard#semver:^5
 ```
 
 Use the following command to install the very latest build. The very latest build may include breaking changes and should not be used in production environments.
@@ -263,6 +263,7 @@ NB: This project targets TypeScript 4 in strict mode.
 * Release new major version.
 * Provide better type guard error messages for complex types.
 * Extend type guards with functionality for deep structured cloning.
+* Add server-side support for urlPrefix.
 * Set up template project with client and server.
 * Create middleware for handling range requests.
 * Create middleware for handling static requests.
