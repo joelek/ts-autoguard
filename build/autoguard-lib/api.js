@@ -440,12 +440,22 @@ function route(endpoints, httpRequest, httpResponse) {
         }
         let endpoint = filteredEndpoints[0];
         try {
-            let prepared = yield endpoint.prepareRequest();
+            let valid = yield endpoint.validateRequest();
             try {
-                let response = yield prepared.handleRequest();
-                let raw = transformResponse(response);
-                yield respond(httpResponse, raw);
-                return;
+                let handled = yield valid.handleRequest();
+                try {
+                    let response = yield handled.validateResponse();
+                    let raw = transformResponse(response);
+                    return yield respond(httpResponse, raw);
+                }
+                catch (error) {
+                    let payload = serializePayload(String(error));
+                    return respond(httpResponse, {
+                        status: 500,
+                        headers: [],
+                        payload: payload
+                    });
+                }
             }
             catch (error) {
                 let status = 500;

@@ -260,7 +260,7 @@ export class Schema {
 			lines.push(`\t\treturn {`);
 			lines.push(`\t\t\tacceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),`);
 			lines.push(`\t\t\tacceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),`);
-			lines.push(`\t\t\tprepareRequest: async () => {`);
+			lines.push(`\t\t\tvalidateRequest: async () => {`);
 			lines.push(`\t\t\t\tlet options = autoguard.api.combineKeyValuePairs(raw.parameters);`);
 			for (let component of route.path.components) {
 				if (is.present(component.type)) {
@@ -284,9 +284,13 @@ export class Schema {
 			lines.push(`\t\t\t\treturn {`);
 			lines.push(`\t\t\t\t\thandleRequest: async () => {`);
 			lines.push(`\t\t\t\t\t\tlet response = await routes["${tag}"](new autoguard.api.ClientRequest(request));`);
-			lines.push(`\t\t\t\t\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);
-			lines.push(`\t\t\t\t\t\tguard.as(response, "SERVER:response");`);
-			lines.push(`\t\t\t\t\t\treturn response;`);
+			lines.push(`\t\t\t\t\t\treturn {`);
+			lines.push(`\t\t\t\t\t\t\tvalidateResponse: async () => {`);
+			lines.push(`\t\t\t\t\t\t\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);
+			lines.push(`\t\t\t\t\t\t\t\tguard.as(response, "SERVER:response");`);
+			lines.push(`\t\t\t\t\t\t\t\treturn response;`);
+			lines.push(`\t\t\t\t\t\t\t}`);
+			lines.push(`\t\t\t\t\t\t};`);
 			lines.push(`\t\t\t\t\t}`);
 			lines.push(`\t\t\t\t};`);
 			lines.push(`\t\t\t}`);

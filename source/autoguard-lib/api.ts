@@ -180,8 +180,10 @@ export type RawResponse = {
 export type Endpoint = (raw: RawRequest) => {
 	acceptsComponents(): boolean;
 	acceptsMethod(): boolean;
-	prepareRequest(): Promise<{
-		handleRequest(): Promise<EndpointResponse>;
+	validateRequest(): Promise<{
+		handleRequest(): Promise<{
+			validateResponse(): Promise<EndpointResponse>;
+		}>
 	}>
 };
 
@@ -470,12 +472,21 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 	}
 	let endpoint = filteredEndpoints[0];
 	try {
-		let prepared = await endpoint.prepareRequest();
+		let valid = await endpoint.validateRequest();
 		try {
-			let response = await prepared.handleRequest();
-			let raw = transformResponse(response);
-			await respond(httpResponse, raw);
-			return;
+			let handled = await valid.handleRequest();
+			try {
+				let response = await handled.validateResponse();
+				let raw = transformResponse(response);
+				return await respond(httpResponse, raw);
+			} catch (error) {
+				let payload = serializePayload(String(error));
+				return respond(httpResponse, {
+					status: 500,
+					headers: [],
+					payload: payload
+				});
+			}
 		} catch (error) {
 			let status = 500;
 			if (Number.isInteger(error) && error >= 100 && error <= 999) {

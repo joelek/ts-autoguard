@@ -53,8 +53,10 @@ export declare type RawResponse = {
 export declare type Endpoint = (raw: RawRequest) => {
     acceptsComponents(): boolean;
     acceptsMethod(): boolean;
-    prepareRequest(): Promise<{
-        handleRequest(): Promise<EndpointResponse>;
+    validateRequest(): Promise<{
+        handleRequest(): Promise<{
+            validateResponse(): Promise<EndpointResponse>;
+        }>;
     }>;
 };
 export declare function getComponents(url: string): Array<string>;
