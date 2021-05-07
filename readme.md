@@ -260,19 +260,20 @@ NB: This project targets TypeScript 4 in strict mode.
 
 ## Roadmap
 
-* Release new major version.
-* Provide better type guard error messages for complex types.
-* Extend type guards with functionality for deep structured cloning.
-* Add server-side support for urlPrefix.
 * Set up template project with client and server.
+* Provide better type guard error messages for complex types.
+* Add server-side support for urlPrefix.
+* Extend type guards with functionality for deep structured cloning.
+* Add support for responding without a payload on error.
+* Structure code using TypeScript project references.
+* Modernize code to use string templates.
+* Add support for pluggable transport that can be used to aid unit testing.
+* Write unit tests.
 * Create middleware for handling range requests.
 * Create middleware for handling static requests.
-* Add support for default parameter and header values.
-* Add support for responding without a payload on error.
-* Modernize code to use string templates.
-* Structure code using TypeScript project references.
-* Create middleware to combine several APIs into one.
-* Add support for pluggable transport that can be used to aid unit testing.
+* Create middleware for combining several APIs into one.
+* Add support for default parameters and header values.
+* Add support for literal parameter values and headers as well unions thereof.
 * Add meta route that allows the schema to be downloaded.
 * Add support for generating JavaScript code directly.
 
