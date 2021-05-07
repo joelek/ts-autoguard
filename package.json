@@ -27,5 +27,5 @@
 		"test:rpc": "node ./build/autoguard-cli/index.js --root=./test/rpc/",
 		"test": "node ./build/autoguard-cli/index.js --root=./test/"
 	},
-	"version": "5.0.0"
+	"version": "5.0.1"
 }
