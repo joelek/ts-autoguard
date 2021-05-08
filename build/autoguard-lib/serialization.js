@@ -7,7 +7,7 @@ class MessageGuardError {
         this.subject = subject;
         this.path = path;
     }
-    getSubject() {
+    getSubjectType() {
         if (this.subject === null) {
             return "null";
         }
@@ -17,7 +17,7 @@ class MessageGuardError {
         return typeof this.subject;
     }
     toString() {
-        return `The value ${this.getSubject()} at ${this.path} is type-incompatible with the expected type: ${this.guard.ts()}`;
+        return `The type ${this.getSubjectType()} at ${this.path} is type-incompatible with the expected type: ${this.guard.ts()}`;
     }
 }
 exports.MessageGuardError = MessageGuardError;

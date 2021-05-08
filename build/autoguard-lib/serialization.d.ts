@@ -11,7 +11,7 @@ export declare class MessageGuardError<A extends Message> {
     private subject;
     private path;
     constructor(guard: MessageGuard<A>, subject: any, path: string);
-    private getSubject;
+    private getSubjectType;
     toString(): string;
 }
 export declare type MessageGuardTuple<A extends stdlib.routing.Message[]> = {
