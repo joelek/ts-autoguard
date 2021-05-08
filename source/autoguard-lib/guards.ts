@@ -19,6 +19,9 @@ export const Any = {
 			return false;
 		}
 		return true;
+	},
+	ts(eol: string = "\n"): string {
+		return `any`;
 	}
 };
 
@@ -32,7 +35,7 @@ export const Array = {
 					}
 					return subject;
 				}
-				throw "Expected an array at " + path + "!";
+				throw new serialization.MessageGuardError(this, subject, path);
 			},
 			is(subject: any): subject is Array<A> {
 				try {
@@ -41,6 +44,9 @@ export const Array = {
 					return false;
 				}
 				return true;
+			},
+			ts(eol: string = "\n"): string {
+				return `${guard.ts(eol)}[]`;
 			}
 		};
 	}
@@ -51,7 +57,7 @@ export const Boolean = {
 		if ((subject != null) && (subject.constructor === globalThis.Boolean)) {
 			return subject as boolean;
 		}
-		throw "Expected a boolean at " + path + "!";
+		throw new serialization.MessageGuardError(this, subject, path);
 	},
 	is(subject: any): subject is boolean {
 		try {
@@ -60,6 +66,9 @@ export const Boolean = {
 			return false;
 		}
 		return true;
+	},
+	ts(eol: string = "\n"): string {
+		return `boolean`;
 	}
 };
 
@@ -70,7 +79,7 @@ export const BooleanLiteral = {
 				if (subject === value) {
 					return subject;
 				}
-				throw "Expected " + value + " at " + path + "!";
+				throw new serialization.MessageGuardError(this, subject, path);
 			},
 			is(subject: any): subject is A {
 				try {
@@ -79,6 +88,9 @@ export const BooleanLiteral = {
 					return false;
 				}
 				return true;
+			},
+			ts(eol: string = "\n"): string {
+				return `${value}`;
 			}
 		};
 	}
@@ -100,6 +112,14 @@ export const Intersection = {
 					return false;
 				}
 				return true;
+			},
+			ts(eol: string = "\n"): string {
+				let lines = new globalThis.Array<string>();
+				for (let guard of guards) {
+					lines.push(guard.ts(eol));
+				}
+				let string = lines.join(" & ");
+				return string;
 			}
 		};
 	}
@@ -110,7 +130,7 @@ export const Null = {
 		if (subject === null) {
 			return subject;
 		}
-		throw "Expected null at " + path + "!";
+		throw new serialization.MessageGuardError(this, subject, path);
 	},
 	is(subject: any): subject is null {
 		try {
@@ -119,6 +139,9 @@ export const Null = {
 			return false;
 		}
 		return true;
+	},
+	ts(eol: string = "\n"): string {
+		return `null`;
 	}
 };
 
@@ -127,7 +150,7 @@ export const Number = {
 		if ((subject != null) && (subject.constructor === globalThis.Number)) {
 			return subject as number;
 		}
-		throw "Expected a number at " + path + "!";
+		throw new serialization.MessageGuardError(this, subject, path);
 	},
 	is(subject: any): subject is number {
 		try {
@@ -136,6 +159,9 @@ export const Number = {
 			return false;
 		}
 		return true;
+	},
+	ts(eol: string = "\n"): string {
+		return `number`;
 	}
 };
 
@@ -146,7 +172,7 @@ export const NumberLiteral = {
 				if (subject === value) {
 					return subject;
 				}
-				throw "Expected " + value + " at " + path + "!";
+				throw new serialization.MessageGuardError(this, subject, path);
 			},
 			is(subject: any): subject is A {
 				try {
@@ -155,6 +181,9 @@ export const NumberLiteral = {
 					return false;
 				}
 				return true;
+			},
+			ts(eol: string = "\n"): string {
+				return `${value}`;
 			}
 		};
 	}
@@ -170,7 +199,7 @@ export const Object = {
 					}
 					return subject;
 				}
-				throw "Expected an object at " + path + "!";
+				throw new serialization.MessageGuardError(this, subject, path);
 			},
 			is(subject: any): subject is MakeUndefinedOptional<A> {
 				try {
@@ -179,6 +208,13 @@ export const Object = {
 					return false;
 				}
 				return true;
+			},
+			ts(eol: string = "\n"): string {
+				let lines = new globalThis.Array<string>();
+				for (let [key, value] of globalThis.Object.entries<serialization.MessageGuard<any>>(guards)) {
+					lines.push(`\t"${key}": ${value.ts(eol + "\t")}`);
+				}
+				return lines.length > 0 ? "{" + eol + lines.join("," + eol) + eol + "}" : "{}";
 			}
 		};
 	}
@@ -195,7 +231,7 @@ export const Record = {
 					}
 					return subject;
 				}
-				throw "Expected a record at " + path + "!";
+				throw new serialization.MessageGuardError(this, subject, path);
 			},
 			is(subject: any): subject is Record<string, undefined | A> {
 				try {
@@ -204,6 +240,9 @@ export const Record = {
 					return false;
 				}
 				return true;
+			},
+			ts(eol: string = "\n"): string {
+				return `{ [key]: ${guard.ts(eol)} }`;
 			}
 		};
 	}
@@ -217,6 +256,9 @@ export const Reference = {
 			},
 			is(subject: any): subject is A {
 				return guard().is(subject);
+			},
+			ts(eol: string = "\n"): string {
+				return guard().ts(eol);
 			}
 		};
 	}
@@ -227,7 +269,7 @@ export const String = {
 		if ((subject != null) && (subject.constructor === globalThis.String)) {
 			return subject as string;
 		}
-		throw "Expected a string at " + path + "!";
+		throw new serialization.MessageGuardError(this, subject, path);
 	},
 	is(subject: any): subject is string {
 		try {
@@ -236,6 +278,9 @@ export const String = {
 			return false;
 		}
 		return true;
+	},
+	ts(eol: string = "\n"): string {
+		return "string";
 	}
 };
 
@@ -246,7 +291,7 @@ export const StringLiteral = {
 				if (subject === value) {
 					return subject;
 				}
-				throw "Expected \"" + value + "\" at " + path + "!";
+				throw new serialization.MessageGuardError(this, subject, path);
 			},
 			is(subject: any): subject is A {
 				try {
@@ -255,6 +300,9 @@ export const StringLiteral = {
 					return false;
 				}
 				return true;
+			},
+			ts(eol: string = "\n"): string {
+				return `"${value}"`;
 			}
 		};
 	}
@@ -270,7 +318,7 @@ export const Tuple = {
 					}
 					return subject as TupleOf<A>;
 				}
-				throw "Expected a tuple at " + path + "!";
+				throw new serialization.MessageGuardError(this, subject, path);
 			},
 			is(subject: any): subject is TupleOf<A> {
 				try {
@@ -279,6 +327,13 @@ export const Tuple = {
 					return false;
 				}
 				return true;
+			},
+			ts(eol: string = "\n"): string {
+				let lines = new globalThis.Array<string>();
+				for (let guard of guards) {
+					lines.push(`\t${guard.ts(eol + "\t")}`);
+				}
+				return lines.length > 0 ? "[" + eol + lines.join("," + eol) + eol + "]" : "[]";
 			}
 		};
 	}
@@ -289,7 +344,7 @@ export const Undefined = {
 		if (subject === undefined) {
 			return subject;
 		}
-		throw "Expected undefined at " + path + "!";
+		throw new serialization.MessageGuardError(this, subject, path);
 	},
 	is(subject: any): subject is undefined {
 		try {
@@ -298,6 +353,9 @@ export const Undefined = {
 			return false;
 		}
 		return true;
+	},
+	ts(eol: string = "\n"): string {
+		return "undefined";
 	}
 };
 
@@ -310,7 +368,7 @@ export const Union = {
 						return guard.as(subject, path);
 					} catch (error) {}
 				}
-				throw "Expected a union at " + path + "!";
+				throw new serialization.MessageGuardError(this, subject, path);
 			},
 			is(subject: any): subject is UnionOf<A> {
 				try {
@@ -319,6 +377,14 @@ export const Union = {
 					return false;
 				}
 				return true;
+			},
+			ts(eol: string = "\n"): string {
+				let lines = new globalThis.Array<string>();
+				for (let guard of guards) {
+					lines.push(guard.ts(eol));
+				}
+				let string = lines.join(" | ");
+				return string;
 			}
 		};
 	}

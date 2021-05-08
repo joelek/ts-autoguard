@@ -7,6 +7,33 @@ export type MessageMap<A> = stdlib.routing.MessageMap<A>;
 export type MessageGuard<A extends stdlib.routing.Message> = {
 	as(subject: any, path?: string): A;
 	is(subject: any, path?: string): subject is A;
+	ts(eol?: string): string;
+};
+
+export class MessageGuardError<A extends Message> {
+	private guard: MessageGuard<A>;
+	private subject: any;
+	private path: string;
+
+	constructor(guard: MessageGuard<A>, subject: any, path: string) {
+		this.guard = guard;
+		this.subject = subject;
+		this.path = path;
+	}
+
+	private getSubjectType(): string {
+		if (this.subject === null) {
+			return "null";
+		}
+		if (this.subject instanceof Array) {
+			return "array";
+		}
+		return typeof this.subject;
+	}
+
+	toString(): string {
+		return `The type ${this.getSubjectType()} at ${this.path} is type-incompatible with the expected type: ${this.guard.ts()}`;
+	}
 };
 
 export type MessageGuardTuple<A extends stdlib.routing.Message[]> = {

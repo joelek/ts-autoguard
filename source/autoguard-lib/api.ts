@@ -35,6 +35,9 @@ export const AsyncBinary = {
 			return false;
 		}
 		return true;
+	},
+	ts(eol: string = "\n"): string {
+		return `AsyncBinary`;
 	}
 };
 
@@ -57,6 +60,9 @@ export const SyncBinary = {
 			return false;
 		}
 		return true;
+	},
+	ts(eol: string = "\n"): string {
+		return `SyncBinary`;
 	}
 };
 
