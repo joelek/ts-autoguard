@@ -323,20 +323,29 @@ export async function collectPayload(binary: Binary): Promise<Uint8Array> {
 	return payload;
 };
 
-export function serializePayload(payload: JSON | undefined): Binary {
-	if (payload === undefined) {
-		return [];
-	}
-	let string = JSON.stringify(payload);
+export function serializeStringPayload(string: string): Binary {
 	let encoder = new TextEncoder();
 	let array = encoder.encode(string);
 	return [array];
 };
 
-export async function deserializePayload(binary: Binary): Promise<JSON | undefined> {
+export function serializePayload(payload: JSON | undefined): Binary {
+	if (payload === undefined) {
+		return [];
+	}
+	let string = JSON.stringify(payload);
+	return serializeStringPayload(string);
+};
+
+export async function deserializeStringPayload(binary: Binary): Promise<string> {
 	let buffer = await collectPayload(binary);
 	let decoder = new TextDecoder();
 	let string = decoder.decode(buffer);
+	return string;
+};
+
+export async function deserializePayload(binary: Binary): Promise<JSON | undefined> {
+	let string = await deserializeStringPayload(binary);
 	return string === "" ? undefined : JSON.parse(string);
 };
 
@@ -480,7 +489,7 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 				let raw = transformResponse(response);
 				return await respond(httpResponse, raw);
 			} catch (error) {
-				let payload = serializePayload(String(error));
+				let payload = serializeStringPayload(String(error));
 				return respond(httpResponse, {
 					status: 500,
 					headers: [],
@@ -499,7 +508,7 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 			});
 		}
 	} catch (error) {
-		let payload = serializePayload(String(error));
+		let payload = serializeStringPayload(String(error));
 		return respond(httpResponse, {
 			status: 400,
 			headers: [],
