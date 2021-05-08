@@ -16,7 +16,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.route = exports.combineRawHeaders = exports.respond = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.serializePayload = exports.collectPayload = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
+exports.route = exports.combineRawHeaders = exports.respond = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
 const guards = require("./guards");
 exports.Options = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
 exports.Headers = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
@@ -38,6 +38,9 @@ exports.AsyncBinary = {
             return false;
         }
         return true;
+    },
+    ts(eol = "\n") {
+        return `AsyncBinary`;
     }
 };
 exports.SyncBinary = {
@@ -58,6 +61,9 @@ exports.SyncBinary = {
             return false;
         }
         return true;
+    },
+    ts(eol = "\n") {
+        return `SyncBinary`;
     }
 };
 exports.Binary = guards.Union.of(exports.AsyncBinary, exports.SyncBinary);
@@ -263,22 +269,35 @@ function collectPayload(binary) {
 }
 exports.collectPayload = collectPayload;
 ;
+function serializeStringPayload(string) {
+    let encoder = new TextEncoder();
+    let array = encoder.encode(string);
+    return [array];
+}
+exports.serializeStringPayload = serializeStringPayload;
+;
 function serializePayload(payload) {
     if (payload === undefined) {
         return [];
     }
     let string = JSON.stringify(payload);
-    let encoder = new TextEncoder();
-    let array = encoder.encode(string);
-    return [array];
+    return serializeStringPayload(string);
 }
 exports.serializePayload = serializePayload;
 ;
-function deserializePayload(binary) {
+function deserializeStringPayload(binary) {
     return __awaiter(this, void 0, void 0, function* () {
         let buffer = yield collectPayload(binary);
         let decoder = new TextDecoder();
         let string = decoder.decode(buffer);
+        return string;
+    });
+}
+exports.deserializeStringPayload = deserializeStringPayload;
+;
+function deserializePayload(binary) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let string = yield deserializeStringPayload(binary);
         return string === "" ? undefined : JSON.parse(string);
     });
 }
@@ -449,7 +468,7 @@ function route(endpoints, httpRequest, httpResponse) {
                     return yield respond(httpResponse, raw);
                 }
                 catch (error) {
-                    let payload = serializePayload(String(error));
+                    let payload = serializeStringPayload(String(error));
                     return respond(httpResponse, {
                         status: 500,
                         headers: [],
@@ -470,7 +489,7 @@ function route(endpoints, httpRequest, httpResponse) {
             }
         }
         catch (error) {
-            let payload = serializePayload(String(error));
+            let payload = serializeStringPayload(String(error));
             return respond(httpResponse, {
                 status: 400,
                 headers: [],

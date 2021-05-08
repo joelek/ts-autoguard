@@ -6,11 +6,13 @@ export declare type AsyncBinary = AsyncIterable<Uint8Array>;
 export declare const AsyncBinary: {
     as(subject: any, path?: string): AsyncBinary;
     is(subject: any): subject is AsyncBinary;
+    ts(eol?: string): string;
 };
 export declare type SyncBinary = Iterable<Uint8Array>;
 export declare const SyncBinary: {
     as(subject: any, path?: string): SyncBinary;
     is(subject: any): subject is SyncBinary;
+    ts(eol?: string): string;
 };
 export declare const Binary: import("./serialization").MessageGuard<AsyncBinary | SyncBinary>;
 export declare type Binary = ReturnType<typeof Binary.as>;
@@ -101,7 +103,9 @@ export declare type Server<A extends RequestMap<A>, B extends ResponseMap<B>> = 
     [C in keyof A & keyof B]: (request: ClientRequest<A[C]>) => Promise<B[C]>;
 };
 export declare function collectPayload(binary: Binary): Promise<Uint8Array>;
+export declare function serializeStringPayload(string: string): Binary;
 export declare function serializePayload(payload: JSON | undefined): Binary;
+export declare function deserializeStringPayload(binary: Binary): Promise<string>;
 export declare function deserializePayload(binary: Binary): Promise<JSON | undefined>;
 export declare function getContentType(payload: Payload): string;
 export declare function transformResponse<A extends EndpointResponse>(response: A): RawResponse;

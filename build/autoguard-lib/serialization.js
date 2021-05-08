@@ -1,6 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MessageSerializer = void 0;
+exports.MessageSerializer = exports.MessageGuardError = void 0;
+class MessageGuardError {
+    constructor(guard, subject, path) {
+        this.guard = guard;
+        this.subject = subject;
+        this.path = path;
+    }
+    getSubject() {
+        if (this.subject === null) {
+            return "null";
+        }
+        if (this.subject instanceof Array) {
+            return "array";
+        }
+        return typeof this.subject;
+    }
+    toString() {
+        return `The value ${this.getSubject()} at ${this.path} is type-incompatible with the expected type: ${this.guard.ts()}`;
+    }
+}
+exports.MessageGuardError = MessageGuardError;
+;
 class MessageSerializer {
     constructor(guards) {
         this.guards = guards;

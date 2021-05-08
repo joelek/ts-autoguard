@@ -17,6 +17,7 @@ declare type MakeUndefinedOptional<A> = {
 export declare const Any: {
     as(subject: any, path?: string): any;
     is(subject: any): subject is any;
+    ts(eol?: string): string;
 };
 export declare const Array: {
     of<A extends unknown>(guard: serialization.MessageGuard<A>): serialization.MessageGuard<A[]>;
@@ -24,6 +25,7 @@ export declare const Array: {
 export declare const Boolean: {
     as(subject: any, path?: string): boolean;
     is(subject: any): subject is boolean;
+    ts(eol?: string): string;
 };
 export declare const BooleanLiteral: {
     of<A extends boolean>(value: A): serialization.MessageGuard<A>;
@@ -34,10 +36,12 @@ export declare const Intersection: {
 export declare const Null: {
     as(subject: any, path?: string): null;
     is(subject: any): subject is null;
+    ts(eol?: string): string;
 };
 export declare const Number: {
     as(subject: any, path?: string): number;
     is(subject: any): subject is number;
+    ts(eol?: string): string;
 };
 export declare const NumberLiteral: {
     of<A extends number>(value: A): serialization.MessageGuard<A>;
@@ -54,6 +58,7 @@ export declare const Reference: {
 export declare const String: {
     as(subject: any, path?: string): string;
     is(subject: any): subject is string;
+    ts(eol?: string): string;
 };
 export declare const StringLiteral: {
     of<A extends string>(value: A): serialization.MessageGuard<A>;
@@ -64,6 +69,7 @@ export declare const Tuple: {
 export declare const Undefined: {
     as(subject: any, path?: string): undefined;
     is(subject: any): subject is undefined;
+    ts(eol?: string): string;
 };
 export declare const Union: {
     of<A extends any[]>(...guards_0: serialization.MessageGuardTuple<A>): serialization.MessageGuard<UnionOf<A>>;
