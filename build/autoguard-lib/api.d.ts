@@ -114,4 +114,4 @@ export declare function acceptsMethod(one: string, two: string): boolean;
 export declare function xhr(raw: RawRequest, urlPrefix?: string): Promise<RawResponse>;
 export declare function respond(httpResponse: ResponseLike, raw: RawResponse): Promise<void>;
 export declare function combineRawHeaders(raw: Array<string>): Array<string>;
-export declare function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike): Promise<void>;
+export declare function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike, urlPrefix?: string): Promise<void>;

@@ -233,7 +233,7 @@ class Schema {
         lines.push(`import * as autoguard from "@joelek/ts-autoguard";`);
         lines.push(`import * as shared from "./index";`);
         lines.push(``);
-        lines.push(`export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Requests, shared.Autoguard.Responses>, options?: Partial<{}>): autoguard.api.RequestListener => {`);
+        lines.push(`export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Requests, shared.Autoguard.Responses>, options?: Partial<{ urlPrefix: string }>): autoguard.api.RequestListener => {`);
         lines.push(`\tlet endpoints = new Array<autoguard.api.Endpoint>();`);
         for (let route of this.routes) {
             let tag = makeRouteTag(route);
@@ -289,7 +289,7 @@ class Schema {
             lines.push(`\t\t};`);
             lines.push(`\t});`);
         }
-        lines.push(`\treturn (request, response) => autoguard.api.route(endpoints, request, response);`);
+        lines.push(`\treturn (request, response) => autoguard.api.route(endpoints, request, response, options?.urlPrefix);`);
         lines.push(`};`);
         lines.push(``);
         return lines.join(options.eol);

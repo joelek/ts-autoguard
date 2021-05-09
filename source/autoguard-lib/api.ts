@@ -452,9 +452,13 @@ export function combineRawHeaders(raw: Array<string>): Array<string> {
 	return headers;
 };
 
-export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike): Promise<void> {
+export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike, urlPrefix: string = ""): Promise<void> {
 	let method = httpRequest.method ?? "GET";
 	let url = httpRequest.url ?? "";
+	if (!url.startsWith(urlPrefix)) {
+		throw `Expected url "${url}" to have prefix "${urlPrefix}"!`;
+	}
+	url = url.slice(urlPrefix?.length);
 	let components = getComponents(url);
 	let parameters = getParameters(url);
 	let headers = getHeaders(combineRawHeaders(httpRequest.rawHeaders));

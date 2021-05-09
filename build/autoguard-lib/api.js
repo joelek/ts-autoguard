@@ -422,11 +422,15 @@ function combineRawHeaders(raw) {
 }
 exports.combineRawHeaders = combineRawHeaders;
 ;
-function route(endpoints, httpRequest, httpResponse) {
+function route(endpoints, httpRequest, httpResponse, urlPrefix = "") {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         let method = (_a = httpRequest.method) !== null && _a !== void 0 ? _a : "GET";
         let url = (_b = httpRequest.url) !== null && _b !== void 0 ? _b : "";
+        if (!url.startsWith(urlPrefix)) {
+            throw `Expected url "${url}" to have prefix "${urlPrefix}"!`;
+        }
+        url = url.slice(urlPrefix === null || urlPrefix === void 0 ? void 0 : urlPrefix.length);
         let components = getComponents(url);
         let parameters = getParameters(url);
         let headers = getHeaders(combineRawHeaders(httpRequest.rawHeaders));

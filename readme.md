@@ -261,7 +261,6 @@ NB: This project targets TypeScript 4 in strict mode.
 ## Roadmap
 
 * Set up template project with client and server.
-* Add server-side support for urlPrefix.
 * Extend type guards with functionality for deep structured cloning.
 * Add support for responding without a payload on error.
 * Structure code using TypeScript project references.
