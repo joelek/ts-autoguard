@@ -185,7 +185,10 @@ export class Schema {
 		lines.push(`import * as autoguard from "@joelek/ts-autoguard";`);
 		lines.push(`import * as shared from "./index";`);
 		lines.push(``);
-		lines.push(`export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.api.Client<shared.Autoguard.Requests, shared.Autoguard.Responses> => ({`);
+		lines.push(`export const makeClient = (options?: Partial<{`);
+		lines.push(`\turlPrefix: string,`);
+		lines.push(`\trequestHandler: autoguard.api.RequestHandler`);
+		lines.push(`}>): autoguard.api.Client<shared.Autoguard.Requests, shared.Autoguard.Responses> => ({`);
 		for (let route of this.routes) {
 			let tag = makeRouteTag(route);
 			lines.push(`\t"${tag}": async (request) => {`);
@@ -213,7 +216,8 @@ export class Schema {
 			} else {
 				lines.push(`\t\tlet payload = autoguard.api.serializePayload(request.payload);`);
 			}
-			lines.push(`\t\tlet raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);`);
+			lines.push(`\t\tlet requestHandler = options?.requestHandler ?? autoguard.api.xhr;`);
+			lines.push(`\t\tlet raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);`);
 			lines.push(`\t\t{`);
 			lines.push(`\t\t\tlet status = raw.status;`);
 			lines.push(`\t\t\tlet headers = autoguard.api.combineKeyValuePairs(raw.headers);`);

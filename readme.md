@@ -265,7 +265,6 @@ NB: This project targets TypeScript 4 in strict mode.
 * Add support for responding without a payload on error.
 * Structure code using TypeScript project references.
 * Modernize code to use string templates.
-* Add support for pluggable transport that can be used to aid unit testing.
 * Write unit tests.
 * Create middleware for handling range requests.
 * Create middleware for handling static requests.

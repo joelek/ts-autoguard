@@ -399,6 +399,8 @@ export function acceptsMethod(one: string, two: string): boolean {
 	return one === two;
 };
 
+export type RequestHandler = (raw: RawRequest, urlPrefix?: string) => Promise<RawResponse>;
+
 export function xhr(raw: RawRequest, urlPrefix?: string): Promise<RawResponse> {
 	return new Promise(async (resolve, reject) => {
 		let xhr = new XMLHttpRequest();
