@@ -428,6 +428,41 @@ export function xhr(raw: RawRequest, urlPrefix?: string): Promise<RawResponse> {
 	});
 };
 
+export type NodeRequestHandlerOptions = Partial<Omit<import("https").RequestOptions, keyof import("http").RequestOptions>>;
+
+export function makeNodeRequestHandler(options?: NodeRequestHandlerOptions): RequestHandler {
+	return (raw, urlPrefix) => {
+		let libhttp = require("http") as typeof import("http");
+		let libhttps = require("https") as typeof import("https");
+		let lib = (urlPrefix ?? "").startsWith("https:") ? libhttps : libhttp;
+		return new Promise(async (resolve, reject) => {
+			let headers: { [key: string]: string } = {};
+			for (let header of raw.headers) {
+				headers[header[0]] = header[1];
+			}
+			let url = urlPrefix ?? "";
+			url += serializeComponents(raw.components);
+			url += serializeParameters(raw.parameters);
+			let request = lib.request(url, {
+				...options,
+				method: raw.method,
+				headers: headers,
+			}, (response) => {
+				let status = response.statusCode ?? 200;
+				let headers = getHeaders(combineRawHeaders(response.rawHeaders));
+				let payload = {
+					[Symbol.asyncIterator]: () => response[Symbol.asyncIterator]()
+				};
+				resolve({ status, headers, payload });
+			});
+			request.on("abort", reject);
+			request.on("error", reject);
+			request.write(await collectPayload(raw.payload));
+			request.end();
+		});
+	};
+};
+
 export async function respond(httpResponse: ResponseLike, raw: RawResponse): Promise<void> {
 	for (let header of raw.headers) {
 		httpResponse.setHeader(header[0], header[1]);

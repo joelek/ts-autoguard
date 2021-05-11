@@ -1,0 +1,3 @@
+route POST:/<component:string>/ ? <{ parameter: string }>
+	<= <{ header: string }> { member: string }
+	=> <{ header: string }> { member: string };

@@ -16,7 +16,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.route = exports.combineRawHeaders = exports.respond = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
+exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
 const guards = require("./guards");
 exports.Options = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
 exports.Headers = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
@@ -380,6 +380,37 @@ function xhr(raw, urlPrefix) {
     }));
 }
 exports.xhr = xhr;
+;
+function makeNodeRequestHandler(options) {
+    return (raw, urlPrefix) => {
+        let libhttp = require("http");
+        let libhttps = require("https");
+        let lib = (urlPrefix !== null && urlPrefix !== void 0 ? urlPrefix : "").startsWith("https:") ? libhttps : libhttp;
+        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+            let headers = {};
+            for (let header of raw.headers) {
+                headers[header[0]] = header[1];
+            }
+            let url = urlPrefix !== null && urlPrefix !== void 0 ? urlPrefix : "";
+            url += serializeComponents(raw.components);
+            url += serializeParameters(raw.parameters);
+            let request = lib.request(url, Object.assign(Object.assign({}, options), { method: raw.method, headers: headers }), (response) => {
+                var _a;
+                let status = (_a = response.statusCode) !== null && _a !== void 0 ? _a : 200;
+                let headers = getHeaders(combineRawHeaders(response.rawHeaders));
+                let payload = {
+                    [Symbol.asyncIterator]: () => response[Symbol.asyncIterator]()
+                };
+                resolve({ status, headers, payload });
+            });
+            request.on("abort", reject);
+            request.on("error", reject);
+            request.write(yield collectPayload(raw.payload));
+            request.end();
+        }));
+    };
+}
+exports.makeNodeRequestHandler = makeNodeRequestHandler;
 ;
 function respond(httpResponse, raw) {
     var e_2, _a;

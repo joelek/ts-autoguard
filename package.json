@@ -25,6 +25,7 @@
 		"test:recursion": "node ./build/autoguard-cli/index.js --root=./test/recursion/",
 		"test:modules": "node ./build/autoguard-cli/index.js --root=./test/modules/",
 		"test:rpc": "node ./build/autoguard-cli/index.js --root=./test/rpc/",
+		"test:node": "node ./build/autoguard-cli/index.js --root=./test/node/",
 		"test": "node ./build/autoguard-cli/index.js --root=./test/"
 	},
 	"version": "5.1.0"

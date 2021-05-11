@@ -113,6 +113,8 @@ export declare function acceptsComponents(one: Array<string>, two: Array<[string
 export declare function acceptsMethod(one: string, two: string): boolean;
 export declare type RequestHandler = (raw: RawRequest, urlPrefix?: string) => Promise<RawResponse>;
 export declare function xhr(raw: RawRequest, urlPrefix?: string): Promise<RawResponse>;
+export declare type NodeRequestHandlerOptions = Partial<Omit<import("https").RequestOptions, keyof import("http").RequestOptions>>;
+export declare function makeNodeRequestHandler(options?: NodeRequestHandlerOptions): RequestHandler;
 export declare function respond(httpResponse: ResponseLike, raw: RawResponse): Promise<void>;
 export declare function combineRawHeaders(raw: Array<string>): Array<string>;
 export declare function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike, urlPrefix?: string): Promise<void>;
