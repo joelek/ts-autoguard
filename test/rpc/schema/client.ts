@@ -3,7 +3,10 @@
 import * as autoguard from "../../../";
 import * as shared from "./index";
 
-export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.api.Client<shared.Autoguard.Requests, shared.Autoguard.Responses> => ({
+export const makeClient = (options?: Partial<{
+	urlPrefix: string,
+	requestHandler: autoguard.api.RequestHandler
+}>): autoguard.api.Client<shared.Autoguard.Requests, shared.Autoguard.Responses> => ({
 	"GET:/": async (request) => {
 		let guard = shared.Autoguard.Requests["GET:/"];
 		guard.as(request, "CLIENT:request");
@@ -13,7 +16,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -32,7 +36,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -51,7 +56,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -71,7 +77,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -91,7 +98,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -110,7 +118,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, ["dynamic_boolean_component"]);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -129,7 +138,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, ["dynamic_number_component"]);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -148,7 +158,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, ["dynamic_string_component"]);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -168,7 +179,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, ["dynamic_component_one","dynamic_component_two"]);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -187,7 +199,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, ["quoted key"]);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -206,7 +219,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -225,7 +239,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -244,7 +259,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -263,7 +279,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -282,7 +299,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -301,7 +319,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -320,7 +339,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -339,7 +359,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -358,7 +379,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -377,7 +399,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -396,7 +419,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -415,7 +439,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -434,7 +459,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -453,7 +479,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -472,7 +499,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -491,7 +519,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -510,7 +539,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -529,7 +559,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -548,7 +579,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -567,7 +599,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -586,7 +619,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -606,7 +640,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -626,7 +661,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -646,7 +682,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -666,7 +703,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -686,7 +724,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -706,7 +745,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -727,7 +767,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -747,7 +788,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -766,7 +808,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -785,7 +828,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -804,7 +848,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -823,7 +868,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -843,7 +889,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -862,7 +909,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = request.payload;
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -881,7 +929,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, []);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
@@ -901,7 +950,8 @@ export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.
 		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, ["number"]);
 		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
 		let payload = autoguard.api.serializePayload(request.payload);
-		let raw = await autoguard.api.xhr({ method, components, parameters, headers, payload }, options?.urlPrefix);
+		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
+		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);

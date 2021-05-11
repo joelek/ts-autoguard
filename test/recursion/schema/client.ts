@@ -3,5 +3,8 @@
 import * as autoguard from "../../../";
 import * as shared from "./index";
 
-export const makeClient = (options?: Partial<{ urlPrefix: string }>): autoguard.api.Client<shared.Autoguard.Requests, shared.Autoguard.Responses> => ({
+export const makeClient = (options?: Partial<{
+	urlPrefix: string,
+	requestHandler: autoguard.api.RequestHandler
+}>): autoguard.api.Client<shared.Autoguard.Requests, shared.Autoguard.Responses> => ({
 });
