@@ -641,6 +641,20 @@ export function parseRangeHeader(value: Primitive | undefined, size: number): {
 	return s416;
 };
 
+export function getContentTypeFromExtension(extension: string): string | undefined {
+	let extensions: Record<string, string | undefined> = {
+		".css": "text/css",
+		".htm": "text/html",
+		".html": "text/html",
+		".jpg": "image/jpeg",
+		".jpeg": "image/jpeg",
+		".js": "text/javascript",
+		".json": "application/json",
+		".png": "image/png"
+	};
+	return extensions[extension];
+};
+
 export function makeReadStreamResponse(pathPrefix: string, pathSuffix: string, request: ClientRequest<EndpointRequest>): EndpointResponse & { payload: Binary } {
 	let libfs = require("fs") as typeof import("fs");
 	let libpath = require("path") as typeof import("path");
@@ -665,7 +679,7 @@ export function makeReadStreamResponse(pathPrefix: string, pathSuffix: string, r
 			"Accept-Ranges": "bytes",
 			"Content-Length": `${range.length}`,
 			"Content-Range": range.length > 0 ? `bytes ${range.offset}-${range.offset+range.length-1}/${range.size}` : `bytes */${range.size}`,
-			"Content-Type": "unknown"
+			"Content-Type": getContentTypeFromExtension(libpath.extname(path))
 		},
 		payload: stream
 	};

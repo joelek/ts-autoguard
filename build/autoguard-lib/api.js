@@ -16,7 +16,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeReadStreamResponse = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
+exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
 const guards = require("./guards");
 const is = require("./is");
 exports.Options = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
@@ -609,6 +609,21 @@ function parseRangeHeader(value, size) {
 }
 exports.parseRangeHeader = parseRangeHeader;
 ;
+function getContentTypeFromExtension(extension) {
+    let extensions = {
+        ".css": "text/css",
+        ".htm": "text/html",
+        ".html": "text/html",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".js": "text/javascript",
+        ".json": "application/json",
+        ".png": "image/png"
+    };
+    return extensions[extension];
+}
+exports.getContentTypeFromExtension = getContentTypeFromExtension;
+;
 function makeReadStreamResponse(pathPrefix, pathSuffix, request) {
     let libfs = require("fs");
     let libpath = require("path");
@@ -633,7 +648,7 @@ function makeReadStreamResponse(pathPrefix, pathSuffix, request) {
             "Accept-Ranges": "bytes",
             "Content-Length": `${range.length}`,
             "Content-Range": range.length > 0 ? `bytes ${range.offset}-${range.offset + range.length - 1}/${range.size}` : `bytes */${range.size}`,
-            "Content-Type": "unknown"
+            "Content-Type": getContentTypeFromExtension(libpath.extname(path))
         },
         payload: stream
     };

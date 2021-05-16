@@ -124,6 +124,7 @@ export declare function parseRangeHeader(value: Primitive | undefined, size: num
     length: number;
     size: number;
 };
+export declare function getContentTypeFromExtension(extension: string): string | undefined;
 export declare function makeReadStreamResponse(pathPrefix: string, pathSuffix: string, request: ClientRequest<EndpointRequest>): EndpointResponse & {
     payload: Binary;
 };
