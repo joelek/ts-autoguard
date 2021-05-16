@@ -11,6 +11,8 @@ guard Object: {
 route GET:/objects/<object_id:number>/ => Object;
 ```
 
+Template project with working client and server now available at https://github.com/joelek/autoguard-template.
+
 ## Sponsorship
 
 The continued development of this software depends on your sponsorship. Please consider sponsoring this project if you find that the software creates value for you and your organization.
@@ -262,7 +264,6 @@ NB: This project targets TypeScript 4 in strict mode.
 
 * Add support for wildcards in paths.
 * Provide access to Socket instance in endpoints.
-* Set up template project with client and server.
 * Extend type guards with functionality for deep structured cloning.
 * Add support for responding without a payload on error.
 * Structure code using TypeScript project references.
