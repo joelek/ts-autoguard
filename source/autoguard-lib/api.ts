@@ -1,4 +1,5 @@
 import * as guards from "./guards";
+import * as is from "./is";
 
 export const Options = guards.Record.of(guards.Union.of(
 	guards.Boolean,
@@ -564,6 +565,82 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 	}
 };
 
+export function parseRangeHeader(value: Primitive | undefined, size: number): {
+	status: number,
+	offset: number,
+	length: number
+	size: number
+} {
+	if (is.absent(value)) {
+		return {
+			status: 200,
+			offset: 0,
+			length: size,
+			size: size
+		};
+	}
+	let s416 = {
+		status: 416,
+		offset: 0,
+		length: 0,
+		size: size
+	};
+	let parts: RegExpExecArray | undefined;
+	parts = /^bytes[=]([0-9]+)[-]$/.exec(String(value)) ?? undefined;
+	if (is.present(parts)) {
+		let one = Number.parseInt(parts[1], 10);
+		if (one >= size) {
+			return s416;
+		}
+		return {
+			status: 206,
+			offset: one,
+			length: size - one,
+			size: size
+		};
+	}
+	parts = /^bytes[=]([0-9]+)[-]([0-9]+)$/.exec(String(value)) ?? undefined;
+	if (is.present(parts)) {
+		let one = Number.parseInt(parts[1], 10);
+		let two = Number.parseInt(parts[2], 10);
+		if (two < one) {
+			return s416;
+		}
+		if (one >= size) {
+			return s416;
+		}
+		if (two >= size) {
+			two = size - 1;
+		}
+		return {
+			status: 206,
+			offset: one,
+			length: two - one + 1,
+			size: size
+		};
+	}
+	parts = /^bytes[=][-]([0-9]+)$/.exec(String(value)) ?? undefined;
+	if (is.present(parts)) {
+		let one = Number.parseInt(parts[1], 10);
+		if (one < 1) {
+			return s416;
+		}
+		if (size < 1) {
+			return s416;
+		}
+		if (one > size) {
+			one = size;
+		}
+		return {
+			status: 206,
+			offset: size - one,
+			length: one,
+			size: size
+		};
+	}
+	return s416;
+};
+
 export function makeReadStreamResponse(pathPrefix: string, pathSuffix: string, request: ClientRequest<EndpointRequest>): EndpointResponse & { payload: Binary } {
 	let libfs = require("fs") as typeof import("fs");
 	let libpath = require("path") as typeof import("path");
@@ -577,13 +654,19 @@ export function makeReadStreamResponse(pathPrefix: string, pathSuffix: string, r
 	if (!libfs.existsSync(path)) {
 		throw 404;
 	}
-	// TODO: Add support for range requests.
-	let payload = libfs.createReadStream(path);
+	let range = parseRangeHeader(request.headers().range, libfs.statSync(path).size);
+	let stream = libfs.createReadStream(path, {
+		start: range.offset,
+		end: range.offset + range.length
+	});
 	return {
-		status: 200,
+		status: range.status,
 		headers: {
+			"Accept-Ranges": "bytes",
+			"Content-Length": `${range.length}`,
+			"Content-Range": range.length > 0 ? `bytes ${range.offset}-${range.offset+range.length-1}/${range.size}` : `bytes */${range.size}`,
 			"Content-Type": "unknown"
 		},
-		payload: payload
+		payload: stream
 	};
 };

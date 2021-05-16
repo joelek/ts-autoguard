@@ -16,8 +16,9 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeReadStreamResponse = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
+exports.makeReadStreamResponse = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
 const guards = require("./guards");
+const is = require("./is");
 exports.Options = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
 exports.Headers = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
 exports.AsyncBinary = {
@@ -535,6 +536,79 @@ function route(endpoints, httpRequest, httpResponse, urlPrefix = "") {
 }
 exports.route = route;
 ;
+function parseRangeHeader(value, size) {
+    var _a, _b, _c;
+    if (is.absent(value)) {
+        return {
+            status: 200,
+            offset: 0,
+            length: size,
+            size: size
+        };
+    }
+    let s416 = {
+        status: 416,
+        offset: 0,
+        length: 0,
+        size: size
+    };
+    let parts;
+    parts = (_a = /^bytes[=]([0-9]+)[-]$/.exec(String(value))) !== null && _a !== void 0 ? _a : undefined;
+    if (is.present(parts)) {
+        let one = Number.parseInt(parts[1], 10);
+        if (one >= size) {
+            return s416;
+        }
+        return {
+            status: 206,
+            offset: one,
+            length: size - one,
+            size: size
+        };
+    }
+    parts = (_b = /^bytes[=]([0-9]+)[-]([0-9]+)$/.exec(String(value))) !== null && _b !== void 0 ? _b : undefined;
+    if (is.present(parts)) {
+        let one = Number.parseInt(parts[1], 10);
+        let two = Number.parseInt(parts[2], 10);
+        if (two < one) {
+            return s416;
+        }
+        if (one >= size) {
+            return s416;
+        }
+        if (two >= size) {
+            two = size - 1;
+        }
+        return {
+            status: 206,
+            offset: one,
+            length: two - one + 1,
+            size: size
+        };
+    }
+    parts = (_c = /^bytes[=][-]([0-9]+)$/.exec(String(value))) !== null && _c !== void 0 ? _c : undefined;
+    if (is.present(parts)) {
+        let one = Number.parseInt(parts[1], 10);
+        if (one < 1) {
+            return s416;
+        }
+        if (size < 1) {
+            return s416;
+        }
+        if (one > size) {
+            one = size;
+        }
+        return {
+            status: 206,
+            offset: size - one,
+            length: one,
+            size: size
+        };
+    }
+    return s416;
+}
+exports.parseRangeHeader = parseRangeHeader;
+;
 function makeReadStreamResponse(pathPrefix, pathSuffix, request) {
     let libfs = require("fs");
     let libpath = require("path");
@@ -548,14 +622,20 @@ function makeReadStreamResponse(pathPrefix, pathSuffix, request) {
     if (!libfs.existsSync(path)) {
         throw 404;
     }
-    // TODO: Add support for range requests.
-    let payload = libfs.createReadStream(path);
+    let range = parseRangeHeader(request.headers().range, libfs.statSync(path).size);
+    let stream = libfs.createReadStream(path, {
+        start: range.offset,
+        end: range.offset + range.length
+    });
     return {
-        status: 200,
+        status: range.status,
         headers: {
+            "Accept-Ranges": "bytes",
+            "Content-Length": `${range.length}`,
+            "Content-Range": range.length > 0 ? `bytes ${range.offset}-${range.offset + range.length - 1}/${range.size}` : `bytes */${range.size}`,
             "Content-Type": "unknown"
         },
-        payload: payload
+        payload: stream
     };
 }
 exports.makeReadStreamResponse = makeReadStreamResponse;
