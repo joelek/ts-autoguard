@@ -16,7 +16,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
+exports.makeReadStreamResponse = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
 const guards = require("./guards");
 exports.Options = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
 exports.Headers = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
@@ -534,4 +534,29 @@ function route(endpoints, httpRequest, httpResponse, urlPrefix = "") {
     });
 }
 exports.route = route;
+;
+function makeReadStreamResponse(pathPrefix, pathSuffix, request) {
+    let libfs = require("fs");
+    let libpath = require("path");
+    if (libpath.normalize(pathSuffix).split(libpath.sep)[0] === "..") {
+        throw 400;
+    }
+    let path = libpath.join(pathPrefix, pathSuffix);
+    while (libfs.existsSync(path) && libfs.statSync(path).isDirectory()) {
+        path = libpath.join(path, "index.html");
+    }
+    if (!libfs.existsSync(path)) {
+        throw 404;
+    }
+    // TODO: Add support for range requests.
+    let payload = libfs.createReadStream(path);
+    return {
+        status: 200,
+        headers: {
+            "Content-Type": "unknown"
+        },
+        payload: payload
+    };
+}
+exports.makeReadStreamResponse = makeReadStreamResponse;
 ;

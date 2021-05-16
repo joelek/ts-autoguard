@@ -260,6 +260,7 @@ NB: This project targets TypeScript 4 in strict mode.
 
 ## Roadmap
 
+* Add support for wildcards in paths.
 * Provide access to Socket instance in endpoints.
 * Set up template project with client and server.
 * Extend type guards with functionality for deep structured cloning.
@@ -268,7 +269,6 @@ NB: This project targets TypeScript 4 in strict mode.
 * Modernize code to use string templates.
 * Write unit tests.
 * Create middleware for handling range requests.
-* Create middleware for handling static requests.
 * Create middleware for combining several APIs into one.
 * Add support for default parameters and header values.
 * Add support for literal parameter values and headers as well unions thereof.

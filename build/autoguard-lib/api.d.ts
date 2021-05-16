@@ -118,3 +118,6 @@ export declare function makeNodeRequestHandler(options?: NodeRequestHandlerOptio
 export declare function respond(httpResponse: ResponseLike, raw: RawResponse): Promise<void>;
 export declare function combineRawHeaders(raw: Array<string>): Array<string>;
 export declare function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike, urlPrefix?: string): Promise<void>;
+export declare function makeReadStreamResponse(pathPrefix: string, pathSuffix: string, request: ClientRequest<EndpointRequest>): EndpointResponse & {
+    payload: Binary;
+};

@@ -563,3 +563,27 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 		});
 	}
 };
+
+export function makeReadStreamResponse(pathPrefix: string, pathSuffix: string, request: ClientRequest<EndpointRequest>): EndpointResponse & { payload: Binary } {
+	let libfs = require("fs") as typeof import("fs");
+	let libpath = require("path") as typeof import("path");
+	if (libpath.normalize(pathSuffix).split(libpath.sep)[0] === "..") {
+		throw 400;
+	}
+	let path = libpath.join(pathPrefix, pathSuffix);
+	while (libfs.existsSync(path) && libfs.statSync(path).isDirectory()) {
+		path = libpath.join(path, "index.html");
+	}
+	if (!libfs.existsSync(path)) {
+		throw 404;
+	}
+	// TODO: Add support for range requests.
+	let payload = libfs.createReadStream(path);
+	return {
+		status: 200,
+		headers: {
+			"Content-Type": "unknown"
+		},
+		payload: payload
+	};
+};
