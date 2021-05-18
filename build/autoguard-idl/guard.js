@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Guard = void 0;
-const tokenization = require("../tokenization");
+const tokenization = require("./tokenization");
 const types = require("./types");
 class Guard {
     constructor(typename, type) {

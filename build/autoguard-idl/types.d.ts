@@ -1,5 +1,5 @@
-import * as shared from "../shared";
-import * as tokenization from "../tokenization";
+import * as shared from "./shared";
+import * as tokenization from "./tokenization";
 export declare type Typename = "Array" | "Intersection" | "Union";
 export interface Type {
     generateSchema(options: shared.Options): string;

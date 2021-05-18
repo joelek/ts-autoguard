@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Route = exports.Message = exports.Headers = exports.Parameters = exports.Parameter = exports.Method = exports.Path = exports.Component = void 0;
-const is = require("../is");
-const tokenization = require("../tokenization");
+const is = require("./is");
+const tokenization = require("./tokenization");
 const types = require("./types");
 class Component {
     constructor(name, type) {

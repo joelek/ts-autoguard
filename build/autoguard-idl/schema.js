@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Schema = void 0;
 const guard = require("./guard");
-const is = require("../is");
+const is = require("./is");
 const route = require("./route");
-const tokenization = require("../tokenization");
+const tokenization = require("./tokenization");
 const types = require("./types");
 function makeParser(type) {
     if (type === "boolean") {

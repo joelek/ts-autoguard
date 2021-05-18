@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const libfs = require("fs");
 const libos = require("os");
 const libpath = require("path");
-const lib = require("../autoguard-lib");
+const idl = require("../autoguard-idl");
 function findFiles(path, paths = []) {
     let stat = libfs.statSync(path);
     if (stat.isDirectory() && libpath.basename(path) !== "node_modules") {
@@ -23,9 +23,9 @@ function filename(path) {
     return libpath.basename(path).split(".").slice(0, -1).join(".");
 }
 function transform(string, options) {
-    let tokenizer = new lib.tokenization.Tokenizer(string);
+    let tokenizer = new idl.tokenization.Tokenizer(string);
     try {
-        let schema = lib.language.schema.Schema.parseOld(tokenizer);
+        let schema = idl.schema.Schema.parseOld(tokenizer);
         process.stderr.write(`\tSupport for legacy schemas has been deprecated. Please upgrade using "--upgrade=true".\n`);
         let client = schema.generateClient(options);
         let server = schema.generateServer(options);
@@ -38,7 +38,7 @@ function transform(string, options) {
     }
     catch (error) { }
     ;
-    let schema = lib.language.schema.Schema.parse(tokenizer);
+    let schema = idl.schema.Schema.parse(tokenizer);
     let client = schema.generateClient(options);
     let server = schema.generateServer(options);
     let shared = schema.generateShared(options);
@@ -49,14 +49,14 @@ function transform(string, options) {
     };
 }
 function upgrade(string, options) {
-    let tokenizer = new lib.tokenization.Tokenizer(string);
+    let tokenizer = new idl.tokenization.Tokenizer(string);
     try {
-        let schema = lib.language.schema.Schema.parseOld(tokenizer);
+        let schema = idl.schema.Schema.parseOld(tokenizer);
         return schema.generateSchema(options);
     }
     catch (error) { }
     ;
-    lib.language.schema.Schema.parse(tokenizer);
+    idl.schema.Schema.parse(tokenizer);
     return string;
 }
 function run() {

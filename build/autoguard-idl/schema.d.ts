@@ -1,5 +1,5 @@
-import * as shared from "../shared";
-import * as tokenization from "../tokenization";
+import * as shared from "./shared";
+import * as tokenization from "./tokenization";
 export declare class Schema {
     private guards;
     private routes;

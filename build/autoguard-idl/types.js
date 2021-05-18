@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Options = exports.Headers = exports.UnionType = exports.UndefinedType = exports.TupleType = exports.StringLiteralType = exports.StringType = exports.ReferenceType = exports.RecordType = exports.ObjectType = exports.NumberLiteralType = exports.NumberType = exports.NullType = exports.IntersectionType = exports.GroupType = exports.BooleanLiteralType = exports.BooleanType = exports.Binary = exports.ArrayType = exports.AnyType = exports.Type = void 0;
-const tokenization = require("../tokenization");
+const tokenization = require("./tokenization");
 ;
 exports.Type = {
     parse(tokenizer, ...exclude) {

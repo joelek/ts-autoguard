@@ -18,7 +18,6 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
 const guards = require("./guards");
-const is = require("./is");
 exports.Options = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
 exports.Headers = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
 exports.AsyncBinary = {
@@ -538,7 +537,7 @@ exports.route = route;
 ;
 function parseRangeHeader(value, size) {
     var _a, _b, _c;
-    if (is.absent(value)) {
+    if (value === undefined) {
         return {
             status: 200,
             offset: 0,
@@ -554,7 +553,7 @@ function parseRangeHeader(value, size) {
     };
     let parts;
     parts = (_a = /^bytes[=]([0-9]+)[-]$/.exec(String(value))) !== null && _a !== void 0 ? _a : undefined;
-    if (is.present(parts)) {
+    if (parts !== undefined) {
         let one = Number.parseInt(parts[1], 10);
         if (one >= size) {
             return s416;
@@ -567,7 +566,7 @@ function parseRangeHeader(value, size) {
         };
     }
     parts = (_b = /^bytes[=]([0-9]+)[-]([0-9]+)$/.exec(String(value))) !== null && _b !== void 0 ? _b : undefined;
-    if (is.present(parts)) {
+    if (parts !== undefined) {
         let one = Number.parseInt(parts[1], 10);
         let two = Number.parseInt(parts[2], 10);
         if (two < one) {
@@ -587,7 +586,7 @@ function parseRangeHeader(value, size) {
         };
     }
     parts = (_c = /^bytes[=][-]([0-9]+)$/.exec(String(value))) !== null && _c !== void 0 ? _c : undefined;
-    if (is.present(parts)) {
+    if (parts !== undefined) {
         let one = Number.parseInt(parts[1], 10);
         if (one < 1) {
             return s416;
