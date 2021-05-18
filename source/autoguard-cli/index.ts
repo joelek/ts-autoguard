@@ -3,7 +3,7 @@
 import * as libfs from "fs";
 import * as libos from "os";
 import * as libpath from "path";
-import * as lib from "../autoguard-lib";
+import * as idl from "../autoguard-idl";
 
 function findFiles(path: string, paths: Array<string> = []): Array<string> {
 	let stat = libfs.statSync(path);
@@ -23,10 +23,10 @@ function filename(path: string): string {
 	return libpath.basename(path).split(".").slice(0, -1).join(".");
 }
 
-function transform(string: string, options: lib.shared.Options): { client: string, server: string, shared: string } {
-	let tokenizer = new lib.tokenization.Tokenizer(string);
+function transform(string: string, options: idl.shared.Options): { client: string, server: string, shared: string } {
+	let tokenizer = new idl.tokenization.Tokenizer(string);
 	try {
-		let schema = lib.language.schema.Schema.parseOld(tokenizer);
+		let schema = idl.schema.Schema.parseOld(tokenizer);
 		process.stderr.write(`\tSupport for legacy schemas has been deprecated. Please upgrade using "--upgrade=true".\n`);
 		let client = schema.generateClient(options);
 		let server = schema.generateServer(options);
@@ -37,7 +37,7 @@ function transform(string: string, options: lib.shared.Options): { client: strin
 			shared
 		};
 	} catch (error) {};
-	let schema = lib.language.schema.Schema.parse(tokenizer);
+	let schema = idl.schema.Schema.parse(tokenizer);
 	let client = schema.generateClient(options);
 	let server = schema.generateServer(options);
 	let shared = schema.generateShared(options);
@@ -48,13 +48,13 @@ function transform(string: string, options: lib.shared.Options): { client: strin
 	};
 }
 
-function upgrade(string: string, options: lib.shared.Options): string {
-	let tokenizer = new lib.tokenization.Tokenizer(string);
+function upgrade(string: string, options: idl.shared.Options): string {
+	let tokenizer = new idl.tokenization.Tokenizer(string);
 	try {
-		let schema = lib.language.schema.Schema.parseOld(tokenizer);
+		let schema = idl.schema.Schema.parseOld(tokenizer);
 		return schema.generateSchema(options);
 	} catch (error) {};
-	lib.language.schema.Schema.parse(tokenizer);
+	idl.schema.Schema.parse(tokenizer);
 	return string;
 }
 

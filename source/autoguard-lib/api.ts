@@ -1,5 +1,4 @@
 import * as guards from "./guards";
-import * as is from "./is";
 
 export const Options = guards.Record.of(guards.Union.of(
 	guards.Boolean,
@@ -571,7 +570,7 @@ export function parseRangeHeader(value: Primitive | undefined, size: number): {
 	length: number
 	size: number
 } {
-	if (is.absent(value)) {
+	if (value === undefined) {
 		return {
 			status: 200,
 			offset: 0,
@@ -587,7 +586,7 @@ export function parseRangeHeader(value: Primitive | undefined, size: number): {
 	};
 	let parts: RegExpExecArray | undefined;
 	parts = /^bytes[=]([0-9]+)[-]$/.exec(String(value)) ?? undefined;
-	if (is.present(parts)) {
+	if (parts !== undefined) {
 		let one = Number.parseInt(parts[1], 10);
 		if (one >= size) {
 			return s416;
@@ -600,7 +599,7 @@ export function parseRangeHeader(value: Primitive | undefined, size: number): {
 		};
 	}
 	parts = /^bytes[=]([0-9]+)[-]([0-9]+)$/.exec(String(value)) ?? undefined;
-	if (is.present(parts)) {
+	if (parts !== undefined) {
 		let one = Number.parseInt(parts[1], 10);
 		let two = Number.parseInt(parts[2], 10);
 		if (two < one) {
@@ -620,7 +619,7 @@ export function parseRangeHeader(value: Primitive | undefined, size: number): {
 		};
 	}
 	parts = /^bytes[=][-]([0-9]+)$/.exec(String(value)) ?? undefined;
-	if (is.present(parts)) {
+	if (parts !== undefined) {
 		let one = Number.parseInt(parts[1], 10);
 		if (one < 1) {
 			return s416;

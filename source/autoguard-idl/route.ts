@@ -1,6 +1,6 @@
-import * as is from "../is";
-import * as shared from "../shared";
-import * as tokenization from "../tokenization";
+import * as is from "./is";
+import * as shared from "./shared";
+import * as tokenization from "./tokenization";
 import * as types from "./types";
 
 export class Component {

@@ -1,8 +1,8 @@
 import * as guard from "./guard";
-import * as is from "../is";
+import * as is from "./is";
 import * as route from "./route";
-import * as shared from "../shared";
-import * as tokenization from "../tokenization";
+import * as shared from "./shared";
+import * as tokenization from "./tokenization";
 import * as types from "./types";
 
 function makeParser(type: string): string {
