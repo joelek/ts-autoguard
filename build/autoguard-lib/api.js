@@ -197,8 +197,9 @@ function getHeaders(headers) {
 exports.getHeaders = getHeaders;
 ;
 class ClientRequest {
-    constructor(request) {
+    constructor(request, auxillary) {
         this.request = request;
+        this.auxillary = auxillary;
     }
     options() {
         let options = this.request.options;
@@ -213,6 +214,9 @@ class ClientRequest {
             let payload = this.request.payload;
             return (exports.Binary.is(payload) ? yield collectPayload(payload) : payload);
         });
+    }
+    socket() {
+        return this.auxillary.socket;
     }
 }
 exports.ClientRequest = ClientRequest;
@@ -468,6 +472,7 @@ function route(endpoints, httpRequest, httpResponse, urlPrefix = "") {
         let payload = {
             [Symbol.asyncIterator]: () => httpRequest[Symbol.asyncIterator]()
         };
+        let socket = httpRequest.socket;
         let raw = {
             method,
             components,
@@ -475,7 +480,10 @@ function route(endpoints, httpRequest, httpResponse, urlPrefix = "") {
             headers,
             payload
         };
-        let filteredEndpoints = endpoints.map((endpoint) => endpoint(raw));
+        let auxillary = {
+            socket
+        };
+        let filteredEndpoints = endpoints.map((endpoint) => endpoint(raw, auxillary));
         filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsComponents());
         if (filteredEndpoints.length === 0) {
             return respond(httpResponse, {

@@ -23,6 +23,7 @@ export declare type JSON = null | Primitive | JSON[] | {
 export declare type RequestLike = AsyncBinary & {
     method?: string;
     rawHeaders: string[];
+    socket: import("net").Socket | import("tls").TLSSocket;
     url?: string;
 };
 export declare type ResponseLike = {
@@ -47,12 +48,15 @@ export declare type RawRequest = {
     headers: Array<[string, string]>;
     payload: Binary;
 };
+export declare type Auxillary = {
+    socket: RequestLike["socket"];
+};
 export declare type RawResponse = {
     status: number;
     headers: Array<[string, string]>;
     payload: Binary;
 };
-export declare type Endpoint = (raw: RawRequest) => {
+export declare type Endpoint = (raw: RawRequest, auxillary: Auxillary) => {
     acceptsComponents(): boolean;
     acceptsMethod(): boolean;
     validateRequest(): Promise<{
@@ -78,10 +82,12 @@ export declare type EndpointResponse = {
 };
 export declare class ClientRequest<A extends EndpointRequest> {
     private request;
-    constructor(request: A);
+    private auxillary;
+    constructor(request: A, auxillary: Auxillary);
     options(): {} & A["options"];
     headers(): {} & A["headers"];
     payload(): Promise<CollectedPayload<A["payload"]>>;
+    socket(): Auxillary["socket"];
 }
 export declare class ServerResponse<A extends EndpointResponse> {
     private response;

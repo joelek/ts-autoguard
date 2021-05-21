@@ -241,7 +241,7 @@ class Schema {
         lines.push(`\tlet endpoints = new Array<autoguard.api.Endpoint>();`);
         for (let route of this.routes) {
             let tag = makeRouteTag(route);
-            lines.push(`\tendpoints.push((raw) => {`);
+            lines.push(`\tendpoints.push((raw, auxillary) => {`);
             lines.push(`\t\tlet method = "${route.method.method}";`);
             lines.push(`\t\tlet components = new Array<[string, string]>();`);
             for (let [index, component] of route.path.components.entries()) {
@@ -279,7 +279,7 @@ class Schema {
             lines.push(`\t\t\t\tlet request = guard.as({ options, headers, payload }, "SERVER:request");`);
             lines.push(`\t\t\t\treturn {`);
             lines.push(`\t\t\t\t\thandleRequest: async () => {`);
-            lines.push(`\t\t\t\t\t\tlet response = await routes["${tag}"](new autoguard.api.ClientRequest(request));`);
+            lines.push(`\t\t\t\t\t\tlet response = await routes["${tag}"](new autoguard.api.ClientRequest(request, auxillary));`);
             lines.push(`\t\t\t\t\t\treturn {`);
             lines.push(`\t\t\t\t\t\t\tvalidateResponse: async () => {`);
             lines.push(`\t\t\t\t\t\t\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);

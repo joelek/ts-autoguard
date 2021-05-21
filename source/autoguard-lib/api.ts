@@ -79,6 +79,7 @@ export type JSON = null | Primitive | JSON[] | { [key: string]: JSON };
 export type RequestLike = AsyncBinary & {
 	method?: string;
 	rawHeaders: string[];
+	socket: import("net").Socket | import("tls").TLSSocket;
 	url?: string;
 };
 
@@ -177,13 +178,17 @@ export type RawRequest = {
 	payload: Binary;
 };
 
+export type Auxillary = {
+	socket: RequestLike["socket"];
+};
+
 export type RawResponse = {
 	status: number;
 	headers: Array<[string, string]>;
 	payload: Binary;
 };
 
-export type Endpoint = (raw: RawRequest) => {
+export type Endpoint = (raw: RawRequest, auxillary: Auxillary) => {
 	acceptsComponents(): boolean;
 	acceptsMethod(): boolean;
 	validateRequest(): Promise<{
@@ -247,9 +252,11 @@ export type EndpointResponse = {
 
 export class ClientRequest<A extends EndpointRequest> {
 	private request: A;
+	private auxillary: Auxillary;
 
-	constructor(request: A) {
+	constructor(request: A, auxillary: Auxillary) {
 		this.request = request;
+		this.auxillary = auxillary;
 	}
 
 	options(): {} & A["options"] {
@@ -269,6 +276,10 @@ export class ClientRequest<A extends EndpointRequest> {
 	async payload(): Promise<CollectedPayload<A["payload"]>> {
 		let payload = this.request.payload;
 		return (Binary.is(payload) ? await collectPayload(payload) : payload) as any;
+	}
+
+	socket(): Auxillary["socket"] {
+		return this.auxillary.socket;
 	}
 };
 
@@ -502,6 +513,7 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 	let payload = {
 		[Symbol.asyncIterator]: () => httpRequest[Symbol.asyncIterator]()
 	};
+	let socket = httpRequest.socket;
 	let raw: RawRequest = {
 		method,
 		components,
@@ -509,7 +521,10 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 		headers,
 		payload
 	};
-	let filteredEndpoints = endpoints.map((endpoint) => endpoint(raw));
+	let auxillary: Auxillary = {
+		socket
+	}
+	let filteredEndpoints = endpoints.map((endpoint) => endpoint(raw, auxillary));
 	filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsComponents());
 	if (filteredEndpoints.length === 0) {
 		return respond(httpResponse, {

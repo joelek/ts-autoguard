@@ -263,7 +263,6 @@ NB: This project targets TypeScript 4 in strict mode.
 ## Roadmap
 
 * Add support for wildcards in paths.
-* Provide access to Socket instance in endpoints.
 * Extend type guards with functionality for deep structured cloning.
 * Add strict option that performs automatic JSON payload filtering.
 * Add support for responding without a payload on error.
