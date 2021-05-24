@@ -262,6 +262,13 @@ NB: This project targets TypeScript 4 in strict mode.
 
 ## Roadmap
 
+* Fix issue with intersections of unions.
+* Solve issue with payload becoming undefined after first collection.
+* Create middleware for defining cache-control.
+* Add keyword "alias" and make it interchangable with "guard".
+* Add support for single line comments in schema.
+* Add more detailed error messages for syntax errors.
+* Change RawRequest to contain url instead of parameters and components.
 * Add support for wildcards in paths.
 * Extend type guards with functionality for deep structured cloning.
 * Add strict option that performs automatic JSON payload filtering.
