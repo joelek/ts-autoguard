@@ -1,16 +1,17 @@
 import * as serialization from "./serialization";
 
-type IntersectionOf<A extends any[]> = Unwrap<IntersectionOfUnion<ValuesOf<Wrap<A>>>>;
+type IntersectionOf<A extends any[]> = ExpansionOf<Unwrap<IntersectionOfUnion<ValuesOf<Wrap<A>>>>>;
 type IntersectionOfUnion<A> = (A extends any ? (_: A) => void : never) extends ((_: infer B) => void) ? B : never;
 type TupleOf<A extends any[]> = [...A];
 type UnionOf<A extends any[]> = A[number];
 type RequiredKeys<A> = { [B in keyof A]: undefined extends A[B] ? never : B; }[keyof A];
 type OptionalKeys<A> = { [B in keyof A]: undefined extends A[B] ? B : never; }[keyof A];
-type MakeUndefinedOptional<A> = { [B in RequiredKeys<A>]: A[B]; } & { [B in OptionalKeys<A>]?: A[B]; };
+type MakeUndefinedOptional<A> = ExpansionOf<{ [B in RequiredKeys<A>]: A[B]; } & { [B in OptionalKeys<A>]?: A[B]; }>;
 type IndicesOfTuple<A extends any[]> = Exclude<keyof A, keyof []>;
 type Wrap<A extends any[]> = { [B in IndicesOfTuple<A>]: { wrappee: A[B] }; };
 type Unwrap<A> = A extends { wrappee: any } ? A["wrappee"] : never;
 type ValuesOf<A> = A[keyof A];
+type ExpansionOf<A> = A extends infer B ? { [C in keyof B]: B[C] } : never;
 
 export const Any = {
 	as(subject: any, path: string = ""): any {
