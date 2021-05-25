@@ -181,7 +181,7 @@ class Schema {
             let tag = makeRouteTag(route);
             lines.push(`\t"${tag}": async (request) => {`);
             lines.push(`\t\tlet guard = shared.Autoguard.Requests["${tag}"];`);
-            lines.push(`\t\tguard.as(request, "CLIENT:request");`);
+            lines.push(`\t\tguard.as(request, "request");`);
             lines.push(`\t\tlet method = "${route.method.method}";`);
             lines.push(`\t\tlet components = new Array<string>();`);
             for (let component of route.path.components) {
@@ -221,7 +221,7 @@ class Schema {
                 lines.push(`\t\t\tlet payload = await autoguard.api.deserializePayload(raw.payload);`);
             }
             lines.push(`\t\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);
-            lines.push(`\t\t\tlet response = guard.as({ status, headers, payload }, "CLIENT:response");`);
+            lines.push(`\t\t\tlet response = guard.as({ status, headers, payload }, "response");`);
             lines.push(`\t\t\treturn new autoguard.api.ServerResponse(response);`);
             lines.push(`\t\t}`);
             lines.push(`\t},`);
@@ -276,14 +276,14 @@ class Schema {
                 lines.push(`\t\t\t\tlet payload = await autoguard.api.deserializePayload(raw.payload);`);
             }
             lines.push(`\t\t\t\tlet guard = shared.Autoguard.Requests["${tag}"];`);
-            lines.push(`\t\t\t\tlet request = guard.as({ options, headers, payload }, "SERVER:request");`);
+            lines.push(`\t\t\t\tlet request = guard.as({ options, headers, payload }, "request");`);
             lines.push(`\t\t\t\treturn {`);
             lines.push(`\t\t\t\t\thandleRequest: async () => {`);
             lines.push(`\t\t\t\t\t\tlet response = await routes["${tag}"](new autoguard.api.ClientRequest(request, auxillary));`);
             lines.push(`\t\t\t\t\t\treturn {`);
             lines.push(`\t\t\t\t\t\t\tvalidateResponse: async () => {`);
             lines.push(`\t\t\t\t\t\t\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);
-            lines.push(`\t\t\t\t\t\t\t\tguard.as(response, "SERVER:response");`);
+            lines.push(`\t\t\t\t\t\t\t\tguard.as(response, "response");`);
             lines.push(`\t\t\t\t\t\t\t\treturn response;`);
             lines.push(`\t\t\t\t\t\t\t}`);
             lines.push(`\t\t\t\t\t\t};`);
