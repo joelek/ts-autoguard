@@ -1,5 +1,5 @@
 import * as serialization from "./serialization";
-declare type IntersectionOf<A extends any[]> = IntersectionOfUnion<UnionOf<A>>;
+declare type IntersectionOf<A extends any[]> = Unwrap<IntersectionOfUnion<ValuesOf<Wrap<A>>>>;
 declare type IntersectionOfUnion<A> = (A extends any ? (_: A) => void : never) extends ((_: infer B) => void) ? B : never;
 declare type TupleOf<A extends any[]> = [...A];
 declare type UnionOf<A extends any[]> = A[number];
@@ -14,6 +14,16 @@ declare type MakeUndefinedOptional<A> = {
 } & {
     [B in OptionalKeys<A>]?: A[B];
 };
+declare type IndicesOfTuple<A extends any[]> = Exclude<keyof A, keyof []>;
+declare type Wrap<A extends any[]> = {
+    [B in IndicesOfTuple<A>]: {
+        wrappee: A[B];
+    };
+};
+declare type Unwrap<A> = A extends {
+    wrappee: any;
+} ? A["wrappee"] : never;
+declare type ValuesOf<A> = A[keyof A];
 export declare const Any: {
     as(subject: any, path?: string): any;
     is(subject: any): subject is any;
@@ -31,7 +41,7 @@ export declare const BooleanLiteral: {
     of<A extends boolean>(value: A): serialization.MessageGuard<A>;
 };
 export declare const Intersection: {
-    of<A extends any[]>(...guards_0: serialization.MessageGuardTuple<A>): serialization.MessageGuard<IntersectionOfUnion<UnionOf<A>>>;
+    of<A extends any[]>(...guards_0: serialization.MessageGuardTuple<A>): serialization.MessageGuard<Unwrap<IntersectionOfUnion<ValuesOf<Wrap<A>>>>>;
 };
 export declare const Null: {
     as(subject: any, path?: string): null;

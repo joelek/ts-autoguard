@@ -262,7 +262,6 @@ NB: This project targets TypeScript 4 in strict mode.
 
 ## Roadmap
 
-* Fix issue with intersections of unions.
 * Solve issue with payload becoming undefined after first collection.
 * Create middleware for defining cache-control.
 * Add keyword "alias" and make it interchangable with "guard".
