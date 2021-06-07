@@ -265,7 +265,6 @@ NB: This project targets TypeScript 4 in strict mode.
 * Solve issue with payload becoming undefined after first collection.
 * Create middleware for defining cache-control.
 * Add keyword "alias" and make it interchangable with "guard".
-* Add support for single line comments in schema.
 * Add more detailed error messages for syntax errors.
 * Change RawRequest to contain url instead of parameters and components.
 * Add support for wildcards in paths.
@@ -285,9 +284,13 @@ NB: This project targets TypeScript 4 in strict mode.
 
 The interface descriptor language is formally defined as a language that shares similarities with the type language in TypeScript.
 
-White space may occur between non-terminal tokens and is considered insignificant.
+White space and line separators may occur between tokens and is considered insignificant.
 
 ```
+LineSeparator = "\r\n" or "\n"
+Whitespace = "\t" or " "
+TokenSeparator = Whitespace or LineSeparator
+Comment = "#" (not LineSeparator)*
 AsciiLetterLowercase = "a" to "z"
 AsciiLetterUppercase = "A" to "Z"
 AsciiLetter = AsciiLetterLowercase or AsciiLetterUppercase

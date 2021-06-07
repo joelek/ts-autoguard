@@ -1,4 +1,5 @@
 export const Families = (<A extends string[]>(...tuple: A): [...A] => tuple)(
+	"LS",
 	"WS",
 	"(",
 	")",
@@ -11,6 +12,7 @@ export const Families = (<A extends string[]>(...tuple: A): [...A] => tuple)(
 	".",
 	"..",
 	"/",
+	"#",
 	"&",
 	",",
 	":",
@@ -66,6 +68,30 @@ export type TypeMap<A extends [...string[]], B> = {
 	[_ in A[number]]: B;
 };
 
+export function removeWhitespaceAndComments(unfiltered: Array<Token>): Array<Token> {
+	let filtered = new Array<Token>();
+	let offset = 0;
+	while (offset < unfiltered.length) {
+		let token = unfiltered[offset];
+		offset += 1;
+		if (token.family === "WS" || token.family === "LS") {
+			continue;
+		}
+		if (token.family === "#") {
+			while (offset < unfiltered.length) {
+				let token = unfiltered[offset];
+				offset += 1;
+				if (token.family === "LS") {
+					break;
+				}
+			}
+			continue;
+		}
+		filtered.push(token);
+	}
+	return filtered;
+};
+
 export class Tokenizer {
 	private tokens: Array<Token>;
 	private offset: number;
@@ -83,7 +109,8 @@ export class Tokenizer {
 
 	constructor(string: string) {
 		let matchers: TypeMap<Families, RegExp> = {
-			"WS": /^([\t\r\n ]+)/su,
+			"LS": /^([\r][\n]|\n)/su,
+			"WS": /^([\t ]+)/su,
 			"(": /^([\(])/su,
 			")": /^([\)])/su,
 			"[": /^([\[])/su,
@@ -95,6 +122,7 @@ export class Tokenizer {
 			".": /^([\.])/su,
 			"..": /^([\.][\.])/su,
 			"/": /^([\/])/su,
+			"#": /^([#])/su,
 			"&": /^([&])/su,
 			",": /^([,])/su,
 			":": /^([:])/su,
@@ -151,9 +179,7 @@ export class Tokenizer {
 			}
 			col += lines[lines.length - 1].length;
 		}
-		this.tokens = tokens.filter((token) => {
-			return token.family !== "WS";
-		});
+		this.tokens = removeWhitespaceAndComments(tokens);
 		this.offset = 0;
 	}
 

@@ -1,12 +1,38 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.expect = exports.Tokenizer = exports.IdentifierFamilies = exports.Families = void 0;
-exports.Families = ((...tuple) => tuple)("WS", "(", ")", "[", "]", "{", "}", "?", "|", ".", "..", "/", "&", ",", ":", ";", "<", ">", "=>", "<=", "any", "binary", "boolean", "false", "guard", "null", "number", "route", "string", "true", "undefined", "IDENTIFIER", "NUMBER_LITERAL", "STRING_LITERAL", "PATH_COMPONENT");
+exports.expect = exports.Tokenizer = exports.removeWhitespaceAndComments = exports.IdentifierFamilies = exports.Families = void 0;
+exports.Families = ((...tuple) => tuple)("LS", "WS", "(", ")", "[", "]", "{", "}", "?", "|", ".", "..", "/", "#", "&", ",", ":", ";", "<", ">", "=>", "<=", "any", "binary", "boolean", "false", "guard", "null", "number", "route", "string", "true", "undefined", "IDENTIFIER", "NUMBER_LITERAL", "STRING_LITERAL", "PATH_COMPONENT");
 exports.IdentifierFamilies = ((...tuple) => tuple)("any", "binary", "boolean", "false", "guard", "null", "number", "route", "string", "true", "undefined", "IDENTIFIER");
+function removeWhitespaceAndComments(unfiltered) {
+    let filtered = new Array();
+    let offset = 0;
+    while (offset < unfiltered.length) {
+        let token = unfiltered[offset];
+        offset += 1;
+        if (token.family === "WS" || token.family === "LS") {
+            continue;
+        }
+        if (token.family === "#") {
+            while (offset < unfiltered.length) {
+                let token = unfiltered[offset];
+                offset += 1;
+                if (token.family === "LS") {
+                    break;
+                }
+            }
+            continue;
+        }
+        filtered.push(token);
+    }
+    return filtered;
+}
+exports.removeWhitespaceAndComments = removeWhitespaceAndComments;
+;
 class Tokenizer {
     constructor(string) {
         let matchers = {
-            "WS": /^([\t\r\n ]+)/su,
+            "LS": /^([\r][\n]|\n)/su,
+            "WS": /^([\t ]+)/su,
             "(": /^([\(])/su,
             ")": /^([\)])/su,
             "[": /^([\[])/su,
@@ -18,6 +44,7 @@ class Tokenizer {
             ".": /^([\.])/su,
             "..": /^([\.][\.])/su,
             "/": /^([\/])/su,
+            "#": /^([#])/su,
             "&": /^([&])/su,
             ",": /^([,])/su,
             ":": /^([:])/su,
@@ -74,9 +101,7 @@ class Tokenizer {
             }
             col += lines[lines.length - 1].length;
         }
-        this.tokens = tokens.filter((token) => {
-            return token.family !== "WS";
-        });
+        this.tokens = removeWhitespaceAndComments(tokens);
         this.offset = 0;
     }
     peek() {
