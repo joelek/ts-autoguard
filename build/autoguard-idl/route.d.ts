@@ -20,6 +20,12 @@ export declare class Method {
     generateSchema(options: shared.Options): string;
     static parse(tokenizer: tokenization.Tokenizer): Method;
 }
+export declare class Alias {
+    identifier: string;
+    constructor(identifier: string);
+    generateSchema(options: shared.Options): string;
+    static parse(tokenizer: tokenization.Tokenizer): Alias;
+}
 export declare class Parameter {
     name: string;
     type: string;
@@ -48,12 +54,13 @@ export declare class Message {
     static parse(tokenizer: tokenization.Tokenizer): Message;
 }
 export declare class Route {
+    alias: Alias;
     method: Method;
     path: Path;
     parameters: Parameters;
     request: Message;
     response: Message;
-    constructor(method: Method, path: Path, parameters: Parameters, request: Message, response: Message);
+    constructor(alias: Alias, method: Method, path: Path, parameters: Parameters, request: Message, response: Message);
     generateSchema(options: shared.Options): string;
     static parse(tokenizer: tokenization.Tokenizer): Route;
 }

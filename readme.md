@@ -263,7 +263,6 @@ NB: This project targets TypeScript 4 in strict mode.
 ## Roadmap
 
 * Create middleware for defining cache-control.
-* Add keyword "alias" and make it interchangable with "guard".
 * Add more detailed error messages for syntax errors.
 * Change RawRequest to contain url instead of parameters and components.
 * Add support for wildcards in paths.
@@ -347,6 +346,7 @@ Payload = Type or "binary"
 Parameters = "?" Options
 Request = "<=" Headers? Payload?
 Response = "=>" Headers? Payload?
-Route = "route" Method ":" Path Parameters? Request? Response? ";"
+Alias = Identifier "(" ")" ":"
+Route = "route" Alias? Method ":" Path Parameters? Request? Response? ";"
 Schema = (Guard or Route)*
 ```

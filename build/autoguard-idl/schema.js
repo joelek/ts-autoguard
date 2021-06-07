@@ -27,6 +27,9 @@ function areAllMembersOptional(object) {
     return true;
 }
 function makeRouteTag(route) {
+    if (route.alias.identifier !== "") {
+        return route.alias.identifier;
+    }
     let components = route.path.components.map((component) => {
         if (is.present(component.type)) {
             return `/<${component.name}>`;

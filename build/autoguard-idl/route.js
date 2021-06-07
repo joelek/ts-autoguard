@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Route = exports.Message = exports.Headers = exports.Parameters = exports.Parameter = exports.Method = exports.Path = exports.Component = void 0;
+exports.Route = exports.Message = exports.Headers = exports.Parameters = exports.Parameter = exports.Alias = exports.Method = exports.Path = exports.Component = void 0;
 const is = require("./is");
 const tokenization = require("./tokenization");
 const types = require("./types");
@@ -86,12 +86,31 @@ class Method {
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
-            let method = tokenization.expect(read(), "IDENTIFIER").value;
+            let method = tokenization.expect(read(), tokenization.IdentifierFamilies).value;
             return new Method(method);
         });
     }
 }
 exports.Method = Method;
+;
+class Alias {
+    constructor(identifier) {
+        this.identifier = identifier;
+    }
+    generateSchema(options) {
+        return this.identifier === "" ? "" : `${this.identifier}():`;
+    }
+    static parse(tokenizer) {
+        return tokenizer.newContext((read, peek) => {
+            let identifier = tokenization.expect(read(), tokenization.IdentifierFamilies).value;
+            tokenization.expect(read(), "(");
+            tokenization.expect(read(), ")");
+            tokenization.expect(read(), ":");
+            return new Alias(identifier);
+        });
+    }
+}
+exports.Alias = Alias;
 ;
 class Parameter {
     constructor(name, type, optional) {
@@ -135,7 +154,7 @@ class Parameters {
         for (let parameter of this.parameters) {
             parts.push(parameter.generateSchema(options));
         }
-        return " ? <{ " + parts.join(", ") + " }>";
+        return "? <{ " + parts.join(", ") + " }>";
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
@@ -243,7 +262,8 @@ class Message {
 exports.Message = Message;
 ;
 class Route {
-    constructor(method, path, parameters, request, response) {
+    constructor(alias, method, path, parameters, request, response) {
+        this.alias = alias;
         this.method = method;
         this.path = path;
         this.parameters = parameters;
@@ -252,7 +272,12 @@ class Route {
     }
     generateSchema(options) {
         let lines = new Array();
-        lines.push(`route ${this.method.generateSchema(options)}:${this.path.generateSchema(options)}${this.parameters.generateSchema(options)}`);
+        let parts = new Array();
+        parts.push("route");
+        parts.push(this.alias.generateSchema(options));
+        parts.push(`${this.method.generateSchema(options)}:${this.path.generateSchema(options)}`);
+        parts.push(this.parameters.generateSchema(options));
+        lines.push(parts.filter((part) => part.length > 0).join(" "));
         let request = this.request.generateSchema(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" }));
         if (request !== "") {
             lines.push(`\t<= ${request}`);
@@ -267,6 +292,11 @@ class Route {
         return tokenizer.newContext((read, peek) => {
             var _a, _b, _c;
             tokenization.expect(read(), "route");
+            let alias = new Alias("");
+            try {
+                alias = Alias.parse(tokenizer);
+            }
+            catch (error) { }
             let method = Method.parse(tokenizer);
             tokenization.expect(read(), ":");
             let path = Path.parse(tokenizer);
@@ -286,7 +316,7 @@ class Route {
                 response = Message.parse(tokenizer);
             }
             tokenization.expect(read(), ";");
-            return new Route(method, path, parameters, request, response);
+            return new Route(alias, method, path, parameters, request, response);
         });
     }
 }
