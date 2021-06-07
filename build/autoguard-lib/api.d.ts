@@ -70,6 +70,7 @@ export declare function getParameters(url: string): Array<[string, string]>;
 export declare function getHeaders(headers: Array<string>): Array<[string, string]>;
 export declare type Payload = JSON | Binary | undefined;
 export declare type CollectedPayload<A extends Payload> = A extends Binary ? Uint8Array : A;
+export declare function isPayloadBinary(payload: Payload): payload is Binary;
 export declare type EndpointRequest = {
     options?: Record<string, Primitive | undefined>;
     headers?: Record<string, Primitive | undefined>;

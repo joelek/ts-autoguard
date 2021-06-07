@@ -16,7 +16,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
+exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.isPayloadBinary = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
 const guards = require("./guards");
 exports.Options = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
 exports.Headers = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
@@ -196,6 +196,11 @@ function getHeaders(headers) {
 }
 exports.getHeaders = getHeaders;
 ;
+function isPayloadBinary(payload) {
+    return typeof payload !== "string" && exports.Binary.is(payload);
+}
+exports.isPayloadBinary = isPayloadBinary;
+;
 class ClientRequest {
     constructor(request, auxillary) {
         this.request = request;
@@ -215,7 +220,7 @@ class ClientRequest {
                 return this.collectedPayload;
             }
             let payload = this.request.payload;
-            let collectedPayload = (exports.Binary.is(payload) ? yield collectPayload(payload) : payload);
+            let collectedPayload = (isPayloadBinary(payload) ? yield collectPayload(payload) : payload);
             this.collectedPayload = collectedPayload;
             return collectedPayload;
         });
@@ -244,7 +249,7 @@ class ServerResponse {
                 return this.collectedPayload;
             }
             let payload = this.response.payload;
-            let collectedPayload = (exports.Binary.is(payload) ? yield collectPayload(payload) : payload);
+            let collectedPayload = (isPayloadBinary(payload) ? yield collectPayload(payload) : payload);
             this.collectedPayload = collectedPayload;
             return collectedPayload;
         });
@@ -328,7 +333,7 @@ function deserializePayload(binary) {
 exports.deserializePayload = deserializePayload;
 ;
 function getContentType(payload) {
-    if (exports.Binary.is(payload) || payload === undefined) {
+    if (isPayloadBinary(payload) || payload === undefined) {
         return "application/octet-stream";
     }
     else {
@@ -347,7 +352,7 @@ function transformResponse(response, defaultStatus) {
     if (contentType === undefined) {
         headers.push(["Content-Type", getContentType(response.payload)]);
     }
-    let payload = exports.Binary.is(response.payload) ? response.payload : serializePayload(response.payload);
+    let payload = isPayloadBinary(response.payload) ? response.payload : serializePayload(response.payload);
     return {
         status: status,
         headers: headers,

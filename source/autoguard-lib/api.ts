@@ -238,6 +238,10 @@ export function getHeaders(headers: Array<string>): Array<[string, string]> {
 export type Payload = JSON | Binary | undefined;
 export type CollectedPayload<A extends Payload> = A extends Binary ? Uint8Array : A;
 
+export function isPayloadBinary(payload: Payload): payload is Binary {
+	return typeof payload !== "string" && Binary.is(payload);
+};
+
 export type EndpointRequest = {
 	options?: Record<string, Primitive | undefined>;
 	headers?: Record<string, Primitive | undefined>;
@@ -279,7 +283,7 @@ export class ClientRequest<A extends EndpointRequest> {
 			return this.collectedPayload;
 		}
 		let payload = this.request.payload;
-		let collectedPayload = (Binary.is(payload) ? await collectPayload(payload) : payload) as any;
+		let collectedPayload = (isPayloadBinary(payload) ? await collectPayload(payload) : payload) as any;
 		this.collectedPayload = collectedPayload;
 		return collectedPayload;
 	}
@@ -314,7 +318,7 @@ export class ServerResponse<A extends EndpointResponse> {
 			return this.collectedPayload;
 		}
 		let payload = this.response.payload;
-		let collectedPayload = (Binary.is(payload) ? await collectPayload(payload) : payload) as any;
+		let collectedPayload = (isPayloadBinary(payload) ? await collectPayload(payload) : payload) as any;
 		this.collectedPayload = collectedPayload;
 		return collectedPayload;
 	}
@@ -391,7 +395,7 @@ export async function deserializePayload(binary: Binary): Promise<JSON | undefin
 };
 
 export function getContentType(payload: Payload): string {
-	if (Binary.is(payload) || payload === undefined) {
+	if (isPayloadBinary(payload) || payload === undefined) {
 		return "application/octet-stream";
 	} else {
 		return "application/json; charset=utf-8";
@@ -407,7 +411,7 @@ export function transformResponse<A extends EndpointResponse>(response: A, defau
 	if (contentType === undefined) {
 		headers.push(["Content-Type", getContentType(response.payload)]);
 	}
-	let payload = Binary.is(response.payload) ? response.payload : serializePayload(response.payload);
+	let payload = isPayloadBinary(response.payload) ? response.payload : serializePayload(response.payload);
 	return {
 		status: status,
 		headers: headers,
