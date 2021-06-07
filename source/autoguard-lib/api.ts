@@ -320,6 +320,18 @@ export class ServerResponse<A extends EndpointResponse> {
 	}
 };
 
+export class EndpointError<A extends EndpointResponse> {
+	private response: A;
+
+	constructor(response: A) {
+		this.response = response;
+	}
+
+	getRawResponse(): RawResponse {
+		return transformResponse(this.response, 500);
+	}
+};
+
 export type RequestMap<A extends RequestMap<A>> = {
 	[B in keyof A]: EndpointRequest;
 };
@@ -386,8 +398,8 @@ export function getContentType(payload: Payload): string {
 	}
 };
 
-export function transformResponse<A extends EndpointResponse>(response: A): RawResponse {
-	let status = response.status ?? 200;
+export function transformResponse<A extends EndpointResponse>(response: A, defaultStatus: number): RawResponse {
+	let status = response.status ?? defaultStatus;
 	let headers = extractKeyValuePairs(response.headers ?? {});
 	let contentType = headers.find((header) => {
 		return header[0].toLowerCase() === "content-type";
@@ -560,7 +572,7 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 			let handled = await valid.handleRequest();
 			try {
 				let response = await handled.validateResponse();
-				let raw = transformResponse(response);
+				let raw = transformResponse(response, 200);
 				return await respond(httpResponse, raw);
 			} catch (error) {
 				let payload = serializeStringPayload(String(error));
@@ -571,15 +583,17 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 				});
 			}
 		} catch (error) {
-			let status = 500;
-			if (Number.isInteger(error) && error >= 100 && error <= 999) {
-				status = error;
-			}
-			return respond(httpResponse, {
-				status: status,
+			let response: RawResponse = {
+				status: 500,
 				headers: [],
 				payload: []
-			});
+			};
+			if (Number.isInteger(error) && error >= 100 && error <= 999) {
+				response.status = error;
+			} else if (error instanceof EndpointError) {
+				response = error.getRawResponse();
+			}
+			return respond(httpResponse, response);
 		}
 	} catch (error) {
 		let payload = serializeStringPayload(String(error));

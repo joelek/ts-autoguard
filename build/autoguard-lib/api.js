@@ -16,7 +16,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
+exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
 const guards = require("./guards");
 exports.Options = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
 exports.Headers = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
@@ -252,6 +252,16 @@ class ServerResponse {
 }
 exports.ServerResponse = ServerResponse;
 ;
+class EndpointError {
+    constructor(response) {
+        this.response = response;
+    }
+    getRawResponse() {
+        return transformResponse(this.response, 500);
+    }
+}
+exports.EndpointError = EndpointError;
+;
 function collectPayload(binary) {
     var binary_1, binary_1_1;
     var e_1, _a;
@@ -327,9 +337,9 @@ function getContentType(payload) {
 }
 exports.getContentType = getContentType;
 ;
-function transformResponse(response) {
+function transformResponse(response, defaultStatus) {
     var _a, _b;
-    let status = (_a = response.status) !== null && _a !== void 0 ? _a : 200;
+    let status = (_a = response.status) !== null && _a !== void 0 ? _a : defaultStatus;
     let headers = extractKeyValuePairs((_b = response.headers) !== null && _b !== void 0 ? _b : {});
     let contentType = headers.find((header) => {
         return header[0].toLowerCase() === "content-type";
@@ -517,7 +527,7 @@ function route(endpoints, httpRequest, httpResponse, urlPrefix = "") {
                 let handled = yield valid.handleRequest();
                 try {
                     let response = yield handled.validateResponse();
-                    let raw = transformResponse(response);
+                    let raw = transformResponse(response, 200);
                     return yield respond(httpResponse, raw);
                 }
                 catch (error) {
@@ -530,15 +540,18 @@ function route(endpoints, httpRequest, httpResponse, urlPrefix = "") {
                 }
             }
             catch (error) {
-                let status = 500;
-                if (Number.isInteger(error) && error >= 100 && error <= 999) {
-                    status = error;
-                }
-                return respond(httpResponse, {
-                    status: status,
+                let response = {
+                    status: 500,
                     headers: [],
                     payload: []
-                });
+                };
+                if (Number.isInteger(error) && error >= 100 && error <= 999) {
+                    response.status = error;
+                }
+                else if (error instanceof EndpointError) {
+                    response = error.getRawResponse();
+                }
+                return respond(httpResponse, response);
             }
         }
         catch (error) {
