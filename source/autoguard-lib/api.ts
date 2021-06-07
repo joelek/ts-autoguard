@@ -253,6 +253,7 @@ export type EndpointResponse = {
 export class ClientRequest<A extends EndpointRequest> {
 	private request: A;
 	private auxillary: Auxillary;
+	private collectedPayload?: CollectedPayload<A["payload"]>;
 
 	constructor(request: A, auxillary: Auxillary) {
 		this.request = request;
@@ -274,8 +275,13 @@ export class ClientRequest<A extends EndpointRequest> {
 	}
 
 	async payload(): Promise<CollectedPayload<A["payload"]>> {
+		if (this.collectedPayload !== undefined) {
+			return this.collectedPayload;
+		}
 		let payload = this.request.payload;
-		return (Binary.is(payload) ? await collectPayload(payload) : payload) as any;
+		let collectedPayload = (Binary.is(payload) ? await collectPayload(payload) : payload) as any;
+		this.collectedPayload = collectedPayload;
+		return collectedPayload;
 	}
 
 	socket(): Auxillary["socket"] {
@@ -285,6 +291,7 @@ export class ClientRequest<A extends EndpointRequest> {
 
 export class ServerResponse<A extends EndpointResponse> {
 	private response: A;
+	private collectedPayload?: CollectedPayload<A["payload"]>;
 
 	constructor(response: A) {
 		this.response = response;
@@ -303,8 +310,13 @@ export class ServerResponse<A extends EndpointResponse> {
 	}
 
 	async payload(): Promise<CollectedPayload<A["payload"]>> {
+		if (this.collectedPayload !== undefined) {
+			return this.collectedPayload;
+		}
 		let payload = this.response.payload;
-		return (Binary.is(payload) ? await collectPayload(payload) : payload) as any;
+		let collectedPayload = (Binary.is(payload) ? await collectPayload(payload) : payload) as any;
+		this.collectedPayload = collectedPayload;
+		return collectedPayload;
 	}
 };
 

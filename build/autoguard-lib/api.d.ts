@@ -83,6 +83,7 @@ export declare type EndpointResponse = {
 export declare class ClientRequest<A extends EndpointRequest> {
     private request;
     private auxillary;
+    private collectedPayload?;
     constructor(request: A, auxillary: Auxillary);
     options(): {} & A["options"];
     headers(): {} & A["headers"];
@@ -91,6 +92,7 @@ export declare class ClientRequest<A extends EndpointRequest> {
 }
 export declare class ServerResponse<A extends EndpointResponse> {
     private response;
+    private collectedPayload?;
     constructor(response: A);
     status(): number;
     headers(): {} & A["headers"];

@@ -211,8 +211,13 @@ class ClientRequest {
     }
     payload() {
         return __awaiter(this, void 0, void 0, function* () {
+            if (this.collectedPayload !== undefined) {
+                return this.collectedPayload;
+            }
             let payload = this.request.payload;
-            return (exports.Binary.is(payload) ? yield collectPayload(payload) : payload);
+            let collectedPayload = (exports.Binary.is(payload) ? yield collectPayload(payload) : payload);
+            this.collectedPayload = collectedPayload;
+            return collectedPayload;
         });
     }
     socket() {
@@ -235,8 +240,13 @@ class ServerResponse {
     }
     payload() {
         return __awaiter(this, void 0, void 0, function* () {
+            if (this.collectedPayload !== undefined) {
+                return this.collectedPayload;
+            }
             let payload = this.response.payload;
-            return (exports.Binary.is(payload) ? yield collectPayload(payload) : payload);
+            let collectedPayload = (exports.Binary.is(payload) ? yield collectPayload(payload) : payload);
+            this.collectedPayload = collectedPayload;
+            return collectedPayload;
         });
     }
 }

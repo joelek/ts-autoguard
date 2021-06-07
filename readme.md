@@ -262,7 +262,6 @@ NB: This project targets TypeScript 4 in strict mode.
 
 ## Roadmap
 
-* Solve issue with payload becoming undefined after first collection.
 * Create middleware for defining cache-control.
 * Add keyword "alias" and make it interchangable with "guard".
 * Add more detailed error messages for syntax errors.
