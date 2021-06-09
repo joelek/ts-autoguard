@@ -3,8 +3,8 @@ import * as tokenization from "./tokenization";
 import * as types from "./types";
 export declare class Component {
     name: string;
-    type?: string;
-    constructor(name: string, type?: string);
+    type?: types.Type;
+    constructor(name: string, type?: types.Type);
     generateSchema(options: shared.Options): string;
     static parse(tokenizer: tokenization.Tokenizer): Component;
 }
@@ -28,9 +28,9 @@ export declare class Alias {
 }
 export declare class Parameter {
     name: string;
-    type: string;
+    type: types.Type;
     optional: boolean;
-    constructor(name: string, type: string, optional: boolean);
+    constructor(name: string, type: types.Type, optional: boolean);
     generateSchema(options: shared.Options): string;
     static parse(tokenizer: tokenization.Tokenizer): Parameter;
 }

@@ -5,9 +5,9 @@ import * as types from "./types";
 
 export class Component {
 	name: string;
-	type?: string;
+	type?: types.Type;
 
-	constructor(name: string, type?: string) {
+	constructor(name: string, type?: types.Type) {
 		this.name = name;
 		this.type = type;
 	}
@@ -30,7 +30,11 @@ export class Component {
 				]);
 				let name = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
 				tokenization.expect(read(), ":");
-				let type = tokenization.expect(read(), ["boolean", "number", "string"]).value;
+				let type = types.Type.parse(tokenizer, {
+					Boolean: true,
+					Number: true,
+					String: true
+				});
 				tokenization.expect(read(), ">");
 				return new Component(name, type);
 			} else {
@@ -122,10 +126,10 @@ export class Alias {
 
 export class Parameter {
 	name: string;
-	type: string;
+	type: types.Type;
 	optional: boolean;
 
-	constructor(name: string, type: string, optional: boolean) {
+	constructor(name: string, type: types.Type, optional: boolean) {
 		this.name = name;
 		this.type = type;
 		this.optional = optional;
@@ -148,7 +152,11 @@ export class Parameter {
 				optional = true;
 			}
 			tokenization.expect(read(), ":");
-			let type = tokenization.expect(read(), ["boolean", "number", "string"]).value;
+			let type = types.Type.parse(tokenizer, {
+				Boolean: true,
+				Number: true,
+				String: true
+			});
 			return new Parameter(name, type, optional);
 		});
 	}

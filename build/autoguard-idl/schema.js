@@ -7,13 +7,13 @@ const route = require("./route");
 const tokenization = require("./tokenization");
 const types = require("./types");
 function makeParser(type) {
-    if (type === "boolean") {
+    if (type instanceof types.BooleanType) {
         return "getBooleanOption";
     }
-    if (type === "number") {
+    if (type instanceof types.NumberType) {
         return "getNumberOption";
     }
-    if (type === "string") {
+    if (type instanceof types.StringType) {
         return "getStringOption";
     }
     throw `Expected "${type}" to be a supported parameter type!`;
@@ -53,14 +53,14 @@ function getRequestType(route) {
     for (let component of route.path.components) {
         if (is.present(component.type)) {
             options.add(component.name, {
-                type: types.Type.parse(new tokenization.Tokenizer(component.type)),
+                type: component.type,
                 optional: false
             });
         }
     }
     for (let parameter of route.parameters.parameters) {
         options.add(parameter.name, {
-            type: types.Type.parse(new tokenization.Tokenizer(parameter.type)),
+            type: parameter.type,
             optional: parameter.optional
         });
     }
@@ -74,7 +74,7 @@ function getRequestType(route) {
     let headers = new types.ObjectType();
     for (let header of route.request.headers.headers) {
         headers.add(header.name, {
-            type: types.Type.parse(new tokenization.Tokenizer(header.type)),
+            type: header.type,
             optional: header.optional
         });
     }
@@ -97,7 +97,7 @@ function getResponseType(route) {
     let headers = new types.ObjectType();
     for (let header of route.response.headers.headers) {
         headers.add(header.name, {
-            type: types.Type.parse(new tokenization.Tokenizer(header.type)),
+            type: header.type,
             optional: header.optional
         });
     }
