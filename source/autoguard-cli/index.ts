@@ -5,6 +5,11 @@ import * as libos from "os";
 import * as libpath from "path";
 import * as idl from "../autoguard-idl";
 
+type Options = idl.shared.Options & {
+	root: string;
+	upgrade: boolean;
+};
+
 function findFiles(path: string, paths: Array<string> = []): Array<string> {
 	let stat = libfs.statSync(path);
 	if (stat.isDirectory() && libpath.basename(path) !== "node_modules") {
@@ -23,7 +28,7 @@ function filename(path: string): string {
 	return libpath.basename(path).split(".").slice(0, -1).join(".");
 }
 
-function transform(string: string, options: idl.shared.Options): { client: string, server: string, shared: string } {
+function transform(string: string, options: Options): { client: string, server: string, shared: string } {
 	let tokenizer = new idl.tokenization.Tokenizer(string);
 	try {
 		let schema = idl.schema.Schema.parseOld(tokenizer);
@@ -48,7 +53,7 @@ function transform(string: string, options: idl.shared.Options): { client: strin
 	};
 }
 
-function upgrade(string: string, options: idl.shared.Options): string {
+function upgrade(string: string, options: Options): string {
 	let tokenizer = new idl.tokenization.Tokenizer(string);
 	try {
 		let schema = idl.schema.Schema.parseOld(tokenizer);
@@ -59,7 +64,7 @@ function upgrade(string: string, options: idl.shared.Options): string {
 }
 
 function run(): void {
-	let options = {
+	let options: Options = {
 		eol: libos.EOL,
 		root: "./",
 		upgrade: false
