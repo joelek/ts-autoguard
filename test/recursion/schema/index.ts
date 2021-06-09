@@ -138,6 +138,13 @@ export const reference2 = autoguard.guards.Object.of({});
 
 export type reference2 = ReturnType<typeof reference2["as"]>;
 
+export const nested = autoguard.guards.Array.of(autoguard.guards.Union.of(
+	autoguard.guards.Array.of(autoguard.guards.String),
+	autoguard.guards.String
+));
+
+export type nested = ReturnType<typeof nested["as"]>;
+
 export namespace Autoguard {
 	export const Guards = {
 		"array1": autoguard.guards.Reference.of(() => array1),
@@ -162,7 +169,8 @@ export namespace Autoguard {
 		"empty1": autoguard.guards.Reference.of(() => empty1),
 		"empty2": autoguard.guards.Reference.of(() => empty2),
 		"reference1": autoguard.guards.Reference.of(() => reference1),
-		"reference2": autoguard.guards.Reference.of(() => reference2)
+		"reference2": autoguard.guards.Reference.of(() => reference2),
+		"nested": autoguard.guards.Reference.of(() => nested)
 	};
 
 	export type Guards = { [A in keyof typeof Guards]: ReturnType<typeof Guards[A]["as"]>; };

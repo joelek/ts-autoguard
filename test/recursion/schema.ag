@@ -51,3 +51,5 @@ guard empty2: {};
 guard reference1: reference2;
 
 guard reference2: {};
+
+guard nested: (string[] | string)[];

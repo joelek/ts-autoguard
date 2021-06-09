@@ -1,6 +1,11 @@
 import * as shared from "./shared";
 import * as tokenization from "./tokenization";
-export declare type Typename = "Array" | "Intersection" | "Union";
+export declare const Typenames: ["Any", "Array", "Boolean", "BooleanLiteral", "Group", "Intersection", "Null", "Number", "NumberLiteral", "Object", "Record", "Reference", "String", "StringLiteral", "Tuple", "Undefined", "Union"];
+export declare type Typename = typeof Typenames[number];
+export declare type TypenameMap = {
+    [A in Typename]?: boolean;
+};
+export declare function makeInclude(): TypenameMap;
 export interface Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
@@ -8,7 +13,7 @@ export interface Type {
     getImports(): Array<shared.Import>;
 }
 export declare const Type: {
-    parse(tokenizer: tokenization.Tokenizer, ...exclude: Typename[]): Type;
+    parse(tokenizer: tokenization.Tokenizer, include?: TypenameMap, exclude?: TypenameMap): Type;
 };
 export declare class AnyType implements Type {
     constructor();
@@ -17,7 +22,7 @@ export declare class AnyType implements Type {
     generateTypeGuard(options: shared.Options): string;
     getImports(): Array<shared.Import>;
     static readonly INSTANCE: AnyType;
-    static parse(tokenizer: tokenization.Tokenizer): AnyType;
+    static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): AnyType;
 }
 export declare class ArrayType implements Type {
     type: Type;
@@ -26,7 +31,7 @@ export declare class ArrayType implements Type {
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getImports(): Array<shared.Import>;
-    static parse(tokenizer: tokenization.Tokenizer, ...exclude: Typename[]): ArrayType;
+    static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): ArrayType;
 }
 export declare class Binary implements Type {
     constructor();
@@ -44,7 +49,7 @@ export declare class BooleanType implements Type {
     generateTypeGuard(options: shared.Options): string;
     getImports(): Array<shared.Import>;
     static readonly INSTANCE: BooleanType;
-    static parse(tokenizer: tokenization.Tokenizer): BooleanType;
+    static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): BooleanType;
 }
 export declare class BooleanLiteralType implements Type {
     value: boolean;
@@ -55,7 +60,7 @@ export declare class BooleanLiteralType implements Type {
     getImports(): Array<shared.Import>;
     static readonly INSTANCE_TRUE: BooleanLiteralType;
     static readonly INSTANCE_FALSE: BooleanLiteralType;
-    static parse(tokenizer: tokenization.Tokenizer): BooleanLiteralType;
+    static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): BooleanLiteralType;
 }
 export declare class GroupType implements Type {
     type: Type;
@@ -64,7 +69,7 @@ export declare class GroupType implements Type {
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getImports(): Array<shared.Import>;
-    static parse(tokenizer: tokenization.Tokenizer): GroupType;
+    static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): GroupType;
 }
 export declare class IntersectionType implements Type {
     types: Set<Type>;
@@ -74,7 +79,7 @@ export declare class IntersectionType implements Type {
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getImports(): Array<shared.Import>;
-    static parse(tokenizer: tokenization.Tokenizer, ...exclude: Typename[]): Type;
+    static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): Type;
 }
 export declare class NullType implements Type {
     constructor();
@@ -83,7 +88,7 @@ export declare class NullType implements Type {
     generateTypeGuard(options: shared.Options): string;
     getImports(): Array<shared.Import>;
     static readonly INSTANCE: NullType;
-    static parse(tokenizer: tokenization.Tokenizer): NullType;
+    static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): NullType;
 }
 export declare class NumberType implements Type {
     constructor();
@@ -92,7 +97,7 @@ export declare class NumberType implements Type {
     generateTypeGuard(options: shared.Options): string;
     getImports(): Array<shared.Import>;
     static readonly INSTANCE: NumberType;
-    static parse(tokenizer: tokenization.Tokenizer): NumberType;
+    static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): NumberType;
 }
 export declare class NumberLiteralType implements Type {
     value: number;
@@ -101,7 +106,7 @@ export declare class NumberLiteralType implements Type {
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getImports(): Array<shared.Import>;
-    static parse(tokenizer: tokenization.Tokenizer): NumberLiteralType;
+    static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): NumberLiteralType;
 }
 export declare type ObjectMember = {
     type: Type;
@@ -115,7 +120,7 @@ export declare class ObjectType implements Type {
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getImports(): Array<shared.Import>;
-    static parse(tokenizer: tokenization.Tokenizer): ObjectType;
+    static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): ObjectType;
 }
 export declare class RecordType implements Type {
     type: Type;
@@ -124,7 +129,7 @@ export declare class RecordType implements Type {
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getImports(): Array<shared.Import>;
-    static parse(tokenizer: tokenization.Tokenizer): RecordType;
+    static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): RecordType;
 }
 export declare class ReferenceType implements Type {
     path: string[];
@@ -134,7 +139,7 @@ export declare class ReferenceType implements Type {
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getImports(): Array<shared.Import>;
-    static parse(tokenizer: tokenization.Tokenizer): ReferenceType;
+    static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): ReferenceType;
 }
 export declare class StringType implements Type {
     constructor();
@@ -143,7 +148,7 @@ export declare class StringType implements Type {
     generateTypeGuard(options: shared.Options): string;
     getImports(): Array<shared.Import>;
     static readonly INSTANCE: StringType;
-    static parse(tokenizer: tokenization.Tokenizer): StringType;
+    static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): StringType;
 }
 export declare class StringLiteralType implements Type {
     value: string;
@@ -152,7 +157,7 @@ export declare class StringLiteralType implements Type {
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getImports(): Array<shared.Import>;
-    static parse(tokenizer: tokenization.Tokenizer): StringLiteralType;
+    static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): StringLiteralType;
 }
 export declare class TupleType implements Type {
     types: Array<Type>;
@@ -162,7 +167,7 @@ export declare class TupleType implements Type {
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getImports(): Array<shared.Import>;
-    static parse(tokenizer: tokenization.Tokenizer): TupleType;
+    static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): TupleType;
 }
 export declare class UndefinedType implements Type {
     constructor();
@@ -171,7 +176,7 @@ export declare class UndefinedType implements Type {
     generateTypeGuard(options: shared.Options): string;
     getImports(): Array<shared.Import>;
     static readonly INSTANCE: UndefinedType;
-    static parse(tokenizer: tokenization.Tokenizer): UndefinedType;
+    static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): UndefinedType;
 }
 export declare class UnionType implements Type {
     types: Set<Type>;
@@ -181,7 +186,7 @@ export declare class UnionType implements Type {
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getImports(): Array<shared.Import>;
-    static parse(tokenizer: tokenization.Tokenizer, ...exclude: Array<Typename>): Type;
+    static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): Type;
 }
 export declare class Headers implements Type {
     constructor();
