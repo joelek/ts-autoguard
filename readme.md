@@ -271,10 +271,7 @@ NB: This project targets TypeScript 4 in strict mode.
 * Structure code using TypeScript project references.
 * Modernize code to use string templates.
 * Write unit tests.
-* Create middleware for combining several APIs into one.
-* Add support for default parameters and header values.
 * Add support for literal parameter values and headers as well unions thereof.
-* Add meta route that allows the schema to be downloaded.
 
 ## Syntax
 
