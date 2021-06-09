@@ -5,7 +5,7 @@ import * as shared from "./index";
 
 export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Requests, shared.Autoguard.Responses>, options?: Partial<{ urlPrefix: string }>): autoguard.api.RequestListener => {
 	let endpoints = new Array<autoguard.api.Endpoint>();
-	endpoints.push((raw) => {
+	endpoints.push((raw, auxillary) => {
 		let method = "POST";
 		let components = new Array<[string, string]>();
 		components.push(["component", raw.components[0]]);
@@ -21,14 +21,14 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				headers["header"] = autoguard.api.getStringOption(raw.headers, "header");
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["POST:/<component>/"];
-				let request = guard.as({ options, headers, payload }, "SERVER:request");
+				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["POST:/<component>/"](new autoguard.api.ClientRequest(request));
+						let response = await routes["POST:/<component>/"](new autoguard.api.ClientRequest(request, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["POST:/<component>/"];
-								guard.as(response, "SERVER:response");
+								guard.as(response, "response");
 								return response;
 							}
 						};

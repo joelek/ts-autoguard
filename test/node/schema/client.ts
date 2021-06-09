@@ -9,7 +9,7 @@ export const makeClient = (options?: Partial<{
 }>): autoguard.api.Client<shared.Autoguard.Requests, shared.Autoguard.Responses> => ({
 	"POST:/<component>/": async (request) => {
 		let guard = shared.Autoguard.Requests["POST:/<component>/"];
-		guard.as(request, "CLIENT:request");
+		guard.as(request, "request");
 		let method = "POST";
 		let components = new Array<string>();
 		components.push(String(request.options["component"]));
@@ -25,7 +25,7 @@ export const makeClient = (options?: Partial<{
 			headers["header"] = autoguard.api.getStringOption(raw.headers, "header");
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["POST:/<component>/"];
-			let response = guard.as({ status, headers, payload }, "CLIENT:response");
+			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response);
 		}
 	},
