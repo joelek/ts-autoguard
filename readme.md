@@ -275,7 +275,6 @@ NB: This project targets TypeScript 4 in strict mode.
 * Add support for default parameters and header values.
 * Add support for literal parameter values and headers as well unions thereof.
 * Add meta route that allows the schema to be downloaded.
-* Add support for generating JavaScript code directly.
 
 ## Syntax
 

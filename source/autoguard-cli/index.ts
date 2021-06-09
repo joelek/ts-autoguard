@@ -3,11 +3,13 @@
 import * as libfs from "fs";
 import * as libos from "os";
 import * as libpath from "path";
+import * as libts from "typescript";
 import * as idl from "../autoguard-idl";
 
 type Options = idl.shared.Options & {
 	root: string;
 	upgrade: boolean;
+	target: string;
 };
 
 function findFiles(path: string, paths: Array<string> = []): Array<string> {
@@ -26,6 +28,16 @@ function findFiles(path: string, paths: Array<string> = []): Array<string> {
 
 function filename(path: string): string {
 	return libpath.basename(path).split(".").slice(0, -1).join(".");
+}
+
+function transpile(source: string): string {
+	let result = libts.transpileModule(source, {
+		compilerOptions: {
+			module: libts.ModuleKind.ESNext,
+			target: libts.ScriptTarget.ESNext
+		}
+	});
+	return result.outputText;
 }
 
 function transform(string: string, options: Options): { client: string, server: string, shared: string } {
@@ -67,7 +79,8 @@ function run(): void {
 	let options: Options = {
 		eol: libos.EOL,
 		root: "./",
-		upgrade: false
+		upgrade: false,
+		target: "ts"
 	};
 	let found_unrecognized_argument = false;
 	for (let argv of process.argv.slice(2)) {
@@ -79,6 +92,8 @@ function run(): void {
 			options.root = parts[1];
 		} else if ((parts = /^--upgrade=(true|false)$/.exec(argv)) != null) {
 			options.upgrade = parts[1] === "true" ? true : false;
+		} else if ((parts = /^--target=(.+)$/.exec(argv)) != null) {
+			options.target = parts[1];
 		} else {
 			found_unrecognized_argument = true;
 			process.stderr.write("Unrecognized argument \"" + argv + "\"!\n");
@@ -89,6 +104,7 @@ function run(): void {
 		process.stderr.write("	--eol=string\n");
 		process.stderr.write("	--root=string\n");
 		process.stderr.write("	--upgrade=boolean\n");
+		process.stderr.write("	--target=string\n");
 		process.exit(0);
 	}
 	let paths = findFiles(options.root);
@@ -112,9 +128,15 @@ function run(): void {
 				libfs.rmSync(directory, { force: true, recursive: true });
 				libfs.rmSync(libpath.join(libpath.dirname(path), filename(path) + ".ts"), { force: true, recursive: true });
 				libfs.mkdirSync(directory, { recursive: true });
-				libfs.writeFileSync(libpath.join(directory, "client.ts"), generated.client, "utf8");
-				libfs.writeFileSync(libpath.join(directory, "server.ts"), generated.server, "utf8");
-				libfs.writeFileSync(libpath.join(directory, "index.ts"), generated.shared, "utf8");
+				if (options.target === "js") {
+					libfs.writeFileSync(libpath.join(directory, "client.js"), transpile(generated.client), "utf8");
+					libfs.writeFileSync(libpath.join(directory, "server.js"), transpile(generated.server), "utf8");
+					libfs.writeFileSync(libpath.join(directory, "index.js"), transpile(generated.shared), "utf8");
+				} else {
+					libfs.writeFileSync(libpath.join(directory, "client.ts"), generated.client, "utf8");
+					libfs.writeFileSync(libpath.join(directory, "server.ts"), generated.server, "utf8");
+					libfs.writeFileSync(libpath.join(directory, "index.ts"), generated.shared, "utf8");
+				}
 			}
 			return sum + 0;
 		} catch (error) {
