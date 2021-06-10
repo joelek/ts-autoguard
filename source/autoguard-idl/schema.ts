@@ -6,16 +6,13 @@ import * as tokenization from "./tokenization";
 import * as types from "./types";
 
 function makeParser(type: types.Type): string {
-	if (type instanceof types.BooleanType) {
-		return "getBooleanOption";
-	}
-	if (type instanceof types.NumberType) {
-		return "getNumberOption";
-	}
 	if (type instanceof types.StringType) {
-		return "getStringOption";
+		return "getPlainOption";
 	}
-	throw `Expected "${type}" to be a supported parameter type!`;
+	if (type instanceof types.StringLiteralType) {
+		return "getPlainOption";
+	}
+	return "getOption";
 }
 
 function areAllMembersOptional(object: types.ObjectType): boolean {

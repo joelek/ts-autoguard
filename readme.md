@@ -270,7 +270,6 @@ NB: This project targets TypeScript 4 in strict mode.
 * Structure code using TypeScript project references.
 * Modernize code to use string templates.
 * Write unit tests.
-* Add support for literal parameter values and headers as well unions thereof.
 
 ## Syntax
 
@@ -319,12 +318,14 @@ TupleBody = Type TupleBodyTail*
 TupleType = "[" TupleBody* "]"
 UndefinedType = "undefined"
 UnionType = Type "|" Type
-PrimitiveType = AnyType or BooleanType or NullType or NumberType or StringType or UndefinedType
+PrimitiveType = BooleanType or NumberType or StringType
+SupportType = AnyType or NullType or UndefinedType;
 LiteralType = BooleanLiteralType or NumberLiteralType or StringLiteralType
 ComplexType = ArrayType or GroupType or IntersectionType or ObjectType or RecordType or ReferenceType or TupleType or UnionType
-Type = PrimitiveType or LiteralType or ComplexType
+Type = PrimitiveType or SupportType or LiteralType or ComplexType
 Guard = "guard" Identifier ":" Type ";"
-OptionsType = BooleanType | NumberType | StringType
+OptionsUnionType = OptionsType "|" OptionsType
+OptionsType = PrimitiveType or LiteralType or NullType or OptionsUnionType
 OptionsKey = Identifier or StringLiteral
 OptionsKeyValue = OptionsKey "?"? ":" OptionsType
 OptionsBodyTail = "," OptionsKeyValue

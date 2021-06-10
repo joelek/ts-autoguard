@@ -2,6 +2,7 @@ import * as guards from "./guards";
 
 export const Options = guards.Record.of(guards.Union.of(
 	guards.Boolean,
+	guards.Null,
 	guards.Number,
 	guards.String
 ));
@@ -10,6 +11,7 @@ export type Options = ReturnType<typeof Headers.as>;
 
 export const Headers = guards.Record.of(guards.Union.of(
 	guards.Boolean,
+	guards.Null,
 	guards.Number,
 	guards.String
 ));
@@ -73,8 +75,8 @@ export const Binary = guards.Union.of(
 
 export type Binary = ReturnType<typeof Binary.as>;
 
-export type Primitive = boolean | number | string;
-export type JSON = null | Primitive | JSON[] | { [key: string]: JSON };
+export type Primitive = boolean | null | number | string;
+export type JSON = boolean | null | number | string | JSON[] | { [key: string]: JSON };
 
 export type RequestLike = AsyncBinary & {
 	method?: string;
@@ -129,6 +131,28 @@ export function serializeParameters(parameters: Array<[string, string]>): string
 		return "";
 	}
 	return `?${parts.join("&")}`;
+};
+
+export function getPlainOption(pairs: Iterable<[string, string]>, key: string): string | undefined {
+	for (let pair of pairs) {
+		if (pair[0] === key) {
+			try {
+				let value = pair[1];
+				return value;
+			} catch (error) {}
+		}
+	}
+};
+
+export function getOption(pairs: Iterable<[string, string]>, key: string): Primitive | undefined {
+	for (let pair of pairs) {
+		if (pair[0] === key) {
+			try {
+				let value = pair[1];
+				return JSON.parse(value);
+			} catch (error) {}
+		}
+	}
 };
 
 export function getStringOption(pairs: Iterable<[string, string]>, key: string): string | undefined {

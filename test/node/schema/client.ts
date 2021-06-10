@@ -22,7 +22,7 @@ export const makeClient = (options?: Partial<{
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-			headers["header"] = autoguard.api.getStringOption(raw.headers, "header");
+			headers["header"] = autoguard.api.getPlainOption(raw.headers, "header");
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["POST:/<component>/"];
 			let response = guard.as({ status, headers, payload }, "response");

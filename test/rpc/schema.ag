@@ -10,11 +10,21 @@ route GET:/one/two;
 
 route GET:/<dynamic_boolean_component:boolean>;
 
+route GET:/<dynamic_boolean_literal_component:true>;
+
+route GET:/<dynamic_null_component:null>;
+
 route GET:/<dynamic_number_component:number>;
+
+route GET:/<dynamic_number_literal_component:1337>;
 
 route GET:/<dynamic_string_component:string>;
 
+route GET:/<dynamic_string_literal_component:"räksmörgås">;
+
 route GET:/<dynamic_component_one:string>/<dynamic_component_two:string>;
+
+route GET:/<dynamic_union_component:boolean|null|number|string>;
 
 route GET:/<"quoted key":string>;
 

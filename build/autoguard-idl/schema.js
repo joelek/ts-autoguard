@@ -7,16 +7,13 @@ const route = require("./route");
 const tokenization = require("./tokenization");
 const types = require("./types");
 function makeParser(type) {
-    if (type instanceof types.BooleanType) {
-        return "getBooleanOption";
-    }
-    if (type instanceof types.NumberType) {
-        return "getNumberOption";
-    }
     if (type instanceof types.StringType) {
-        return "getStringOption";
+        return "getPlainOption";
     }
-    throw `Expected "${type}" to be a supported parameter type!`;
+    if (type instanceof types.StringLiteralType) {
+        return "getPlainOption";
+    }
+    return "getOption";
 }
 function areAllMembersOptional(object) {
     for (let [key, value] of object.members) {

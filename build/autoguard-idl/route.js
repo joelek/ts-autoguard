@@ -30,8 +30,13 @@ class Component {
                 tokenization.expect(read(), ":");
                 let type = types.Type.parse(tokenizer, {
                     Boolean: true,
+                    BooleanLiteral: true,
+                    Null: true,
                     Number: true,
-                    String: true
+                    NumberLiteral: true,
+                    String: true,
+                    StringLiteral: true,
+                    Union: true
                 });
                 tokenization.expect(read(), ">");
                 return new Component(name, type);
@@ -141,8 +146,13 @@ class Parameter {
             tokenization.expect(read(), ":");
             let type = types.Type.parse(tokenizer, {
                 Boolean: true,
+                BooleanLiteral: true,
+                Null: true,
                 Number: true,
-                String: true
+                NumberLiteral: true,
+                String: true,
+                StringLiteral: true,
+                Union: true
             });
             return new Parameter(name, type, optional);
         });

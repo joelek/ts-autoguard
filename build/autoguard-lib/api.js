@@ -16,10 +16,10 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.isPayloadBinary = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
+exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.isPayloadBinary = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getBooleanOption = exports.getNumberOption = exports.getStringOption = exports.getOption = exports.getPlainOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
 const guards = require("./guards");
-exports.Options = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
-exports.Headers = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
+exports.Options = guards.Record.of(guards.Union.of(guards.Boolean, guards.Null, guards.Number, guards.String));
+exports.Headers = guards.Record.of(guards.Union.of(guards.Boolean, guards.Null, guards.Number, guards.String));
 exports.AsyncBinary = {
     as(subject, path = "") {
         if (subject != null) {
@@ -108,6 +108,32 @@ function serializeParameters(parameters) {
     return `?${parts.join("&")}`;
 }
 exports.serializeParameters = serializeParameters;
+;
+function getPlainOption(pairs, key) {
+    for (let pair of pairs) {
+        if (pair[0] === key) {
+            try {
+                let value = pair[1];
+                return value;
+            }
+            catch (error) { }
+        }
+    }
+}
+exports.getPlainOption = getPlainOption;
+;
+function getOption(pairs, key) {
+    for (let pair of pairs) {
+        if (pair[0] === key) {
+            try {
+                let value = pair[1];
+                return JSON.parse(value);
+            }
+            catch (error) { }
+        }
+    }
+}
+exports.getOption = getOption;
 ;
 function getStringOption(pairs, key) {
     for (let pair of pairs) {
