@@ -41,16 +41,6 @@ function makeRouteTag(route: route.Route): string {
 	return `${route.method.method}:${components.join("")}`;
 }
 
-function makeOptionType(): types.Type {
-	return new types.RecordType(
-		new types.UnionType([
-			types.BooleanType.INSTANCE,
-			types.NumberType.INSTANCE,
-			types.StringType.INSTANCE
-		])
-	);
-}
-
 function getRequestType(route: route.Route): types.Type {
 	let request = new types.ObjectType();
 	let options = new types.ObjectType();

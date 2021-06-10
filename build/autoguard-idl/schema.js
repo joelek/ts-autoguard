@@ -40,13 +40,6 @@ function makeRouteTag(route) {
     });
     return `${route.method.method}:${components.join("")}`;
 }
-function makeOptionType() {
-    return new types.RecordType(new types.UnionType([
-        types.BooleanType.INSTANCE,
-        types.NumberType.INSTANCE,
-        types.StringType.INSTANCE
-    ]));
-}
 function getRequestType(route) {
     let request = new types.ObjectType();
     let options = new types.ObjectType();
