@@ -2,7 +2,6 @@ import * as guards from "./guards";
 
 export const Options = guards.Record.of(guards.Union.of(
 	guards.Boolean,
-	guards.Null,
 	guards.Number,
 	guards.String
 ));
@@ -11,7 +10,6 @@ export type Options = ReturnType<typeof Headers.as>;
 
 export const Headers = guards.Record.of(guards.Union.of(
 	guards.Boolean,
-	guards.Null,
 	guards.Number,
 	guards.String
 ));
@@ -133,7 +131,7 @@ export function serializeParameters(parameters: Array<[string, string]>): string
 	return `?${parts.join("&")}`;
 };
 
-export function getPlainOption(pairs: Iterable<[string, string]>, key: string): string | undefined {
+export function getOption(pairs: Iterable<[string, string]>, key: string): string | undefined {
 	for (let pair of pairs) {
 		if (pair[0] === key) {
 			try {
@@ -144,7 +142,7 @@ export function getPlainOption(pairs: Iterable<[string, string]>, key: string): 
 	}
 };
 
-export function getOption(pairs: Iterable<[string, string]>, key: string): Primitive | undefined {
+export function getParsedOption(pairs: Iterable<[string, string]>, key: string): Primitive | undefined {
 	for (let pair of pairs) {
 		if (pair[0] === key) {
 			try {

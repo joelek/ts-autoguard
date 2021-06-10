@@ -1,6 +1,6 @@
-export declare const Options: import("./serialization").MessageGuard<Record<string, string | number | boolean | null | undefined>>;
+export declare const Options: import("./serialization").MessageGuard<Record<string, string | number | boolean | undefined>>;
 export declare type Options = ReturnType<typeof Headers.as>;
-export declare const Headers: import("./serialization").MessageGuard<Record<string, string | number | boolean | null | undefined>>;
+export declare const Headers: import("./serialization").MessageGuard<Record<string, string | number | boolean | undefined>>;
 export declare type Headers = ReturnType<typeof Headers.as>;
 export declare type AsyncBinary = AsyncIterable<Uint8Array>;
 export declare const AsyncBinary: {
@@ -38,8 +38,8 @@ export declare function serializeComponents(components: Array<string>): string;
 export declare function extractKeyValuePairs(record: Record<string, Primitive | undefined>, exclude?: Array<string>): Array<[string, string]>;
 export declare function combineKeyValuePairs(pairs: Array<[string, string]>): Record<string, Primitive | undefined>;
 export declare function serializeParameters(parameters: Array<[string, string]>): string;
-export declare function getPlainOption(pairs: Iterable<[string, string]>, key: string): string | undefined;
-export declare function getOption(pairs: Iterable<[string, string]>, key: string): Primitive | undefined;
+export declare function getOption(pairs: Iterable<[string, string]>, key: string): string | undefined;
+export declare function getParsedOption(pairs: Iterable<[string, string]>, key: string): Primitive | undefined;
 export declare type RawRequest = {
     method: string;
     components: Array<string>;

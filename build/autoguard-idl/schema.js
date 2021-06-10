@@ -8,12 +8,9 @@ const tokenization = require("./tokenization");
 const types = require("./types");
 function makeParser(type) {
     if (type instanceof types.StringType) {
-        return "getPlainOption";
+        return "getOption";
     }
-    if (type instanceof types.StringLiteralType) {
-        return "getPlainOption";
-    }
-    return "getOption";
+    return "getParsedOption";
 }
 function areAllMembersOptional(object) {
     for (let [key, value] of object.members) {

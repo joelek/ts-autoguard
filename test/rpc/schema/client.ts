@@ -129,26 +129,6 @@ export const makeClient = (options?: Partial<{
 			return new autoguard.api.ServerResponse(response);
 		}
 	},
-	"GET:/<dynamic_boolean_literal_component>": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/<dynamic_boolean_literal_component>"];
-		guard.as(request, "request");
-		let method = "GET";
-		let components = new Array<string>();
-		components.push(String(request.options["dynamic_boolean_literal_component"]));
-		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, ["dynamic_boolean_literal_component"]);
-		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
-		let payload = autoguard.api.serializePayload(request.payload);
-		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
-		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
-		{
-			let status = raw.status;
-			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-			let payload = await autoguard.api.deserializePayload(raw.payload);
-			let guard = shared.Autoguard.Responses["GET:/<dynamic_boolean_literal_component>"];
-			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
-		}
-	},
 	"GET:/<dynamic_number_component>": async (request) => {
 		let guard = shared.Autoguard.Requests["GET:/<dynamic_number_component>"];
 		guard.as(request, "request");
@@ -165,26 +145,6 @@ export const makeClient = (options?: Partial<{
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/<dynamic_number_component>"];
-			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
-		}
-	},
-	"GET:/<dynamic_number_literal_component>": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/<dynamic_number_literal_component>"];
-		guard.as(request, "request");
-		let method = "GET";
-		let components = new Array<string>();
-		components.push(String(request.options["dynamic_number_literal_component"]));
-		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, ["dynamic_number_literal_component"]);
-		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
-		let payload = autoguard.api.serializePayload(request.payload);
-		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
-		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
-		{
-			let status = raw.status;
-			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-			let payload = await autoguard.api.deserializePayload(raw.payload);
-			let guard = shared.Autoguard.Responses["GET:/<dynamic_number_literal_component>"];
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response);
 		}
@@ -209,26 +169,6 @@ export const makeClient = (options?: Partial<{
 			return new autoguard.api.ServerResponse(response);
 		}
 	},
-	"GET:/<dynamic_string_literal_component>": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/<dynamic_string_literal_component>"];
-		guard.as(request, "request");
-		let method = "GET";
-		let components = new Array<string>();
-		components.push(String(request.options["dynamic_string_literal_component"]));
-		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, ["dynamic_string_literal_component"]);
-		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
-		let payload = autoguard.api.serializePayload(request.payload);
-		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
-		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
-		{
-			let status = raw.status;
-			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-			let payload = await autoguard.api.deserializePayload(raw.payload);
-			let guard = shared.Autoguard.Responses["GET:/<dynamic_string_literal_component>"];
-			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
-		}
-	},
 	"GET:/<dynamic_component_one>/<dynamic_component_two>": async (request) => {
 		let guard = shared.Autoguard.Requests["GET:/<dynamic_component_one>/<dynamic_component_two>"];
 		guard.as(request, "request");
@@ -246,26 +186,6 @@ export const makeClient = (options?: Partial<{
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/<dynamic_component_one>/<dynamic_component_two>"];
-			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
-		}
-	},
-	"GET:/<dynamic_union_component>": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/<dynamic_union_component>"];
-		guard.as(request, "request");
-		let method = "GET";
-		let components = new Array<string>();
-		components.push(String(request.options["dynamic_union_component"]));
-		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, ["dynamic_union_component"]);
-		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
-		let payload = autoguard.api.serializePayload(request.payload);
-		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
-		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
-		{
-			let status = raw.status;
-			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-			let payload = await autoguard.api.deserializePayload(raw.payload);
-			let guard = shared.Autoguard.Responses["GET:/<dynamic_union_component>"];
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response);
 		}
@@ -704,7 +624,7 @@ export const makeClient = (options?: Partial<{
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-			headers["required_boolean_response_header"] = autoguard.api.getOption(raw.headers, "required_boolean_response_header");
+			headers["required_boolean_response_header"] = autoguard.api.getParsedOption(raw.headers, "required_boolean_response_header");
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers02"];
 			let response = guard.as({ status, headers, payload }, "response");
@@ -725,7 +645,7 @@ export const makeClient = (options?: Partial<{
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-			headers["optional_boolean_response_header"] = autoguard.api.getOption(raw.headers, "optional_boolean_response_header");
+			headers["optional_boolean_response_header"] = autoguard.api.getParsedOption(raw.headers, "optional_boolean_response_header");
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers03"];
 			let response = guard.as({ status, headers, payload }, "response");
@@ -746,7 +666,7 @@ export const makeClient = (options?: Partial<{
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-			headers["required_number_response_header"] = autoguard.api.getOption(raw.headers, "required_number_response_header");
+			headers["required_number_response_header"] = autoguard.api.getParsedOption(raw.headers, "required_number_response_header");
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers04"];
 			let response = guard.as({ status, headers, payload }, "response");
@@ -767,7 +687,7 @@ export const makeClient = (options?: Partial<{
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-			headers["optional_number_response_header"] = autoguard.api.getOption(raw.headers, "optional_number_response_header");
+			headers["optional_number_response_header"] = autoguard.api.getParsedOption(raw.headers, "optional_number_response_header");
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers05"];
 			let response = guard.as({ status, headers, payload }, "response");
@@ -788,7 +708,7 @@ export const makeClient = (options?: Partial<{
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-			headers["required_string_response_header"] = autoguard.api.getPlainOption(raw.headers, "required_string_response_header");
+			headers["required_string_response_header"] = autoguard.api.getOption(raw.headers, "required_string_response_header");
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers06"];
 			let response = guard.as({ status, headers, payload }, "response");
@@ -809,7 +729,7 @@ export const makeClient = (options?: Partial<{
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-			headers["optional_string_response_header"] = autoguard.api.getPlainOption(raw.headers, "optional_string_response_header");
+			headers["optional_string_response_header"] = autoguard.api.getOption(raw.headers, "optional_string_response_header");
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers07"];
 			let response = guard.as({ status, headers, payload }, "response");
@@ -830,8 +750,8 @@ export const makeClient = (options?: Partial<{
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-			headers["response_header_one"] = autoguard.api.getPlainOption(raw.headers, "response_header_one");
-			headers["response_header_two"] = autoguard.api.getPlainOption(raw.headers, "response_header_two");
+			headers["response_header_one"] = autoguard.api.getOption(raw.headers, "response_header_one");
+			headers["response_header_two"] = autoguard.api.getOption(raw.headers, "response_header_two");
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers08"];
 			let response = guard.as({ status, headers, payload }, "response");
@@ -852,7 +772,7 @@ export const makeClient = (options?: Partial<{
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-			headers["quoted key"] = autoguard.api.getPlainOption(raw.headers, "quoted key");
+			headers["quoted key"] = autoguard.api.getOption(raw.headers, "quoted key");
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers09"];
 			let response = guard.as({ status, headers, payload }, "response");
@@ -953,7 +873,7 @@ export const makeClient = (options?: Partial<{
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-			headers["response_header"] = autoguard.api.getPlainOption(raw.headers, "response_header");
+			headers["response_header"] = autoguard.api.getOption(raw.headers, "response_header");
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/full_example"];
 			let response = guard.as({ status, headers, payload }, "response");

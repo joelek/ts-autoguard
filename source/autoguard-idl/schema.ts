@@ -7,12 +7,9 @@ import * as types from "./types";
 
 function makeParser(type: types.Type): string {
 	if (type instanceof types.StringType) {
-		return "getPlainOption";
+		return "getOption";
 	}
-	if (type instanceof types.StringLiteralType) {
-		return "getPlainOption";
-	}
-	return "getOption";
+	return "getParsedOption";
 }
 
 function areAllMembersOptional(object: types.ObjectType): boolean {
