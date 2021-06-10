@@ -155,45 +155,6 @@ export function getOption(pairs: Iterable<[string, string]>, key: string): Primi
 	}
 };
 
-export function getStringOption(pairs: Iterable<[string, string]>, key: string): string | undefined {
-	for (let pair of pairs) {
-		if (pair[0] === key) {
-			try {
-				let value = pair[1];
-				if (guards.String.is(value)) {
-					return value;
-				}
-			} catch (error) {}
-		}
-	}
-};
-
-export function getNumberOption(pairs: Iterable<[string, string]>, key: string): number | undefined {
-	for (let pair of pairs) {
-		if (pair[0] === key) {
-			try {
-				let value = JSON.parse(pair[1]);
-				if (guards.Number.is(value)) {
-					return value;
-				}
-			} catch (error) {}
-		}
-	}
-};
-
-export function getBooleanOption(pairs: Iterable<[string, string]>, key: string): boolean | undefined {
-	for (let pair of pairs) {
-		if (pair[0] === key) {
-			try {
-				let value = JSON.parse(pair[1]);
-				if (guards.Boolean.is(value)) {
-					return value;
-				}
-			} catch (error) {}
-		}
-	}
-};
-
 export type RawRequest = {
 	method: string;
 	components: Array<string>;

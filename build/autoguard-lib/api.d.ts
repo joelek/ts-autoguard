@@ -40,9 +40,6 @@ export declare function combineKeyValuePairs(pairs: Array<[string, string]>): Re
 export declare function serializeParameters(parameters: Array<[string, string]>): string;
 export declare function getPlainOption(pairs: Iterable<[string, string]>, key: string): string | undefined;
 export declare function getOption(pairs: Iterable<[string, string]>, key: string): Primitive | undefined;
-export declare function getStringOption(pairs: Iterable<[string, string]>, key: string): string | undefined;
-export declare function getNumberOption(pairs: Iterable<[string, string]>, key: string): number | undefined;
-export declare function getBooleanOption(pairs: Iterable<[string, string]>, key: string): boolean | undefined;
 export declare type RawRequest = {
     method: string;
     components: Array<string>;
