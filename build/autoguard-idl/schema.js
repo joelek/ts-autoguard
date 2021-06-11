@@ -7,7 +7,7 @@ const route = require("./route");
 const tokenization = require("./tokenization");
 const types = require("./types");
 function makeParser(type) {
-    if (type instanceof types.StringType) {
+    if (type instanceof types.PlainType) {
         return "getOption";
     }
     return "getParsedOption";

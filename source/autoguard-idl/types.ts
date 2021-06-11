@@ -1017,3 +1017,27 @@ export class Options implements Type {
 
 	static readonly INSTANCE = new Options();
 };
+
+export class PlainType implements Type {
+	constructor() {
+
+	}
+
+	generateSchema(options: shared.Options): string {
+		throw `plain`;
+	}
+
+	generateType(options: shared.Options): string {
+		return "string";
+	}
+
+	generateTypeGuard(options: shared.Options): string {
+		return "autoguard.guards.String";
+	}
+
+	getImports(): shared.Import[] {
+		return [];
+	}
+
+	static readonly INSTANCE = new PlainType();
+};

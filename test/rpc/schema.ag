@@ -10,6 +10,8 @@ route GET:/one/two;
 
 route GET:/<dynamic_component>;
 
+route GET:/<dynamic_plain_component:plain>;
+
 route GET:/<dynamic_boolean_component:boolean>;
 
 route GET:/<dynamic_number_component:number>;
@@ -44,6 +46,10 @@ route GET:/parameters10 ? <{ required_parameter }>;
 
 route GET:/parameters11 ? <{ optional_parameter? }>;
 
+route GET:/parameters12 ? <{ required_plain_parameter: plain }>;
+
+route GET:/parameters13 ? <{ optional_plain_parameter?: plain }>;
+
 route GET:/request_headers01 <= <{}>;
 
 route GET:/request_headers02 <= <{ required_boolean_request_header: boolean }>;
@@ -66,6 +72,10 @@ route GET:/request_headers10 <= <{ required_request_header }>;
 
 route GET:/request_headers11 <= <{ optional_request_header? }>;
 
+route GET:/request_headers12 <= <{ required_plain_request_header: plain }>;
+
+route GET:/request_headers13 <= <{ optional_plain_request_header?: plain }>;
+
 route GET:/response_headers01 => <{}>;
 
 route GET:/response_headers02 => <{ required_boolean_response_header: boolean }>;
@@ -87,6 +97,10 @@ route GET:/response_headers09 => <{ "quoted key": string }>;
 route GET:/response_headers10 => <{ required_response_header }>;
 
 route GET:/response_headers11 => <{ optional_response_header? }>;
+
+route GET:/response_headers12 => <{ required_plain_response_header: plain }>;
+
+route GET:/response_headers13 => <{ optional_plain_response_header?: plain }>;
 
 route GET:/request_payload01 <= { required_request_member: string };
 

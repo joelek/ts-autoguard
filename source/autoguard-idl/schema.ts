@@ -6,7 +6,7 @@ import * as tokenization from "./tokenization";
 import * as types from "./types";
 
 function makeParser(type: types.Type): string {
-	if (type instanceof types.StringType) {
+	if (type instanceof types.PlainType) {
 		return "getOption";
 	}
 	return "getParsedOption";

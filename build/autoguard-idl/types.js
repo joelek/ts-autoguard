@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Options = exports.Headers = exports.UnionType = exports.UndefinedType = exports.TupleType = exports.StringLiteralType = exports.StringType = exports.ReferenceType = exports.RecordType = exports.ObjectType = exports.NumberLiteralType = exports.NumberType = exports.NullType = exports.IntersectionType = exports.GroupType = exports.BooleanLiteralType = exports.BooleanType = exports.Binary = exports.ArrayType = exports.AnyType = exports.Type = exports.makeInclude = exports.Typenames = void 0;
+exports.PlainType = exports.Options = exports.Headers = exports.UnionType = exports.UndefinedType = exports.TupleType = exports.StringLiteralType = exports.StringType = exports.ReferenceType = exports.RecordType = exports.ObjectType = exports.NumberLiteralType = exports.NumberType = exports.NullType = exports.IntersectionType = exports.GroupType = exports.BooleanLiteralType = exports.BooleanType = exports.Binary = exports.ArrayType = exports.AnyType = exports.Type = exports.makeInclude = exports.Typenames = void 0;
 const tokenization = require("./tokenization");
 exports.Typenames = ((...tuple) => tuple)("Any", "Array", "Boolean", "BooleanLiteral", "Group", "Intersection", "Null", "Number", "NumberLiteral", "Object", "Record", "Reference", "String", "StringLiteral", "Tuple", "Undefined", "Union");
 function makeInclude() {
@@ -867,4 +867,23 @@ class Options {
 }
 exports.Options = Options;
 Options.INSTANCE = new Options();
+;
+class PlainType {
+    constructor() {
+    }
+    generateSchema(options) {
+        throw `plain`;
+    }
+    generateType(options) {
+        return "string";
+    }
+    generateTypeGuard(options) {
+        return "autoguard.guards.String";
+    }
+    getImports() {
+        return [];
+    }
+}
+exports.PlainType = PlainType;
+PlainType.INSTANCE = new PlainType();
 ;

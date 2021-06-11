@@ -204,3 +204,11 @@ export declare class Options implements Type {
     getImports(): shared.Import[];
     static readonly INSTANCE: Options;
 }
+export declare class PlainType implements Type {
+    constructor();
+    generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
+    generateTypeGuard(options: shared.Options): string;
+    getImports(): shared.Import[];
+    static readonly INSTANCE: PlainType;
+}

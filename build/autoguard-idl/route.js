@@ -19,7 +19,7 @@ class Component {
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
-            var _a, _b, _c;
+            var _a, _b, _c, _d;
             if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) === "<") {
                 tokenization.expect(read(), "<");
                 let token = tokenization.expect(read(), [
@@ -27,21 +27,30 @@ class Component {
                     "STRING_LITERAL"
                 ]);
                 let name = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
-                let type = types.StringType.INSTANCE;
+                let type = types.PlainType.INSTANCE;
                 if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === ":") {
                     tokenization.expect(read(), ":");
-                    type = types.Type.parse(tokenizer, {
-                        Boolean: true,
-                        Number: true,
-                        String: true
-                    });
+                    if (((_c = peek()) === null || _c === void 0 ? void 0 : _c.family) === "plain") {
+                        tokenization.expect(read(), "plain");
+                    }
+                    else {
+                        type = types.Type.parse(tokenizer, {
+                            Boolean: true,
+                            Number: true,
+                            String: true
+                        });
+                        // TODO: Remove compatibility behaviour in v6.
+                        if (type === types.StringType.INSTANCE) {
+                            type = types.PlainType.INSTANCE;
+                        }
+                    }
                 }
                 tokenization.expect(read(), ">");
                 return new Component(name, type);
             }
             else {
                 let name = "";
-                if ([...tokenization.IdentifierFamilies, "PATH_COMPONENT"].includes((_c = peek()) === null || _c === void 0 ? void 0 : _c.family)) {
+                if ([...tokenization.IdentifierFamilies, "PATH_COMPONENT"].includes((_d = peek()) === null || _d === void 0 ? void 0 : _d.family)) {
                     let token = tokenization.expect(read(), [
                         ...tokenization.IdentifierFamilies,
                         "PATH_COMPONENT"
@@ -130,7 +139,7 @@ class Parameter {
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
-            var _a, _b;
+            var _a, _b, _c;
             let token = tokenization.expect(read(), [
                 ...tokenization.IdentifierFamilies,
                 "STRING_LITERAL"
@@ -141,14 +150,23 @@ class Parameter {
                 tokenization.expect(read(), "?");
                 optional = true;
             }
-            let type = types.StringType.INSTANCE;
+            let type = types.PlainType.INSTANCE;
             if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === ":") {
                 tokenization.expect(read(), ":");
-                type = types.Type.parse(tokenizer, {
-                    Boolean: true,
-                    Number: true,
-                    String: true
-                });
+                if (((_c = peek()) === null || _c === void 0 ? void 0 : _c.family) === "plain") {
+                    tokenization.expect(read(), "plain");
+                }
+                else {
+                    type = types.Type.parse(tokenizer, {
+                        Boolean: true,
+                        Number: true,
+                        String: true
+                    });
+                    // TODO: Remove compatibility behaviour in v6.
+                    if (type === types.StringType.INSTANCE) {
+                        type = types.PlainType.INSTANCE;
+                    }
+                }
             }
             return new Parameter(name, type, optional);
         });

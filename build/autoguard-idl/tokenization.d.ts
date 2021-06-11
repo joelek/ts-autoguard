@@ -1,7 +1,7 @@
-export declare const Families: ["LS", "WS", "(", ")", "[", "]", "{", "}", "?", "|", ".", "..", "/", "#", "&", ",", ":", ";", "<", ">", "=>", "<=", "any", "binary", "boolean", "false", "guard", "null", "number", "route", "string", "true", "undefined", "IDENTIFIER", "NUMBER_LITERAL", "STRING_LITERAL", "PATH_COMPONENT"];
+export declare const Families: ["LS", "WS", "(", ")", "[", "]", "{", "}", "?", "|", ".", "..", "/", "#", "&", ",", ":", ";", "<", ">", "=>", "<=", "any", "binary", "boolean", "false", "guard", "null", "number", "plain", "route", "string", "true", "undefined", "IDENTIFIER", "NUMBER_LITERAL", "STRING_LITERAL", "PATH_COMPONENT"];
 export declare type Families = typeof Families;
 export declare type Family = typeof Families[number];
-export declare const IdentifierFamilies: ["any", "binary", "boolean", "false", "guard", "null", "number", "route", "string", "true", "undefined", "IDENTIFIER"];
+export declare const IdentifierFamilies: ["any", "binary", "boolean", "false", "guard", "null", "number", "plain", "route", "string", "true", "undefined", "IDENTIFIER"];
 export declare type Token = {
     row: number;
     col: number;

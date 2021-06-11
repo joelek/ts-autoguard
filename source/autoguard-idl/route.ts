@@ -29,14 +29,22 @@ export class Component {
 					"STRING_LITERAL"
 				]);
 				let name = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
-				let type: types.Type = types.StringType.INSTANCE;
+				let type: types.Type = types.PlainType.INSTANCE;
 				if (peek()?.family === ":") {
 					tokenization.expect(read(), ":");
-					type = types.Type.parse(tokenizer, {
-						Boolean: true,
-						Number: true,
-						String: true
-					});
+					if (peek()?.family === "plain") {
+						tokenization.expect(read(), "plain");
+					} else {
+						type = types.Type.parse(tokenizer, {
+							Boolean: true,
+							Number: true,
+							String: true
+						});
+						// TODO: Remove compatibility behaviour in v6.
+						if (type === types.StringType.INSTANCE) {
+							type = types.PlainType.INSTANCE;
+						}
+					}
 				}
 				tokenization.expect(read(), ">");
 				return new Component(name, type);
@@ -154,14 +162,22 @@ export class Parameter {
 				tokenization.expect(read(), "?");
 				optional = true;
 			}
-			let type: types.Type = types.StringType.INSTANCE;
+			let type: types.Type = types.PlainType.INSTANCE;
 			if (peek()?.family === ":") {
 				tokenization.expect(read(), ":");
-				type = types.Type.parse(tokenizer, {
-					Boolean: true,
-					Number: true,
-					String: true
-				});
+				if (peek()?.family === "plain") {
+					tokenization.expect(read(), "plain");
+				} else {
+					type = types.Type.parse(tokenizer, {
+						Boolean: true,
+						Number: true,
+						String: true
+					});
+					// TODO: Remove compatibility behaviour in v6.
+					if (type === types.StringType.INSTANCE) {
+						type = types.PlainType.INSTANCE;
+					}
+				}
 			}
 			return new Parameter(name, type, optional);
 		});
