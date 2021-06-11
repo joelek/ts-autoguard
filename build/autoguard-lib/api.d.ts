@@ -60,7 +60,7 @@ export declare type Endpoint = (raw: RawRequest, auxillary: Auxillary) => {
     acceptsMethod(): boolean;
     validateRequest(): Promise<{
         handleRequest(): Promise<{
-            validateResponse(): Promise<EndpointResponse>;
+            validateResponse(): Promise<RawResponse>;
         }>;
     }>;
 };
@@ -122,6 +122,7 @@ export declare function deserializeStringPayload(binary: Binary): Promise<string
 export declare function deserializePayload(binary: Binary): Promise<JSON | undefined>;
 export declare function getContentType(payload: Payload): string;
 export declare function transformResponse<A extends EndpointResponse>(response: A, defaultStatus: number): RawResponse;
+export declare function finalizeResponse(raw: RawResponse, defaultContentType: string): RawResponse;
 export declare function acceptsComponents(one: Array<string>, two: Array<[string, string]>): boolean;
 export declare function acceptsMethod(one: string, two: string): boolean;
 export declare type RequestHandler = (raw: RawRequest, urlPrefix?: string) => Promise<RawResponse>;

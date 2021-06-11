@@ -29,7 +29,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["POST:/<component>/"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/json; charset=utf-8");
 							}
 						};
 					}

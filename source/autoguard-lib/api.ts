@@ -176,7 +176,7 @@ export type Endpoint = (raw: RawRequest, auxillary: Auxillary) => {
 	acceptsMethod(): boolean;
 	validateRequest(): Promise<{
 		handleRequest(): Promise<{
-			validateResponse(): Promise<EndpointResponse>;
+			validateResponse(): Promise<RawResponse>;
 		}>
 	}>
 };
@@ -402,6 +402,23 @@ export function transformResponse<A extends EndpointResponse>(response: A, defau
 	};
 };
 
+export function finalizeResponse(raw: RawResponse, defaultContentType: string): RawResponse {
+	let headers = raw.headers;
+	let contentType = headers.find((header) => {
+		return header[0].toLowerCase() === "content-type";
+	});
+	if (contentType === undefined) {
+		headers = [
+			...headers,
+			["Content-Type", defaultContentType]
+		];
+	}
+	return {
+		...raw,
+		headers
+	};
+};
+
 export function acceptsComponents(one: Array<string>, two: Array<[string, string]>): boolean {
 	if (one.length !== two.length) {
 		return false;
@@ -558,8 +575,7 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 		try {
 			let handled = await valid.handleRequest();
 			try {
-				let response = await handled.validateResponse();
-				let raw = transformResponse(response, 200);
+				let raw = await handled.validateResponse();
 				return await respond(httpResponse, raw);
 			} catch (error) {
 				let payload = serializeStringPayload(String(error));

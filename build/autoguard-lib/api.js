@@ -16,7 +16,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.isPayloadBinary = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getParsedOption = exports.getOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
+exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.isPayloadBinary = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getParsedOption = exports.getOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
 const guards = require("./guards");
 exports.Options = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
 exports.Headers = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
@@ -342,6 +342,21 @@ function transformResponse(response, defaultStatus) {
 }
 exports.transformResponse = transformResponse;
 ;
+function finalizeResponse(raw, defaultContentType) {
+    let headers = raw.headers;
+    let contentType = headers.find((header) => {
+        return header[0].toLowerCase() === "content-type";
+    });
+    if (contentType === undefined) {
+        headers = [
+            ...headers,
+            ["Content-Type", defaultContentType]
+        ];
+    }
+    return Object.assign(Object.assign({}, raw), { headers });
+}
+exports.finalizeResponse = finalizeResponse;
+;
 function acceptsComponents(one, two) {
     if (one.length !== two.length) {
         return false;
@@ -512,8 +527,7 @@ function route(endpoints, httpRequest, httpResponse, urlPrefix = "") {
             try {
                 let handled = yield valid.handleRequest();
                 try {
-                    let response = yield handled.validateResponse();
-                    let raw = transformResponse(response, 200);
+                    let raw = yield handled.validateResponse();
                     return yield respond(httpResponse, raw);
                 }
                 catch (error) {

@@ -25,7 +25,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -53,7 +56,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["POST:/"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -81,7 +87,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/one"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -110,7 +119,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/one/"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -139,7 +151,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/one/two"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -168,7 +183,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/<dynamic_boolean_component>"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -197,7 +215,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/<dynamic_number_component>"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -226,7 +247,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/<dynamic_string_component>"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -257,7 +281,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/<dynamic_component_one>/<dynamic_component_two>"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -286,7 +313,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/<quoted key>"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -314,7 +344,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/%22r%C3%A4ksm%C3%B6rg%C3%A5s%22"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -342,7 +375,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters01"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -371,7 +407,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters02"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -400,7 +439,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters03"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -429,7 +471,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters04"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -458,7 +503,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters05"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -487,7 +535,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters06"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -516,7 +567,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters07"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -546,7 +600,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters08"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -575,7 +632,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters09"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -603,7 +663,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers01"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -632,7 +695,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers02"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -661,7 +727,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers03"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -690,7 +759,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers04"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -719,7 +791,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers05"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -748,7 +823,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers06"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -777,7 +855,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers07"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -807,7 +888,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers08"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -836,7 +920,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers09"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -864,7 +951,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers01"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -892,7 +982,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers02"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -920,7 +1013,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers03"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -948,7 +1044,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers04"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -976,7 +1075,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers05"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -1004,7 +1106,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers06"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -1032,7 +1137,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers07"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -1060,7 +1168,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers08"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -1088,7 +1199,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers09"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -1116,7 +1230,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_payload01"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -1144,7 +1261,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_payload02"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -1172,7 +1292,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_payload01"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/json; charset=utf-8");
 							}
 						};
 					}
@@ -1200,7 +1323,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_payload02"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/json; charset=utf-8");
 							}
 						};
 					}
@@ -1230,7 +1356,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/full_example"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/json; charset=utf-8");
 							}
 						};
 					}
@@ -1258,7 +1387,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/reference"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/json; charset=utf-8");
 							}
 						};
 					}
@@ -1286,7 +1418,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/binary_request"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -1314,7 +1449,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/binary_response"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = response.payload;
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
@@ -1345,7 +1483,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/number/<number>"];
 								guard.as(response, "response");
-								return response;
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
 					}
