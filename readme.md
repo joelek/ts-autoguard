@@ -262,6 +262,8 @@ NB: This project targets TypeScript 4 in strict mode.
 
 ## Roadmap
 
+* Add support for all JSON types in header and parameter values.
+* Add support for multiple-valued header and parameter values.
 * Create middleware for defining cache-control.
 * Add more detailed error messages for syntax errors.
 * Add support for wildcards in paths.
