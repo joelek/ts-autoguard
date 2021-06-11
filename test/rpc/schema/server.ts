@@ -165,6 +165,38 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
+		components.push(["dynamic_component", raw.components[0]]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			validateRequest: async () => {
+				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
+				options["dynamic_component"] = autoguard.api.getOption(components, "dynamic_component");
+				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
+				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let guard = shared.Autoguard.Requests["GET:/<dynamic_component>"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/<dynamic_component>"](new autoguard.api.ClientRequest(request, auxillary));
+						return {
+							validateResponse: async () => {
+								let guard = shared.Autoguard.Responses["GET:/<dynamic_component>"];
+								guard.as(response, "response");
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
+							}
+						};
+					}
+				};
+			}
+		};
+	});
+	endpoints.push((raw, auxillary) => {
+		let method = "GET";
+		let components = new Array<[string, string]>();
 		components.push(["dynamic_boolean_component", raw.components[0]]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
@@ -646,6 +678,70 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
+		components.push(["", decodeURIComponent("parameters10")]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			validateRequest: async () => {
+				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
+				options["required_parameter"] = autoguard.api.getOption(raw.parameters, "required_parameter");
+				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
+				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let guard = shared.Autoguard.Requests["GET:/parameters10"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/parameters10"](new autoguard.api.ClientRequest(request, auxillary));
+						return {
+							validateResponse: async () => {
+								let guard = shared.Autoguard.Responses["GET:/parameters10"];
+								guard.as(response, "response");
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
+							}
+						};
+					}
+				};
+			}
+		};
+	});
+	endpoints.push((raw, auxillary) => {
+		let method = "GET";
+		let components = new Array<[string, string]>();
+		components.push(["", decodeURIComponent("parameters11")]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			validateRequest: async () => {
+				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
+				options["optional_parameter"] = autoguard.api.getOption(raw.parameters, "optional_parameter");
+				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
+				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let guard = shared.Autoguard.Requests["GET:/parameters11"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/parameters11"](new autoguard.api.ClientRequest(request, auxillary));
+						return {
+							validateResponse: async () => {
+								let guard = shared.Autoguard.Responses["GET:/parameters11"];
+								guard.as(response, "response");
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
+							}
+						};
+					}
+				};
+			}
+		};
+	});
+	endpoints.push((raw, auxillary) => {
+		let method = "GET";
+		let components = new Array<[string, string]>();
 		components.push(["", decodeURIComponent("request_headers01")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
@@ -934,6 +1030,70 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
 		let components = new Array<[string, string]>();
+		components.push(["", decodeURIComponent("request_headers10")]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			validateRequest: async () => {
+				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
+				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
+				headers["required_request_header"] = autoguard.api.getOption(raw.headers, "required_request_header");
+				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let guard = shared.Autoguard.Requests["GET:/request_headers10"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/request_headers10"](new autoguard.api.ClientRequest(request, auxillary));
+						return {
+							validateResponse: async () => {
+								let guard = shared.Autoguard.Responses["GET:/request_headers10"];
+								guard.as(response, "response");
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
+							}
+						};
+					}
+				};
+			}
+		};
+	});
+	endpoints.push((raw, auxillary) => {
+		let method = "GET";
+		let components = new Array<[string, string]>();
+		components.push(["", decodeURIComponent("request_headers11")]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			validateRequest: async () => {
+				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
+				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
+				headers["optional_request_header"] = autoguard.api.getOption(raw.headers, "optional_request_header");
+				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let guard = shared.Autoguard.Requests["GET:/request_headers11"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/request_headers11"](new autoguard.api.ClientRequest(request, auxillary));
+						return {
+							validateResponse: async () => {
+								let guard = shared.Autoguard.Responses["GET:/request_headers11"];
+								guard.as(response, "response");
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
+							}
+						};
+					}
+				};
+			}
+		};
+	});
+	endpoints.push((raw, auxillary) => {
+		let method = "GET";
+		let components = new Array<[string, string]>();
 		components.push(["", decodeURIComponent("response_headers01")]);
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
@@ -1198,6 +1358,68 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers09"];
+								guard.as(response, "response");
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
+							}
+						};
+					}
+				};
+			}
+		};
+	});
+	endpoints.push((raw, auxillary) => {
+		let method = "GET";
+		let components = new Array<[string, string]>();
+		components.push(["", decodeURIComponent("response_headers10")]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			validateRequest: async () => {
+				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
+				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
+				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let guard = shared.Autoguard.Requests["GET:/response_headers10"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/response_headers10"](new autoguard.api.ClientRequest(request, auxillary));
+						return {
+							validateResponse: async () => {
+								let guard = shared.Autoguard.Responses["GET:/response_headers10"];
+								guard.as(response, "response");
+								let status = response.status ?? 200;
+								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});
+								let payload = autoguard.api.serializePayload(response.payload);
+								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
+							}
+						};
+					}
+				};
+			}
+		};
+	});
+	endpoints.push((raw, auxillary) => {
+		let method = "GET";
+		let components = new Array<[string, string]>();
+		components.push(["", decodeURIComponent("response_headers11")]);
+		return {
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
+			validateRequest: async () => {
+				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
+				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
+				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let guard = shared.Autoguard.Requests["GET:/response_headers11"];
+				let request = guard.as({ options, headers, payload }, "request");
+				return {
+					handleRequest: async () => {
+						let response = await routes["GET:/response_headers11"](new autoguard.api.ClientRequest(request, auxillary));
+						return {
+							validateResponse: async () => {
+								let guard = shared.Autoguard.Responses["GET:/response_headers11"];
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});

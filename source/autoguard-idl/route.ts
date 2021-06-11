@@ -29,12 +29,15 @@ export class Component {
 					"STRING_LITERAL"
 				]);
 				let name = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
-				tokenization.expect(read(), ":");
-				let type = types.Type.parse(tokenizer, {
-					Boolean: true,
-					Number: true,
-					String: true
-				});
+				let type: types.Type = types.StringType.INSTANCE;
+				if (peek()?.family === ":") {
+					tokenization.expect(read(), ":");
+					type = types.Type.parse(tokenizer, {
+						Boolean: true,
+						Number: true,
+						String: true
+					});
+				}
 				tokenization.expect(read(), ">");
 				return new Component(name, type);
 			} else {
@@ -151,12 +154,15 @@ export class Parameter {
 				tokenization.expect(read(), "?");
 				optional = true;
 			}
-			tokenization.expect(read(), ":");
-			let type = types.Type.parse(tokenizer, {
-				Boolean: true,
-				Number: true,
-				String: true
-			});
+			let type: types.Type = types.StringType.INSTANCE;
+			if (peek()?.family === ":") {
+				tokenization.expect(read(), ":");
+				type = types.Type.parse(tokenizer, {
+					Boolean: true,
+					Number: true,
+					String: true
+				});
+			}
 			return new Parameter(name, type, optional);
 		});
 	}
