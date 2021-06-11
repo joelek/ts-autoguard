@@ -16,7 +16,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.transformResponse = exports.getContentType = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.isPayloadBinary = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getParsedOption = exports.getOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
+exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.isPayloadBinary = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getParsedOption = exports.getOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
 const guards = require("./guards");
 exports.Options = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
 exports.Headers = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
@@ -242,8 +242,16 @@ class EndpointError {
     constructor(response) {
         this.response = response;
     }
-    getRawResponse() {
-        return transformResponse(this.response, 500);
+    getResponse() {
+        var _a, _b, _c;
+        let status = (_a = this.response.status) !== null && _a !== void 0 ? _a : 500;
+        let headers = (_b = this.response.headers) !== null && _b !== void 0 ? _b : [];
+        let payload = (_c = this.response.payload) !== null && _c !== void 0 ? _c : [];
+        return {
+            status,
+            headers,
+            payload
+        };
     }
 }
 exports.EndpointError = EndpointError;
@@ -312,35 +320,6 @@ function deserializePayload(binary) {
     });
 }
 exports.deserializePayload = deserializePayload;
-;
-function getContentType(payload) {
-    if (isPayloadBinary(payload) || payload === undefined) {
-        return "application/octet-stream";
-    }
-    else {
-        return "application/json; charset=utf-8";
-    }
-}
-exports.getContentType = getContentType;
-;
-function transformResponse(response, defaultStatus) {
-    var _a, _b;
-    let status = (_a = response.status) !== null && _a !== void 0 ? _a : defaultStatus;
-    let headers = extractKeyValuePairs((_b = response.headers) !== null && _b !== void 0 ? _b : {});
-    let contentType = headers.find((header) => {
-        return header[0].toLowerCase() === "content-type";
-    });
-    if (contentType === undefined) {
-        headers.push(["Content-Type", getContentType(response.payload)]);
-    }
-    let payload = isPayloadBinary(response.payload) ? response.payload : serializePayload(response.payload);
-    return {
-        status: status,
-        headers: headers,
-        payload: payload
-    };
-}
-exports.transformResponse = transformResponse;
 ;
 function finalizeResponse(raw, defaultContentType) {
     let headers = raw.headers;
@@ -549,7 +528,7 @@ function route(endpoints, httpRequest, httpResponse, urlPrefix = "") {
                     response.status = error;
                 }
                 else if (error instanceof EndpointError) {
-                    response = error.getRawResponse();
+                    response = error.getResponse();
                 }
                 return respond(httpResponse, response);
             }

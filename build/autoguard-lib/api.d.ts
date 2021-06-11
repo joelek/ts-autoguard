@@ -98,10 +98,10 @@ export declare class ServerResponse<A extends EndpointResponse> {
     headers(): {} & A["headers"];
     payload(): Promise<CollectedPayload<A["payload"]>>;
 }
-export declare class EndpointError<A extends EndpointResponse> {
+export declare class EndpointError {
     private response;
-    constructor(response: A);
-    getRawResponse(): RawResponse;
+    constructor(response: Partial<RawResponse>);
+    getResponse(): RawResponse;
 }
 export declare type RequestMap<A extends RequestMap<A>> = {
     [B in keyof A]: EndpointRequest;
@@ -120,8 +120,6 @@ export declare function serializeStringPayload(string: string): Binary;
 export declare function serializePayload(payload: JSON | undefined): Binary;
 export declare function deserializeStringPayload(binary: Binary): Promise<string>;
 export declare function deserializePayload(binary: Binary): Promise<JSON | undefined>;
-export declare function getContentType(payload: Payload): string;
-export declare function transformResponse<A extends EndpointResponse>(response: A, defaultStatus: number): RawResponse;
 export declare function finalizeResponse(raw: RawResponse, defaultContentType: string): RawResponse;
 export declare function acceptsComponents(one: Array<string>, two: Array<[string, string]>): boolean;
 export declare function acceptsMethod(one: string, two: string): boolean;

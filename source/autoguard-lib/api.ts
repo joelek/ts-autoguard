@@ -307,15 +307,22 @@ export class ServerResponse<A extends EndpointResponse> {
 	}
 };
 
-export class EndpointError<A extends EndpointResponse> {
-	private response: A;
+export class EndpointError {
+	private response: Partial<RawResponse>;
 
-	constructor(response: A) {
+	constructor(response: Partial<RawResponse>) {
 		this.response = response;
 	}
 
-	getRawResponse(): RawResponse {
-		return transformResponse(this.response, 500);
+	getResponse(): RawResponse {
+		let status = this.response.status ?? 500;
+		let headers = this.response.headers ?? [];
+		let payload = this.response.payload ?? [];
+		return {
+			status,
+			headers,
+			payload
+		};
 	}
 };
 
@@ -375,31 +382,6 @@ export async function deserializeStringPayload(binary: Binary): Promise<string> 
 export async function deserializePayload(binary: Binary): Promise<JSON | undefined> {
 	let string = await deserializeStringPayload(binary);
 	return string === "" ? undefined : JSON.parse(string);
-};
-
-export function getContentType(payload: Payload): string {
-	if (isPayloadBinary(payload) || payload === undefined) {
-		return "application/octet-stream";
-	} else {
-		return "application/json; charset=utf-8";
-	}
-};
-
-export function transformResponse<A extends EndpointResponse>(response: A, defaultStatus: number): RawResponse {
-	let status = response.status ?? defaultStatus;
-	let headers = extractKeyValuePairs(response.headers ?? {});
-	let contentType = headers.find((header) => {
-		return header[0].toLowerCase() === "content-type";
-	});
-	if (contentType === undefined) {
-		headers.push(["Content-Type", getContentType(response.payload)]);
-	}
-	let payload = isPayloadBinary(response.payload) ? response.payload : serializePayload(response.payload);
-	return {
-		status: status,
-		headers: headers,
-		payload: payload
-	};
 };
 
 export function finalizeResponse(raw: RawResponse, defaultContentType: string): RawResponse {
@@ -594,7 +576,7 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 			if (Number.isInteger(error) && error >= 100 && error <= 999) {
 				response.status = error;
 			} else if (error instanceof EndpointError) {
-				response = error.getRawResponse();
+				response = error.getResponse();
 			}
 			return respond(httpResponse, response);
 		}
