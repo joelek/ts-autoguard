@@ -73,7 +73,7 @@ export const Binary = guards.Union.of(
 
 export type Binary = ReturnType<typeof Binary.as>;
 
-export type Primitive = boolean | null | number | string;
+export type Primitive = boolean | number | string;
 export type JSON = boolean | null | number | string | JSON[] | { [key: string]: JSON };
 
 export type RequestLike = AsyncBinary & {

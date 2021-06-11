@@ -16,7 +16,7 @@ export declare const SyncBinary: {
 };
 export declare const Binary: import("./serialization").MessageGuard<AsyncBinary | SyncBinary>;
 export declare type Binary = ReturnType<typeof Binary.as>;
-export declare type Primitive = boolean | null | number | string;
+export declare type Primitive = boolean | number | string;
 export declare type JSON = boolean | null | number | string | JSON[] | {
     [key: string]: JSON;
 };
