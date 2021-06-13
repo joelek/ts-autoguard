@@ -121,7 +121,7 @@ export function extractKeyValuePairs(record: Record<string, Primitive>, exclude:
 			if (guards.String.is(value)) {
 				pairs.push([key, value]);
 			} else {
-				throw `Expected value of "${key}" to be a string!`;
+				throw `Expected value of undeclared "${key}" to be a string!`;
 			}
 		}
 	}
