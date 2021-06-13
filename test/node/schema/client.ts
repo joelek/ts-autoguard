@@ -12,17 +12,21 @@ export const makeClient = (options?: Partial<{
 		guard.as(request, "request");
 		let method = "POST";
 		let components = new Array<string>();
-		components.push(String(request.options["component"]));
+		components.push(autoguard.api.serializeValue(request.options["component"], true) ?? "");
 		components.push(decodeURIComponent(""));
-		let parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, ["component"]);
-		let headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});
+		let parameters = new Array<[string, string]>();
+		autoguard.api.appendKeyValuePair(parameters, "parameter", request.options?.["parameter"], true);
+		parameters.push(...autoguard.api.extractKeyValuePairs(request.options ?? {}, [...["component"], ...parameters.map((parameter) => parameter[0])]));
+		let headers = new Array<[string, string]>();
+		autoguard.api.appendKeyValuePair(headers, "header", request.headers?.["header"], true);
+		headers.push(...autoguard.api.extractKeyValuePairs(request.headers ?? {}, headers.map((header) => header[0])));
 		let payload = autoguard.api.serializePayload(request.payload);
 		let requestHandler = options?.requestHandler ?? autoguard.api.xhr;
 		let raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);
 		{
 			let status = raw.status;
 			let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-			headers["header"] = autoguard.api.getOption(raw.headers, "header");
+			headers["header"] = autoguard.api.getValue(raw.headers, "header", true);
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["POST:/<component>/"];
 			let response = guard.as({ status, headers, payload }, "response");
