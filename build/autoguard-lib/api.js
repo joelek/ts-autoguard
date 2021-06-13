@@ -16,7 +16,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.isPayloadBinary = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getParsedOption = exports.getOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Headers = exports.Options = exports.JSON = exports.Primitive = exports.Binary = exports.SyncBinary = exports.AsyncBinary = void 0;
+exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.isPayloadBinary = exports.getHeaders = exports.getParameters = exports.getComponents = exports.deserializeValue = exports.serializeValue = exports.getValue = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.appendKeyValuePair = exports.serializeComponents = exports.Headers = exports.Options = exports.JSON = exports.Primitive = exports.Binary = exports.SyncBinary = exports.AsyncBinary = void 0;
 const guards = require("./guards");
 exports.AsyncBinary = {
     as(subject, path = "") {
@@ -78,11 +78,24 @@ function serializeComponents(components) {
 }
 exports.serializeComponents = serializeComponents;
 ;
-function extractKeyValuePairs(record, exclude = []) {
+function appendKeyValuePair(pairs, key, value, plain) {
+    let serialized = serializeValue(value, plain);
+    if (serialized !== undefined) {
+        pairs.push([key, serialized]);
+    }
+}
+exports.appendKeyValuePair = appendKeyValuePair;
+;
+function extractKeyValuePairs(record, exclude) {
     let pairs = new Array();
     for (let [key, value] of Object.entries(record)) {
-        if (value !== undefined && !exclude.includes(key)) {
-            pairs.push([key, String(value)]);
+        if (!exclude.includes(key) && value !== undefined) {
+            if (guards.String.is(value)) {
+                pairs.push([key, value]);
+            }
+            else {
+                throw `Expected value of "${key}" to be a string!`;
+            }
         }
     }
     return pairs;
@@ -111,31 +124,34 @@ function serializeParameters(parameters) {
 }
 exports.serializeParameters = serializeParameters;
 ;
-function getOption(pairs, key) {
+function getValue(pairs, key, plain) {
     for (let pair of pairs) {
         if (pair[0] === key) {
             try {
                 let value = pair[1];
-                return value;
+                return deserializeValue(value, plain);
             }
             catch (error) { }
         }
     }
 }
-exports.getOption = getOption;
+exports.getValue = getValue;
 ;
-function getParsedOption(pairs, key) {
-    for (let pair of pairs) {
-        if (pair[0] === key) {
-            try {
-                let value = pair[1];
-                return globalThis.JSON.parse(value);
-            }
-            catch (error) { }
-        }
+function serializeValue(value, plain) {
+    if (value === undefined) {
+        return;
     }
+    return plain ? String(value) : globalThis.JSON.stringify(value);
 }
-exports.getParsedOption = getParsedOption;
+exports.serializeValue = serializeValue;
+;
+function deserializeValue(value, plain) {
+    if (value === undefined) {
+        return;
+    }
+    return plain ? value : globalThis.JSON.parse(value);
+}
+exports.deserializeValue = deserializeValue;
 ;
 function getComponents(url) {
     return url.split("?")[0].split("/").map((part) => {

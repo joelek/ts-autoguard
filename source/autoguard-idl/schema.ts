@@ -5,13 +5,6 @@ import * as shared from "./shared";
 import * as tokenization from "./tokenization";
 import * as types from "./types";
 
-function makeParser(type: types.Type): string {
-	if (type instanceof types.PlainType) {
-		return "getOption";
-	}
-	return "getParsedOption";
-}
-
 function areAllMembersOptional(object: types.ObjectType): boolean {
 	for (let [key, value] of object.members) {
 		if (!value.optional) {
@@ -131,7 +124,8 @@ function generateClientRoute(route: route.Route, options: shared.Options): strin
 		if (is.absent(component.type)) {
 			lines.push(`\tcomponents.push(decodeURIComponent("${encodeURIComponent(component.name)}"));`);
 		} else {
-			lines.push(`\tcomponents.push(String(request.options["${component.name}"]));`);
+			let plain = component.type === types.PlainType.INSTANCE;
+			lines.push(`\tcomponents.push(autoguard.api.serializeValue(request.options["${component.name}"], ${plain}) ?? "");`);
 		}
 	}
 	let exclude = new Array<string>();
@@ -140,8 +134,18 @@ function generateClientRoute(route: route.Route, options: shared.Options): strin
 			exclude.push(`"${component.name}"`);
 		}
 	}
-	lines.push(`\tlet parameters = autoguard.api.extractKeyValuePairs(request.options ?? {}, [${exclude.join(",")}]);`);
-	lines.push(`\tlet headers = autoguard.api.extractKeyValuePairs(request.headers ?? {});`);
+	lines.push(`\tlet parameters = new Array<[string, string]>();`);
+	for (let parameter of route.parameters.parameters) {
+		let plain = parameter.type === types.PlainType.INSTANCE;
+		lines.push(`\tautoguard.api.appendKeyValuePair(parameters, "${parameter.name}", request.options["${parameter.name}"], ${plain});`);
+	}
+	lines.push(`\tparameters.push(...autoguard.api.extractKeyValuePairs(request.options ?? {}, [...[${exclude.join(",")}], ...parameters.map((parameter) => parameter[0])]));`);
+	lines.push(`\tlet headers = new Array<[string, string]>();`);
+	for (let header of route.request.headers.headers) {
+		let plain = header.type === types.PlainType.INSTANCE;
+		lines.push(`\tautoguard.api.appendKeyValuePair(headers, "${header.name}", request.headers["${header.name}"], ${plain});`);
+	}
+	lines.push(`\theaders.push(...autoguard.api.extractKeyValuePairs(request.headers ?? {}, headers.map((header) => header[0])));`);
 	if (route.request.payload === types.Binary.INSTANCE) {
 		lines.push(`\tlet payload = request.payload;`);
 	} else {
@@ -153,7 +157,8 @@ function generateClientRoute(route: route.Route, options: shared.Options): strin
 	lines.push(`\t\tlet status = raw.status;`);
 	lines.push(`\t\tlet headers = autoguard.api.combineKeyValuePairs(raw.headers);`);
 	for (let header of route.response.headers.headers) {
-		lines.push(`\t\theaders["${header.name}"] = autoguard.api.${makeParser(header.type)}(raw.headers, "${header.name}");`);
+		let plain = header.type === types.PlainType.INSTANCE;
+		lines.push(`\t\theaders["${header.name}"] = autoguard.api.getValue(raw.headers, "${header.name}", ${plain});`);
 	}
 	if (route.response.payload === types.Binary.INSTANCE) {
 		lines.push(`\t\tlet payload = raw.payload;`);
@@ -188,15 +193,18 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 	lines.push(`\t\t\tlet options = autoguard.api.combineKeyValuePairs(raw.parameters);`);
 	for (let component of route.path.components) {
 		if (is.present(component.type)) {
-			lines.push(`\t\t\toptions["${component.name}"] = autoguard.api.${makeParser(component.type)}(components, "${component.name}");`);
+			let plain = component.type === types.PlainType.INSTANCE;
+			lines.push(`\t\t\toptions["${component.name}"] = autoguard.api.getValue(components, "${component.name}", ${plain});`);
 		}
 	}
 	for (let parameter of route.parameters.parameters) {
-		lines.push(`\t\t\toptions["${parameter.name}"] = autoguard.api.${makeParser(parameter.type)}(raw.parameters, "${parameter.name}");`);
+		let plain = parameter.type === types.PlainType.INSTANCE;
+		lines.push(`\t\t\toptions["${parameter.name}"] = autoguard.api.getValue(raw.parameters, "${parameter.name}", ${plain});`);
 	}
 	lines.push(`\t\t\tlet headers = autoguard.api.combineKeyValuePairs(raw.headers);`);
 	for (let header of route.request.headers.headers) {
-		lines.push(`\t\t\theaders["${header.name}"] = autoguard.api.${makeParser(header.type)}(raw.headers, "${header.name}");`);
+		let plain = header.type === types.PlainType.INSTANCE;
+		lines.push(`\t\t\theaders["${header.name}"] = autoguard.api.getValue(raw.headers, "${header.name}", ${plain});`);
 	}
 	if (route.request.payload === types.Binary.INSTANCE) {
 		lines.push(`\t\t\tlet payload = raw.payload;`);
@@ -213,7 +221,12 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 	lines.push(`\t\t\t\t\t\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);
 	lines.push(`\t\t\t\t\t\t\tguard.as(response, "response");`);
 	lines.push(`\t\t\t\t\t\t\tlet status = response.status ?? 200;`);
-	lines.push(`\t\t\t\t\t\t\tlet headers = autoguard.api.extractKeyValuePairs(response.headers ?? {});`);
+	lines.push(`\t\t\t\t\t\t\tlet headers = new Array<[string, string]>();`);
+	for (let header of route.response.headers.headers) {
+		let plain = header.type === types.PlainType.INSTANCE;
+		lines.push(`\t\t\t\t\t\t\tautoguard.api.appendKeyValuePair(headers, "${header.name}", response.headers["${header.name}"], ${plain});`);
+	}
+	lines.push(`\t\t\t\t\t\t\theaders.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));`);
 	if (route.response.payload === types.Binary.INSTANCE) {
 		lines.push(`\t\t\t\t\t\t\tlet payload = response.payload;`);
 	} else {

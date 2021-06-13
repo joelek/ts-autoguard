@@ -107,11 +107,22 @@ export function serializeComponents(components: Array<string>): string {
 		.join("/");
 };
 
-export function extractKeyValuePairs(record: Record<string, Primitive>, exclude: Array<string> = []): Array<[string, string]> {
+export function appendKeyValuePair(pairs: Array<[string, string]>, key: string, value: Primitive, plain: boolean): void {
+	let serialized = serializeValue(value, plain);
+	if (serialized !== undefined) {
+		pairs.push([key, serialized]);
+	}
+};
+
+export function extractKeyValuePairs(record: Record<string, Primitive>, exclude: Array<string>): Array<[string, string]> {
 	let pairs = new Array<[string, string]>();
 	for (let [key, value] of Object.entries(record)) {
-		if (value !== undefined && !exclude.includes(key)) {
-			pairs.push([key, String(value)]);
+		if (!exclude.includes(key) && value !== undefined) {
+			if (guards.String.is(value)) {
+				pairs.push([key, value]);
+			} else {
+				throw `Expected value of "${key}" to be a string!`;
+			}
 		}
 	}
 	return pairs;
@@ -137,26 +148,29 @@ export function serializeParameters(parameters: Array<[string, string]>): string
 	return `?${parts.join("&")}`;
 };
 
-export function getOption(pairs: Iterable<[string, string]>, key: string): Primitive {
+export function getValue(pairs: Iterable<[string, string]>, key: string, plain: boolean): Primitive {
 	for (let pair of pairs) {
 		if (pair[0] === key) {
 			try {
 				let value = pair[1];
-				return value;
+				return deserializeValue(value, plain);
 			} catch (error) {}
 		}
 	}
 };
 
-export function getParsedOption(pairs: Iterable<[string, string]>, key: string): Primitive {
-	for (let pair of pairs) {
-		if (pair[0] === key) {
-			try {
-				let value = pair[1];
-				return globalThis.JSON.parse(value);
-			} catch (error) {}
-		}
+export function serializeValue(value: Primitive, plain: boolean): string | undefined {
+	if (value === undefined) {
+		return;
 	}
+	return plain ? String(value) : globalThis.JSON.stringify(value);
+};
+
+export function deserializeValue(value: string | undefined, plain: boolean): Primitive {
+	if (value === undefined) {
+		return;
+	}
+	return plain ? value : globalThis.JSON.parse(value);
 };
 
 export type RawRequest = {

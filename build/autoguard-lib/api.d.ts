@@ -36,11 +36,13 @@ export declare type ResponseLike = {
 };
 export declare type RequestListener = (request: RequestLike, response: ResponseLike) => Promise<void>;
 export declare function serializeComponents(components: Array<string>): string;
-export declare function extractKeyValuePairs(record: Record<string, Primitive>, exclude?: Array<string>): Array<[string, string]>;
+export declare function appendKeyValuePair(pairs: Array<[string, string]>, key: string, value: Primitive, plain: boolean): void;
+export declare function extractKeyValuePairs(record: Record<string, Primitive>, exclude: Array<string>): Array<[string, string]>;
 export declare function combineKeyValuePairs(pairs: Array<[string, string]>): Record<string, Primitive>;
 export declare function serializeParameters(parameters: Array<[string, string]>): string;
-export declare function getOption(pairs: Iterable<[string, string]>, key: string): Primitive;
-export declare function getParsedOption(pairs: Iterable<[string, string]>, key: string): Primitive;
+export declare function getValue(pairs: Iterable<[string, string]>, key: string, plain: boolean): Primitive;
+export declare function serializeValue(value: Primitive, plain: boolean): string | undefined;
+export declare function deserializeValue(value: string | undefined, plain: boolean): Primitive;
 export declare type RawRequest = {
     method: string;
     components: Array<string>;
