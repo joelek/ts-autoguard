@@ -16,10 +16,8 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.isPayloadBinary = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getParsedOption = exports.getOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
+exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.isPayloadBinary = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getParsedOption = exports.getOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Headers = exports.Options = exports.JSON = exports.Primitive = exports.Binary = exports.SyncBinary = exports.AsyncBinary = void 0;
 const guards = require("./guards");
-exports.Options = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String, guards.Undefined));
-exports.Headers = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String, guards.Undefined));
 exports.AsyncBinary = {
     as(subject, path = "") {
         if (subject != null) {
@@ -67,6 +65,10 @@ exports.SyncBinary = {
     }
 };
 exports.Binary = guards.Union.of(exports.AsyncBinary, exports.SyncBinary);
+exports.Primitive = guards.Union.of(guards.Boolean, guards.Number, guards.String, guards.Undefined);
+exports.JSON = guards.Union.of(guards.Boolean, guards.Null, guards.Number, guards.String, guards.Array.of(guards.Reference.of(() => exports.JSON)), guards.Record.of(guards.Reference.of(() => exports.JSON)), guards.Undefined);
+exports.Options = guards.Record.of(exports.Primitive);
+exports.Headers = guards.Record.of(exports.Primitive);
 function serializeComponents(components) {
     return "/" + components
         .map((component) => {
@@ -127,7 +129,7 @@ function getParsedOption(pairs, key) {
         if (pair[0] === key) {
             try {
                 let value = pair[1];
-                return JSON.parse(value);
+                return globalThis.JSON.parse(value);
             }
             catch (error) { }
         }
@@ -298,7 +300,7 @@ function serializePayload(payload) {
     if (payload === undefined) {
         return [];
     }
-    let string = JSON.stringify(payload);
+    let string = globalThis.JSON.stringify(payload);
     return serializeStringPayload(string);
 }
 exports.serializePayload = serializePayload;
@@ -316,7 +318,7 @@ exports.deserializeStringPayload = deserializeStringPayload;
 function deserializePayload(binary) {
     return __awaiter(this, void 0, void 0, function* () {
         let string = yield deserializeStringPayload(binary);
-        return string === "" ? undefined : JSON.parse(string);
+        return string === "" ? undefined : globalThis.JSON.parse(string);
     });
 }
 exports.deserializePayload = deserializePayload;

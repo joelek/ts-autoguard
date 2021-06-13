@@ -1,22 +1,5 @@
 import * as guards from "./guards";
-
-export const Options = guards.Record.of(guards.Union.of(
-	guards.Boolean,
-	guards.Number,
-	guards.String,
-	guards.Undefined
-));
-
-export type Options = ReturnType<typeof Headers.as>;
-
-export const Headers = guards.Record.of(guards.Union.of(
-	guards.Boolean,
-	guards.Number,
-	guards.String,
-	guards.Undefined
-));
-
-export type Headers = ReturnType<typeof Headers.as>;
+import * as serialization from "./serialization";
 
 export type AsyncBinary = AsyncIterable<Uint8Array>;
 
@@ -76,7 +59,28 @@ export const Binary = guards.Union.of(
 export type Binary = ReturnType<typeof Binary.as>;
 
 export type Primitive = boolean | number | string | undefined;
+
+export const Primitive: serialization.MessageGuard<Primitive> = guards.Union.of(
+	guards.Boolean,
+	guards.Number,
+	guards.String,
+	guards.Undefined
+);
+
 export type JSON = boolean | null | number | string | JSON[] | { [key: string]: JSON } | undefined;
+
+export const JSON: serialization.MessageGuard<JSON> = guards.Union.of(
+	guards.Boolean,
+	guards.Null,
+	guards.Number,
+	guards.String,
+	guards.Array.of(guards.Reference.of(() => JSON)),
+	guards.Record.of(guards.Reference.of(() => JSON)),
+	guards.Undefined
+);
+
+export const Options = guards.Record.of(Primitive);
+export const Headers = guards.Record.of(Primitive);
 
 export type RequestLike = AsyncBinary & {
 	method?: string;
@@ -149,7 +153,7 @@ export function getParsedOption(pairs: Iterable<[string, string]>, key: string):
 		if (pair[0] === key) {
 			try {
 				let value = pair[1];
-				return JSON.parse(value);
+				return globalThis.JSON.parse(value);
 			} catch (error) {}
 		}
 	}
@@ -370,7 +374,7 @@ export function serializePayload(payload: JSON): Binary {
 	if (payload === undefined) {
 		return [];
 	}
-	let string = JSON.stringify(payload);
+	let string = globalThis.JSON.stringify(payload);
 	return serializeStringPayload(string);
 };
 
@@ -383,7 +387,7 @@ export async function deserializeStringPayload(binary: Binary): Promise<string> 
 
 export async function deserializePayload(binary: Binary): Promise<JSON> {
 	let string = await deserializeStringPayload(binary);
-	return string === "" ? undefined : JSON.parse(string);
+	return string === "" ? undefined : globalThis.JSON.parse(string);
 };
 
 export function finalizeResponse(raw: RawResponse, defaultContentType: string): RawResponse {

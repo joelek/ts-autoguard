@@ -1,7 +1,4 @@
-export declare const Options: import("./serialization").MessageGuard<Record<string, string | number | boolean | undefined>>;
-export declare type Options = ReturnType<typeof Headers.as>;
-export declare const Headers: import("./serialization").MessageGuard<Record<string, string | number | boolean | undefined>>;
-export declare type Headers = ReturnType<typeof Headers.as>;
+import * as serialization from "./serialization";
 export declare type AsyncBinary = AsyncIterable<Uint8Array>;
 export declare const AsyncBinary: {
     as(subject: any, path?: string): AsyncBinary;
@@ -14,12 +11,16 @@ export declare const SyncBinary: {
     is(subject: any): subject is SyncBinary;
     ts(eol?: string): string;
 };
-export declare const Binary: import("./serialization").MessageGuard<AsyncBinary | SyncBinary>;
+export declare const Binary: serialization.MessageGuard<AsyncBinary | SyncBinary>;
 export declare type Binary = ReturnType<typeof Binary.as>;
 export declare type Primitive = boolean | number | string | undefined;
+export declare const Primitive: serialization.MessageGuard<Primitive>;
 export declare type JSON = boolean | null | number | string | JSON[] | {
     [key: string]: JSON;
 } | undefined;
+export declare const JSON: serialization.MessageGuard<JSON>;
+export declare const Options: serialization.MessageGuard<Record<string, Primitive>>;
+export declare const Headers: serialization.MessageGuard<Record<string, Primitive>>;
 export declare type RequestLike = AsyncBinary & {
     method?: string;
     rawHeaders: string[];
