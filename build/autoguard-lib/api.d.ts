@@ -19,8 +19,8 @@ export declare type JSON = boolean | null | number | string | JSON[] | {
     [key: string]: JSON;
 } | undefined;
 export declare const JSON: serialization.MessageGuard<JSON>;
-export declare const Options: serialization.MessageGuard<Record<string, Primitive>>;
-export declare const Headers: serialization.MessageGuard<Record<string, Primitive>>;
+export declare const Options: serialization.MessageGuard<Record<string, JSON>>;
+export declare const Headers: serialization.MessageGuard<Record<string, JSON>>;
 export declare type RequestLike = AsyncBinary & {
     method?: string;
     rawHeaders: string[];
@@ -36,13 +36,13 @@ export declare type ResponseLike = {
 };
 export declare type RequestListener = (request: RequestLike, response: ResponseLike) => Promise<void>;
 export declare function serializeComponents(components: Array<string>): string;
-export declare function appendKeyValuePair(pairs: Array<[string, string]>, key: string, value: Primitive, plain: boolean): void;
-export declare function extractKeyValuePairs(record: Record<string, Primitive>, exclude: Array<string>): Array<[string, string]>;
-export declare function combineKeyValuePairs(pairs: Array<[string, string]>): Record<string, Primitive>;
+export declare function appendKeyValuePair(pairs: Array<[string, string]>, key: string, value: JSON, plain: boolean): void;
+export declare function extractKeyValuePairs(record: Record<string, JSON>, exclude: Array<string>): Array<[string, string]>;
+export declare function combineKeyValuePairs(pairs: Array<[string, string]>): Record<string, JSON>;
 export declare function serializeParameters(parameters: Array<[string, string]>): string;
-export declare function getValue(pairs: Iterable<[string, string]>, key: string, plain: boolean): Primitive;
-export declare function serializeValue(value: Primitive, plain: boolean): string | undefined;
-export declare function deserializeValue(value: string | undefined, plain: boolean): Primitive;
+export declare function getValue(pairs: Iterable<[string, string]>, key: string, plain: boolean): JSON;
+export declare function serializeValue(value: JSON, plain: boolean): string | undefined;
+export declare function deserializeValue(value: string | undefined, plain: boolean): JSON;
 export declare type RawRequest = {
     method: string;
     components: Array<string>;
@@ -74,13 +74,13 @@ export declare type Payload = JSON | Binary;
 export declare type CollectedPayload<A extends Payload> = A extends Binary ? Uint8Array : A;
 export declare function isPayloadBinary(payload: Payload): payload is Binary;
 export declare type EndpointRequest = {
-    options?: Record<string, Primitive>;
-    headers?: Record<string, Primitive>;
+    options?: Record<string, JSON>;
+    headers?: Record<string, JSON>;
     payload?: Payload;
 };
 export declare type EndpointResponse = {
     status?: number;
-    headers?: Record<string, Primitive>;
+    headers?: Record<string, JSON>;
     payload?: Payload;
 };
 export declare class ClientRequest<A extends EndpointRequest> {
@@ -133,7 +133,7 @@ export declare function makeNodeRequestHandler(options?: NodeRequestHandlerOptio
 export declare function respond(httpResponse: ResponseLike, raw: RawResponse): Promise<void>;
 export declare function combineRawHeaders(raw: Array<string>): Array<string>;
 export declare function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike, urlPrefix?: string): Promise<void>;
-export declare function parseRangeHeader(value: Primitive, size: number): {
+export declare function parseRangeHeader(value: JSON, size: number): {
     status: number;
     offset: number;
     length: number;

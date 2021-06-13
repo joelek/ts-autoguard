@@ -35,11 +35,7 @@ export class Component {
 					if (peek()?.family === "plain") {
 						tokenization.expect(read(), "plain");
 					} else {
-						type = types.Type.parse(tokenizer, {
-							Boolean: true,
-							Number: true,
-							String: true
-						});
+						type = types.Type.parse(tokenizer);
 						// TODO: Remove compatibility behaviour in v6.
 						if (type === types.StringType.INSTANCE) {
 							type = types.PlainType.INSTANCE;
@@ -168,11 +164,7 @@ export class Parameter {
 				if (peek()?.family === "plain") {
 					tokenization.expect(read(), "plain");
 				} else {
-					type = types.Type.parse(tokenizer, {
-						Boolean: true,
-						Number: true,
-						String: true
-					});
+					type = types.Type.parse(tokenizer);
 					// TODO: Remove compatibility behaviour in v6.
 					if (type === types.StringType.INSTANCE) {
 						type = types.PlainType.INSTANCE;

@@ -67,8 +67,8 @@ exports.SyncBinary = {
 exports.Binary = guards.Union.of(exports.AsyncBinary, exports.SyncBinary);
 exports.Primitive = guards.Union.of(guards.Boolean, guards.Number, guards.String, guards.Undefined);
 exports.JSON = guards.Union.of(guards.Boolean, guards.Null, guards.Number, guards.String, guards.Array.of(guards.Reference.of(() => exports.JSON)), guards.Record.of(guards.Reference.of(() => exports.JSON)), guards.Undefined);
-exports.Options = guards.Record.of(exports.Primitive);
-exports.Headers = guards.Record.of(exports.Primitive);
+exports.Options = guards.Record.of(exports.JSON);
+exports.Headers = guards.Record.of(exports.JSON);
 function serializeComponents(components) {
     return "/" + components
         .map((component) => {
