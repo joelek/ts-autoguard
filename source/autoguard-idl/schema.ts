@@ -137,13 +137,13 @@ function generateClientRoute(route: route.Route, options: shared.Options): strin
 	lines.push(`\tlet parameters = new Array<[string, string]>();`);
 	for (let parameter of route.parameters.parameters) {
 		let plain = parameter.type === types.PlainType.INSTANCE;
-		lines.push(`\tautoguard.api.appendKeyValuePair(parameters, "${parameter.name}", request.options["${parameter.name}"], ${plain});`);
+		lines.push(`\tautoguard.api.appendKeyValuePair(parameters, "${parameter.name}", request.options?.["${parameter.name}"], ${plain});`);
 	}
 	lines.push(`\tparameters.push(...autoguard.api.extractKeyValuePairs(request.options ?? {}, [...[${exclude.join(",")}], ...parameters.map((parameter) => parameter[0])]));`);
 	lines.push(`\tlet headers = new Array<[string, string]>();`);
 	for (let header of route.request.headers.headers) {
 		let plain = header.type === types.PlainType.INSTANCE;
-		lines.push(`\tautoguard.api.appendKeyValuePair(headers, "${header.name}", request.headers["${header.name}"], ${plain});`);
+		lines.push(`\tautoguard.api.appendKeyValuePair(headers, "${header.name}", request.headers?.["${header.name}"], ${plain});`);
 	}
 	lines.push(`\theaders.push(...autoguard.api.extractKeyValuePairs(request.headers ?? {}, headers.map((header) => header[0])));`);
 	if (route.request.payload === types.Binary.INSTANCE) {
@@ -224,7 +224,7 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 	lines.push(`\t\t\t\t\t\t\tlet headers = new Array<[string, string]>();`);
 	for (let header of route.response.headers.headers) {
 		let plain = header.type === types.PlainType.INSTANCE;
-		lines.push(`\t\t\t\t\t\t\tautoguard.api.appendKeyValuePair(headers, "${header.name}", response.headers["${header.name}"], ${plain});`);
+		lines.push(`\t\t\t\t\t\t\tautoguard.api.appendKeyValuePair(headers, "${header.name}", response.headers?.["${header.name}"], ${plain});`);
 	}
 	lines.push(`\t\t\t\t\t\t\theaders.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));`);
 	if (route.response.payload === types.Binary.INSTANCE) {
