@@ -18,8 +18,8 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.isPayloadBinary = exports.getHeaders = exports.getParameters = exports.getComponents = exports.getParsedOption = exports.getOption = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.serializeComponents = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.Headers = exports.Options = void 0;
 const guards = require("./guards");
-exports.Options = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
-exports.Headers = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String));
+exports.Options = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String, guards.Undefined));
+exports.Headers = guards.Record.of(guards.Union.of(guards.Boolean, guards.Number, guards.String, guards.Undefined));
 exports.AsyncBinary = {
     as(subject, path = "") {
         if (subject != null) {

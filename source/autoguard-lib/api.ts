@@ -3,7 +3,8 @@ import * as guards from "./guards";
 export const Options = guards.Record.of(guards.Union.of(
 	guards.Boolean,
 	guards.Number,
-	guards.String
+	guards.String,
+	guards.Undefined
 ));
 
 export type Options = ReturnType<typeof Headers.as>;
@@ -11,7 +12,8 @@ export type Options = ReturnType<typeof Headers.as>;
 export const Headers = guards.Record.of(guards.Union.of(
 	guards.Boolean,
 	guards.Number,
-	guards.String
+	guards.String,
+	guards.Undefined
 ));
 
 export type Headers = ReturnType<typeof Headers.as>;
@@ -73,8 +75,8 @@ export const Binary = guards.Union.of(
 
 export type Binary = ReturnType<typeof Binary.as>;
 
-export type Primitive = boolean | number | string;
-export type JSON = boolean | null | number | string | JSON[] | { [key: string]: JSON };
+export type Primitive = boolean | number | string | undefined;
+export type JSON = boolean | null | number | string | JSON[] | { [key: string]: JSON } | undefined;
 
 export type RequestLike = AsyncBinary & {
 	method?: string;
@@ -101,7 +103,7 @@ export function serializeComponents(components: Array<string>): string {
 		.join("/");
 };
 
-export function extractKeyValuePairs(record: Record<string, Primitive | undefined>, exclude: Array<string> = []): Array<[string, string]> {
+export function extractKeyValuePairs(record: Record<string, Primitive>, exclude: Array<string> = []): Array<[string, string]> {
 	let pairs = new Array<[string, string]>();
 	for (let [key, value] of Object.entries(record)) {
 		if (value !== undefined && !exclude.includes(key)) {
@@ -111,8 +113,8 @@ export function extractKeyValuePairs(record: Record<string, Primitive | undefine
 	return pairs;
 };
 
-export function combineKeyValuePairs(pairs: Array<[string, string]>): Record<string, Primitive | undefined> {
-	let record: Record<string, Primitive | undefined> = {};
+export function combineKeyValuePairs(pairs: Array<[string, string]>): Record<string, Primitive> {
+	let record: Record<string, Primitive> = {};
 	for (let pair of pairs) {
 		record[pair[0]] = pair[1];
 	}
@@ -131,7 +133,7 @@ export function serializeParameters(parameters: Array<[string, string]>): string
 	return `?${parts.join("&")}`;
 };
 
-export function getOption(pairs: Iterable<[string, string]>, key: string): string | undefined {
+export function getOption(pairs: Iterable<[string, string]>, key: string): Primitive {
 	for (let pair of pairs) {
 		if (pair[0] === key) {
 			try {
@@ -142,7 +144,7 @@ export function getOption(pairs: Iterable<[string, string]>, key: string): strin
 	}
 };
 
-export function getParsedOption(pairs: Iterable<[string, string]>, key: string): Primitive | undefined {
+export function getParsedOption(pairs: Iterable<[string, string]>, key: string): Primitive {
 	for (let pair of pairs) {
 		if (pair[0] === key) {
 			try {
@@ -218,7 +220,7 @@ export function getHeaders(headers: Array<string>): Array<[string, string]> {
 	});
 };
 
-export type Payload = JSON | Binary | undefined;
+export type Payload = JSON | Binary;
 export type CollectedPayload<A extends Payload> = A extends Binary ? Uint8Array : A;
 
 export function isPayloadBinary(payload: Payload): payload is Binary {
@@ -226,14 +228,14 @@ export function isPayloadBinary(payload: Payload): payload is Binary {
 };
 
 export type EndpointRequest = {
-	options?: Record<string, Primitive | undefined>;
-	headers?: Record<string, Primitive | undefined>;
+	options?: Record<string, Primitive>;
+	headers?: Record<string, Primitive>;
 	payload?: Payload;
 };
 
 export type EndpointResponse = {
 	status?: number;
-	headers?: Record<string, Primitive | undefined>;
+	headers?: Record<string, Primitive>;
 	payload?: Payload;
 };
 
@@ -364,7 +366,7 @@ export function serializeStringPayload(string: string): Binary {
 	return [array];
 };
 
-export function serializePayload(payload: JSON | undefined): Binary {
+export function serializePayload(payload: JSON): Binary {
 	if (payload === undefined) {
 		return [];
 	}
@@ -379,7 +381,7 @@ export async function deserializeStringPayload(binary: Binary): Promise<string> 
 	return string;
 };
 
-export async function deserializePayload(binary: Binary): Promise<JSON | undefined> {
+export async function deserializePayload(binary: Binary): Promise<JSON> {
 	let string = await deserializeStringPayload(binary);
 	return string === "" ? undefined : JSON.parse(string);
 };
@@ -590,7 +592,7 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 	}
 };
 
-export function parseRangeHeader(value: Primitive | undefined, size: number): {
+export function parseRangeHeader(value: Primitive, size: number): {
 	status: number,
 	offset: number,
 	length: number
