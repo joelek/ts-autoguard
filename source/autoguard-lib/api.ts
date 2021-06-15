@@ -1,6 +1,80 @@
 import * as guards from "./guards";
 import * as serialization from "./serialization";
 
+export interface RouteMatcher {
+	acceptComponent(component: string): boolean;
+	getValue(): JSON;
+	isSatisfied(): boolean;
+};
+
+export class StaticRouteMatcher implements RouteMatcher {
+	private string: string;
+	private accepted: boolean;
+
+	constructor(string: string) {
+		this.string = string;
+		this.accepted = false;
+	}
+
+	acceptComponent(component: string): boolean {
+		if (this.accepted) {
+			return false;
+		}
+		this.accepted = component === this.string;
+		return this.accepted;
+	}
+
+	getValue(): JSON {
+		return this.string;
+	}
+
+	isSatisfied(): boolean {
+		return this.accepted;
+	}
+};
+
+export class DynamicRouteMatcher<A> implements RouteMatcher {
+	private minOccurences: number;
+	private maxOccurences: number;
+	private plain: boolean;
+	private guard: serialization.MessageGuard<A>;
+	private values: Array<JSON>;
+
+	constructor(minOccurences: number, maxOccurences: number, plain: boolean, guard: serialization.MessageGuard<A>) {
+		this.minOccurences = minOccurences;
+		this.maxOccurences = maxOccurences;
+		this.plain = plain;
+		this.guard = guard;
+		this.values = new Array<JSON>();
+	}
+
+	acceptComponent(component: string): boolean {
+		if (this.values.length >= this.maxOccurences) {
+			return false;
+		}
+		try {
+			let value = deserializeValue(component, this.plain);
+			if (this.guard.is(value)) {
+				this.values.push(value);
+				return true;
+			}
+		} catch (error) {}
+		return false;
+	}
+
+	getValue(): JSON {
+		if (this.maxOccurences === 1) {
+			return this.values[0];
+		} else {
+			return this.values;
+		}
+	}
+
+	isSatisfied(): boolean {
+		return this.minOccurences <= this.values.length && this.values.length <= this.maxOccurences;
+	}
+};
+
 export type AsyncBinary = AsyncIterable<Uint8Array>;
 
 export const AsyncBinary = {
@@ -421,19 +495,24 @@ export function finalizeResponse(raw: RawResponse, defaultContentType: string): 
 	};
 };
 
-export function acceptsComponents(one: Array<string>, two: Array<[string, string]>): boolean {
-	if (one.length !== two.length) {
-		return false;
-	}
-	let length = one.length;
-	for (let i = 0; i < length; i++) {
-		if (two[i][0] === "") {
-			if (one[i] !== two[i][1]) {
-				return false;
+export function acceptsComponents(components: Array<string>, matchers: Array<RouteMatcher>): boolean {
+	let currentMatcher = 0;
+	outer: for (let component of components) {
+		inner: for (let matcher of matchers.slice(currentMatcher)) {
+			if (matcher.acceptComponent(component)) {
+				continue outer;
+			} else {
+				if (matcher.isSatisfied()) {
+					currentMatcher += 1;
+					continue inner;
+				} else {
+					break outer;
+				}
 			}
 		}
+		break outer;
 	}
-	return true;
+	return currentMatcher === matchers.length - 1 && matchers[currentMatcher].isSatisfied();
 };
 
 export function acceptsMethod(one: string, two: string): boolean {

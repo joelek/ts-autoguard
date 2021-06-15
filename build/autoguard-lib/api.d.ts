@@ -1,4 +1,28 @@
 import * as serialization from "./serialization";
+export interface RouteMatcher {
+    acceptComponent(component: string): boolean;
+    getValue(): JSON;
+    isSatisfied(): boolean;
+}
+export declare class StaticRouteMatcher implements RouteMatcher {
+    private string;
+    private accepted;
+    constructor(string: string);
+    acceptComponent(component: string): boolean;
+    getValue(): JSON;
+    isSatisfied(): boolean;
+}
+export declare class DynamicRouteMatcher<A> implements RouteMatcher {
+    private minOccurences;
+    private maxOccurences;
+    private plain;
+    private guard;
+    private values;
+    constructor(minOccurences: number, maxOccurences: number, plain: boolean, guard: serialization.MessageGuard<A>);
+    acceptComponent(component: string): boolean;
+    getValue(): JSON;
+    isSatisfied(): boolean;
+}
 export declare type AsyncBinary = AsyncIterable<Uint8Array>;
 export declare const AsyncBinary: {
     as(subject: any, path?: string): AsyncBinary;
@@ -124,7 +148,7 @@ export declare function serializePayload(payload: JSON): Binary;
 export declare function deserializeStringPayload(binary: Binary): Promise<string>;
 export declare function deserializePayload(binary: Binary): Promise<JSON>;
 export declare function finalizeResponse(raw: RawResponse, defaultContentType: string): RawResponse;
-export declare function acceptsComponents(one: Array<string>, two: Array<[string, string]>): boolean;
+export declare function acceptsComponents(components: Array<string>, matchers: Array<RouteMatcher>): boolean;
 export declare function acceptsMethod(one: string, two: string): boolean;
 export declare type RequestHandler = (raw: RawRequest, urlPrefix?: string) => Promise<RawResponse>;
 export declare function xhr(raw: RawRequest, urlPrefix?: string): Promise<RawResponse>;

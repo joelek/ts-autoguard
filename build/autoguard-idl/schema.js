@@ -177,24 +177,26 @@ function generateServerRoute(route, options) {
     let tag = makeRouteTag(route);
     lines.push(`(raw, auxillary) => {`);
     lines.push(`\tlet method = "${route.method.method}";`);
-    lines.push(`\tlet components = new Array<[string, string]>();`);
-    for (let [index, component] of route.path.components.entries()) {
+    lines.push(`\tlet matchers = new Array<autoguard.api.RouteMatcher>();`);
+    for (let component of route.path.components) {
         if (is.present(component.type)) {
-            lines.push(`\tcomponents.push(["${component.name}", raw.components[${index}]]);`);
+            let min = 1;
+            let max = 1;
+            let plain = component.type === types.PlainType.INSTANCE;
+            lines.push(`\tmatchers.push(new autoguard.api.DynamicRouteMatcher(${min}, ${max}, ${plain}, ${component.type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" }))}));`);
         }
         else {
-            lines.push(`\tcomponents.push(["", decodeURIComponent("${encodeURIComponent(component.name)}")]);`);
+            lines.push(`\tmatchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("${encodeURIComponent(component.name)}")));`);
         }
     }
     lines.push(`\treturn {`);
-    lines.push(`\t\tacceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),`);
+    lines.push(`\t\tacceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),`);
     lines.push(`\t\tacceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),`);
     lines.push(`\t\tvalidateRequest: async () => {`);
     lines.push(`\t\t\tlet options = autoguard.api.combineKeyValuePairs(raw.parameters);`);
-    for (let component of route.path.components) {
+    for (let [index, component] of route.path.components.entries()) {
         if (is.present(component.type)) {
-            let plain = component.type === types.PlainType.INSTANCE;
-            lines.push(`\t\t\toptions["${component.name}"] = autoguard.api.getValue(components, "${component.name}", ${plain});`);
+            lines.push(`\t\t\toptions["${component.name}"] = matchers[${index}].getValue();`);
         }
     }
     for (let parameter of route.parameters.parameters) {

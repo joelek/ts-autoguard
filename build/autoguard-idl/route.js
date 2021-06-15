@@ -1,17 +1,36 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Route = exports.Message = exports.Headers = exports.Parameters = exports.Parameter = exports.Alias = exports.Method = exports.Path = exports.Component = void 0;
+exports.Route = exports.Message = exports.Headers = exports.Parameters = exports.Parameter = exports.Alias = exports.Method = exports.Path = exports.Component = exports.Quantifier = void 0;
 const is = require("./is");
 const tokenization = require("./tokenization");
 const types = require("./types");
+class Quantifier {
+    constructor(kind) {
+        this.kind = kind;
+    }
+    generateSchema(options) {
+        if (this.kind === "required") {
+            return "";
+        }
+        throw `Expected code to be unreachable!`;
+    }
+    static parse(tokenizer) {
+        return tokenizer.newContext((read, peek) => {
+            return new Quantifier("required");
+        });
+    }
+}
+exports.Quantifier = Quantifier;
+;
 class Component {
-    constructor(name, type) {
+    constructor(name, quantifier, type) {
         this.name = name;
+        this.quantifier = quantifier;
         this.type = type;
     }
     generateSchema(options) {
         if (is.present(this.type)) {
-            return "<\"" + this.name + "\"" + ":" + this.type + ">";
+            return "<\"" + this.name + "\"" + this.quantifier.generateSchema(options) + ":" + this.type + ">";
         }
         else {
             return encodeURIComponent(this.name);
@@ -27,6 +46,7 @@ class Component {
                     "STRING_LITERAL"
                 ]);
                 let name = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
+                let quantifier = Quantifier.parse(tokenizer);
                 let type = types.PlainType.INSTANCE;
                 if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === ":") {
                     tokenization.expect(read(), ":");
@@ -42,7 +62,7 @@ class Component {
                     }
                 }
                 tokenization.expect(read(), ">");
-                return new Component(name, type);
+                return new Component(name, quantifier, type);
             }
             else {
                 let name = "";
@@ -53,7 +73,7 @@ class Component {
                     ]);
                     name = token.family === "PATH_COMPONENT" ? decodeURIComponent(token.value) : token.value;
                 }
-                return new Component(name);
+                return new Component(name, new Quantifier("required"));
             }
         });
     }

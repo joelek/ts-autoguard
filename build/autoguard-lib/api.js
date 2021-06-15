@@ -16,8 +16,66 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.isPayloadBinary = exports.getHeaders = exports.getParameters = exports.getComponents = exports.deserializeValue = exports.serializeValue = exports.getValue = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.appendKeyValuePair = exports.serializeComponents = exports.Headers = exports.Options = exports.JSON = exports.Primitive = exports.Binary = exports.SyncBinary = exports.AsyncBinary = void 0;
+exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.isPayloadBinary = exports.getHeaders = exports.getParameters = exports.getComponents = exports.deserializeValue = exports.serializeValue = exports.getValue = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.appendKeyValuePair = exports.serializeComponents = exports.Headers = exports.Options = exports.JSON = exports.Primitive = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.DynamicRouteMatcher = exports.StaticRouteMatcher = void 0;
 const guards = require("./guards");
+;
+class StaticRouteMatcher {
+    constructor(string) {
+        this.string = string;
+        this.accepted = false;
+    }
+    acceptComponent(component) {
+        if (this.accepted) {
+            return false;
+        }
+        this.accepted = component === this.string;
+        return this.accepted;
+    }
+    getValue() {
+        return this.string;
+    }
+    isSatisfied() {
+        return this.accepted;
+    }
+}
+exports.StaticRouteMatcher = StaticRouteMatcher;
+;
+class DynamicRouteMatcher {
+    constructor(minOccurences, maxOccurences, plain, guard) {
+        this.minOccurences = minOccurences;
+        this.maxOccurences = maxOccurences;
+        this.plain = plain;
+        this.guard = guard;
+        this.values = new Array();
+    }
+    acceptComponent(component) {
+        if (this.values.length >= this.maxOccurences) {
+            return false;
+        }
+        try {
+            let value = deserializeValue(component, this.plain);
+            if (this.guard.is(value)) {
+                this.values.push(value);
+                return true;
+            }
+        }
+        catch (error) { }
+        return false;
+    }
+    getValue() {
+        if (this.maxOccurences === 1) {
+            return this.values[0];
+        }
+        else {
+            return this.values;
+        }
+    }
+    isSatisfied() {
+        return this.minOccurences <= this.values.length && this.values.length <= this.maxOccurences;
+    }
+}
+exports.DynamicRouteMatcher = DynamicRouteMatcher;
+;
 exports.AsyncBinary = {
     as(subject, path = "") {
         if (subject != null) {
@@ -354,19 +412,26 @@ function finalizeResponse(raw, defaultContentType) {
 }
 exports.finalizeResponse = finalizeResponse;
 ;
-function acceptsComponents(one, two) {
-    if (one.length !== two.length) {
-        return false;
-    }
-    let length = one.length;
-    for (let i = 0; i < length; i++) {
-        if (two[i][0] === "") {
-            if (one[i] !== two[i][1]) {
-                return false;
+function acceptsComponents(components, matchers) {
+    let currentMatcher = 0;
+    outer: for (let component of components) {
+        inner: for (let matcher of matchers.slice(currentMatcher)) {
+            if (matcher.acceptComponent(component)) {
+                continue outer;
+            }
+            else {
+                if (matcher.isSatisfied()) {
+                    currentMatcher += 1;
+                    continue inner;
+                }
+                else {
+                    break outer;
+                }
             }
         }
+        break outer;
     }
-    return true;
+    return currentMatcher === matchers.length - 1 && matchers[currentMatcher].isSatisfied();
 }
 exports.acceptsComponents = acceptsComponents;
 ;

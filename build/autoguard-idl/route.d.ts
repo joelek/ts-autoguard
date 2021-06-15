@@ -1,10 +1,17 @@
 import * as shared from "./shared";
 import * as tokenization from "./tokenization";
 import * as types from "./types";
+export declare class Quantifier {
+    kind: "required";
+    constructor(kind: "required");
+    generateSchema(options: shared.Options): string;
+    static parse(tokenizer: tokenization.Tokenizer): Quantifier;
+}
 export declare class Component {
     name: string;
+    quantifier: Quantifier;
     type?: types.Type;
-    constructor(name: string, type?: types.Type);
+    constructor(name: string, quantifier: Quantifier, type?: types.Type);
     generateSchema(options: shared.Options): string;
     static parse(tokenizer: tokenization.Tokenizer): Component;
 }

@@ -3,18 +3,41 @@ import * as shared from "./shared";
 import * as tokenization from "./tokenization";
 import * as types from "./types";
 
+export class Quantifier {
+	kind: "required";
+
+	constructor(kind: "required") {
+		this.kind = kind;
+	}
+
+	generateSchema(options: shared.Options): string {
+		if (this.kind === "required") {
+			return ""
+		}
+		throw `Expected code to be unreachable!`;
+	}
+
+	static parse(tokenizer: tokenization.Tokenizer): Quantifier {
+		return tokenizer.newContext((read, peek) => {
+			return new Quantifier("required");
+		});
+	}
+};
+
 export class Component {
 	name: string;
+	quantifier: Quantifier;
 	type?: types.Type;
 
-	constructor(name: string, type?: types.Type) {
+	constructor(name: string, quantifier: Quantifier, type?: types.Type) {
 		this.name = name;
+		this.quantifier = quantifier;
 		this.type = type;
 	}
 
 	generateSchema(options: shared.Options): string {
 		if (is.present(this.type)) {
-			return "<\"" + this.name + "\"" + ":" + this.type + ">";
+			return "<\"" + this.name + "\"" + this.quantifier.generateSchema(options) + ":" + this.type + ">";
 		} else {
 			return encodeURIComponent(this.name);
 		}
@@ -29,6 +52,7 @@ export class Component {
 					"STRING_LITERAL"
 				]);
 				let name = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
+				let quantifier = Quantifier.parse(tokenizer);
 				let type: types.Type = types.PlainType.INSTANCE;
 				if (peek()?.family === ":") {
 					tokenization.expect(read(), ":");
@@ -43,7 +67,7 @@ export class Component {
 					}
 				}
 				tokenization.expect(read(), ">");
-				return new Component(name, type);
+				return new Component(name, quantifier, type);
 			} else {
 				let name = "";
 				if (([...tokenization.IdentifierFamilies, "PATH_COMPONENT"] as Array<string | undefined>).includes(peek()?.family)) {
@@ -53,7 +77,7 @@ export class Component {
 					]);
 					name = token.family === "PATH_COMPONENT" ? decodeURIComponent(token.value) : token.value;
 				}
-				return new Component(name);
+				return new Component(name, new Quantifier("required"));
 			}
 		});
 	}
