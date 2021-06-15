@@ -11,10 +11,10 @@ class Component {
     }
     generateSchema(options) {
         if (is.present(this.type)) {
-            return "<" + this.name + ":" + this.type + ">";
+            return "<\"" + this.name + "\"" + ":" + this.type + ">";
         }
         else {
-            return this.name;
+            return encodeURIComponent(this.name);
         }
     }
     static parse(tokenizer) {
@@ -131,7 +131,7 @@ class Parameter {
         this.optional = optional;
     }
     generateSchema(options) {
-        return this.name + (this.optional ? "?" : "") + ": " + this.type;
+        return "\"" + this.name + "\"" + (this.optional ? "?" : "") + ": " + this.type;
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {

@@ -14,9 +14,9 @@ export class Component {
 
 	generateSchema(options: shared.Options): string {
 		if (is.present(this.type)) {
-			return "<" + this.name + ":" + this.type + ">";
+			return "<\"" + this.name + "\"" + ":" + this.type + ">";
 		} else {
-			return this.name;
+			return encodeURIComponent(this.name);
 		}
 	}
 
@@ -143,7 +143,7 @@ export class Parameter {
 	}
 
 	generateSchema(options: shared.Options): string {
-		return this.name + (this.optional ? "?" : "") + ": " + this.type;
+		return "\"" + this.name + "\"" + (this.optional ? "?" : "") + ": " + this.type;
 	}
 
 	static parse(tokenizer: tokenization.Tokenizer): Parameter {
