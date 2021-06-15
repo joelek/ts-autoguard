@@ -262,6 +262,8 @@ NB: This project targets TypeScript 4 in strict mode.
 
 ## Roadmap
 
+* Fix issue with references in components.
+* Remove run-time checks of payload types.
 * Add support for multiple-valued header and parameter values.
 * Create middleware for defining cache-control.
 * Add more detailed error messages for syntax errors.
