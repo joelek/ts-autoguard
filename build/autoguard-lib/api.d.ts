@@ -65,6 +65,7 @@ export declare function extractKeyValuePairs(record: Record<string, JSON>, exclu
 export declare function combineKeyValuePairs(pairs: Array<[string, string]>): Record<string, JSON>;
 export declare function serializeParameters(parameters: Array<[string, string]>): string;
 export declare function getValue(pairs: Iterable<[string, string]>, key: string, plain: boolean): JSON;
+export declare function serializeValues(values: Array<JSON>, plain: boolean): Array<string>;
 export declare function serializeValue(value: JSON, plain: boolean): string | undefined;
 export declare function deserializeValue(value: string | undefined, plain: boolean): JSON;
 export declare type RawRequest = {

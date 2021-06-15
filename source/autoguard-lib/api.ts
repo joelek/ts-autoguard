@@ -233,6 +233,17 @@ export function getValue(pairs: Iterable<[string, string]>, key: string, plain: 
 	}
 };
 
+export function serializeValues(values: Array<JSON>, plain: boolean): Array<string> {
+	let array = new Array<string>();
+	for (let value of values) {
+		let serialized = serializeValue(value, plain);
+		if (serialized !== undefined) {
+			array.push(serialized);
+		}
+	}
+	return array;
+};
+
 export function serializeValue(value: JSON, plain: boolean): string | undefined {
 	if (value === undefined) {
 		return;

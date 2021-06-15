@@ -34,7 +34,7 @@ function getRequestType(route: route.Route): types.Type {
 	for (let component of route.path.components) {
 		if (is.present(component.type)) {
 			options.add(component.name, {
-				type: component.type,
+				type: (component.quantifier.kind === "repeated") ? new types.ArrayType(component.type) : component.type,
 				optional: false
 			});
 		}
@@ -125,7 +125,11 @@ function generateClientRoute(route: route.Route, options: shared.Options): strin
 			lines.push(`\tcomponents.push(decodeURIComponent("${encodeURIComponent(component.name)}"));`);
 		} else {
 			let plain = component.type === types.PlainType.INSTANCE;
-			lines.push(`\tcomponents.push(autoguard.api.serializeValue(request.options["${component.name}"], ${plain}) ?? "");`);
+			if (component.quantifier.kind === "repeated") {
+				lines.push(`\tcomponents.push(...autoguard.api.serializeValues(request.options["${component.name}"], ${plain}));`);
+			} else {
+				lines.push(`\tcomponents.push(autoguard.api.serializeValue(request.options["${component.name}"], ${plain}) ?? "");`);
+			}
 		}
 	}
 	let exclude = new Array<string>();
@@ -181,8 +185,8 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 	lines.push(`\tlet matchers = new Array<autoguard.api.RouteMatcher>();`);
 	for (let component of route.path.components) {
 		if (is.present(component.type)) {
-			let min = 1;
-			let max = 1;
+			let min = component.quantifier.kind === "repeated" ? 1 : 1;
+			let max = component.quantifier.kind === "repeated" ? Infinity : 1;
 			let plain = component.type === types.PlainType.INSTANCE;
 			lines.push(`\tmatchers.push(new autoguard.api.DynamicRouteMatcher(${min}, ${max}, ${plain}, ${component.type.generateTypeGuard({ ...options, eol: options.eol + "\t" })}));`);
 		} else {

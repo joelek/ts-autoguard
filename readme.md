@@ -265,7 +265,6 @@ NB: This project targets TypeScript 4 in strict mode.
 * Add support for multiple-valued header and parameter values.
 * Create middleware for defining cache-control.
 * Add more detailed error messages for syntax errors.
-* Add support for wildcards in paths.
 * Extend type guards with functionality for deep structured cloning.
 * Add strict option that performs automatic JSON payload filtering.
 * Structure code using TypeScript project references.
@@ -334,7 +333,8 @@ OptionsBody = OptionsKeyValue OptionsBodyTail*
 Options = "<" "{" OptionsBody* "}" ">"
 StaticComponentPart = AsciiLetter or Digit or "_" or "." or "~" or "-" or PercentEncodedOctet
 StaticComponent = StaticComponentPart*
-DynamicComponent = "<" (Identifier or StringLiteral) (":" OptionsType)? ">"
+Quantifier = "*"
+DynamicComponent = "<" (Identifier or StringLiteral) Quantifier? (":" OptionsType)? ">"
 Component = StaticComponent or DynamicComponent
 Path = "/" Component Path*
 Method = Identifier

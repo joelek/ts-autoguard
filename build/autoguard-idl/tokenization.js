@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.expect = exports.Tokenizer = exports.removeWhitespaceAndComments = exports.IdentifierFamilies = exports.Families = void 0;
-exports.Families = ((...tuple) => tuple)("LS", "WS", "(", ")", "[", "]", "{", "}", "?", "|", ".", "..", "/", "#", "&", ",", ":", ";", "<", ">", "=>", "<=", "any", "binary", "boolean", "false", "guard", "null", "number", "plain", "route", "string", "true", "undefined", "IDENTIFIER", "NUMBER_LITERAL", "STRING_LITERAL", "PATH_COMPONENT");
+exports.Families = ((...tuple) => tuple)("LS", "WS", "(", ")", "[", "]", "{", "}", "?", "|", ".", "..", "/", "*", "#", "&", ",", ":", ";", "<", ">", "=>", "<=", "any", "binary", "boolean", "false", "guard", "null", "number", "plain", "route", "string", "true", "undefined", "IDENTIFIER", "NUMBER_LITERAL", "STRING_LITERAL", "PATH_COMPONENT");
 exports.IdentifierFamilies = ((...tuple) => tuple)("any", "binary", "boolean", "false", "guard", "null", "number", "plain", "route", "string", "true", "undefined", "IDENTIFIER");
 function removeWhitespaceAndComments(unfiltered) {
     let filtered = new Array();
@@ -44,6 +44,7 @@ class Tokenizer {
             ".": /^([\.])/su,
             "..": /^([\.][\.])/su,
             "/": /^([\/])/su,
+            "*": /^([*])/su,
             "#": /^([#])/su,
             "&": /^([&])/su,
             ",": /^([,])/su,

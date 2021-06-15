@@ -9,6 +9,9 @@ class Quantifier {
         this.kind = kind;
     }
     generateSchema(options) {
+        if (this.kind === "repeated") {
+            return "*";
+        }
         if (this.kind === "required") {
             return "";
         }
@@ -16,6 +19,11 @@ class Quantifier {
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
+            var _a;
+            if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) === "*") {
+                tokenization.expect(read(), "*");
+                return new Quantifier("repeated");
+            }
             return new Quantifier("required");
         });
     }

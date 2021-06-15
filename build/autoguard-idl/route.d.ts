@@ -2,8 +2,8 @@ import * as shared from "./shared";
 import * as tokenization from "./tokenization";
 import * as types from "./types";
 export declare class Quantifier {
-    kind: "required";
-    constructor(kind: "required");
+    kind: "repeated" | "required";
+    constructor(kind: "repeated" | "required");
     generateSchema(options: shared.Options): string;
     static parse(tokenizer: tokenization.Tokenizer): Quantifier;
 }

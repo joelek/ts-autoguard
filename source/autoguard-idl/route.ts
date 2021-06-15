@@ -4,13 +4,16 @@ import * as tokenization from "./tokenization";
 import * as types from "./types";
 
 export class Quantifier {
-	kind: "required";
+	kind: "repeated" | "required";
 
-	constructor(kind: "required") {
+	constructor(kind: "repeated" | "required") {
 		this.kind = kind;
 	}
 
 	generateSchema(options: shared.Options): string {
+		if (this.kind === "repeated") {
+			return "*";
+		}
 		if (this.kind === "required") {
 			return ""
 		}
@@ -19,6 +22,10 @@ export class Quantifier {
 
 	static parse(tokenizer: tokenization.Tokenizer): Quantifier {
 		return tokenizer.newContext((read, peek) => {
+			if (peek()?.family === "*") {
+				tokenization.expect(read(), "*");
+				return new Quantifier("repeated");
+			}
 			return new Quantifier("required");
 		});
 	}
