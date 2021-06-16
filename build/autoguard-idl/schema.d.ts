@@ -3,6 +3,8 @@ import * as tokenization from "./tokenization";
 export declare class Schema {
     private guards;
     private routes;
+    private getClientImports;
+    private getServerImports;
     private getSharedImports;
     private constructor();
     generateSchema(options: shared.Options): string;

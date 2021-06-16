@@ -254,6 +254,50 @@ export class Schema {
 	private guards: Array<guard.Guard>;
 	private routes: Array<route.Route>;
 
+	private getClientImports(): Array<shared.Reference> {
+		let imports = new Map<string, string[]>();
+		return Array.from(imports.entries())
+			.sort((one, two) => one[0].localeCompare(two[0]))
+			.map((entry) => ({
+				path: entry[1],
+				typename: entry[0]
+			}))
+			.map((entry) => ({
+				...entry,
+				path: entry.path.length === 0 ? [".", "index"] : ["..", ...entry.path]
+			}));
+	}
+
+	private getServerImports(): Array<shared.Reference> {
+		let imports = new Map<string, string[]>();
+		for (let route of this.routes) {
+			for (let component of route.path.components) {
+				let type = component.type;
+				if (is.present(type)) {
+					for (let reference of type.getReferences()) {
+						imports.set(reference.typename, reference.path);
+					}
+				}
+			}
+			for (let parameter of route.parameters.parameters) {
+				let type = parameter.type;
+				for (let reference of type.getReferences()) {
+					imports.set(reference.typename, reference.path);
+				}
+			}
+		}
+		return Array.from(imports.entries())
+			.sort((one, two) => one[0].localeCompare(two[0]))
+			.map((entry) => ({
+				path: entry[1],
+				typename: entry[0]
+			}))
+			.map((entry) => ({
+				...entry,
+				path: entry.path.length === 0 ? [".", "index"] : ["..", ...entry.path]
+			}));
+	}
+
 	private getSharedImports(): Array<shared.Reference> {
 		let imports = new Map<string, string[]>();
 		for (let guard of this.guards) {
@@ -315,6 +359,9 @@ export class Schema {
 		lines.push(``);
 		lines.push(`import * as autoguard from "@joelek/ts-autoguard";`);
 		lines.push(`import * as shared from "./index";`);
+		for (let entry of this.getClientImports()) {
+			lines.push(`import { ${entry.typename} } from "${entry.path.join("/")}";`);
+		}
 		lines.push(``);
 		lines.push(`export const makeClient = (options?: Partial<{`);
 		lines.push(`\turlPrefix: string,`);
@@ -335,6 +382,9 @@ export class Schema {
 		lines.push(``);
 		lines.push(`import * as autoguard from "@joelek/ts-autoguard";`);
 		lines.push(`import * as shared from "./index";`);
+		for (let entry of this.getServerImports()) {
+			lines.push(`import { ${entry.typename} } from "${entry.path.join("/")}";`);
+		}
 		lines.push(``);
 		lines.push(`export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Requests, shared.Autoguard.Responses>, options?: Partial<{ urlPrefix: string }>): autoguard.api.RequestListener => {`);
 		lines.push(`\tlet endpoints = new Array<autoguard.api.Endpoint>();`);

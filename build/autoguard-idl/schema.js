@@ -257,6 +257,42 @@ class Schema {
         this.guards = guards;
         this.routes = routes;
     }
+    getClientImports() {
+        let imports = new Map();
+        return Array.from(imports.entries())
+            .sort((one, two) => one[0].localeCompare(two[0]))
+            .map((entry) => ({
+            path: entry[1],
+            typename: entry[0]
+        }))
+            .map((entry) => (Object.assign(Object.assign({}, entry), { path: entry.path.length === 0 ? [".", "index"] : ["..", ...entry.path] })));
+    }
+    getServerImports() {
+        let imports = new Map();
+        for (let route of this.routes) {
+            for (let component of route.path.components) {
+                let type = component.type;
+                if (is.present(type)) {
+                    for (let reference of type.getReferences()) {
+                        imports.set(reference.typename, reference.path);
+                    }
+                }
+            }
+            for (let parameter of route.parameters.parameters) {
+                let type = parameter.type;
+                for (let reference of type.getReferences()) {
+                    imports.set(reference.typename, reference.path);
+                }
+            }
+        }
+        return Array.from(imports.entries())
+            .sort((one, two) => one[0].localeCompare(two[0]))
+            .map((entry) => ({
+            path: entry[1],
+            typename: entry[0]
+        }))
+            .map((entry) => (Object.assign(Object.assign({}, entry), { path: entry.path.length === 0 ? [".", "index"] : ["..", ...entry.path] })));
+    }
     getSharedImports() {
         let imports = new Map();
         for (let guard of this.guards) {
@@ -308,6 +344,9 @@ class Schema {
         lines.push(``);
         lines.push(`import * as autoguard from "@joelek/ts-autoguard";`);
         lines.push(`import * as shared from "./index";`);
+        for (let entry of this.getClientImports()) {
+            lines.push(`import { ${entry.typename} } from "${entry.path.join("/")}";`);
+        }
         lines.push(``);
         lines.push(`export const makeClient = (options?: Partial<{`);
         lines.push(`\turlPrefix: string,`);
@@ -327,6 +366,9 @@ class Schema {
         lines.push(``);
         lines.push(`import * as autoguard from "@joelek/ts-autoguard";`);
         lines.push(`import * as shared from "./index";`);
+        for (let entry of this.getServerImports()) {
+            lines.push(`import { ${entry.typename} } from "${entry.path.join("/")}";`);
+        }
         lines.push(``);
         lines.push(`export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Requests, shared.Autoguard.Responses>, options?: Partial<{ urlPrefix: string }>): autoguard.api.RequestListener => {`);
         lines.push(`\tlet endpoints = new Array<autoguard.api.Endpoint>();`);
