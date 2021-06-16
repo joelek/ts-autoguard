@@ -8,7 +8,7 @@ guard Object: {
 	title: string
 };
 
-route GET:/objects/<object_id:number>/ => Object;
+route getObject(): GET:/objects/<object_id:number>/ => Object;
 ```
 
 Template project with working client and server now available at https://github.com/joelek/autoguard-template.
@@ -17,11 +17,11 @@ Template project with working client and server now available at https://github.
 
 The continued development of this software depends on your sponsorship. Please consider sponsoring this project if you find that the software creates value for you and your organization.
 
-The sponsor button can be used to view the different sponsoring options. All contributions are appreciated and welcomed. Thank you for your contribution!
+The sponsor button can be used to view the different sponsoring options. Contributions of all sizes are welcome. Thank you for your contribution!
 
 ## Background
 
-JSON is a standardized and commonly used format for which JavaScript runtimes contain built-in serialization functionality. The TypeScript return type of the deserialization function `JSON.parse()` is `any` since there is no way for the TypeScript compiler to know what the serialized data consists of. The TypeScript `any` type is flexible and allows you to treat it as pretty much anything. This is both extremely useful and incredibly dangerous for the runtime safety of an application.
+JSON is a standardized and commonly used format for which JavaScript runtimes contain built-in serialization functionality. The TypeScript return type of the deserialization function `JSON.parse()` is `any` since there is no way for the TypeScript compiler to know what the serialized data consists of. The TypeScript `any` type is flexible and unsurprisingly allows you to treat it as anything. This is both extremely useful and incredibly dangerous for the runtime safety of an application.
 
 Type assertions are TypeScript constructs used for asserting type information that is only informally known. It is not uncommon to see JSON deserialization followed by a type assertion in code handling API communication or file IO.
 
@@ -76,7 +76,7 @@ const sum = deserialized.reduce((sum, number) => {
 
 The type assertion has been replaced by a type guard assertion using `guard.as(...)`. The code in the example will throw an error if a broken contract is detected.
 
-Type guards also support checking using `guard.is(...)` for use in branching decisions. Type checks will not throw errors but instead return true or false depending on the success of the check.
+Type guards also support type checking using `guard.is(...)` for use in branching decisions and filters. Type checks will not throw errors but instead return true or false depending on the success of the check.
 
 ## Features
 
@@ -102,7 +102,7 @@ type guard = ReturnType<typeof guard.as>;
 
 ### Interface descriptor language
 
-Autoguard defines a custom interface descriptor language (IDL) from which robust and powerful source code can be generated. An example of a schema writted using the language is shown below.
+Autoguard defines a custom interface descriptor language (IDL) from which robust and powerful source code can be generated. An example of a schema written using the language is shown below.
 
 ```
 guard Object: {
@@ -110,7 +110,7 @@ guard Object: {
 	title: string
 };
 
-route GET:/objects/<object_id:number>/ => Object;
+route getObject(): GET:/objects/<object_id:number>/ => Object;
 ```
 
 Autoguard reads schemas from `.ag` files and generates source files for integration in your application. By default, Autoguard will traverse the directories of your project and generate TypeScript source files for the `.ag` files it encounters.
@@ -119,13 +119,15 @@ Autoguard reads schemas from `.ag` files and generates source files for integrat
 npx autoguard
 ```
 
+* ARGSSS
+
 Schemas may contain any number of `guard` constructs. These define types and will generate type guards for runtime type assertions and type checks.
 
-Schemas may contain any number of `route` constructs. These define API functionality and will generate fully-functional methods that execute on a remote system or process when called (RPC). Autoguard also generates server-side functionality that only requires the actual business logic in order to create fully-functional API servers.
+Schemas may contain any number of `route` constructs. These define API functionality and will generate fully-functional methods that invoke functionality on a remote system or process when called (RPC). Autoguard also generates server-side functionality that only requires the actual business logic in order to create fully-functional API servers.
 
 The generated code handles runtime type-checking of requests as well as of responses. Serialization, transport and deserialization is delegated to shared functionality shipped togheter with Autoguard.
 
-The API functionality is designed to be fully compatible with the standardized HTTP protocol. Although preferred for maximum type-safety and robustness, Autoguard does _not_ require both the client and the server to be implemented using Autoguard. The client or server may be implemented using different technologies as long as they employ standard HTTP transport.
+The API functionality is designed to be fully compatible with the standardized HTTP protocol. Although preferred for maximum type-safety and robustness, Autoguard does _not_ require both the client and the server to be implemented using Autoguard. The client or server may be implemented using different technologies as long as standard HTTP transport is employed.
 
 #### Integration
 
@@ -138,7 +140,7 @@ import * as libhttp from "http";
 import * as libserver from "./myschema/server";
 
 libhttp.createServer(libserver.makeServer({
-	"GET:/objects/<object_id>/": async (request) => ({
+	getObject: async (request) => ({
 		payload: {
 			object_id: request.options().object_id,
 			title: "räksmörgås"
@@ -153,7 +155,7 @@ The generated client module can be used to consume data from any API honoring th
 import * as libclient from "./myschema/client";
 
 const client = libclient.makeClient({ urlPrefix: "" });
-const response = await client["GET:/objects/<object_id>/"]({
+const response = await client.getObject({
 	options: {
 		object_id: 1337
 	}
@@ -174,7 +176,7 @@ guard MyBooleanType: boolean;
 
 guard MyBooleanliteralType: true;
 
-guard MyGroupType: (any);
+guard MyGroupType: (any); # Used when different precedence is required.
 
 guard MyImportedType: ./module/MyExternalType;
 
@@ -219,11 +221,64 @@ guard MyUnionType: string | null;
 The following example illustrates how the `route` construct can be used.
 
 ```
-route POST:/encoded%20path%20component/<id:string>/ ? <{ parameter: string }>
-	<= <{ request_header: string }> { request_payload_member: string }
-	=> <{ response_header: string }> { response_payload_member: string };
+route accessURLWithStaticPathComponent(): HEAD:/static;
 
-route POST:/upload <= binary;
+route accessURLWithRequiredDynamicPathComponent(): HEAD:/<id>;
+
+route accessURLWithOptionalDynamicPathComponent(): HEAD:/<id?>;
+
+route accessURLWithRepeatedDynamicPathComponent(): HEAD:/<ids*>;
+
+route accessURLWithRequiredQueryParameter(): HEAD:/ ? <{ parameter }>;
+
+route accessURLWithOptionalQueryParameter(): HEAD:/ ? <{ parameter? }>;
+
+route sendRequiredRequestHeader(): GET:/
+	<= <{ request_header }>;
+
+route sendOptionalRequestHeader(): GET:/
+	<= <{ request_header? }>;
+
+route receiveRequiredResponseHeader(): GET:/
+	=> <{ response_header }>;
+
+route receiveOptionalResponseHeader(): GET:/
+	=> <{ response_header? }>;
+
+route receiveJSONPayload(): GET:/
+	=> {
+		required_in_response_payload: string,
+		optional_in_respnose_payload?: string
+	};
+
+route sendJSONPayload(): POST:/
+	<= {
+		required_in_request_payload: string,
+		optional_in_request_payload?: string
+	};
+
+route receiveBinaryPayload(): GET:/
+	=> binary;
+
+route sendBinaryPayload(): POST:/
+	<= binary;
+```
+
+The full type language is available for the payload as well as for path components, query parameters and headers. Path components, query parameters and headers default to unparsed string (plain) when the type annotation is omitted.
+
+```
+guard Object: {
+	object_id: number,
+	title: string
+};
+
+route objects(): POST:/<id:Object> ? <{ parameter: Object }>
+	<= <{ request_header: Object }> {
+		in_request_payload: Object
+	}
+	=> <{ response_header: Object }> {
+		in_response_payload: Object
+	};
 ```
 
 ### Serialization and deserialization
