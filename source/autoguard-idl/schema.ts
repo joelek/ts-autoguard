@@ -33,10 +33,24 @@ function getRequestType(route: route.Route): types.Type {
 	let options = new types.ObjectType();
 	for (let component of route.path.components) {
 		if (is.present(component.type)) {
-			options.add(component.name, {
-				type: (component.quantifier.kind === "repeated") ? new types.ArrayType(component.type) : component.type,
-				optional: false
-			});
+			if (component.quantifier.kind === "required") {
+				options.add(component.name, {
+					type: component.type,
+					optional: false
+				});
+			}
+			if (component.quantifier.kind === "repeated") {
+				options.add(component.name, {
+					type: new types.ArrayType(component.type),
+					optional: false
+				});
+			}
+			if (component.quantifier.kind === "optional") {
+				options.add(component.name, {
+					type: component.type,
+					optional: true
+				});
+			}
 		}
 	}
 	for (let parameter of route.parameters.parameters) {
@@ -126,9 +140,9 @@ function generateClientRoute(route: route.Route, options: shared.Options): strin
 		} else {
 			let plain = component.type === types.PlainType.INSTANCE;
 			if (component.quantifier.kind === "repeated") {
-				lines.push(`\tcomponents.push(...autoguard.api.serializeValues(request.options["${component.name}"], ${plain}));`);
+				lines.push(`\tcomponents.push(...autoguard.api.serializeValues(request.options?.["${component.name}"], ${plain}));`);
 			} else {
-				lines.push(`\tcomponents.push(autoguard.api.serializeValue(request.options["${component.name}"], ${plain}) ?? "");`);
+				lines.push(`\tcomponents.push(...autoguard.api.serializeValues([request.options?.["${component.name}"]], ${plain}));`);
 			}
 		}
 	}
@@ -185,8 +199,7 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 	lines.push(`\tlet matchers = new Array<autoguard.api.RouteMatcher>();`);
 	for (let component of route.path.components) {
 		if (is.present(component.type)) {
-			let min = component.quantifier.kind === "repeated" ? 1 : 1;
-			let max = component.quantifier.kind === "repeated" ? Infinity : 1;
+			let { min, max } = component.quantifier.getMinMax();
 			let plain = component.type === types.PlainType.INSTANCE;
 			lines.push(`\tmatchers.push(new autoguard.api.DynamicRouteMatcher(${min}, ${max}, ${plain}, ${component.type.generateTypeGuard({ ...options, eol: options.eol + "\t" })}));`);
 		} else {

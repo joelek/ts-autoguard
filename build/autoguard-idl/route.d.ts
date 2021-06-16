@@ -2,9 +2,13 @@ import * as shared from "./shared";
 import * as tokenization from "./tokenization";
 import * as types from "./types";
 export declare class Quantifier {
-    kind: "repeated" | "required";
-    constructor(kind: "repeated" | "required");
+    kind: "repeated" | "required" | "optional";
+    constructor(kind: "repeated" | "required" | "optional");
     generateSchema(options: shared.Options): string;
+    getMinMax(): {
+        min: number;
+        max: number;
+    };
     static parse(tokenizer: tokenization.Tokenizer): Quantifier;
 }
 export declare class Component {

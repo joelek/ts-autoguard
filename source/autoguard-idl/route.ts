@@ -4,9 +4,9 @@ import * as tokenization from "./tokenization";
 import * as types from "./types";
 
 export class Quantifier {
-	kind: "repeated" | "required";
+	kind: "repeated" | "required" | "optional";
 
-	constructor(kind: "repeated" | "required") {
+	constructor(kind: "repeated" | "required" | "optional") {
 		this.kind = kind;
 	}
 
@@ -14,8 +14,24 @@ export class Quantifier {
 		if (this.kind === "repeated") {
 			return "*";
 		}
+		if (this.kind === "optional") {
+			return "?";
+		}
 		if (this.kind === "required") {
 			return ""
+		}
+		throw `Expected code to be unreachable!`;
+	}
+
+	getMinMax(): { min: number, max: number } {
+		if (this.kind === "repeated") {
+			return { min: 0, max: Infinity };
+		}
+		if (this.kind === "optional") {
+			return { min: 0, max: 1 };
+		}
+		if (this.kind === "required") {
+			return { min: 1, max: 1 };
 		}
 		throw `Expected code to be unreachable!`;
 	}
@@ -25,6 +41,10 @@ export class Quantifier {
 			if (peek()?.family === "*") {
 				tokenization.expect(read(), "*");
 				return new Quantifier("repeated");
+			}
+			if (peek()?.family === "?") {
+				tokenization.expect(read(), "?");
+				return new Quantifier("optional");
 			}
 			return new Quantifier("required");
 		});

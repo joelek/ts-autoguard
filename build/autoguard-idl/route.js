@@ -12,17 +12,36 @@ class Quantifier {
         if (this.kind === "repeated") {
             return "*";
         }
+        if (this.kind === "optional") {
+            return "?";
+        }
         if (this.kind === "required") {
             return "";
         }
         throw `Expected code to be unreachable!`;
     }
+    getMinMax() {
+        if (this.kind === "repeated") {
+            return { min: 0, max: Infinity };
+        }
+        if (this.kind === "optional") {
+            return { min: 0, max: 1 };
+        }
+        if (this.kind === "required") {
+            return { min: 1, max: 1 };
+        }
+        throw `Expected code to be unreachable!`;
+    }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
-            var _a;
+            var _a, _b;
             if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) === "*") {
                 tokenization.expect(read(), "*");
                 return new Quantifier("repeated");
+            }
+            if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === "?") {
+                tokenization.expect(read(), "?");
+                return new Quantifier("optional");
             }
             return new Quantifier("required");
         });
