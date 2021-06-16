@@ -262,6 +262,9 @@ NB: This project targets TypeScript 4 in strict mode.
 
 ## Roadmap
 
+* Fix issue with badly percent-encoded octets.
+* Decide on quantifier position in language syntax.
+* Simplify import paths before resolving references.
 * Remove run-time checks of payload types.
 * Add support for multiple-valued header and parameter values.
 * Create middleware for defining cache-control.
