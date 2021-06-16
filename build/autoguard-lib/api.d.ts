@@ -92,8 +92,9 @@ export declare type Endpoint = (raw: RawRequest, auxillary: Auxillary) => {
         }>;
     }>;
 };
-export declare function getComponents(url: string): Array<string>;
-export declare function getParameters(url: string): Array<[string, string]>;
+export declare function decodeURIComponent(string: string): string | undefined;
+export declare function getComponents(url: string): Array<string> | undefined;
+export declare function getParameters(url: string): Array<[string, string]> | undefined;
 export declare function getHeaders(headers: Array<string>): Array<[string, string]>;
 export declare type Payload = JSON | Binary;
 export declare type CollectedPayload<A extends Payload> = A extends Binary ? Uint8Array : A;

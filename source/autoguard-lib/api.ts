@@ -286,26 +286,48 @@ export type Endpoint = (raw: RawRequest, auxillary: Auxillary) => {
 	}>
 };
 
-export function getComponents(url: string): Array<string> {
-	return url.split("?")[0].split("/").map((part) => {
-		return decodeURIComponent(part);
-	}).slice(1);
+export function decodeURIComponent(string: string): string | undefined {
+	try {
+		return globalThis.decodeURIComponent(string);
+	} catch (error) {}
 };
 
-export function getParameters(url: string): Array<[string, string]> {
-	let query = url.split("?").slice(1).join("?");
-	return query === "" ? [] : query.split("&").map((part) => {
-		let parts = part.split("=");
-		if (parts.length === 1) {
-			let key = decodeURIComponent(parts[0]);
-			let value = "";
-			return [key, value];
-		} else {
-			let key = decodeURIComponent(parts[0]);
-			let value = decodeURIComponent(parts.slice(1).join("="));
-			return [key, value];
+export function getComponents(url: string): Array<string> | undefined {
+	let components = new Array<string>();
+	for (let part of url.split("?")[0].split("/").slice(1)) {
+		let component = decodeURIComponent(part);
+		if (component === undefined) {
+			return;
 		}
-	});
+		components.push(component);
+	}
+	return components;
+};
+
+export function getParameters(url: string): Array<[string, string]> | undefined {
+	let parameters = new Array<[string, string]>();
+	let query = url.split("?").slice(1).join("?");
+	if (query !== "") {
+		for (let part of query.split("&")) {
+			let parts = part.split("=");
+			if (parts.length === 1) {
+				let key = decodeURIComponent(parts[0]);
+				let value = "";
+				if (key === undefined) {
+					return;
+				}
+				parameters.push([key, value]);
+			} else {
+				let key = decodeURIComponent(parts[0]);
+				let value = decodeURIComponent(parts.slice(1).join("="));
+				if (key === undefined || value === undefined) {
+					return;
+				}
+				parameters.push([key, value]);
+			}
+		}
+	}
+	return parameters;
 };
 
 export function getHeaders(headers: Array<string>): Array<[string, string]> {
@@ -629,6 +651,14 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 	url = url.slice(urlPrefix?.length);
 	let components = getComponents(url);
 	let parameters = getParameters(url);
+	if (components === undefined || parameters === undefined) {
+		let payload = serializeStringPayload(`Expected url to be properly percent encoded!`);
+		return respond(httpResponse, {
+			status: 400,
+			headers: [],
+			payload: payload
+		});
+	}
 	let headers = getHeaders(combineRawHeaders(httpRequest.rawHeaders));
 	let payload = {
 		[Symbol.asyncIterator]: () => httpRequest[Symbol.asyncIterator]()

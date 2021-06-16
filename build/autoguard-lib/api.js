@@ -16,7 +16,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.isPayloadBinary = exports.getHeaders = exports.getParameters = exports.getComponents = exports.deserializeValue = exports.serializeValue = exports.serializeValues = exports.getValue = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.appendKeyValuePair = exports.serializeComponents = exports.Headers = exports.Options = exports.JSON = exports.Primitive = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.DynamicRouteMatcher = exports.StaticRouteMatcher = void 0;
+exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.isPayloadBinary = exports.getHeaders = exports.getParameters = exports.getComponents = exports.decodeURIComponent = exports.deserializeValue = exports.serializeValue = exports.serializeValues = exports.getValue = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.appendKeyValuePair = exports.serializeComponents = exports.Headers = exports.Options = exports.JSON = exports.Primitive = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.DynamicRouteMatcher = exports.StaticRouteMatcher = void 0;
 const guards = require("./guards");
 ;
 class StaticRouteMatcher {
@@ -223,28 +223,52 @@ function deserializeValue(value, plain) {
 }
 exports.deserializeValue = deserializeValue;
 ;
+function decodeURIComponent(string) {
+    try {
+        return globalThis.decodeURIComponent(string);
+    }
+    catch (error) { }
+}
+exports.decodeURIComponent = decodeURIComponent;
+;
 function getComponents(url) {
-    return url.split("?")[0].split("/").map((part) => {
-        return decodeURIComponent(part);
-    }).slice(1);
+    let components = new Array();
+    for (let part of url.split("?")[0].split("/").slice(1)) {
+        let component = decodeURIComponent(part);
+        if (component === undefined) {
+            return;
+        }
+        components.push(component);
+    }
+    return components;
 }
 exports.getComponents = getComponents;
 ;
 function getParameters(url) {
+    let parameters = new Array();
     let query = url.split("?").slice(1).join("?");
-    return query === "" ? [] : query.split("&").map((part) => {
-        let parts = part.split("=");
-        if (parts.length === 1) {
-            let key = decodeURIComponent(parts[0]);
-            let value = "";
-            return [key, value];
+    if (query !== "") {
+        for (let part of query.split("&")) {
+            let parts = part.split("=");
+            if (parts.length === 1) {
+                let key = decodeURIComponent(parts[0]);
+                let value = "";
+                if (key === undefined) {
+                    return;
+                }
+                parameters.push([key, value]);
+            }
+            else {
+                let key = decodeURIComponent(parts[0]);
+                let value = decodeURIComponent(parts.slice(1).join("="));
+                if (key === undefined || value === undefined) {
+                    return;
+                }
+                parameters.push([key, value]);
+            }
         }
-        else {
-            let key = decodeURIComponent(parts[0]);
-            let value = decodeURIComponent(parts.slice(1).join("="));
-            return [key, value];
-        }
-    });
+    }
+    return parameters;
 }
 exports.getParameters = getParameters;
 ;
@@ -563,6 +587,14 @@ function route(endpoints, httpRequest, httpResponse, urlPrefix = "") {
         url = url.slice(urlPrefix === null || urlPrefix === void 0 ? void 0 : urlPrefix.length);
         let components = getComponents(url);
         let parameters = getParameters(url);
+        if (components === undefined || parameters === undefined) {
+            let payload = serializeStringPayload(`Expected url to be properly percent encoded!`);
+            return respond(httpResponse, {
+                status: 400,
+                headers: [],
+                payload: payload
+            });
+        }
         let headers = getHeaders(combineRawHeaders(httpRequest.rawHeaders));
         let payload = {
             [Symbol.asyncIterator]: () => httpRequest[Symbol.asyncIterator]()
