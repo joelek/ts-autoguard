@@ -16,7 +16,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.isPayloadBinary = exports.getHeaders = exports.getParameters = exports.getComponents = exports.decodeURIComponent = exports.deserializeValue = exports.serializeValue = exports.serializeValues = exports.getValue = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.appendKeyValuePair = exports.serializeComponents = exports.Headers = exports.Options = exports.JSON = exports.Primitive = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.DynamicRouteMatcher = exports.StaticRouteMatcher = void 0;
+exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.decodeURIComponent = exports.deserializeValue = exports.serializeValue = exports.serializeValues = exports.getValue = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.appendKeyValuePair = exports.serializeComponents = exports.Headers = exports.Options = exports.JSON = exports.Primitive = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.DynamicRouteMatcher = exports.StaticRouteMatcher = void 0;
 const guards = require("./guards");
 ;
 class StaticRouteMatcher {
@@ -289,14 +289,10 @@ function getHeaders(headers) {
 }
 exports.getHeaders = getHeaders;
 ;
-function isPayloadBinary(payload) {
-    return typeof payload !== "string" && exports.Binary.is(payload);
-}
-exports.isPayloadBinary = isPayloadBinary;
-;
 class ClientRequest {
-    constructor(request, auxillary) {
+    constructor(request, collect, auxillary) {
         this.request = request;
+        this.collect = collect;
         this.auxillary = auxillary;
     }
     options() {
@@ -313,7 +309,7 @@ class ClientRequest {
                 return this.collectedPayload;
             }
             let payload = this.request.payload;
-            let collectedPayload = (isPayloadBinary(payload) ? yield collectPayload(payload) : payload);
+            let collectedPayload = (this.collect ? yield collectPayload(payload) : payload);
             this.collectedPayload = collectedPayload;
             return collectedPayload;
         });
@@ -325,8 +321,9 @@ class ClientRequest {
 exports.ClientRequest = ClientRequest;
 ;
 class ServerResponse {
-    constructor(response) {
+    constructor(response, collect) {
         this.response = response;
+        this.collect = collect;
     }
     status() {
         let status = this.response.status;
@@ -342,7 +339,7 @@ class ServerResponse {
                 return this.collectedPayload;
             }
             let payload = this.response.payload;
-            let collectedPayload = (isPayloadBinary(payload) ? yield collectPayload(payload) : payload);
+            let collectedPayload = (this.collect ? yield collectPayload(payload) : payload);
             this.collectedPayload = collectedPayload;
             return collectedPayload;
         });

@@ -348,10 +348,6 @@ export function getHeaders(headers: Array<string>): Array<[string, string]> {
 export type Payload = JSON | Binary;
 export type CollectedPayload<A extends Payload> = A extends Binary ? Uint8Array : A;
 
-export function isPayloadBinary(payload: Payload): payload is Binary {
-	return typeof payload !== "string" && Binary.is(payload);
-};
-
 export type EndpointRequest = {
 	options?: Record<string, JSON>;
 	headers?: Record<string, JSON>;
@@ -366,11 +362,13 @@ export type EndpointResponse = {
 
 export class ClientRequest<A extends EndpointRequest> {
 	private request: A;
+	private collect: boolean;
 	private auxillary: Auxillary;
 	private collectedPayload?: CollectedPayload<A["payload"]>;
 
-	constructor(request: A, auxillary: Auxillary) {
+	constructor(request: A, collect: boolean, auxillary: Auxillary) {
 		this.request = request;
+		this.collect = collect;
 		this.auxillary = auxillary;
 	}
 
@@ -393,7 +391,7 @@ export class ClientRequest<A extends EndpointRequest> {
 			return this.collectedPayload;
 		}
 		let payload = this.request.payload;
-		let collectedPayload = (isPayloadBinary(payload) ? await collectPayload(payload) : payload) as any;
+		let collectedPayload = (this.collect ? await collectPayload(payload as Binary) : payload) as any;
 		this.collectedPayload = collectedPayload;
 		return collectedPayload;
 	}
@@ -405,10 +403,12 @@ export class ClientRequest<A extends EndpointRequest> {
 
 export class ServerResponse<A extends EndpointResponse> {
 	private response: A;
+	private collect: boolean;
 	private collectedPayload?: CollectedPayload<A["payload"]>;
 
-	constructor(response: A) {
+	constructor(response: A, collect: boolean) {
 		this.response = response;
+		this.collect = collect;
 	}
 
 	status(): number {
@@ -428,7 +428,7 @@ export class ServerResponse<A extends EndpointResponse> {
 			return this.collectedPayload;
 		}
 		let payload = this.response.payload;
-		let collectedPayload = (isPayloadBinary(payload) ? await collectPayload(payload) : payload) as any;
+		let collectedPayload = (this.collect ? await collectPayload(payload as Binary) : payload) as any;
 		this.collectedPayload = collectedPayload;
 		return collectedPayload;
 	}

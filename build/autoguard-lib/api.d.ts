@@ -98,7 +98,6 @@ export declare function getParameters(url: string): Array<[string, string]> | un
 export declare function getHeaders(headers: Array<string>): Array<[string, string]>;
 export declare type Payload = JSON | Binary;
 export declare type CollectedPayload<A extends Payload> = A extends Binary ? Uint8Array : A;
-export declare function isPayloadBinary(payload: Payload): payload is Binary;
 export declare type EndpointRequest = {
     options?: Record<string, JSON>;
     headers?: Record<string, JSON>;
@@ -111,9 +110,10 @@ export declare type EndpointResponse = {
 };
 export declare class ClientRequest<A extends EndpointRequest> {
     private request;
+    private collect;
     private auxillary;
     private collectedPayload?;
-    constructor(request: A, auxillary: Auxillary);
+    constructor(request: A, collect: boolean, auxillary: Auxillary);
     options(): {} & A["options"];
     headers(): {} & A["headers"];
     payload(): Promise<CollectedPayload<A["payload"]>>;
@@ -121,8 +121,9 @@ export declare class ClientRequest<A extends EndpointRequest> {
 }
 export declare class ServerResponse<A extends EndpointResponse> {
     private response;
+    private collect;
     private collectedPayload?;
-    constructor(response: A);
+    constructor(response: A, collect: boolean);
     status(): number;
     headers(): {} & A["headers"];
     payload(): Promise<CollectedPayload<A["payload"]>>;

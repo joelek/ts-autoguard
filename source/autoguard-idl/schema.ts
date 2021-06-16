@@ -185,7 +185,8 @@ function generateClientRoute(route: route.Route, options: shared.Options): strin
 	}
 	lines.push(`\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);
 	lines.push(`\t\tlet response = guard.as({ status, headers, payload }, "response");`);
-	lines.push(`\t\treturn new autoguard.api.ServerResponse(response);`);
+	let collect = route.response.payload === types.Binary.INSTANCE;
+	lines.push(`\t\treturn new autoguard.api.ServerResponse(response, ${collect});`);
 	lines.push(`\t}`);
 	lines.push(`}`);
 	return lines.join(options.eol);
@@ -234,7 +235,8 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 	lines.push(`\t\t\tlet request = guard.as({ options, headers, payload }, "request");`);
 	lines.push(`\t\t\treturn {`);
 	lines.push(`\t\t\t\thandleRequest: async () => {`);
-	lines.push(`\t\t\t\t\tlet response = await routes["${tag}"](new autoguard.api.ClientRequest(request, auxillary));`);
+	let collect = route.request.payload === types.Binary.INSTANCE;
+	lines.push(`\t\t\t\t\tlet response = await routes["${tag}"](new autoguard.api.ClientRequest(request, ${collect}, auxillary));`);
 	lines.push(`\t\t\t\t\treturn {`);
 	lines.push(`\t\t\t\t\t\tvalidateResponse: async () => {`);
 	lines.push(`\t\t\t\t\t\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);
