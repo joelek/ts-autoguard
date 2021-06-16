@@ -119,8 +119,6 @@ Autoguard reads schemas from `.ag` files and generates source files for integrat
 npx autoguard
 ```
 
-* ARGSSS
-
 Schemas may contain any number of `guard` constructs. These define types and will generate type guards for runtime type assertions and type checks.
 
 Schemas may contain any number of `route` constructs. These define API functionality and will generate fully-functional methods that invoke functionality on a remote system or process when called (RPC). Autoguard also generates server-side functionality that only requires the actual business logic in order to create fully-functional API servers.

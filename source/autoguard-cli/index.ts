@@ -92,7 +92,7 @@ function run(): void {
 			options.root = parts[1];
 		} else if ((parts = /^--upgrade=(true|false)$/.exec(argv)) != null) {
 			options.upgrade = parts[1] === "true" ? true : false;
-		} else if ((parts = /^--target=(.+)$/.exec(argv)) != null) {
+		} else if ((parts = /^--target=(ts|js)$/.exec(argv)) != null) {
 			options.target = parts[1];
 		} else {
 			found_unrecognized_argument = true;
@@ -100,11 +100,15 @@ function run(): void {
 		}
 	}
 	if (found_unrecognized_argument) {
-		process.stderr.write("Arguments:\n");
-		process.stderr.write("	--eol=string\n");
-		process.stderr.write("	--root=string\n");
-		process.stderr.write("	--upgrade=boolean\n");
-		process.stderr.write("	--target=string\n");
+		process.stderr.write(`Arguments:\n`);
+		process.stderr.write(`	--eol=string\n`);
+		process.stderr.write(`		Set end of line for generated code.\n`);
+		process.stderr.write(`	--root=string\n`);
+		process.stderr.write(`		Set root directory for source code traversal.\n`);
+		process.stderr.write(`	--upgrade=boolean\n`);
+		process.stderr.write(`		Upgrade legacy schema files with current syntax.\n`);
+		process.stderr.write(`	--target="ts"|"js"\n`);
+		process.stderr.write(`		Set target language for generated code.\n`);
 		process.exit(0);
 	}
 	let paths = findFiles(options.root);
