@@ -7,10 +7,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	let endpoints = new Array<autoguard.api.Endpoint>();
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -20,7 +20,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/"];
@@ -39,10 +39,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "POST";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -52,7 +52,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["POST:/"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["POST:/"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["POST:/"];
@@ -71,10 +71,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("one")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("one")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -84,7 +84,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/one"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/one"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/one"];
@@ -103,11 +103,11 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("one")]);
-		components.push(["", decodeURIComponent("")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("one")));
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -117,7 +117,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/one/"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/one/"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/one/"];
@@ -136,11 +136,11 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("one")]);
-		components.push(["", decodeURIComponent("two")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("one")));
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("two")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -150,7 +150,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/one/two"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/one/two"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/one/two"];
@@ -169,21 +169,21 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["dynamic_component", raw.components[0]]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.DynamicRouteMatcher(1, 1, true, autoguard.guards.String));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["dynamic_component"] = autoguard.api.getValue(components, "dynamic_component", true);
+				options["dynamic_component"] = matchers[0].getValue();
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/<dynamic_component>"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/<dynamic_component>"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/<dynamic_component>"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/<dynamic_component>"];
@@ -202,21 +202,21 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["dynamic_plain_component", raw.components[0]]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.DynamicRouteMatcher(1, 1, true, autoguard.guards.String));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["dynamic_plain_component"] = autoguard.api.getValue(components, "dynamic_plain_component", true);
+				options["dynamic_plain_component"] = matchers[0].getValue();
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/<dynamic_plain_component>"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/<dynamic_plain_component>"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/<dynamic_plain_component>"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/<dynamic_plain_component>"];
@@ -235,21 +235,21 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["dynamic_boolean_component", raw.components[0]]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.DynamicRouteMatcher(1, 1, false, autoguard.guards.Boolean));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["dynamic_boolean_component"] = autoguard.api.getValue(components, "dynamic_boolean_component", false);
+				options["dynamic_boolean_component"] = matchers[0].getValue();
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/<dynamic_boolean_component>"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/<dynamic_boolean_component>"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/<dynamic_boolean_component>"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/<dynamic_boolean_component>"];
@@ -268,21 +268,21 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["dynamic_number_component", raw.components[0]]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.DynamicRouteMatcher(1, 1, false, autoguard.guards.Number));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["dynamic_number_component"] = autoguard.api.getValue(components, "dynamic_number_component", false);
+				options["dynamic_number_component"] = matchers[0].getValue();
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/<dynamic_number_component>"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/<dynamic_number_component>"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/<dynamic_number_component>"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/<dynamic_number_component>"];
@@ -301,21 +301,21 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["dynamic_string_component", raw.components[0]]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.DynamicRouteMatcher(1, 1, true, autoguard.guards.String));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["dynamic_string_component"] = autoguard.api.getValue(components, "dynamic_string_component", true);
+				options["dynamic_string_component"] = matchers[0].getValue();
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/<dynamic_string_component>"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/<dynamic_string_component>"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/<dynamic_string_component>"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/<dynamic_string_component>"];
@@ -334,23 +334,23 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["dynamic_component_one", raw.components[0]]);
-		components.push(["dynamic_component_two", raw.components[1]]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.DynamicRouteMatcher(1, 1, true, autoguard.guards.String));
+		matchers.push(new autoguard.api.DynamicRouteMatcher(1, 1, true, autoguard.guards.String));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["dynamic_component_one"] = autoguard.api.getValue(components, "dynamic_component_one", true);
-				options["dynamic_component_two"] = autoguard.api.getValue(components, "dynamic_component_two", true);
+				options["dynamic_component_one"] = matchers[0].getValue();
+				options["dynamic_component_two"] = matchers[1].getValue();
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/<dynamic_component_one>/<dynamic_component_two>"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/<dynamic_component_one>/<dynamic_component_two>"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/<dynamic_component_one>/<dynamic_component_two>"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/<dynamic_component_one>/<dynamic_component_two>"];
@@ -369,21 +369,21 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["quoted key", raw.components[0]]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.DynamicRouteMatcher(1, 1, true, autoguard.guards.String));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["quoted key"] = autoguard.api.getValue(components, "quoted key", true);
+				options["quoted key"] = matchers[0].getValue();
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/<quoted key>"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/<quoted key>"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/<quoted key>"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/<quoted key>"];
@@ -402,10 +402,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("%22r%C3%A4ksm%C3%B6rg%C3%A5s%22")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("%22r%C3%A4ksm%C3%B6rg%C3%A5s%22")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -415,7 +415,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/%22r%C3%A4ksm%C3%B6rg%C3%A5s%22"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/%22r%C3%A4ksm%C3%B6rg%C3%A5s%22"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/%22r%C3%A4ksm%C3%B6rg%C3%A5s%22"];
@@ -434,10 +434,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("parameters01")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("parameters01")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -447,7 +447,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters01"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/parameters01"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters01"];
@@ -466,10 +466,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("parameters02")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("parameters02")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -480,7 +480,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters02"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/parameters02"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters02"];
@@ -499,10 +499,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("parameters03")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("parameters03")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -513,7 +513,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters03"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/parameters03"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters03"];
@@ -532,10 +532,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("parameters04")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("parameters04")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -546,7 +546,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters04"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/parameters04"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters04"];
@@ -565,10 +565,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("parameters05")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("parameters05")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -579,7 +579,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters05"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/parameters05"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters05"];
@@ -598,10 +598,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("parameters06")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("parameters06")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -612,7 +612,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters06"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/parameters06"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters06"];
@@ -631,10 +631,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("parameters07")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("parameters07")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -645,7 +645,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters07"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/parameters07"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters07"];
@@ -664,10 +664,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("parameters08")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("parameters08")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -679,7 +679,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters08"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/parameters08"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters08"];
@@ -698,10 +698,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("parameters09")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("parameters09")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -712,7 +712,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters09"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/parameters09"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters09"];
@@ -731,10 +731,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("parameters10")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("parameters10")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -745,7 +745,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters10"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/parameters10"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters10"];
@@ -764,10 +764,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("parameters11")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("parameters11")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -778,7 +778,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters11"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/parameters11"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters11"];
@@ -797,10 +797,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("parameters12")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("parameters12")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -811,7 +811,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters12"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/parameters12"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters12"];
@@ -830,10 +830,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("parameters13")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("parameters13")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -844,7 +844,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters13"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/parameters13"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters13"];
@@ -863,10 +863,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("request_headers01")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("request_headers01")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -876,7 +876,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/request_headers01"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/request_headers01"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers01"];
@@ -895,10 +895,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("request_headers02")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("request_headers02")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -909,7 +909,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/request_headers02"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/request_headers02"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers02"];
@@ -928,10 +928,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("request_headers03")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("request_headers03")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -942,7 +942,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/request_headers03"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/request_headers03"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers03"];
@@ -961,10 +961,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("request_headers04")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("request_headers04")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -975,7 +975,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/request_headers04"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/request_headers04"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers04"];
@@ -994,10 +994,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("request_headers05")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("request_headers05")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1008,7 +1008,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/request_headers05"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/request_headers05"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers05"];
@@ -1027,10 +1027,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("request_headers06")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("request_headers06")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1041,7 +1041,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/request_headers06"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/request_headers06"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers06"];
@@ -1060,10 +1060,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("request_headers07")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("request_headers07")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1074,7 +1074,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/request_headers07"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/request_headers07"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers07"];
@@ -1093,10 +1093,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("request_headers08")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("request_headers08")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1108,7 +1108,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/request_headers08"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/request_headers08"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers08"];
@@ -1127,10 +1127,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("request_headers09")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("request_headers09")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1141,7 +1141,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/request_headers09"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/request_headers09"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers09"];
@@ -1160,10 +1160,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("request_headers10")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("request_headers10")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1174,7 +1174,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/request_headers10"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/request_headers10"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers10"];
@@ -1193,10 +1193,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("request_headers11")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("request_headers11")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1207,7 +1207,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/request_headers11"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/request_headers11"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers11"];
@@ -1226,10 +1226,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("request_headers12")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("request_headers12")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1240,7 +1240,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/request_headers12"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/request_headers12"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers12"];
@@ -1259,10 +1259,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("request_headers13")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("request_headers13")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1273,7 +1273,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/request_headers13"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/request_headers13"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_headers13"];
@@ -1292,10 +1292,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("response_headers01")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("response_headers01")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1305,7 +1305,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers01"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/response_headers01"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers01"];
@@ -1324,10 +1324,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("response_headers02")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("response_headers02")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1337,7 +1337,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers02"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/response_headers02"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers02"];
@@ -1357,10 +1357,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("response_headers03")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("response_headers03")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1370,7 +1370,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers03"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/response_headers03"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers03"];
@@ -1390,10 +1390,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("response_headers04")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("response_headers04")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1403,7 +1403,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers04"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/response_headers04"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers04"];
@@ -1423,10 +1423,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("response_headers05")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("response_headers05")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1436,7 +1436,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers05"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/response_headers05"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers05"];
@@ -1456,10 +1456,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("response_headers06")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("response_headers06")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1469,7 +1469,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers06"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/response_headers06"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers06"];
@@ -1489,10 +1489,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("response_headers07")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("response_headers07")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1502,7 +1502,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers07"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/response_headers07"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers07"];
@@ -1522,10 +1522,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("response_headers08")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("response_headers08")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1535,7 +1535,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers08"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/response_headers08"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers08"];
@@ -1556,10 +1556,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("response_headers09")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("response_headers09")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1569,7 +1569,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers09"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/response_headers09"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers09"];
@@ -1589,10 +1589,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("response_headers10")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("response_headers10")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1602,7 +1602,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers10"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/response_headers10"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers10"];
@@ -1622,10 +1622,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("response_headers11")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("response_headers11")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1635,7 +1635,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers11"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/response_headers11"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers11"];
@@ -1655,10 +1655,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("response_headers12")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("response_headers12")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1668,7 +1668,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers12"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/response_headers12"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers12"];
@@ -1688,10 +1688,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("response_headers13")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("response_headers13")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1701,7 +1701,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers13"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/response_headers13"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers13"];
@@ -1721,10 +1721,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("request_payload01")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("request_payload01")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1734,7 +1734,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/request_payload01"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/request_payload01"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_payload01"];
@@ -1753,10 +1753,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("request_payload02")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("request_payload02")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1766,7 +1766,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/request_payload02"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/request_payload02"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/request_payload02"];
@@ -1785,10 +1785,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("response_payload01")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("response_payload01")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1798,7 +1798,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_payload01"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/response_payload01"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_payload01"];
@@ -1817,10 +1817,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("response_payload02")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("response_payload02")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1830,7 +1830,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_payload02"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/response_payload02"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_payload02"];
@@ -1849,10 +1849,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("full_example")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("full_example")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1864,7 +1864,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/full_example"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/full_example"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/full_example"];
@@ -1884,10 +1884,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("reference")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("reference")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1897,7 +1897,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/reference"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/reference"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/reference"];
@@ -1916,10 +1916,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("binary_request")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("binary_request")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1929,7 +1929,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/binary_request"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/binary_request"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/binary_request"];
@@ -1948,10 +1948,10 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("binary_response")]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("binary_response")));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
@@ -1961,7 +1961,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/binary_response"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/binary_response"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/binary_response"];
@@ -1980,15 +1980,15 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 	});
 	endpoints.push((raw, auxillary) => {
 		let method = "GET";
-		let components = new Array<[string, string]>();
-		components.push(["", decodeURIComponent("number")]);
-		components.push(["number", raw.components[1]]);
+		let matchers = new Array<autoguard.api.RouteMatcher>();
+		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("number")));
+		matchers.push(new autoguard.api.DynamicRouteMatcher(1, 1, false, autoguard.guards.Number));
 		return {
-			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, components),
+			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["number"] = autoguard.api.getValue(components, "number", false);
+				options["number"] = matchers[1].getValue();
 				options["number"] = autoguard.api.getValue(raw.parameters, "number", false);
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
@@ -1996,7 +1996,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/number/<number>"](new autoguard.api.ClientRequest(request, auxillary));
+						let response = await routes["GET:/number/<number>"](new autoguard.api.ClientRequest(request, false, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/number/<number>"];

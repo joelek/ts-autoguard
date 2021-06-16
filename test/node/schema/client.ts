@@ -12,7 +12,7 @@ export const makeClient = (options?: Partial<{
 		guard.as(request, "request");
 		let method = "POST";
 		let components = new Array<string>();
-		components.push(autoguard.api.serializeValue(request.options["component"], true) ?? "");
+		components.push(...autoguard.api.serializeValues([request.options?.["component"]], true));
 		components.push(decodeURIComponent(""));
 		let parameters = new Array<[string, string]>();
 		autoguard.api.appendKeyValuePair(parameters, "parameter", request.options?.["parameter"], true);
@@ -30,7 +30,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["POST:/<component>/"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 });

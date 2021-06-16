@@ -26,7 +26,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"POST:/": async (request) => {
@@ -48,7 +48,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["POST:/"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/one": async (request) => {
@@ -70,7 +70,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/one"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/one/": async (request) => {
@@ -93,7 +93,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/one/"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/one/two": async (request) => {
@@ -116,7 +116,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/one/two"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/<dynamic_component>": async (request) => {
@@ -124,7 +124,7 @@ export const makeClient = (options?: Partial<{
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
-		components.push(autoguard.api.serializeValue(request.options["dynamic_component"], true) ?? "");
+		components.push(...autoguard.api.serializeValues([request.options?.["dynamic_component"]], true));
 		let parameters = new Array<[string, string]>();
 		parameters.push(...autoguard.api.extractKeyValuePairs(request.options ?? {}, [...["dynamic_component"], ...parameters.map((parameter) => parameter[0])]));
 		let headers = new Array<[string, string]>();
@@ -138,7 +138,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/<dynamic_component>"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/<dynamic_plain_component>": async (request) => {
@@ -146,7 +146,7 @@ export const makeClient = (options?: Partial<{
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
-		components.push(autoguard.api.serializeValue(request.options["dynamic_plain_component"], true) ?? "");
+		components.push(...autoguard.api.serializeValues([request.options?.["dynamic_plain_component"]], true));
 		let parameters = new Array<[string, string]>();
 		parameters.push(...autoguard.api.extractKeyValuePairs(request.options ?? {}, [...["dynamic_plain_component"], ...parameters.map((parameter) => parameter[0])]));
 		let headers = new Array<[string, string]>();
@@ -160,7 +160,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/<dynamic_plain_component>"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/<dynamic_boolean_component>": async (request) => {
@@ -168,7 +168,7 @@ export const makeClient = (options?: Partial<{
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
-		components.push(autoguard.api.serializeValue(request.options["dynamic_boolean_component"], false) ?? "");
+		components.push(...autoguard.api.serializeValues([request.options?.["dynamic_boolean_component"]], false));
 		let parameters = new Array<[string, string]>();
 		parameters.push(...autoguard.api.extractKeyValuePairs(request.options ?? {}, [...["dynamic_boolean_component"], ...parameters.map((parameter) => parameter[0])]));
 		let headers = new Array<[string, string]>();
@@ -182,7 +182,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/<dynamic_boolean_component>"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/<dynamic_number_component>": async (request) => {
@@ -190,7 +190,7 @@ export const makeClient = (options?: Partial<{
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
-		components.push(autoguard.api.serializeValue(request.options["dynamic_number_component"], false) ?? "");
+		components.push(...autoguard.api.serializeValues([request.options?.["dynamic_number_component"]], false));
 		let parameters = new Array<[string, string]>();
 		parameters.push(...autoguard.api.extractKeyValuePairs(request.options ?? {}, [...["dynamic_number_component"], ...parameters.map((parameter) => parameter[0])]));
 		let headers = new Array<[string, string]>();
@@ -204,7 +204,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/<dynamic_number_component>"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/<dynamic_string_component>": async (request) => {
@@ -212,7 +212,7 @@ export const makeClient = (options?: Partial<{
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
-		components.push(autoguard.api.serializeValue(request.options["dynamic_string_component"], true) ?? "");
+		components.push(...autoguard.api.serializeValues([request.options?.["dynamic_string_component"]], true));
 		let parameters = new Array<[string, string]>();
 		parameters.push(...autoguard.api.extractKeyValuePairs(request.options ?? {}, [...["dynamic_string_component"], ...parameters.map((parameter) => parameter[0])]));
 		let headers = new Array<[string, string]>();
@@ -226,7 +226,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/<dynamic_string_component>"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/<dynamic_component_one>/<dynamic_component_two>": async (request) => {
@@ -234,8 +234,8 @@ export const makeClient = (options?: Partial<{
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
-		components.push(autoguard.api.serializeValue(request.options["dynamic_component_one"], true) ?? "");
-		components.push(autoguard.api.serializeValue(request.options["dynamic_component_two"], true) ?? "");
+		components.push(...autoguard.api.serializeValues([request.options?.["dynamic_component_one"]], true));
+		components.push(...autoguard.api.serializeValues([request.options?.["dynamic_component_two"]], true));
 		let parameters = new Array<[string, string]>();
 		parameters.push(...autoguard.api.extractKeyValuePairs(request.options ?? {}, [...["dynamic_component_one","dynamic_component_two"], ...parameters.map((parameter) => parameter[0])]));
 		let headers = new Array<[string, string]>();
@@ -249,7 +249,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/<dynamic_component_one>/<dynamic_component_two>"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/<quoted key>": async (request) => {
@@ -257,7 +257,7 @@ export const makeClient = (options?: Partial<{
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
-		components.push(autoguard.api.serializeValue(request.options["quoted key"], true) ?? "");
+		components.push(...autoguard.api.serializeValues([request.options?.["quoted key"]], true));
 		let parameters = new Array<[string, string]>();
 		parameters.push(...autoguard.api.extractKeyValuePairs(request.options ?? {}, [...["quoted key"], ...parameters.map((parameter) => parameter[0])]));
 		let headers = new Array<[string, string]>();
@@ -271,7 +271,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/<quoted key>"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/%22r%C3%A4ksm%C3%B6rg%C3%A5s%22": async (request) => {
@@ -293,7 +293,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/%22r%C3%A4ksm%C3%B6rg%C3%A5s%22"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/parameters01": async (request) => {
@@ -315,7 +315,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/parameters01"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/parameters02": async (request) => {
@@ -338,7 +338,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/parameters02"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/parameters03": async (request) => {
@@ -361,7 +361,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/parameters03"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/parameters04": async (request) => {
@@ -384,7 +384,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/parameters04"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/parameters05": async (request) => {
@@ -407,7 +407,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/parameters05"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/parameters06": async (request) => {
@@ -430,7 +430,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/parameters06"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/parameters07": async (request) => {
@@ -453,7 +453,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/parameters07"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/parameters08": async (request) => {
@@ -477,7 +477,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/parameters08"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/parameters09": async (request) => {
@@ -500,7 +500,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/parameters09"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/parameters10": async (request) => {
@@ -523,7 +523,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/parameters10"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/parameters11": async (request) => {
@@ -546,7 +546,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/parameters11"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/parameters12": async (request) => {
@@ -569,7 +569,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/parameters12"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/parameters13": async (request) => {
@@ -592,7 +592,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/parameters13"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/request_headers01": async (request) => {
@@ -614,7 +614,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/request_headers01"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/request_headers02": async (request) => {
@@ -637,7 +637,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/request_headers02"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/request_headers03": async (request) => {
@@ -660,7 +660,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/request_headers03"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/request_headers04": async (request) => {
@@ -683,7 +683,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/request_headers04"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/request_headers05": async (request) => {
@@ -706,7 +706,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/request_headers05"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/request_headers06": async (request) => {
@@ -729,7 +729,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/request_headers06"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/request_headers07": async (request) => {
@@ -752,7 +752,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/request_headers07"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/request_headers08": async (request) => {
@@ -776,7 +776,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/request_headers08"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/request_headers09": async (request) => {
@@ -799,7 +799,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/request_headers09"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/request_headers10": async (request) => {
@@ -822,7 +822,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/request_headers10"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/request_headers11": async (request) => {
@@ -845,7 +845,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/request_headers11"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/request_headers12": async (request) => {
@@ -868,7 +868,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/request_headers12"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/request_headers13": async (request) => {
@@ -891,7 +891,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/request_headers13"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/response_headers01": async (request) => {
@@ -913,7 +913,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers01"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/response_headers02": async (request) => {
@@ -936,7 +936,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers02"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/response_headers03": async (request) => {
@@ -959,7 +959,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers03"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/response_headers04": async (request) => {
@@ -982,7 +982,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers04"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/response_headers05": async (request) => {
@@ -1005,7 +1005,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers05"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/response_headers06": async (request) => {
@@ -1028,7 +1028,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers06"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/response_headers07": async (request) => {
@@ -1051,7 +1051,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers07"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/response_headers08": async (request) => {
@@ -1075,7 +1075,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers08"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/response_headers09": async (request) => {
@@ -1098,7 +1098,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers09"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/response_headers10": async (request) => {
@@ -1121,7 +1121,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers10"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/response_headers11": async (request) => {
@@ -1144,7 +1144,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers11"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/response_headers12": async (request) => {
@@ -1167,7 +1167,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers12"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/response_headers13": async (request) => {
@@ -1190,7 +1190,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_headers13"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/request_payload01": async (request) => {
@@ -1212,7 +1212,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/request_payload01"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/request_payload02": async (request) => {
@@ -1234,7 +1234,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/request_payload02"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/response_payload01": async (request) => {
@@ -1256,7 +1256,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_payload01"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/response_payload02": async (request) => {
@@ -1278,7 +1278,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/response_payload02"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/full_example": async (request) => {
@@ -1303,7 +1303,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/full_example"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/reference": async (request) => {
@@ -1325,7 +1325,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/reference"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/binary_request": async (request) => {
@@ -1347,7 +1347,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/binary_request"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/binary_response": async (request) => {
@@ -1369,7 +1369,7 @@ export const makeClient = (options?: Partial<{
 			let payload = raw.payload;
 			let guard = shared.Autoguard.Responses["GET:/binary_response"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/number/<number>": async (request) => {
@@ -1378,7 +1378,7 @@ export const makeClient = (options?: Partial<{
 		let method = "GET";
 		let components = new Array<string>();
 		components.push(decodeURIComponent("number"));
-		components.push(autoguard.api.serializeValue(request.options["number"], false) ?? "");
+		components.push(...autoguard.api.serializeValues([request.options?.["number"]], false));
 		let parameters = new Array<[string, string]>();
 		autoguard.api.appendKeyValuePair(parameters, "number", request.options?.["number"], false);
 		parameters.push(...autoguard.api.extractKeyValuePairs(request.options ?? {}, [...["number"], ...parameters.map((parameter) => parameter[0])]));
@@ -1393,7 +1393,7 @@ export const makeClient = (options?: Partial<{
 			let payload = await autoguard.api.deserializePayload(raw.payload);
 			let guard = shared.Autoguard.Responses["GET:/number/<number>"];
 			let response = guard.as({ status, headers, payload }, "response");
-			return new autoguard.api.ServerResponse(response);
+			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 });
