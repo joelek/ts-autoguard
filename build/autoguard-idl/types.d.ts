@@ -10,7 +10,7 @@ export interface Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): Array<shared.Import>;
+    getReferences(): Array<shared.Reference>;
 }
 export declare const Type: {
     parse(tokenizer: tokenization.Tokenizer, include?: TypenameMap, exclude?: TypenameMap): Type;
@@ -20,7 +20,7 @@ export declare class AnyType implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): Array<shared.Import>;
+    getReferences(): Array<shared.Reference>;
     static readonly INSTANCE: AnyType;
     static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): AnyType;
 }
@@ -30,7 +30,7 @@ export declare class ArrayType implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): Array<shared.Import>;
+    getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): ArrayType;
 }
 export declare class Binary implements Type {
@@ -38,7 +38,7 @@ export declare class Binary implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): shared.Import[];
+    getReferences(): shared.Reference[];
     static readonly INSTANCE: Binary;
     static parse(tokenizer: tokenization.Tokenizer): UndefinedType;
 }
@@ -47,7 +47,7 @@ export declare class BooleanType implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): Array<shared.Import>;
+    getReferences(): Array<shared.Reference>;
     static readonly INSTANCE: BooleanType;
     static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): BooleanType;
 }
@@ -57,7 +57,7 @@ export declare class BooleanLiteralType implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): Array<shared.Import>;
+    getReferences(): Array<shared.Reference>;
     static readonly INSTANCE_TRUE: BooleanLiteralType;
     static readonly INSTANCE_FALSE: BooleanLiteralType;
     static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): BooleanLiteralType;
@@ -68,7 +68,7 @@ export declare class GroupType implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): Array<shared.Import>;
+    getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): GroupType;
 }
 export declare class IntersectionType implements Type {
@@ -78,7 +78,7 @@ export declare class IntersectionType implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): Array<shared.Import>;
+    getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): Type;
 }
 export declare class NullType implements Type {
@@ -86,7 +86,7 @@ export declare class NullType implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): Array<shared.Import>;
+    getReferences(): Array<shared.Reference>;
     static readonly INSTANCE: NullType;
     static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): NullType;
 }
@@ -95,7 +95,7 @@ export declare class NumberType implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): Array<shared.Import>;
+    getReferences(): Array<shared.Reference>;
     static readonly INSTANCE: NumberType;
     static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): NumberType;
 }
@@ -105,7 +105,7 @@ export declare class NumberLiteralType implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): Array<shared.Import>;
+    getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): NumberLiteralType;
 }
 export declare type ObjectMember = {
@@ -119,7 +119,7 @@ export declare class ObjectType implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): Array<shared.Import>;
+    getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): ObjectType;
 }
 export declare class RecordType implements Type {
@@ -128,7 +128,7 @@ export declare class RecordType implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): Array<shared.Import>;
+    getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): RecordType;
 }
 export declare class ReferenceType implements Type {
@@ -138,7 +138,7 @@ export declare class ReferenceType implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): Array<shared.Import>;
+    getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): ReferenceType;
 }
 export declare class StringType implements Type {
@@ -146,7 +146,7 @@ export declare class StringType implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): Array<shared.Import>;
+    getReferences(): Array<shared.Reference>;
     static readonly INSTANCE: StringType;
     static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): StringType;
 }
@@ -156,7 +156,7 @@ export declare class StringLiteralType implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): Array<shared.Import>;
+    getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): StringLiteralType;
 }
 export declare class TupleType implements Type {
@@ -166,7 +166,7 @@ export declare class TupleType implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): Array<shared.Import>;
+    getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): TupleType;
 }
 export declare class UndefinedType implements Type {
@@ -174,7 +174,7 @@ export declare class UndefinedType implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): Array<shared.Import>;
+    getReferences(): Array<shared.Reference>;
     static readonly INSTANCE: UndefinedType;
     static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): UndefinedType;
 }
@@ -185,7 +185,7 @@ export declare class UnionType implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): Array<shared.Import>;
+    getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): Type;
 }
 export declare class Headers implements Type {
@@ -193,7 +193,7 @@ export declare class Headers implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): shared.Import[];
+    getReferences(): shared.Reference[];
     static readonly INSTANCE: Headers;
 }
 export declare class Options implements Type {
@@ -201,7 +201,7 @@ export declare class Options implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): shared.Import[];
+    getReferences(): shared.Reference[];
     static readonly INSTANCE: Options;
 }
 export declare class PlainType implements Type {
@@ -209,6 +209,6 @@ export declare class PlainType implements Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
-    getImports(): shared.Import[];
+    getReferences(): shared.Reference[];
     static readonly INSTANCE: PlainType;
 }

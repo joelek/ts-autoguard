@@ -1,4 +1,4 @@
-export type Import = {
+export type Reference = {
 	path: Array<string>;
 	typename: string;
 };

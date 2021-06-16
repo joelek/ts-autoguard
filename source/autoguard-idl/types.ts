@@ -35,7 +35,7 @@ export interface Type {
 	generateSchema(options: shared.Options): string;
 	generateType(options: shared.Options): string;
 	generateTypeGuard(options: shared.Options): string;
-	getImports(): Array<shared.Import>;
+	getReferences(): Array<shared.Reference>;
 };
 
 export const Type = {
@@ -117,7 +117,7 @@ export class AnyType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Array<shared.Import> {
+	getReferences(): Array<shared.Reference> {
 		return [];
 	}
 
@@ -155,8 +155,8 @@ export class ArrayType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Array<shared.Import> {
-		return this.type.getImports();
+	getReferences(): Array<shared.Reference> {
+		return this.type.getReferences();
 	}
 
 	static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): ArrayType {
@@ -204,7 +204,7 @@ export class Binary implements Type {
 		return "autoguard.api.Binary";
 	}
 
-	getImports(): shared.Import[] {
+	getReferences(): shared.Reference[] {
 		return [];
 	}
 
@@ -237,7 +237,7 @@ export class BooleanType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Array<shared.Import> {
+	getReferences(): Array<shared.Reference> {
 		return [];
 	}
 
@@ -275,7 +275,7 @@ export class BooleanLiteralType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Array<shared.Import> {
+	getReferences(): Array<shared.Reference> {
 		return [];
 	}
 
@@ -319,8 +319,8 @@ export class GroupType implements Type {
 		return this.type.generateTypeGuard(options);
 	}
 
-	getImports(): Array<shared.Import> {
-		return this.type.getImports();
+	getReferences(): Array<shared.Reference> {
+		return this.type.getReferences();
 	}
 
 	static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): GroupType {
@@ -374,12 +374,12 @@ export class IntersectionType implements Type {
 		return "autoguard.guards.Intersection.of(" + options.eol + lines.join("," + options.eol) + options.eol + ")";
 	}
 
-	getImports(): Array<shared.Import> {
-		let imports = new Array<shared.Import>();
+	getReferences(): Array<shared.Reference> {
+		let references = new Array<shared.Reference>();
 		for (let type of this.types) {
-			imports.push(...type.getImports());
+			references.push(...type.getReferences());
 		}
-		return imports;
+		return references;
 	}
 
 	static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): Type {
@@ -431,7 +431,7 @@ export class NullType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Array<shared.Import> {
+	getReferences(): Array<shared.Reference> {
 		return [];
 	}
 
@@ -467,7 +467,7 @@ export class NumberType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Array<shared.Import> {
+	getReferences(): Array<shared.Reference> {
 		return [];
 	}
 
@@ -505,7 +505,7 @@ export class NumberLiteralType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Array<shared.Import> {
+	getReferences(): Array<shared.Reference> {
 		return [];
 	}
 
@@ -577,13 +577,13 @@ export class ObjectType implements Type {
 		return "autoguard.guards.Object.of({" + guard + "})";
 	}
 
-	getImports(): Array<shared.Import> {
-		let imports = new Array<shared.Import>();
+	getReferences(): Array<shared.Reference> {
+		let references = new Array<shared.Reference>();
 		for (let [key, value] of this.members) {
 			let type = value.type;
-			imports.push(...type.getImports());
+			references.push(...type.getReferences());
 		}
-		return imports;
+		return references;
 	}
 
 	static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): ObjectType {
@@ -644,8 +644,8 @@ export class RecordType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Array<shared.Import> {
-		return this.type.getImports();
+	getReferences(): Array<shared.Reference> {
+		return this.type.getReferences();
 	}
 
 	static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): RecordType {
@@ -682,16 +682,13 @@ export class ReferenceType implements Type {
 		return "autoguard.guards.Reference.of(() => " + this.typename + ")";
 	}
 
-	getImports(): Array<shared.Import> {
-		if (this.path.length > 0) {
-			return [
-				{
-					path: this.path,
-					typename: this.typename
-				}
-			];
-		}
-		return [];
+	getReferences(): Array<shared.Reference> {
+		return [
+			{
+				path: this.path,
+				typename: this.typename
+			}
+		];
 	}
 
 	static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): ReferenceType {
@@ -735,7 +732,7 @@ export class StringType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Array<shared.Import> {
+	getReferences(): Array<shared.Reference> {
 		return [];
 	}
 
@@ -773,7 +770,7 @@ export class StringLiteralType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Array<shared.Import> {
+	getReferences(): Array<shared.Reference> {
 		return [];
 	}
 
@@ -827,12 +824,12 @@ export class TupleType implements Type {
 		return "autoguard.guards.Tuple.of(" + string + ")";
 	}
 
-	getImports(): Array<shared.Import> {
-		let imports = new Array<shared.Import>();
+	getReferences(): Array<shared.Reference> {
+		let references = new Array<shared.Reference>();
 		for (let type of this.types) {
-			imports.push(...type.getImports());
+			references.push(...type.getReferences());
 		}
-		return imports;
+		return references;
 	}
 
 	static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): TupleType {
@@ -877,7 +874,7 @@ export class UndefinedType implements Type {
 		return lines.join(options.eol);
 	}
 
-	getImports(): Array<shared.Import> {
+	getReferences(): Array<shared.Reference> {
 		return [];
 	}
 
@@ -932,12 +929,12 @@ export class UnionType implements Type {
 		return "autoguard.guards.Union.of(" + options.eol + lines.join("," + options.eol) + options.eol + ")";
 	}
 
-	getImports(): Array<shared.Import> {
-		let imports = new Array<shared.Import>();
+	getReferences(): Array<shared.Reference> {
+		let references = new Array<shared.Reference>();
 		for (let type of this.types) {
-			imports.push(...type.getImports());
+			references.push(...type.getReferences());
 		}
-		return imports;
+		return references;
 	}
 
 	static parse(tokenizer: tokenization.Tokenizer, include: TypenameMap, exclude: TypenameMap): Type {
@@ -987,7 +984,7 @@ export class Headers implements Type {
 		return "autoguard.api.Headers";
 	}
 
-	getImports(): shared.Import[] {
+	getReferences(): shared.Reference[] {
 		return [];
 	}
 
@@ -1011,7 +1008,7 @@ export class Options implements Type {
 		return "autoguard.api.Options";
 	}
 
-	getImports(): shared.Import[] {
+	getReferences(): shared.Reference[] {
 		return [];
 	}
 
@@ -1035,7 +1032,7 @@ export class PlainType implements Type {
 		return "autoguard.guards.String";
 	}
 
-	getImports(): shared.Import[] {
+	getReferences(): shared.Reference[] {
 		return [];
 	}
 

@@ -99,7 +99,7 @@ class AnyType {
         lines.push("autoguard.guards.Any");
         return lines.join(options.eol);
     }
-    getImports() {
+    getReferences() {
         return [];
     }
     static parse(tokenizer, include, exclude) {
@@ -130,8 +130,8 @@ class ArrayType {
         lines.push("autoguard.guards.Array.of(" + this.type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol })) + ")");
         return lines.join(options.eol);
     }
-    getImports() {
-        return this.type.getImports();
+    getReferences() {
+        return this.type.getReferences();
     }
     static parse(tokenizer, include, exclude) {
         if (!include.Array || exclude.Array) {
@@ -172,7 +172,7 @@ class Binary {
     generateTypeGuard(options) {
         return "autoguard.api.Binary";
     }
-    getImports() {
+    getReferences() {
         return [];
     }
     static parse(tokenizer) {
@@ -199,7 +199,7 @@ class BooleanType {
         lines.push("autoguard.guards.Boolean");
         return lines.join(options.eol);
     }
-    getImports() {
+    getReferences() {
         return [];
     }
     static parse(tokenizer, include, exclude) {
@@ -230,7 +230,7 @@ class BooleanLiteralType {
         lines.push("autoguard.guards.BooleanLiteral.of(" + this.generateType(Object.assign(Object.assign({}, options), { eol: options.eol })) + ")");
         return lines.join(options.eol);
     }
-    getImports() {
+    getReferences() {
         return [];
     }
     static parse(tokenizer, include, exclude) {
@@ -268,8 +268,8 @@ class GroupType {
     generateTypeGuard(options) {
         return this.type.generateTypeGuard(options);
     }
-    getImports() {
-        return this.type.getImports();
+    getReferences() {
+        return this.type.getReferences();
     }
     static parse(tokenizer, include, exclude) {
         if (!include.Group || exclude.Group) {
@@ -316,12 +316,12 @@ class IntersectionType {
         }
         return "autoguard.guards.Intersection.of(" + options.eol + lines.join("," + options.eol) + options.eol + ")";
     }
-    getImports() {
-        let imports = new Array();
+    getReferences() {
+        let references = new Array();
         for (let type of this.types) {
-            imports.push(...type.getImports());
+            references.push(...type.getReferences());
         }
-        return imports;
+        return references;
     }
     static parse(tokenizer, include, exclude) {
         if (!include.Intersection || exclude.Intersection) {
@@ -363,7 +363,7 @@ class NullType {
         lines.push("autoguard.guards.Null");
         return lines.join(options.eol);
     }
-    getImports() {
+    getReferences() {
         return [];
     }
     static parse(tokenizer, include, exclude) {
@@ -393,7 +393,7 @@ class NumberType {
         lines.push("autoguard.guards.Number");
         return lines.join(options.eol);
     }
-    getImports() {
+    getReferences() {
         return [];
     }
     static parse(tokenizer, include, exclude) {
@@ -424,7 +424,7 @@ class NumberLiteralType {
         lines.push("autoguard.guards.NumberLiteral.of(" + this.generateType(Object.assign(Object.assign({}, options), { eol: options.eol })) + ")");
         return lines.join(options.eol);
     }
-    getImports() {
+    getReferences() {
         return [];
     }
     static parse(tokenizer, include, exclude) {
@@ -484,13 +484,13 @@ class ObjectType {
         let guard = lines.length > 0 ? options.eol + lines.join("," + options.eol) + options.eol : "";
         return "autoguard.guards.Object.of({" + guard + "})";
     }
-    getImports() {
-        let imports = new Array();
+    getReferences() {
+        let references = new Array();
         for (let [key, value] of this.members) {
             let type = value.type;
-            imports.push(...type.getImports());
+            references.push(...type.getReferences());
         }
-        return imports;
+        return references;
     }
     static parse(tokenizer, include, exclude) {
         if (!include.Object || exclude.Object) {
@@ -546,8 +546,8 @@ class RecordType {
         lines.push("autoguard.guards.Record.of(" + this.type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol })) + ")");
         return lines.join(options.eol);
     }
-    getImports() {
-        return this.type.getImports();
+    getReferences() {
+        return this.type.getReferences();
     }
     static parse(tokenizer, include, exclude) {
         if (!include.Record || exclude.Record) {
@@ -577,16 +577,13 @@ class ReferenceType {
     generateTypeGuard(options) {
         return "autoguard.guards.Reference.of(() => " + this.typename + ")";
     }
-    getImports() {
-        if (this.path.length > 0) {
-            return [
-                {
-                    path: this.path,
-                    typename: this.typename
-                }
-            ];
-        }
-        return [];
+    getReferences() {
+        return [
+            {
+                path: this.path,
+                typename: this.typename
+            }
+        ];
     }
     static parse(tokenizer, include, exclude) {
         if (!include.Reference || exclude.Reference) {
@@ -626,7 +623,7 @@ class StringType {
         lines.push("autoguard.guards.String");
         return lines.join(options.eol);
     }
-    getImports() {
+    getReferences() {
         return [];
     }
     static parse(tokenizer, include, exclude) {
@@ -657,7 +654,7 @@ class StringLiteralType {
         lines.push("autoguard.guards.StringLiteral.of(\"" + this.value + "\")");
         return lines.join(options.eol);
     }
-    getImports() {
+    getReferences() {
         return [];
     }
     static parse(tokenizer, include, exclude) {
@@ -704,12 +701,12 @@ class TupleType {
         let string = lines.length > 0 ? options.eol + lines.join("," + options.eol) + options.eol : "";
         return "autoguard.guards.Tuple.of(" + string + ")";
     }
-    getImports() {
-        let imports = new Array();
+    getReferences() {
+        let references = new Array();
         for (let type of this.types) {
-            imports.push(...type.getImports());
+            references.push(...type.getReferences());
         }
-        return imports;
+        return references;
     }
     static parse(tokenizer, include, exclude) {
         if (!include.Tuple || exclude.Tuple) {
@@ -750,7 +747,7 @@ class UndefinedType {
         lines.push("autoguard.guards.Undefined");
         return lines.join(options.eol);
     }
-    getImports() {
+    getReferences() {
         return [];
     }
     static parse(tokenizer, include, exclude) {
@@ -797,12 +794,12 @@ class UnionType {
         }
         return "autoguard.guards.Union.of(" + options.eol + lines.join("," + options.eol) + options.eol + ")";
     }
-    getImports() {
-        let imports = new Array();
+    getReferences() {
+        let references = new Array();
         for (let type of this.types) {
-            imports.push(...type.getImports());
+            references.push(...type.getReferences());
         }
-        return imports;
+        return references;
     }
     static parse(tokenizer, include, exclude) {
         if (!include.Union || exclude.Union) {
@@ -842,7 +839,7 @@ class Headers {
     generateTypeGuard(options) {
         return "autoguard.api.Headers";
     }
-    getImports() {
+    getReferences() {
         return [];
     }
 }
@@ -861,7 +858,7 @@ class Options {
     generateTypeGuard(options) {
         return "autoguard.api.Options";
     }
-    getImports() {
+    getReferences() {
         return [];
     }
 }
@@ -880,7 +877,7 @@ class PlainType {
     generateTypeGuard(options) {
         return "autoguard.guards.String";
     }
-    getImports() {
+    getReferences() {
         return [];
     }
 }

@@ -3,7 +3,7 @@ import * as tokenization from "./tokenization";
 export declare class Schema {
     private guards;
     private routes;
-    private getImports;
+    private getSharedImports;
     private constructor();
     generateSchema(options: shared.Options): string;
     generateClient(options: shared.Options): string;

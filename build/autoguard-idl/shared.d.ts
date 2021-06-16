@@ -1,4 +1,4 @@
-export declare type Import = {
+export declare type Reference = {
     path: Array<string>;
     typename: string;
 };
