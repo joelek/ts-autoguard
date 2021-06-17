@@ -589,9 +589,16 @@ export function makeNodeRequestHandler(options?: NodeRequestHandlerOptions): Req
 		let libhttps = require("https") as typeof import("https");
 		let lib = (urlPrefix ?? "").startsWith("https:") ? libhttps : libhttp;
 		return new Promise(async (resolve, reject) => {
-			let headers: { [key: string]: string } = {};
+			let headers: Record<string, Array<string>> = {};
 			for (let header of raw.headers) {
-				headers[header[0]] = header[1];
+				let key = header[0];
+				let value = header[1];
+				let values = headers[key] as Array<string> | undefined;
+				if (values === undefined) {
+					values = new Array<string>();
+					headers[key] = values;
+				}
+				values.push(value);
 			}
 			let url = urlPrefix ?? "";
 			url += serializeComponents(raw.components);
@@ -599,7 +606,7 @@ export function makeNodeRequestHandler(options?: NodeRequestHandlerOptions): Req
 			let request = lib.request(url, {
 				...options,
 				method: raw.method,
-				headers: headers,
+				headers: headers
 			}, (response) => {
 				let status = response.statusCode ?? 200;
 				let headers = getHeaders(combineRawHeaders(response.rawHeaders));

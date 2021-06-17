@@ -509,7 +509,14 @@ function makeNodeRequestHandler(options) {
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             let headers = {};
             for (let header of raw.headers) {
-                headers[header[0]] = header[1];
+                let key = header[0];
+                let value = header[1];
+                let values = headers[key];
+                if (values === undefined) {
+                    values = new Array();
+                    headers[key] = values;
+                }
+                values.push(value);
             }
             let url = urlPrefix !== null && urlPrefix !== void 0 ? urlPrefix : "";
             url += serializeComponents(raw.components);
