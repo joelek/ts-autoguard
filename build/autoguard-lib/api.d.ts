@@ -54,9 +54,9 @@ export declare type RequestLike = AsyncBinary & {
 export declare type ResponseLike = {
     end(): void;
     once(type: string, callback: () => void): void;
-    setHeader(key: string, value: string): void;
+    setHeader(key: string, value: string | Array<string>): void;
     write(payload: Uint8Array): boolean;
-    writeHead(status: number): void;
+    writeHead(status: number, headers?: Record<string, string | Array<string>> | Array<string>): void;
 };
 export declare type RequestListener = (request: RequestLike, response: ResponseLike) => Promise<void>;
 export declare function serializeComponents(components: Array<string>): string;

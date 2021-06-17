@@ -166,9 +166,9 @@ export type RequestLike = AsyncBinary & {
 export type ResponseLike = {
 	end(): void;
 	once(type: string, callback: () => void): void;
-	setHeader(key: string, value: string): void;
+	setHeader(key: string, value: string | Array<string>): void;
 	write(payload: Uint8Array): boolean;
-	writeHead(status: number): void;
+	writeHead(status: number, headers?: Record<string, string | Array<string>> | Array<string>): void;
 };
 
 export type RequestListener = (request: RequestLike, response: ResponseLike) => Promise<void>;
@@ -617,10 +617,11 @@ export function makeNodeRequestHandler(options?: NodeRequestHandlerOptions): Req
 };
 
 export async function respond(httpResponse: ResponseLike, raw: RawResponse): Promise<void> {
+	let rawHeaders = new Array<string>();
 	for (let header of raw.headers) {
-		httpResponse.setHeader(header[0], header[1]);
+		rawHeaders.push(...header);
 	}
-	httpResponse.writeHead(raw.status);
+	httpResponse.writeHead(raw.status, rawHeaders);
 	for await (let chunk of raw.payload) {
 		if (!httpResponse.write(chunk)) {
 			await new Promise<void>((resolve, reject) => {

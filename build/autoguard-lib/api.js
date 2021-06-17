@@ -535,10 +535,11 @@ exports.makeNodeRequestHandler = makeNodeRequestHandler;
 function respond(httpResponse, raw) {
     var e_2, _a;
     return __awaiter(this, void 0, void 0, function* () {
+        let rawHeaders = new Array();
         for (let header of raw.headers) {
-            httpResponse.setHeader(header[0], header[1]);
+            rawHeaders.push(...header);
         }
-        httpResponse.writeHead(raw.status);
+        httpResponse.writeHead(raw.status, rawHeaders);
         try {
             for (var _b = __asyncValues(raw.payload), _c; _c = yield _b.next(), !_c.done;) {
                 let chunk = _c.value;
