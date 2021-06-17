@@ -561,6 +561,7 @@ export function xhr(raw: RawRequest, urlPrefix?: string): Promise<RawResponse> {
 		xhr.onabort = reject;
 		xhr.onload = () => {
 			let status = xhr.status;
+			// Header values for the same header name are joined by he XHR implementation.
 			let headers = getHeaders(xhr.getAllResponseHeaders().split("\r\n").slice(0, -1));
 			let payload = [new Uint8Array(xhr.response as ArrayBuffer)];
 			resolve({
@@ -575,6 +576,7 @@ export function xhr(raw: RawRequest, urlPrefix?: string): Promise<RawResponse> {
 		xhr.open(raw.method, url, true);
 		xhr.responseType = "arraybuffer";
 		for (let header of raw.headers) {
+			// Header values for the same header name are joined by he XHR implementation.
 			xhr.setRequestHeader(header[0], header[1]);
 		}
 		xhr.send(await collectPayload(raw.payload));

@@ -480,6 +480,7 @@ function xhr(raw, urlPrefix) {
         xhr.onabort = reject;
         xhr.onload = () => {
             let status = xhr.status;
+            // Header values for the same header name are joined by he XHR implementation.
             let headers = getHeaders(xhr.getAllResponseHeaders().split("\r\n").slice(0, -1));
             let payload = [new Uint8Array(xhr.response)];
             resolve({
@@ -494,6 +495,7 @@ function xhr(raw, urlPrefix) {
         xhr.open(raw.method, url, true);
         xhr.responseType = "arraybuffer";
         for (let header of raw.headers) {
+            // Header values for the same header name are joined by he XHR implementation.
             xhr.setRequestHeader(header[0], header[1]);
         }
         xhr.send(yield collectPayload(raw.payload));
