@@ -16,7 +16,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.decodeURIComponent = exports.deserializeValue = exports.serializeValue = exports.serializeValues = exports.getValue = exports.serializeParameters = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.appendKeyValuePair = exports.serializeComponents = exports.Headers = exports.Options = exports.JSON = exports.Primitive = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.DynamicRouteMatcher = exports.StaticRouteMatcher = void 0;
+exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.decodeURIComponent = exports.deserializeValue = exports.serializeValue = exports.serializeValues = exports.serializeParameters = exports.serializeKeyValues = exports.getValues = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.appendKeyValuePair = exports.serializeComponents = exports.Headers = exports.Options = exports.JSON = exports.Primitive = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.DynamicRouteMatcher = exports.StaticRouteMatcher = void 0;
 const guards = require("./guards");
 ;
 class StaticRouteMatcher {
@@ -151,8 +151,13 @@ function extractKeyValuePairs(record, exclude) {
             if (guards.String.is(value)) {
                 pairs.push([key, value]);
             }
+            else if (guards.Array.of(guards.String).is(value)) {
+                for (let string of value) {
+                    pairs.push([key, string]);
+                }
+            }
             else {
-                throw `Expected value of undeclared "${key}" to be a string!`;
+                throw `Expected type of undeclared "${key}" to be string or string[]!`;
             }
         }
     }
@@ -161,13 +166,57 @@ function extractKeyValuePairs(record, exclude) {
 exports.extractKeyValuePairs = extractKeyValuePairs;
 ;
 function combineKeyValuePairs(pairs) {
-    let record = {};
+    let map = {};
     for (let pair of pairs) {
-        record[pair[0]] = pair[1];
+        let key = pair[0];
+        let value = pair[1];
+        let values = map[key];
+        if (values === undefined) {
+            values = new Array();
+            map[key] = values;
+        }
+        values.push(value);
+    }
+    let record = {};
+    for (let [key, value] of Object.entries(map)) {
+        if (value.length === 1) {
+            record[key] = value[0];
+        }
+        else {
+            record[key] = value;
+        }
     }
     return record;
 }
 exports.combineKeyValuePairs = combineKeyValuePairs;
+;
+function getValues(pairs, key, plain) {
+    let values = new Array();
+    for (let pair of pairs) {
+        if (pair[0] === key) {
+            let value;
+            try {
+                value = deserializeValue(pair[1], plain);
+            }
+            catch (error) { }
+            values.push(value);
+        }
+    }
+    return values;
+}
+exports.getValues = getValues;
+;
+function serializeKeyValues(key, values, plain) {
+    let array = new Array();
+    for (let value of values) {
+        let serialized = serializeValue(value, plain);
+        if (serialized !== undefined) {
+            array.push([key, serialized]);
+        }
+    }
+    return array;
+}
+exports.serializeKeyValues = serializeKeyValues;
 ;
 function serializeParameters(parameters) {
     let parts = parameters.map((parameters) => {
@@ -181,19 +230,6 @@ function serializeParameters(parameters) {
     return `?${parts.join("&")}`;
 }
 exports.serializeParameters = serializeParameters;
-;
-function getValue(pairs, key, plain) {
-    for (let pair of pairs) {
-        if (pair[0] === key) {
-            try {
-                let value = pair[1];
-                return deserializeValue(value, plain);
-            }
-            catch (error) { }
-        }
-    }
-}
-exports.getValue = getValue;
 ;
 function serializeValues(values, plain) {
     let array = new Array();

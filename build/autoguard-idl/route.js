@@ -172,31 +172,27 @@ class Alias {
 exports.Alias = Alias;
 ;
 class Parameter {
-    constructor(name, type, optional) {
+    constructor(name, quantifier, type) {
         this.name = name;
+        this.quantifier = quantifier;
         this.type = type;
-        this.optional = optional;
     }
     generateSchema(options) {
-        return "\"" + this.name + "\"" + (this.optional ? "?" : "") + ": " + this.type;
+        return "\"" + this.name + "\"" + this.quantifier.generateSchema(options) + ": " + this.type;
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
-            var _a, _b, _c;
+            var _a, _b;
             let token = tokenization.expect(read(), [
                 ...tokenization.IdentifierFamilies,
                 "STRING_LITERAL"
             ]);
             let name = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
-            let optional = false;
-            if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) === "?") {
-                tokenization.expect(read(), "?");
-                optional = true;
-            }
+            let quantifier = Quantifier.parse(tokenizer);
             let type = types.PlainType.INSTANCE;
-            if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === ":") {
+            if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) === ":") {
                 tokenization.expect(read(), ":");
-                if (((_c = peek()) === null || _c === void 0 ? void 0 : _c.family) === "plain") {
+                if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === "plain") {
                     tokenization.expect(read(), "plain");
                 }
                 else {
@@ -207,7 +203,7 @@ class Parameter {
                     }
                 }
             }
-            return new Parameter(name, type, optional);
+            return new Parameter(name, quantifier, type);
         });
     }
 }

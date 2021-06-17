@@ -231,6 +231,8 @@ route accessURLWithRequiredQueryParameter(): HEAD:/ ? <{ parameter }>;
 
 route accessURLWithOptionalQueryParameter(): HEAD:/ ? <{ parameter? }>;
 
+route accessURLWithRepeatedQueryParameter(): HEAD:/ ? <{ parameter* }>;
+
 route sendRequiredRequestHeader(): GET:/
 	<= <{ request_header }>;
 
@@ -316,7 +318,6 @@ NB: This project targets TypeScript 4 in strict mode.
 ## Roadmap
 
 * Simplify import paths before resolving references.
-* Add support for multiple-valued header and parameter values.
 * Create middleware for defining cache-control.
 * Add more detailed error messages for syntax errors.
 * Extend type guards with functionality for deep structured cloning.
@@ -381,7 +382,7 @@ Guard = "guard" Identifier ":" Type ";"
 PlainType = "plain"
 OptionsType = PlainType or Type
 OptionsKey = Identifier or StringLiteral
-OptionsKeyValue = OptionsKey "?"? (":" OptionsType)?
+OptionsKeyValue = OptionsKey Quantifier? (":" OptionsType)?
 OptionsBodyTail = "," OptionsKeyValue
 OptionsBody = OptionsKeyValue OptionsBodyTail*
 Options = "<" "{" OptionsBody* "}" ">"

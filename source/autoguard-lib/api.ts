@@ -194,8 +194,12 @@ export function extractKeyValuePairs(record: Record<string, JSON>, exclude: Arra
 		if (!exclude.includes(key) && value !== undefined) {
 			if (guards.String.is(value)) {
 				pairs.push([key, value]);
+			} else if (guards.Array.of(guards.String).is(value)) {
+				for (let string of value) {
+					pairs.push([key, string]);
+				}
 			} else {
-				throw `Expected value of undeclared "${key}" to be a string!`;
+				throw `Expected type of undeclared "${key}" to be string or string[]!`;
 			}
 		}
 	}
@@ -203,11 +207,51 @@ export function extractKeyValuePairs(record: Record<string, JSON>, exclude: Arra
 };
 
 export function combineKeyValuePairs(pairs: Array<[string, string]>): Record<string, JSON> {
-	let record: Record<string, JSON> = {};
+	let map: Record<string, Array<string>> = {};
 	for (let pair of pairs) {
-		record[pair[0]] = pair[1];
+		let key = pair[0];
+		let value = pair[1];
+		let values = map[key] as string[] | undefined;
+		if (values === undefined) {
+			values = new Array<string>();
+			map[key] = values;
+		}
+		values.push(value);
+	}
+	let record: Record<string, JSON> = {};
+	for (let [key, value] of Object.entries(map)) {
+		if (value.length === 1) {
+			record[key] = value[0];
+		} else {
+			record[key] = value;
+		}
 	}
 	return record;
+};
+
+export function getValues(pairs: Iterable<[string, string]>, key: string, plain: boolean): Array<JSON> {
+	let values = new Array<JSON>();
+	for (let pair of pairs) {
+		if (pair[0] === key) {
+			let value: JSON;
+			try {
+				value = deserializeValue(pair[1], plain);
+			} catch (error) {}
+			values.push(value);
+		}
+	}
+	return values;
+};
+
+export function serializeKeyValues(key: string, values: Array<JSON>, plain: boolean): Array<[string, string]> {
+	let array = new Array<[string, string]>();
+	for (let value of values) {
+		let serialized = serializeValue(value, plain);
+		if (serialized !== undefined) {
+			array.push([key, serialized]);
+		}
+	}
+	return array;
 };
 
 export function serializeParameters(parameters: Array<[string, string]>): string {
@@ -220,17 +264,6 @@ export function serializeParameters(parameters: Array<[string, string]>): string
 		return "";
 	}
 	return `?${parts.join("&")}`;
-};
-
-export function getValue(pairs: Iterable<[string, string]>, key: string, plain: boolean): JSON {
-	for (let pair of pairs) {
-		if (pair[0] === key) {
-			try {
-				let value = pair[1];
-				return deserializeValue(value, plain);
-			} catch (error) {}
-		}
-	}
 };
 
 export function serializeValues(values: Array<JSON>, plain: boolean): Array<string> {

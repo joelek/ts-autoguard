@@ -184,17 +184,17 @@ export class Alias {
 
 export class Parameter {
 	name: string;
+	quantifier: Quantifier;
 	type: types.Type;
-	optional: boolean;
 
-	constructor(name: string, type: types.Type, optional: boolean) {
+	constructor(name: string, quantifier: Quantifier, type: types.Type) {
 		this.name = name;
+		this.quantifier = quantifier;
 		this.type = type;
-		this.optional = optional;
 	}
 
 	generateSchema(options: shared.Options): string {
-		return "\"" + this.name + "\"" + (this.optional ? "?" : "") + ": " + this.type;
+		return "\"" + this.name + "\"" + this.quantifier.generateSchema(options) + ": " + this.type;
 	}
 
 	static parse(tokenizer: tokenization.Tokenizer): Parameter {
@@ -204,11 +204,7 @@ export class Parameter {
 				"STRING_LITERAL"
 			]);
 			let name = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
-			let optional = false;
-			if (peek()?.family === "?") {
-				tokenization.expect(read(), "?");
-				optional = true;
-			}
+			let quantifier = Quantifier.parse(tokenizer);
 			let type: types.Type = types.PlainType.INSTANCE;
 			if (peek()?.family === ":") {
 				tokenization.expect(read(), ":");
@@ -222,7 +218,7 @@ export class Parameter {
 					}
 				}
 			}
-			return new Parameter(name, type, optional);
+			return new Parameter(name, quantifier, type);
 		});
 	}
 };

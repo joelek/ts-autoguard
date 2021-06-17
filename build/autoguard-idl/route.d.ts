@@ -39,9 +39,9 @@ export declare class Alias {
 }
 export declare class Parameter {
     name: string;
+    quantifier: Quantifier;
     type: types.Type;
-    optional: boolean;
-    constructor(name: string, type: types.Type, optional: boolean);
+    constructor(name: string, quantifier: Quantifier, type: types.Type);
     generateSchema(options: shared.Options): string;
     static parse(tokenizer: tokenization.Tokenizer): Parameter;
 }
