@@ -229,29 +229,50 @@ export function combineKeyValuePairs(pairs: Array<[string, string]>): Record<str
 	return record;
 };
 
-export function getValues(pairs: Iterable<[string, string]>, key: string, plain: boolean): Array<JSON> {
+export function getParameterValues(pairs: Iterable<[string, string]>, key: string, plain: boolean): Array<JSON> {
 	let values = new Array<JSON>();
 	for (let pair of pairs) {
 		if (pair[0] === key) {
-			let value: JSON;
-			try {
-				value = deserializeValue(pair[1], plain);
-			} catch (error) {}
+			let value = deserializeValue(pair[1], plain);
+			if (value === undefined) {
+				throw `Expected parameter "${key}" to be properly encoded!`;
+			}
 			values.push(value);
 		}
 	}
 	return values;
 };
 
+export function getParameterValue(pairs: Iterable<[string, string]>, key: string, plain: boolean): JSON {
+	let values = new Array<JSON>();
+	for (let pair of pairs) {
+		if (pair[0] === key) {
+			let value = deserializeValue(pair[1], plain);
+			if (value === undefined) {
+				throw `Expected parameter "${key}" to be properly encoded!`;
+			}
+			values.push(value);
+		}
+	}
+	if (values.length > 1) {
+		throw `Expected no more than one "${key}" parameter!`;
+	}
+	return values[0];
+};
+
 export function decodeHeaderValue(pairs: Iterable<[string, string]>, key: string, plain: boolean): JSON {
 	let values = new Array<JSON>();
 	for (let pair of pairs) {
-		if (key === pair[0]) {
+		if (key === decodeURIComponent(pair[0])) {
 			let value = deserializeValue(decodeURIComponent(pair[1]), plain);
-			if (value !== undefined) {
-				values.push(value);
+			if (value === undefined) {
+				throw `Expected header "${key}" to be properly encoded!`;
 			}
+			values.push(value);
 		}
+	}
+	if (values.length > 1) {
+		throw `Expected no more than one "${key}" header!`;
 	}
 	return values[0];
 };
@@ -259,13 +280,14 @@ export function decodeHeaderValue(pairs: Iterable<[string, string]>, key: string
 export function decodeHeaderValues(pairs: Iterable<[string, string]>, key: string, plain: boolean): Array<JSON> {
 	let values = new Array<JSON>();
 	for (let pair of pairs) {
-		if (key === pair[0]) {
+		if (key === decodeURIComponent(pair[0])) {
 			let parts = pair[1].split(",");
 			for (let part of parts) {
 				let value = deserializeValue(decodeURIComponent(part.trim()), plain);
-				if (value !== undefined) {
-					values.push(value);
+				if (value === undefined) {
+					throw `Expected header "${key}" to be properly encoded!`;
 				}
+				values.push(value);
 			}
 		}
 	}
@@ -322,10 +344,12 @@ export function serializeValue(value: JSON, plain: boolean): string | undefined 
 };
 
 export function deserializeValue(value: string | undefined, plain: boolean): JSON {
-	if (value === undefined) {
-		return;
+	if (value === undefined || plain) {
+		return value;
 	}
-	return plain ? value : globalThis.JSON.parse(value);
+	try {
+		return globalThis.JSON.parse(value);
+	} catch (error) {}
 };
 
 export type RawRequest = {
@@ -562,23 +586,47 @@ export function serializeStringPayload(string: string): Binary {
 };
 
 export function serializePayload(payload: JSON): Binary {
-	if (payload === undefined) {
+	let serialized = serializeValue(payload, false);
+	if (serialized === undefined) {
 		return [];
 	}
-	let string = globalThis.JSON.stringify(payload);
-	return serializeStringPayload(string);
+	return serializeStringPayload(serialized);
+};
+
+export function compareArrays(one: Uint8Array, two: Uint8Array): boolean {
+	if (one.length !== two.length) {
+		return false;
+	}
+	for (let i = 0; i < one.length; i++) {
+		if (one[i] !== two[i]) {
+			return false;
+		}
+	}
+	return true;
 };
 
 export async function deserializeStringPayload(binary: Binary): Promise<string> {
 	let buffer = await collectPayload(binary);
 	let decoder = new TextDecoder();
 	let string = decoder.decode(buffer);
+	let encoder = new TextEncoder();
+	let encoded = encoder.encode(string);
+	if (!compareArrays(buffer, encoded)) {
+		throw `Expected payload to be UTF-8 encoded!`;
+	}
 	return string;
 };
 
 export async function deserializePayload(binary: Binary): Promise<JSON> {
 	let string = await deserializeStringPayload(binary);
-	return string === "" ? undefined : globalThis.JSON.parse(string);
+	if (string === "") {
+		return;
+	}
+	let value = deserializeValue(string, false);
+	if (value === undefined) {
+		throw `Expected payload to be JSON encoded!`;
+	}
+	return value;
 };
 
 export function finalizeResponse(raw: RawResponse, defaultContentType: string): RawResponse {
@@ -732,7 +780,7 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 	let components = getComponents(url);
 	let parameters = getParameters(url);
 	if (components === undefined || parameters === undefined) {
-		let payload = serializeStringPayload(`Expected url to be properly percent encoded!`);
+		let payload = serializeStringPayload(`Expected url to be properly encoded!`);
 		return respond(httpResponse, {
 			status: 400,
 			headers: [],

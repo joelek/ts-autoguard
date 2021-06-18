@@ -16,7 +16,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.decodeURIComponent = exports.deserializeValue = exports.serializeValue = exports.serializeValues = exports.serializeParameters = exports.serializeKeyValues = exports.encodeHeaderValues = exports.decodeHeaderValues = exports.decodeHeaderValue = exports.getValues = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.appendKeyValuePair = exports.serializeComponents = exports.Headers = exports.Options = exports.JSON = exports.Primitive = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.DynamicRouteMatcher = exports.StaticRouteMatcher = void 0;
+exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.deserializePayload = exports.deserializeStringPayload = exports.compareArrays = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.decodeURIComponent = exports.deserializeValue = exports.serializeValue = exports.serializeValues = exports.serializeParameters = exports.serializeKeyValues = exports.encodeHeaderValues = exports.decodeHeaderValues = exports.decodeHeaderValue = exports.getParameterValue = exports.getParameterValues = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.appendKeyValuePair = exports.serializeComponents = exports.Headers = exports.Options = exports.JSON = exports.Primitive = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.DynamicRouteMatcher = exports.StaticRouteMatcher = void 0;
 const guards = require("./guards");
 ;
 class StaticRouteMatcher {
@@ -190,31 +190,52 @@ function combineKeyValuePairs(pairs) {
 }
 exports.combineKeyValuePairs = combineKeyValuePairs;
 ;
-function getValues(pairs, key, plain) {
+function getParameterValues(pairs, key, plain) {
     let values = new Array();
     for (let pair of pairs) {
         if (pair[0] === key) {
-            let value;
-            try {
-                value = deserializeValue(pair[1], plain);
+            let value = deserializeValue(pair[1], plain);
+            if (value === undefined) {
+                throw `Expected parameter "${key}" to be properly encoded!`;
             }
-            catch (error) { }
             values.push(value);
         }
     }
     return values;
 }
-exports.getValues = getValues;
+exports.getParameterValues = getParameterValues;
+;
+function getParameterValue(pairs, key, plain) {
+    let values = new Array();
+    for (let pair of pairs) {
+        if (pair[0] === key) {
+            let value = deserializeValue(pair[1], plain);
+            if (value === undefined) {
+                throw `Expected parameter "${key}" to be properly encoded!`;
+            }
+            values.push(value);
+        }
+    }
+    if (values.length > 1) {
+        throw `Expected no more than one "${key}" parameter!`;
+    }
+    return values[0];
+}
+exports.getParameterValue = getParameterValue;
 ;
 function decodeHeaderValue(pairs, key, plain) {
     let values = new Array();
     for (let pair of pairs) {
-        if (key === pair[0]) {
+        if (key === decodeURIComponent(pair[0])) {
             let value = deserializeValue(decodeURIComponent(pair[1]), plain);
-            if (value !== undefined) {
-                values.push(value);
+            if (value === undefined) {
+                throw `Expected header "${key}" to be properly encoded!`;
             }
+            values.push(value);
         }
+    }
+    if (values.length > 1) {
+        throw `Expected no more than one "${key}" header!`;
     }
     return values[0];
 }
@@ -223,13 +244,14 @@ exports.decodeHeaderValue = decodeHeaderValue;
 function decodeHeaderValues(pairs, key, plain) {
     let values = new Array();
     for (let pair of pairs) {
-        if (key === pair[0]) {
+        if (key === decodeURIComponent(pair[0])) {
             let parts = pair[1].split(",");
             for (let part of parts) {
                 let value = deserializeValue(decodeURIComponent(part.trim()), plain);
-                if (value !== undefined) {
-                    values.push(value);
+                if (value === undefined) {
+                    throw `Expected header "${key}" to be properly encoded!`;
                 }
+                values.push(value);
             }
         }
     }
@@ -292,10 +314,13 @@ function serializeValue(value, plain) {
 exports.serializeValue = serializeValue;
 ;
 function deserializeValue(value, plain) {
-    if (value === undefined) {
-        return;
+    if (value === undefined || plain) {
+        return value;
     }
-    return plain ? value : globalThis.JSON.parse(value);
+    try {
+        return globalThis.JSON.parse(value);
+    }
+    catch (error) { }
 }
 exports.deserializeValue = deserializeValue;
 ;
@@ -480,19 +505,37 @@ function serializeStringPayload(string) {
 exports.serializeStringPayload = serializeStringPayload;
 ;
 function serializePayload(payload) {
-    if (payload === undefined) {
+    let serialized = serializeValue(payload, false);
+    if (serialized === undefined) {
         return [];
     }
-    let string = globalThis.JSON.stringify(payload);
-    return serializeStringPayload(string);
+    return serializeStringPayload(serialized);
 }
 exports.serializePayload = serializePayload;
+;
+function compareArrays(one, two) {
+    if (one.length !== two.length) {
+        return false;
+    }
+    for (let i = 0; i < one.length; i++) {
+        if (one[i] !== two[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+exports.compareArrays = compareArrays;
 ;
 function deserializeStringPayload(binary) {
     return __awaiter(this, void 0, void 0, function* () {
         let buffer = yield collectPayload(binary);
         let decoder = new TextDecoder();
         let string = decoder.decode(buffer);
+        let encoder = new TextEncoder();
+        let encoded = encoder.encode(string);
+        if (!compareArrays(buffer, encoded)) {
+            throw `Expected payload to be UTF-8 encoded!`;
+        }
         return string;
     });
 }
@@ -501,7 +544,14 @@ exports.deserializeStringPayload = deserializeStringPayload;
 function deserializePayload(binary) {
     return __awaiter(this, void 0, void 0, function* () {
         let string = yield deserializeStringPayload(binary);
-        return string === "" ? undefined : globalThis.JSON.parse(string);
+        if (string === "") {
+            return;
+        }
+        let value = deserializeValue(string, false);
+        if (value === undefined) {
+            throw `Expected payload to be JSON encoded!`;
+        }
+        return value;
     });
 }
 exports.deserializePayload = deserializePayload;
@@ -671,7 +721,7 @@ function route(endpoints, httpRequest, httpResponse, urlPrefix = "") {
         let components = getComponents(url);
         let parameters = getParameters(url);
         if (components === undefined || parameters === undefined) {
-            let payload = serializeStringPayload(`Expected url to be properly percent encoded!`);
+            let payload = serializeStringPayload(`Expected url to be properly encoded!`);
             return respond(httpResponse, {
                 status: 400,
                 headers: [],

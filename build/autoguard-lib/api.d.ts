@@ -63,7 +63,8 @@ export declare function serializeComponents(components: Array<string>): string;
 export declare function appendKeyValuePair(pairs: Array<[string, string]>, key: string, value: JSON, plain: boolean): void;
 export declare function extractKeyValuePairs(record: Record<string, JSON>, exclude: Array<string>): Array<[string, string]>;
 export declare function combineKeyValuePairs(pairs: Array<[string, string]>): Record<string, JSON>;
-export declare function getValues(pairs: Iterable<[string, string]>, key: string, plain: boolean): Array<JSON>;
+export declare function getParameterValues(pairs: Iterable<[string, string]>, key: string, plain: boolean): Array<JSON>;
+export declare function getParameterValue(pairs: Iterable<[string, string]>, key: string, plain: boolean): JSON;
 export declare function decodeHeaderValue(pairs: Iterable<[string, string]>, key: string, plain: boolean): JSON;
 export declare function decodeHeaderValues(pairs: Iterable<[string, string]>, key: string, plain: boolean): Array<JSON>;
 export declare function encodeHeaderValues(pairs: Array<[string, string]>): Array<[string, string]>;
@@ -152,6 +153,7 @@ export declare type Server<A extends RequestMap<A>, B extends ResponseMap<B>> = 
 export declare function collectPayload(binary: Binary): Promise<Uint8Array>;
 export declare function serializeStringPayload(string: string): Binary;
 export declare function serializePayload(payload: JSON): Binary;
+export declare function compareArrays(one: Uint8Array, two: Uint8Array): boolean;
 export declare function deserializeStringPayload(binary: Binary): Promise<string>;
 export declare function deserializePayload(binary: Binary): Promise<JSON>;
 export declare function finalizeResponse(raw: RawResponse, defaultContentType: string): RawResponse;

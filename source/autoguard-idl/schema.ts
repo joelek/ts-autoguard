@@ -275,9 +275,9 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 	for (let parameter of route.parameters.parameters) {
 		let plain = parameter.type === types.PlainType.INSTANCE;
 		if (parameter.quantifier.kind === "repeated") {
-			lines.push(`\t\t\toptions["${parameter.name}"] = autoguard.api.getValues(raw.parameters, "${parameter.name}", ${plain});`);
+			lines.push(`\t\t\toptions["${parameter.name}"] = autoguard.api.getParameterValues(raw.parameters, "${parameter.name}", ${plain});`);
 		} else {
-			lines.push(`\t\t\toptions["${parameter.name}"] = autoguard.api.getValues(raw.parameters, "${parameter.name}", ${plain})[0];`);
+			lines.push(`\t\t\toptions["${parameter.name}"] = autoguard.api.getParameterValue(raw.parameters, "${parameter.name}", ${plain});`);
 		}
 	}
 	lines.push(`\t\t\tlet headers = autoguard.api.combineKeyValuePairs(raw.headers);`);
