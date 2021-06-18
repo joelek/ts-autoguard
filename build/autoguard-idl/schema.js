@@ -322,7 +322,7 @@ function generateServerRoute(route, options) {
             lines.push(`\t\t\t\t\t\t\theaders.push(...autoguard.api.serializeKeyValues("${header.name}", [response.headers?.["${header.name}"]], ${plain}));`);
         }
     }
-    lines.push(`\theaders = autoguard.api.encodeHeaderValues(headers);`);
+    lines.push(`\t\t\t\t\t\t\theaders = autoguard.api.encodeHeaderValues(headers);`);
     lines.push(`\t\t\t\t\t\t\theaders.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));`);
     if (route.response.payload === types.Binary.INSTANCE) {
         lines.push(`\t\t\t\t\t\t\tlet payload = response.payload;`);
