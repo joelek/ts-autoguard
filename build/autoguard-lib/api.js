@@ -210,7 +210,7 @@ function decodeHeaderValue(pairs, key, plain) {
     let values = new Array();
     for (let pair of pairs) {
         if (key === pair[0]) {
-            let value = decodeURIComponent(pair[1]);
+            let value = deserializeValue(decodeURIComponent(pair[1]), plain);
             if (value !== undefined) {
                 values.push(value);
             }
@@ -226,7 +226,7 @@ function decodeHeaderValues(pairs, key, plain) {
         if (key === pair[0]) {
             let parts = pair[1].split(",");
             for (let part of parts) {
-                let value = decodeURIComponent(part.trim());
+                let value = deserializeValue(decodeURIComponent(part.trim()), plain);
                 if (value !== undefined) {
                     values.push(value);
                 }

@@ -247,7 +247,7 @@ export function decodeHeaderValue(pairs: Iterable<[string, string]>, key: string
 	let values = new Array<JSON>();
 	for (let pair of pairs) {
 		if (key === pair[0]) {
-			let value = decodeURIComponent(pair[1]);
+			let value = deserializeValue(decodeURIComponent(pair[1]), plain);
 			if (value !== undefined) {
 				values.push(value);
 			}
@@ -262,7 +262,7 @@ export function decodeHeaderValues(pairs: Iterable<[string, string]>, key: strin
 		if (key === pair[0]) {
 			let parts = pair[1].split(",");
 			for (let part of parts) {
-				let value = decodeURIComponent(part.trim());
+				let value = deserializeValue(decodeURIComponent(part.trim()), plain);
 				if (value !== undefined) {
 					values.push(value);
 				}
