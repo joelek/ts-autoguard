@@ -331,7 +331,7 @@ export class Message {
 			if (peek()?.family === "<") {
 				headers = Headers.parse(tokenizer);
 			}
-			let payload: types.Type | types.Binary = types.UndefinedType.INSTANCE;
+			let payload: types.Type | types.Binary = types.Binary.INSTANCE;
 			if (peek()?.family === "binary") {
 				tokenization.expect(read(), "binary");
 				payload = types.Binary.INSTANCE;

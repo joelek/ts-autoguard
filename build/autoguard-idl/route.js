@@ -311,7 +311,7 @@ class Message {
             if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) === "<") {
                 headers = Headers.parse(tokenizer);
             }
-            let payload = types.UndefinedType.INSTANCE;
+            let payload = types.Binary.INSTANCE;
             if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === "binary") {
                 tokenization.expect(read(), "binary");
                 payload = types.Binary.INSTANCE;
