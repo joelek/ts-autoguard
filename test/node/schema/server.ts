@@ -16,9 +16,9 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
 				options["component"] = matchers[0].getValue();
-				options["parameter"] = autoguard.api.getValue(raw.parameters, "parameter", true);
+				options["parameter"] = autoguard.api.getValues(raw.parameters, "parameter", true)[0];
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-				headers["header"] = autoguard.api.getValue(raw.headers, "header", true);
+				headers["header"] = autoguard.api.decodeHeaderValue(raw.headers, "header", true);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["POST:/<component>/"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -31,7 +31,8 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
-								autoguard.api.appendKeyValuePair(headers, "header", response.headers?.["header"], true);
+								headers.push(...autoguard.api.serializeKeyValues("header", [response.headers?.["header"]], true));
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/json; charset=utf-8");

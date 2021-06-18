@@ -27,6 +27,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -59,6 +60,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -91,6 +93,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -124,6 +127,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -157,6 +161,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -190,6 +195,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -223,6 +229,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -256,6 +263,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -289,6 +297,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -322,6 +331,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -357,6 +367,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -390,6 +401,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -422,6 +434,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -454,6 +467,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -473,7 +487,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["required_boolean_parameter"] = autoguard.api.getValue(raw.parameters, "required_boolean_parameter", false);
+				options["required_boolean_parameter"] = autoguard.api.getValues(raw.parameters, "required_boolean_parameter", false)[0];
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters02"];
@@ -487,6 +501,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -506,7 +521,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["optional_boolean_parameter"] = autoguard.api.getValue(raw.parameters, "optional_boolean_parameter", false);
+				options["optional_boolean_parameter"] = autoguard.api.getValues(raw.parameters, "optional_boolean_parameter", false)[0];
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters03"];
@@ -520,6 +535,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -539,7 +555,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["required_number_parameter"] = autoguard.api.getValue(raw.parameters, "required_number_parameter", false);
+				options["required_number_parameter"] = autoguard.api.getValues(raw.parameters, "required_number_parameter", false)[0];
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters04"];
@@ -553,6 +569,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -572,7 +589,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["optional_number_parameter"] = autoguard.api.getValue(raw.parameters, "optional_number_parameter", false);
+				options["optional_number_parameter"] = autoguard.api.getValues(raw.parameters, "optional_number_parameter", false)[0];
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters05"];
@@ -586,6 +603,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -605,7 +623,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["required_string_parameter"] = autoguard.api.getValue(raw.parameters, "required_string_parameter", true);
+				options["required_string_parameter"] = autoguard.api.getValues(raw.parameters, "required_string_parameter", true)[0];
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters06"];
@@ -619,6 +637,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -638,7 +657,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["optional_string_parameter"] = autoguard.api.getValue(raw.parameters, "optional_string_parameter", true);
+				options["optional_string_parameter"] = autoguard.api.getValues(raw.parameters, "optional_string_parameter", true)[0];
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters07"];
@@ -652,6 +671,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -671,8 +691,8 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["parameter_one"] = autoguard.api.getValue(raw.parameters, "parameter_one", true);
-				options["parameter_two"] = autoguard.api.getValue(raw.parameters, "parameter_two", true);
+				options["parameter_one"] = autoguard.api.getValues(raw.parameters, "parameter_one", true)[0];
+				options["parameter_two"] = autoguard.api.getValues(raw.parameters, "parameter_two", true)[0];
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters08"];
@@ -686,6 +706,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -705,7 +726,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["quoted key"] = autoguard.api.getValue(raw.parameters, "quoted key", true);
+				options["quoted key"] = autoguard.api.getValues(raw.parameters, "quoted key", true)[0];
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters09"];
@@ -719,6 +740,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -738,7 +760,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["required_parameter"] = autoguard.api.getValue(raw.parameters, "required_parameter", true);
+				options["required_parameter"] = autoguard.api.getValues(raw.parameters, "required_parameter", true)[0];
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters10"];
@@ -752,6 +774,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -771,7 +794,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["optional_parameter"] = autoguard.api.getValue(raw.parameters, "optional_parameter", true);
+				options["optional_parameter"] = autoguard.api.getValues(raw.parameters, "optional_parameter", true)[0];
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters11"];
@@ -785,6 +808,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -804,7 +828,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["required_plain_parameter"] = autoguard.api.getValue(raw.parameters, "required_plain_parameter", true);
+				options["required_plain_parameter"] = autoguard.api.getValues(raw.parameters, "required_plain_parameter", true)[0];
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters12"];
@@ -818,6 +842,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -837,7 +862,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["optional_plain_parameter"] = autoguard.api.getValue(raw.parameters, "optional_plain_parameter", true);
+				options["optional_plain_parameter"] = autoguard.api.getValues(raw.parameters, "optional_plain_parameter", true)[0];
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/parameters13"];
@@ -851,6 +876,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -883,6 +909,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -903,7 +930,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-				headers["required_boolean_request_header"] = autoguard.api.getValue(raw.headers, "required_boolean_request_header", false);
+				headers["required_boolean_request_header"] = autoguard.api.decodeHeaderValue(raw.headers, "required_boolean_request_header", false);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers02"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -916,6 +943,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -936,7 +964,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-				headers["optional_boolean_request_header"] = autoguard.api.getValue(raw.headers, "optional_boolean_request_header", false);
+				headers["optional_boolean_request_header"] = autoguard.api.decodeHeaderValue(raw.headers, "optional_boolean_request_header", false);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers03"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -949,6 +977,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -969,7 +998,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-				headers["required_number_request_header"] = autoguard.api.getValue(raw.headers, "required_number_request_header", false);
+				headers["required_number_request_header"] = autoguard.api.decodeHeaderValue(raw.headers, "required_number_request_header", false);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers04"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -982,6 +1011,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1002,7 +1032,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-				headers["optional_number_request_header"] = autoguard.api.getValue(raw.headers, "optional_number_request_header", false);
+				headers["optional_number_request_header"] = autoguard.api.decodeHeaderValue(raw.headers, "optional_number_request_header", false);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers05"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -1015,6 +1045,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1035,7 +1066,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-				headers["required_string_request_header"] = autoguard.api.getValue(raw.headers, "required_string_request_header", true);
+				headers["required_string_request_header"] = autoguard.api.decodeHeaderValue(raw.headers, "required_string_request_header", true);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers06"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -1048,6 +1079,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1068,7 +1100,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-				headers["optional_string_request_header"] = autoguard.api.getValue(raw.headers, "optional_string_request_header", true);
+				headers["optional_string_request_header"] = autoguard.api.decodeHeaderValue(raw.headers, "optional_string_request_header", true);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers07"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -1081,6 +1113,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1101,8 +1134,8 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-				headers["request_header_one"] = autoguard.api.getValue(raw.headers, "request_header_one", true);
-				headers["request_header_two"] = autoguard.api.getValue(raw.headers, "request_header_two", true);
+				headers["request_header_one"] = autoguard.api.decodeHeaderValue(raw.headers, "request_header_one", true);
+				headers["request_header_two"] = autoguard.api.decodeHeaderValue(raw.headers, "request_header_two", true);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers08"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -1115,6 +1148,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1135,7 +1169,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-				headers["quoted key"] = autoguard.api.getValue(raw.headers, "quoted key", true);
+				headers["quoted key"] = autoguard.api.decodeHeaderValue(raw.headers, "quoted key", true);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers09"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -1148,6 +1182,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1168,7 +1203,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-				headers["required_request_header"] = autoguard.api.getValue(raw.headers, "required_request_header", true);
+				headers["required_request_header"] = autoguard.api.decodeHeaderValue(raw.headers, "required_request_header", true);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers10"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -1181,6 +1216,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1201,7 +1237,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-				headers["optional_request_header"] = autoguard.api.getValue(raw.headers, "optional_request_header", true);
+				headers["optional_request_header"] = autoguard.api.decodeHeaderValue(raw.headers, "optional_request_header", true);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers11"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -1214,6 +1250,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1234,7 +1271,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-				headers["required_plain_request_header"] = autoguard.api.getValue(raw.headers, "required_plain_request_header", true);
+				headers["required_plain_request_header"] = autoguard.api.decodeHeaderValue(raw.headers, "required_plain_request_header", true);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers12"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -1247,6 +1284,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1267,7 +1305,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-				headers["optional_plain_request_header"] = autoguard.api.getValue(raw.headers, "optional_plain_request_header", true);
+				headers["optional_plain_request_header"] = autoguard.api.decodeHeaderValue(raw.headers, "optional_plain_request_header", true);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/request_headers13"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -1280,6 +1318,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1312,6 +1351,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1344,7 +1384,8 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
-								autoguard.api.appendKeyValuePair(headers, "required_boolean_response_header", response.headers?.["required_boolean_response_header"], false);
+								headers.push(...autoguard.api.serializeKeyValues("required_boolean_response_header", [response.headers?.["required_boolean_response_header"]], false));
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1377,7 +1418,8 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
-								autoguard.api.appendKeyValuePair(headers, "optional_boolean_response_header", response.headers?.["optional_boolean_response_header"], false);
+								headers.push(...autoguard.api.serializeKeyValues("optional_boolean_response_header", [response.headers?.["optional_boolean_response_header"]], false));
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1410,7 +1452,8 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
-								autoguard.api.appendKeyValuePair(headers, "required_number_response_header", response.headers?.["required_number_response_header"], false);
+								headers.push(...autoguard.api.serializeKeyValues("required_number_response_header", [response.headers?.["required_number_response_header"]], false));
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1443,7 +1486,8 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
-								autoguard.api.appendKeyValuePair(headers, "optional_number_response_header", response.headers?.["optional_number_response_header"], false);
+								headers.push(...autoguard.api.serializeKeyValues("optional_number_response_header", [response.headers?.["optional_number_response_header"]], false));
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1476,7 +1520,8 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
-								autoguard.api.appendKeyValuePair(headers, "required_string_response_header", response.headers?.["required_string_response_header"], true);
+								headers.push(...autoguard.api.serializeKeyValues("required_string_response_header", [response.headers?.["required_string_response_header"]], true));
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1509,7 +1554,8 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
-								autoguard.api.appendKeyValuePair(headers, "optional_string_response_header", response.headers?.["optional_string_response_header"], true);
+								headers.push(...autoguard.api.serializeKeyValues("optional_string_response_header", [response.headers?.["optional_string_response_header"]], true));
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1542,8 +1588,9 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
-								autoguard.api.appendKeyValuePair(headers, "response_header_one", response.headers?.["response_header_one"], true);
-								autoguard.api.appendKeyValuePair(headers, "response_header_two", response.headers?.["response_header_two"], true);
+								headers.push(...autoguard.api.serializeKeyValues("response_header_one", [response.headers?.["response_header_one"]], true));
+								headers.push(...autoguard.api.serializeKeyValues("response_header_two", [response.headers?.["response_header_two"]], true));
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1576,7 +1623,8 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
-								autoguard.api.appendKeyValuePair(headers, "quoted key", response.headers?.["quoted key"], true);
+								headers.push(...autoguard.api.serializeKeyValues("quoted key", [response.headers?.["quoted key"]], true));
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1609,7 +1657,8 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
-								autoguard.api.appendKeyValuePair(headers, "required_response_header", response.headers?.["required_response_header"], true);
+								headers.push(...autoguard.api.serializeKeyValues("required_response_header", [response.headers?.["required_response_header"]], true));
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1642,7 +1691,8 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
-								autoguard.api.appendKeyValuePair(headers, "optional_response_header", response.headers?.["optional_response_header"], true);
+								headers.push(...autoguard.api.serializeKeyValues("optional_response_header", [response.headers?.["optional_response_header"]], true));
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1675,7 +1725,8 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
-								autoguard.api.appendKeyValuePair(headers, "required_plain_response_header", response.headers?.["required_plain_response_header"], true);
+								headers.push(...autoguard.api.serializeKeyValues("required_plain_response_header", [response.headers?.["required_plain_response_header"]], true));
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1708,7 +1759,8 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
-								autoguard.api.appendKeyValuePair(headers, "optional_plain_response_header", response.headers?.["optional_plain_response_header"], true);
+								headers.push(...autoguard.api.serializeKeyValues("optional_plain_response_header", [response.headers?.["optional_plain_response_header"]], true));
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1741,6 +1793,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1773,6 +1826,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1805,6 +1859,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/json; charset=utf-8");
@@ -1837,6 +1892,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/json; charset=utf-8");
@@ -1856,9 +1912,9 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
-				options["parameter"] = autoguard.api.getValue(raw.parameters, "parameter", true);
+				options["parameter"] = autoguard.api.getValues(raw.parameters, "parameter", true)[0];
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
-				headers["request_header"] = autoguard.api.getValue(raw.headers, "request_header", true);
+				headers["request_header"] = autoguard.api.decodeHeaderValue(raw.headers, "request_header", true);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/full_example"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -1871,7 +1927,8 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
-								autoguard.api.appendKeyValuePair(headers, "response_header", response.headers?.["response_header"], true);
+								headers.push(...autoguard.api.serializeKeyValues("response_header", [response.headers?.["response_header"]], true));
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/json; charset=utf-8");
@@ -1904,6 +1961,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/json; charset=utf-8");
@@ -1936,6 +1994,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1968,6 +2027,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = response.payload;
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
@@ -1989,7 +2049,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			validateRequest: async () => {
 				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
 				options["number"] = matchers[1].getValue();
-				options["number"] = autoguard.api.getValue(raw.parameters, "number", false);
+				options["number"] = autoguard.api.getValues(raw.parameters, "number", false)[0];
 				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["GET:/number/<number>"];
@@ -2003,6 +2063,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
+								headers = autoguard.api.encodeHeaderValues(headers);
 								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
