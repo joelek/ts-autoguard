@@ -243,6 +243,43 @@ export function getValues(pairs: Iterable<[string, string]>, key: string, plain:
 	return values;
 };
 
+export function decodeHeaderValue(pairs: Iterable<[string, string]>, key: string, plain: boolean): JSON {
+	let values = new Array<JSON>();
+	for (let pair of pairs) {
+		if (key === pair[0]) {
+			let value = decodeURIComponent(pair[1]);
+			if (value !== undefined) {
+				values.push(value);
+			}
+		}
+	}
+	return values[0];
+};
+
+export function decodeHeaderValues(pairs: Iterable<[string, string]>, key: string, plain: boolean): Array<JSON> {
+	let values = new Array<JSON>();
+	for (let pair of pairs) {
+		if (key === pair[0]) {
+			let parts = pair[1].split(",");
+			for (let part of parts) {
+				let value = decodeURIComponent(part.trim());
+				if (value !== undefined) {
+					values.push(value);
+				}
+			}
+		}
+	}
+	return values;
+};
+
+export function encodeHeaderValues(pairs: Array<[string, string]>): Array<[string, string]> {
+	let encoded = new Array<[string, string]>();
+	for (let pair of pairs) {
+		encoded.push([encodeURIComponent(pair[0]), encodeURIComponent(pair[1])]);
+	}
+	return encoded;
+};
+
 export function serializeKeyValues(key: string, values: Array<JSON>, plain: boolean): Array<[string, string]> {
 	let array = new Array<[string, string]>();
 	for (let value of values) {

@@ -214,6 +214,7 @@ function generateClientRoute(route, options) {
             lines.push(`\theaders.push(...autoguard.api.serializeKeyValues("${header.name}", [request.headers?.["${header.name}"]], ${plain}));`);
         }
     }
+    lines.push(`\theaders = autoguard.api.encodeHeaderValues(headers);`);
     lines.push(`\theaders.push(...autoguard.api.extractKeyValuePairs(request.headers ?? {}, headers.map((header) => header[0])));`);
     if (route.request.payload === types.Binary.INSTANCE) {
         lines.push(`\tlet payload = request.payload;`);
@@ -229,10 +230,10 @@ function generateClientRoute(route, options) {
     for (let header of route.response.headers.headers) {
         let plain = header.type === types.PlainType.INSTANCE;
         if (header.quantifier.kind === "repeated") {
-            lines.push(`\t\theaders["${header.name}"] = autoguard.api.getValues(raw.headers, "${header.name}", ${plain});`);
+            lines.push(`\t\theaders["${header.name}"] = autoguard.api.decodeHeaderValues(raw.headers, "${header.name}", ${plain});`);
         }
         else {
-            lines.push(`\t\theaders["${header.name}"] = autoguard.api.getValues(raw.headers, "${header.name}", ${plain})[0];`);
+            lines.push(`\t\theaders["${header.name}"] = autoguard.api.decodeHeaderValue(raw.headers, "${header.name}", ${plain});`);
         }
     }
     if (route.response.payload === types.Binary.INSTANCE) {
@@ -288,10 +289,10 @@ function generateServerRoute(route, options) {
     for (let header of route.request.headers.headers) {
         let plain = header.type === types.PlainType.INSTANCE;
         if (header.quantifier.kind === "repeated") {
-            lines.push(`\t\t\theaders["${header.name}"] = autoguard.api.getValues(raw.headers, "${header.name}", ${plain});`);
+            lines.push(`\t\t\theaders["${header.name}"] = autoguard.api.decodeHeaderValues(raw.headers, "${header.name}", ${plain});`);
         }
         else {
-            lines.push(`\t\t\theaders["${header.name}"] = autoguard.api.getValues(raw.headers, "${header.name}", ${plain})[0];`);
+            lines.push(`\t\t\theaders["${header.name}"] = autoguard.api.decodeHeaderValue(raw.headers, "${header.name}", ${plain});`);
         }
     }
     if (route.request.payload === types.Binary.INSTANCE) {
@@ -321,6 +322,7 @@ function generateServerRoute(route, options) {
             lines.push(`\t\t\t\t\t\t\theaders.push(...autoguard.api.serializeKeyValues("${header.name}", [response.headers?.["${header.name}"]], ${plain}));`);
         }
     }
+    lines.push(`\theaders = autoguard.api.encodeHeaderValues(headers);`);
     lines.push(`\t\t\t\t\t\t\theaders.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));`);
     if (route.response.payload === types.Binary.INSTANCE) {
         lines.push(`\t\t\t\t\t\t\tlet payload = response.payload;`);

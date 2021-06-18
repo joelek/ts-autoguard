@@ -64,6 +64,9 @@ export declare function appendKeyValuePair(pairs: Array<[string, string]>, key: 
 export declare function extractKeyValuePairs(record: Record<string, JSON>, exclude: Array<string>): Array<[string, string]>;
 export declare function combineKeyValuePairs(pairs: Array<[string, string]>): Record<string, JSON>;
 export declare function getValues(pairs: Iterable<[string, string]>, key: string, plain: boolean): Array<JSON>;
+export declare function decodeHeaderValue(pairs: Iterable<[string, string]>, key: string, plain: boolean): JSON;
+export declare function decodeHeaderValues(pairs: Iterable<[string, string]>, key: string, plain: boolean): Array<JSON>;
+export declare function encodeHeaderValues(pairs: Array<[string, string]>): Array<[string, string]>;
 export declare function serializeKeyValues(key: string, values: Array<JSON>, plain: boolean): Array<[string, string]>;
 export declare function serializeParameters(parameters: Array<[string, string]>): string;
 export declare function serializeValues(values: Array<JSON>, plain: boolean): Array<string>;

@@ -16,7 +16,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.decodeURIComponent = exports.deserializeValue = exports.serializeValue = exports.serializeValues = exports.serializeParameters = exports.serializeKeyValues = exports.getValues = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.appendKeyValuePair = exports.serializeComponents = exports.Headers = exports.Options = exports.JSON = exports.Primitive = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.DynamicRouteMatcher = exports.StaticRouteMatcher = void 0;
+exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.deserializePayload = exports.deserializeStringPayload = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.getHeaders = exports.getParameters = exports.getComponents = exports.decodeURIComponent = exports.deserializeValue = exports.serializeValue = exports.serializeValues = exports.serializeParameters = exports.serializeKeyValues = exports.encodeHeaderValues = exports.decodeHeaderValues = exports.decodeHeaderValue = exports.getValues = exports.combineKeyValuePairs = exports.extractKeyValuePairs = exports.appendKeyValuePair = exports.serializeComponents = exports.Headers = exports.Options = exports.JSON = exports.Primitive = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.DynamicRouteMatcher = exports.StaticRouteMatcher = void 0;
 const guards = require("./guards");
 ;
 class StaticRouteMatcher {
@@ -205,6 +205,46 @@ function getValues(pairs, key, plain) {
     return values;
 }
 exports.getValues = getValues;
+;
+function decodeHeaderValue(pairs, key, plain) {
+    let values = new Array();
+    for (let pair of pairs) {
+        if (key === pair[0]) {
+            let value = decodeURIComponent(pair[1]);
+            if (value !== undefined) {
+                values.push(value);
+            }
+        }
+    }
+    return values[0];
+}
+exports.decodeHeaderValue = decodeHeaderValue;
+;
+function decodeHeaderValues(pairs, key, plain) {
+    let values = new Array();
+    for (let pair of pairs) {
+        if (key === pair[0]) {
+            let parts = pair[1].split(",");
+            for (let part of parts) {
+                let value = decodeURIComponent(part.trim());
+                if (value !== undefined) {
+                    values.push(value);
+                }
+            }
+        }
+    }
+    return values;
+}
+exports.decodeHeaderValues = decodeHeaderValues;
+;
+function encodeHeaderValues(pairs) {
+    let encoded = new Array();
+    for (let pair of pairs) {
+        encoded.push([encodeURIComponent(pair[0]), encodeURIComponent(pair[1])]);
+    }
+    return encoded;
+}
+exports.encodeHeaderValues = encodeHeaderValues;
 ;
 function serializeKeyValues(key, values, plain) {
     let array = new Array();
