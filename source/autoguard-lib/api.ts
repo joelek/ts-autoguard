@@ -732,7 +732,15 @@ export function acceptsComponents(components: Array<string>, matchers: Array<Rou
 		}
 		break outer;
 	}
-	return currentMatcher === matchers.length - 1 && matchers[currentMatcher].isSatisfied();
+	if (currentMatcher >= matchers.length) {
+		return false;
+	}
+	for (let matcher of matchers.slice(currentMatcher)) {
+		if (!matcher.isSatisfied()) {
+			return false;
+		}
+	}
+	return true;
 };
 
 export function acceptsMethod(one: string, two: string): boolean {

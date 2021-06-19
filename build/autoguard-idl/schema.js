@@ -42,7 +42,7 @@ function getRequestType(route) {
             if (component.quantifier.kind === "repeated") {
                 options.add(component.name, {
                     type: new types.ArrayType(component.type),
-                    optional: false
+                    optional: true
                 });
             }
             if (component.quantifier.kind === "optional") {

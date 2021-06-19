@@ -670,7 +670,15 @@ function acceptsComponents(components, matchers) {
         }
         break outer;
     }
-    return currentMatcher === matchers.length - 1 && matchers[currentMatcher].isSatisfied();
+    if (currentMatcher >= matchers.length) {
+        return false;
+    }
+    for (let matcher of matchers.slice(currentMatcher)) {
+        if (!matcher.isSatisfied()) {
+            return false;
+        }
+    }
+    return true;
 }
 exports.acceptsComponents = acceptsComponents;
 ;
