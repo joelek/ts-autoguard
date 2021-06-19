@@ -178,13 +178,13 @@ function generateClientRoute(route: route.Route, options: shared.Options): strin
 	lines.push(`\tlet components = new Array<string>();`);
 	for (let component of route.path.components) {
 		if (is.absent(component.type)) {
-			lines.push(`\tcomponents.push(decodeURIComponent("${encodeURIComponent(component.name)}"));`);
+			lines.push(`\tcomponents.push("${encodeURIComponent(component.name)}");`);
 		} else {
 			let plain = component.type === types.PlainType.INSTANCE;
 			if (component.quantifier.kind === "repeated") {
-				lines.push(`\tcomponents.push(...autoguard.api.serializeValues(request.options?.["${component.name}"], ${plain}));`);
+				lines.push(`\tcomponents.push(...autoguard.api.encodeComponents(request.options?.["${component.name}"] ?? [], ${plain}));`);
 			} else {
-				lines.push(`\tcomponents.push(...autoguard.api.serializeValues([request.options?.["${component.name}"]], ${plain}));`);
+				lines.push(`\tcomponents.push(...autoguard.api.encodeComponents([request.options?.["${component.name}"]], ${plain}));`);
 			}
 		}
 	}
@@ -198,23 +198,22 @@ function generateClientRoute(route: route.Route, options: shared.Options): strin
 	for (let parameter of route.parameters.parameters) {
 		let plain = parameter.type === types.PlainType.INSTANCE;
 		if (parameter.quantifier.kind === "repeated") {
-			lines.push(`\tparameters.push(...autoguard.api.serializeKeyValues("${parameter.name}", request.options?.["${parameter.name}"] ?? [], ${plain}));`);
+			lines.push(`\tparameters.push(...autoguard.api.encodeParameterPairs("${parameter.name}", request.options?.["${parameter.name}"] ?? [], ${plain}));`);
 		} else {
-			lines.push(`\tparameters.push(...autoguard.api.serializeKeyValues("${parameter.name}", [request.options?.["${parameter.name}"]], ${plain}));`);
+			lines.push(`\tparameters.push(...autoguard.api.encodeParameterPairs("${parameter.name}", [request.options?.["${parameter.name}"]], ${plain}));`);
 		}
 	}
-	lines.push(`\tparameters.push(...autoguard.api.extractKeyValuePairs(request.options ?? {}, [...[${exclude.join(",")}], ...parameters.map((parameter) => parameter[0])]));`);
+	lines.push(`\tparameters.push(...autoguard.api.encodeUndeclaredParameterPairs(request.options ?? {}, [...[${exclude.join(",")}], ...parameters.map((parameter) => parameter[0])]));`);
 	lines.push(`\tlet headers = new Array<[string, string]>();`);
 	for (let header of route.request.headers.headers) {
 		let plain = header.type === types.PlainType.INSTANCE;
 		if (header.quantifier.kind === "repeated") {
-			lines.push(`\theaders.push(...autoguard.api.serializeKeyValues("${header.name}", request.headers?.["${header.name}"] ?? [], ${plain}));`);
+			lines.push(`\theaders.push(...autoguard.api.encodeHeaderPairs("${header.name}", request.headers?.["${header.name}"] ?? [], ${plain}));`);
 		} else {
-			lines.push(`\theaders.push(...autoguard.api.serializeKeyValues("${header.name}", [request.headers?.["${header.name}"]], ${plain}));`);
+			lines.push(`\theaders.push(...autoguard.api.encodeHeaderPairs("${header.name}", [request.headers?.["${header.name}"]], ${plain}));`);
 		}
 	}
-	lines.push(`\theaders = autoguard.api.encodeHeaderValues(headers);`);
-	lines.push(`\theaders.push(...autoguard.api.extractKeyValuePairs(request.headers ?? {}, headers.map((header) => header[0])));`);
+	lines.push(`\theaders.push(...autoguard.api.encodeUndeclaredHeaderPairs(request.headers ?? {}, headers.map((header) => header[0])));`);
 	if (route.request.payload === types.Binary.INSTANCE) {
 		lines.push(`\tlet payload = request.payload ?? [];`);
 	} else {
@@ -224,7 +223,7 @@ function generateClientRoute(route: route.Route, options: shared.Options): strin
 	lines.push(`\tlet raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);`);
 	lines.push(`\t{`);
 	lines.push(`\t\tlet status = raw.status;`);
-	lines.push(`\t\tlet headers = autoguard.api.combineKeyValuePairs(raw.headers);`);
+	lines.push(`\t\tlet headers: Record<string, autoguard.api.JSON> = {};`);
 	for (let header of route.response.headers.headers) {
 		let plain = header.type === types.PlainType.INSTANCE;
 		if (header.quantifier.kind === "repeated") {
@@ -233,6 +232,7 @@ function generateClientRoute(route: route.Route, options: shared.Options): strin
 			lines.push(`\t\theaders["${header.name}"] = autoguard.api.decodeHeaderValue(raw.headers, "${header.name}", ${plain});`);
 		}
 	}
+	lines.push(`\t\theaders = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };`);
 	if (route.response.payload === types.Binary.INSTANCE) {
 		lines.push(`\t\tlet payload = raw.payload;`);
 	} else {
@@ -266,7 +266,7 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 	lines.push(`\t\tacceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),`);
 	lines.push(`\t\tacceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),`);
 	lines.push(`\t\tvalidateRequest: async () => {`);
-	lines.push(`\t\t\tlet options = autoguard.api.combineKeyValuePairs(raw.parameters);`);
+	lines.push(`\t\t\tlet options: Record<string, autoguard.api.JSON> = {};`);
 	for (let [index, component] of route.path.components.entries()) {
 		if (is.present(component.type)) {
 			lines.push(`\t\t\toptions["${component.name}"] = matchers[${index}].getValue();`);
@@ -275,12 +275,13 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 	for (let parameter of route.parameters.parameters) {
 		let plain = parameter.type === types.PlainType.INSTANCE;
 		if (parameter.quantifier.kind === "repeated") {
-			lines.push(`\t\t\toptions["${parameter.name}"] = autoguard.api.getParameterValues(raw.parameters, "${parameter.name}", ${plain});`);
+			lines.push(`\t\t\toptions["${parameter.name}"] = autoguard.api.decodeParameterValues(raw.parameters, "${parameter.name}", ${plain});`);
 		} else {
-			lines.push(`\t\t\toptions["${parameter.name}"] = autoguard.api.getParameterValue(raw.parameters, "${parameter.name}", ${plain});`);
+			lines.push(`\t\t\toptions["${parameter.name}"] = autoguard.api.decodeParameterValue(raw.parameters, "${parameter.name}", ${plain});`);
 		}
 	}
-	lines.push(`\t\t\tlet headers = autoguard.api.combineKeyValuePairs(raw.headers);`);
+	lines.push(`\t\t\toptions = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };`);
+	lines.push(`\t\t\tlet headers: Record<string, autoguard.api.JSON> = {};`);
 	for (let header of route.request.headers.headers) {
 		let plain = header.type === types.PlainType.INSTANCE;
 		if (header.quantifier.kind === "repeated") {
@@ -289,6 +290,7 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 			lines.push(`\t\t\theaders["${header.name}"] = autoguard.api.decodeHeaderValue(raw.headers, "${header.name}", ${plain});`);
 		}
 	}
+	lines.push(`\t\t\theaders = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };`);
 	if (route.request.payload === types.Binary.INSTANCE) {
 		lines.push(`\t\t\tlet payload = raw.payload;`);
 	} else {
@@ -309,13 +311,12 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 	for (let header of route.response.headers.headers) {
 		let plain = header.type === types.PlainType.INSTANCE;
 		if (header.quantifier.kind === "repeated") {
-			lines.push(`\t\t\t\t\t\t\theaders.push(...autoguard.api.serializeKeyValues("${header.name}", response.headers?.["${header.name}"] ?? [], ${plain}));`);
+			lines.push(`\t\t\t\t\t\t\theaders.push(...autoguard.api.encodeHeaderPairs("${header.name}", response.headers?.["${header.name}"] ?? [], ${plain}));`);
 		} else {
-			lines.push(`\t\t\t\t\t\t\theaders.push(...autoguard.api.serializeKeyValues("${header.name}", [response.headers?.["${header.name}"]], ${plain}));`);
+			lines.push(`\t\t\t\t\t\t\theaders.push(...autoguard.api.encodeHeaderPairs("${header.name}", [response.headers?.["${header.name}"]], ${plain}));`);
 		}
 	}
-	lines.push(`\t\t\t\t\t\t\theaders = autoguard.api.encodeHeaderValues(headers);`);
-	lines.push(`\t\t\t\t\t\t\theaders.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));`);
+	lines.push(`\t\t\t\t\t\t\theaders.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));`);
 	if (route.response.payload === types.Binary.INSTANCE) {
 		lines.push(`\t\t\t\t\t\t\tlet payload = response.payload ?? [];`);
 	} else {

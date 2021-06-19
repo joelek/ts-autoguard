@@ -274,9 +274,9 @@ The full type language is available for the payload as well as for path componen
 
 Plain strings and JSON strings differ in that JSON strings will be JSON encoded and decoded automatically whereas plain strings will not. Plain strings are commonly used in path components, query parameters and headers whereas JSON strings are normally used in JSON payloads.
 
-NB: Path components, query parameters and headers declared with the "string" type will handled as if the "plain" type had been declared. This compatibility behaviour will be removed in the next major release and through that bring consistency to the type language. Please declare plain strings explicitly or remove the type declaration to use the default.
+NB: Path components, query parameters and headers declared with the "string" type will be handled as if the "plain" type had been declared. This compatibility behaviour will be removed in the next major release and through that bring consistency to the type language. Please declare plain strings explicitly or remove the type declaration to use the default type.
 
-Autoguard accepts and exposes undeclared request parameters as well as undeclared request and response headers. No parsing, encoding or decoding is performed since no assumptions can be made about the content. The responsibility of parsing, encoding and decoding undeclared data lies with the user. Autoguard expects undeclared request parameters, request headers and response headers to be strings fully compatible with the HTTP standard.
+Autoguard accepts and exposes undeclared request parameters as well as undeclared request and response headers. No parsing is performed since no assumptions can be made about the content. The responsibility of parsing undeclared data lies with the user. Autoguard requires the type of all undeclared request parameters, request headers and response headers to be string or array of strings.
 
 ```
 guard Object: {

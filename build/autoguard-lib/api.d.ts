@@ -1,4 +1,26 @@
 import * as serialization from "./serialization";
+export declare function decodeURIComponent(string: string): string | undefined;
+export declare function splitComponents(url: string): Array<string>;
+export declare function combineComponents(components: Array<string>): string;
+export declare function splitParameters(url: string): Array<[string, string]>;
+export declare function combineParameters(parameters: Array<[string, string]>): string;
+export declare function splitHeaders(lines: Array<string>): Array<[string, string]>;
+export declare function escapeHeaderKey(string: string, alwaysEncode?: string): string;
+export declare function escapeHeaderValue(string: string, alwaysEncode?: string): string;
+export declare function encodeHeaderPairs(key: string, values: Array<JSON>, plain: boolean): Array<[string, string]>;
+export declare function encodeUndeclaredHeaderPairs(record: Record<string, JSON>, exclude: Array<string>): Array<[string, string]>;
+export declare function escapeComponent(string: string): string;
+export declare function encodeComponents(values: Array<JSON>, plain: boolean): Array<string>;
+export declare function escapeParameterKey(string: string): string;
+export declare function escapeParameterValue(string: string): string;
+export declare function encodeParameterPairs(key: string, values: Array<JSON>, plain: boolean): Array<[string, string]>;
+export declare function encodeUndeclaredParameterPairs(record: Record<string, JSON>, exclude: Array<string>): Array<[string, string]>;
+export declare function decodeParameterValues(pairs: Iterable<[string, string]>, key: string, plain: boolean): Array<JSON>;
+export declare function decodeParameterValue(pairs: Iterable<[string, string]>, key: string, plain: boolean): JSON;
+export declare function decodeUndeclaredParameters(pairs: Array<[string, string]>, exclude: Array<string>): Record<string, JSON>;
+export declare function decodeHeaderValues(pairs: Iterable<[string, string]>, key: string, plain: boolean): Array<JSON>;
+export declare function decodeHeaderValue(pairs: Iterable<[string, string]>, key: string, plain: boolean): JSON;
+export declare function decodeUndeclaredHeaders(pairs: Array<[string, string]>, exclude: Array<string>): Record<string, JSON>;
 export interface RouteMatcher {
     acceptComponent(component: string): boolean;
     getValue(): JSON;
@@ -59,18 +81,6 @@ export declare type ResponseLike = {
     writeHead(status: number, headers?: Record<string, string | Array<string>> | Array<string>): void;
 };
 export declare type RequestListener = (request: RequestLike, response: ResponseLike) => Promise<void>;
-export declare function serializeComponents(components: Array<string>): string;
-export declare function appendKeyValuePair(pairs: Array<[string, string]>, key: string, value: JSON, plain: boolean): void;
-export declare function extractKeyValuePairs(record: Record<string, JSON>, exclude: Array<string>): Array<[string, string]>;
-export declare function combineKeyValuePairs(pairs: Array<[string, string]>): Record<string, JSON>;
-export declare function getParameterValues(pairs: Iterable<[string, string]>, key: string, plain: boolean): Array<JSON>;
-export declare function getParameterValue(pairs: Iterable<[string, string]>, key: string, plain: boolean): JSON;
-export declare function decodeHeaderValue(pairs: Iterable<[string, string]>, key: string, plain: boolean): JSON;
-export declare function decodeHeaderValues(pairs: Iterable<[string, string]>, key: string, plain: boolean): Array<JSON>;
-export declare function encodeHeaderValues(pairs: Array<[string, string]>): Array<[string, string]>;
-export declare function serializeKeyValues(key: string, values: Array<JSON>, plain: boolean): Array<[string, string]>;
-export declare function serializeParameters(parameters: Array<[string, string]>): string;
-export declare function serializeValues(values: Array<JSON>, plain: boolean): Array<string>;
 export declare function serializeValue(value: JSON, plain: boolean): string | undefined;
 export declare function deserializeValue(value: string | undefined, plain: boolean): JSON;
 export declare type RawRequest = {
@@ -97,10 +107,6 @@ export declare type Endpoint = (raw: RawRequest, auxillary: Auxillary) => {
         }>;
     }>;
 };
-export declare function decodeURIComponent(string: string): string | undefined;
-export declare function getComponents(url: string): Array<string> | undefined;
-export declare function getParameters(url: string): Array<[string, string]> | undefined;
-export declare function getHeaders(headers: Array<string>): Array<[string, string]>;
 export declare type Payload = JSON | Binary;
 export declare type CollectedPayload<A extends Payload> = A extends Binary ? Uint8Array : A;
 export declare type EndpointRequest = {
