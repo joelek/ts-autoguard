@@ -94,19 +94,34 @@ libhttps.createServer({
 	cert: selfSignedCertificate,
 	key: selfSignedPrivateKey
 }, libserver.makeServer({
-	"POST:/<component>/": async (request) => {
+	plain: async (request) => {
 		let options = request.options();
 		let headers = request.headers();
 		let payload = await request.payload();
-		console.log({ options, headers, payload });
+		console.log("plain", { options, headers, payload });
 		return {
-			status: 299,
+			status: 204,
 			headers: {
-				header: "https header"
-			},
-			payload: {
-				member: "https member"
+				ha: "1",
+				hb: "2",
+				hc: ["3", "4"],
+				hd: ["5", "6"]
 			}
-		}
+		};
+	},
+	json: async (request) => {
+		let options = request.options();
+		let headers = request.headers();
+		let payload = await request.payload();
+		console.log("json", { options, headers, payload });
+		return {
+			status: 204,
+			headers: {
+				ha: 1,
+				hb: 2,
+				hc: [3, 4],
+				hd: ["5", "6"]
+			}
+		};
 	}
 })).listen(443);

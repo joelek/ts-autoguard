@@ -1,3 +1,7 @@
-route POST:/<component:string>/ ? <{ parameter: string }>
-	<= <{ header: string }> { member: string }
-	=> <{ header: string }> { member: string };
+route plain(): POST:/plain/<ca>/<cb?>/<cc*> ? <{ pa, pb?, pc* }>
+	<= <{ ha, hb?, hc* }>
+	=> <{ ha, hb?, hc* }>;
+
+route json(): POST:/json/<ca:number>/<cb?:number>/<cc*:number> ? <{ pa:number, pb?:number, pc*:number }>
+	<= <{ ha:number, hb?:number, hc*:number }>
+	=> <{ ha:number, hb?:number, hc*:number }>;

@@ -8,30 +8,98 @@ export namespace Autoguard {
 	export type Guards = { [A in keyof typeof Guards]: ReturnType<typeof Guards[A]["as"]>; };
 
 	export const Requests = {
-		"POST:/<component>/": autoguard.guards.Object.of({
+		"plain": autoguard.guards.Object.of({
 			"options": autoguard.guards.Intersection.of(
 				autoguard.api.Options,
 				autoguard.guards.Object.of({
-					"component": autoguard.guards.String,
-					"parameter": autoguard.guards.String
+					"ca": autoguard.guards.String,
+					"cb": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.String
+					),
+					"cc": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.Array.of(autoguard.guards.String)
+					),
+					"pa": autoguard.guards.String,
+					"pb": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.String
+					),
+					"pc": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.Array.of(autoguard.guards.String)
+					)
 				})
 			),
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.api.Headers,
 				autoguard.guards.Object.of({
-					"header": autoguard.guards.String
+					"ha": autoguard.guards.String,
+					"hb": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.String
+					),
+					"hc": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.Array.of(autoguard.guards.String)
+					)
 				})
 			),
-			"payload": autoguard.guards.Object.of({
-				"member": autoguard.guards.String
-			})
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
+			)
+		}),
+		"json": autoguard.guards.Object.of({
+			"options": autoguard.guards.Intersection.of(
+				autoguard.api.Options,
+				autoguard.guards.Object.of({
+					"ca": autoguard.guards.Number,
+					"cb": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.Number
+					),
+					"cc": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.Array.of(autoguard.guards.Number)
+					),
+					"pa": autoguard.guards.Number,
+					"pb": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.Number
+					),
+					"pc": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.Array.of(autoguard.guards.Number)
+					)
+				})
+			),
+			"headers": autoguard.guards.Intersection.of(
+				autoguard.api.Headers,
+				autoguard.guards.Object.of({
+					"ha": autoguard.guards.Number,
+					"hb": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.Number
+					),
+					"hc": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.Array.of(autoguard.guards.Number)
+					)
+				})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
+			)
 		})
 	};
 
 	export type Requests = { [A in keyof typeof Requests]: ReturnType<typeof Requests[A]["as"]>; };
 
 	export const Responses = {
-		"POST:/<component>/": autoguard.guards.Object.of({
+		"plain": autoguard.guards.Object.of({
 			"status": autoguard.guards.Union.of(
 				autoguard.guards.Undefined,
 				autoguard.guards.Number
@@ -39,12 +107,45 @@ export namespace Autoguard {
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.api.Headers,
 				autoguard.guards.Object.of({
-					"header": autoguard.guards.String
+					"ha": autoguard.guards.String,
+					"hb": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.String
+					),
+					"hc": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.Array.of(autoguard.guards.String)
+					)
 				})
 			),
-			"payload": autoguard.guards.Object.of({
-				"member": autoguard.guards.String
-			})
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
+			)
+		}),
+		"json": autoguard.guards.Object.of({
+			"status": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.guards.Number
+			),
+			"headers": autoguard.guards.Intersection.of(
+				autoguard.api.Headers,
+				autoguard.guards.Object.of({
+					"ha": autoguard.guards.Number,
+					"hb": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.Number
+					),
+					"hc": autoguard.guards.Union.of(
+						autoguard.guards.Undefined,
+						autoguard.guards.Array.of(autoguard.guards.Number)
+					)
+				})
+			),
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
+			)
 		})
 	};
 
