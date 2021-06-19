@@ -540,7 +540,8 @@ export namespace Autoguard {
 				)
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/request_headers02": autoguard.guards.Object.of({
@@ -558,7 +559,8 @@ export namespace Autoguard {
 				})
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/request_headers03": autoguard.guards.Object.of({
@@ -582,7 +584,8 @@ export namespace Autoguard {
 				)
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/request_headers04": autoguard.guards.Object.of({
@@ -600,7 +603,8 @@ export namespace Autoguard {
 				})
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/request_headers05": autoguard.guards.Object.of({
@@ -624,7 +628,8 @@ export namespace Autoguard {
 				)
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/request_headers06": autoguard.guards.Object.of({
@@ -642,7 +647,8 @@ export namespace Autoguard {
 				})
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/request_headers07": autoguard.guards.Object.of({
@@ -666,7 +672,8 @@ export namespace Autoguard {
 				)
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/request_headers08": autoguard.guards.Object.of({
@@ -685,7 +692,8 @@ export namespace Autoguard {
 				})
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/request_headers09": autoguard.guards.Object.of({
@@ -703,7 +711,8 @@ export namespace Autoguard {
 				})
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/request_headers10": autoguard.guards.Object.of({
@@ -721,7 +730,8 @@ export namespace Autoguard {
 				})
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/request_headers11": autoguard.guards.Object.of({
@@ -745,7 +755,8 @@ export namespace Autoguard {
 				)
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/request_headers12": autoguard.guards.Object.of({
@@ -763,7 +774,8 @@ export namespace Autoguard {
 				})
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/request_headers13": autoguard.guards.Object.of({
@@ -787,7 +799,8 @@ export namespace Autoguard {
 				)
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/response_headers01": autoguard.guards.Object.of({
@@ -1167,7 +1180,10 @@ export namespace Autoguard {
 					autoguard.guards.Object.of({})
 				)
 			),
-			"payload": autoguard.api.Binary
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
+			)
 		}),
 		"GET:/binary_response": autoguard.guards.Object.of({
 			"options": autoguard.guards.Union.of(
@@ -1848,7 +1864,8 @@ export namespace Autoguard {
 				)
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/response_headers02": autoguard.guards.Object.of({
@@ -1863,7 +1880,8 @@ export namespace Autoguard {
 				})
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/response_headers03": autoguard.guards.Object.of({
@@ -1884,7 +1902,8 @@ export namespace Autoguard {
 				)
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/response_headers04": autoguard.guards.Object.of({
@@ -1899,7 +1918,8 @@ export namespace Autoguard {
 				})
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/response_headers05": autoguard.guards.Object.of({
@@ -1920,7 +1940,8 @@ export namespace Autoguard {
 				)
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/response_headers06": autoguard.guards.Object.of({
@@ -1935,7 +1956,8 @@ export namespace Autoguard {
 				})
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/response_headers07": autoguard.guards.Object.of({
@@ -1956,7 +1978,8 @@ export namespace Autoguard {
 				)
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/response_headers08": autoguard.guards.Object.of({
@@ -1972,7 +1995,8 @@ export namespace Autoguard {
 				})
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/response_headers09": autoguard.guards.Object.of({
@@ -1987,7 +2011,8 @@ export namespace Autoguard {
 				})
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/response_headers10": autoguard.guards.Object.of({
@@ -2002,7 +2027,8 @@ export namespace Autoguard {
 				})
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/response_headers11": autoguard.guards.Object.of({
@@ -2023,7 +2049,8 @@ export namespace Autoguard {
 				)
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/response_headers12": autoguard.guards.Object.of({
@@ -2038,7 +2065,8 @@ export namespace Autoguard {
 				})
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/response_headers13": autoguard.guards.Object.of({
@@ -2059,7 +2087,8 @@ export namespace Autoguard {
 				)
 			),
 			"payload": autoguard.guards.Union.of(
-				autoguard.guards.Undefined
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
 			)
 		}),
 		"GET:/request_payload01": autoguard.guards.Object.of({
@@ -2186,7 +2215,10 @@ export namespace Autoguard {
 					autoguard.guards.Object.of({})
 				)
 			),
-			"payload": autoguard.api.Binary
+			"payload": autoguard.guards.Union.of(
+				autoguard.guards.Undefined,
+				autoguard.api.Binary
+			)
 		}),
 		"GET:/number/<number>": autoguard.guards.Object.of({
 			"status": autoguard.guards.Union.of(

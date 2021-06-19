@@ -14,11 +14,13 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
 			validateRequest: async () => {
-				let options = autoguard.api.combineKeyValuePairs(raw.parameters);
+				let options: Record<string, autoguard.api.JSON> = {};
 				options["component"] = matchers[0].getValue();
-				options["parameter"] = autoguard.api.getValues(raw.parameters, "parameter", true)[0];
-				let headers = autoguard.api.combineKeyValuePairs(raw.headers);
+				options["parameter"] = autoguard.api.decodeParameterValue(raw.parameters, "parameter", true);
+				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
+				let headers: Record<string, autoguard.api.JSON> = {};
 				headers["header"] = autoguard.api.decodeHeaderValue(raw.headers, "header", true);
+				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
 				let payload = await autoguard.api.deserializePayload(raw.payload);
 				let guard = shared.Autoguard.Requests["POST:/<component>/"];
 				let request = guard.as({ options, headers, payload }, "request");
@@ -31,9 +33,8 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
-								headers.push(...autoguard.api.serializeKeyValues("header", [response.headers?.["header"]], true));
-								headers = autoguard.api.encodeHeaderValues(headers);
-								headers.push(...autoguard.api.extractKeyValuePairs(response.headers ?? {}, headers.map((header) => header[0])));
+								headers.push(...autoguard.api.encodeHeaderPairs("header", [response.headers?.["header"]], true));
+								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
 								let payload = autoguard.api.serializePayload(response.payload);
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/json; charset=utf-8");
 							}
