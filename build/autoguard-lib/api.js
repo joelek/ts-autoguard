@@ -757,15 +757,16 @@ exports.makeNodeRequestHandler = makeNodeRequestHandler;
 ;
 function respond(httpResponse, raw) {
     var e_2, _a;
+    var _b, _c, _d;
     return __awaiter(this, void 0, void 0, function* () {
         let rawHeaders = new Array();
-        for (let header of raw.headers) {
+        for (let header of (_b = raw.headers) !== null && _b !== void 0 ? _b : []) {
             rawHeaders.push(...header);
         }
-        httpResponse.writeHead(raw.status, rawHeaders);
+        httpResponse.writeHead((_c = raw.status) !== null && _c !== void 0 ? _c : 200, rawHeaders);
         try {
-            for (var _b = __asyncValues(raw.payload), _c; _c = yield _b.next(), !_c.done;) {
-                let chunk = _c.value;
+            for (var _e = __asyncValues((_d = raw.payload) !== null && _d !== void 0 ? _d : []), _f; _f = yield _e.next(), !_f.done;) {
+                let chunk = _f.value;
                 if (!httpResponse.write(chunk)) {
                     yield new Promise((resolve, reject) => {
                         httpResponse.once("drain", resolve);
@@ -776,7 +777,7 @@ function respond(httpResponse, raw) {
         catch (e_2_1) { e_2 = { error: e_2_1 }; }
         finally {
             try {
-                if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
+                if (_f && !_f.done && (_a = _e.return)) yield _a.call(_e);
             }
             finally { if (e_2) throw e_2.error; }
         }
@@ -828,67 +829,49 @@ function route(endpoints, httpRequest, httpResponse, urlPrefix = "") {
             filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsComponents());
             if (filteredEndpoints.length === 0) {
                 return respond(httpResponse, {
-                    status: 404,
-                    headers: [],
-                    payload: []
+                    status: 404
                 });
             }
             filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsMethod());
             if (filteredEndpoints.length === 0) {
                 return respond(httpResponse, {
-                    status: 405,
-                    headers: [],
-                    payload: []
+                    status: 405
                 });
             }
             let endpoint = filteredEndpoints[0];
+            let valid = yield endpoint.validateRequest();
             try {
-                let valid = yield endpoint.validateRequest();
+                let handled = yield valid.handleRequest();
                 try {
-                    let handled = yield valid.handleRequest();
-                    try {
-                        let raw = yield handled.validateResponse();
-                        return yield respond(httpResponse, raw);
-                    }
-                    catch (error) {
-                        let payload = serializeStringPayload(String(error));
-                        return respond(httpResponse, {
-                            status: 500,
-                            headers: [],
-                            payload: payload
-                        });
-                    }
+                    let raw = yield handled.validateResponse();
+                    return yield respond(httpResponse, raw);
                 }
                 catch (error) {
-                    let response = {
+                    return respond(httpResponse, {
                         status: 500,
-                        headers: [],
-                        payload: []
-                    };
-                    if (Number.isInteger(error) && error >= 100 && error <= 999) {
-                        response.status = error;
-                    }
-                    else if (error instanceof EndpointError) {
-                        response = error.getResponse();
-                    }
-                    return respond(httpResponse, response);
+                        payload: serializeStringPayload(String(error))
+                    });
                 }
             }
             catch (error) {
-                let payload = serializeStringPayload(String(error));
+                if (Number.isInteger(error) && error >= 100 && error <= 999) {
+                    return respond(httpResponse, {
+                        status: error
+                    });
+                }
+                if (error instanceof EndpointError) {
+                    let raw = error.getResponse();
+                    return respond(httpResponse, raw);
+                }
                 return respond(httpResponse, {
-                    status: 400,
-                    headers: [],
-                    payload: payload
+                    status: 500
                 });
             }
         }
         catch (error) {
-            let payload = serializeStringPayload(String(error));
             return respond(httpResponse, {
                 status: 400,
-                headers: [],
-                payload: payload
+                payload: serializeStringPayload(String(error))
             });
         }
     });

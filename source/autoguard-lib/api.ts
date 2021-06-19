@@ -820,13 +820,13 @@ export function makeNodeRequestHandler(options?: NodeRequestHandlerOptions): Req
 	};
 };
 
-export async function respond(httpResponse: ResponseLike, raw: RawResponse): Promise<void> {
+export async function respond(httpResponse: ResponseLike, raw: Partial<RawResponse>): Promise<void> {
 	let rawHeaders = new Array<string>();
-	for (let header of raw.headers) {
+	for (let header of raw.headers ?? []) {
 		rawHeaders.push(...header);
 	}
-	httpResponse.writeHead(raw.status, rawHeaders);
-	for await (let chunk of raw.payload) {
+	httpResponse.writeHead(raw.status ?? 200, rawHeaders);
+	for await (let chunk of raw.payload ?? []) {
 		if (!httpResponse.write(chunk)) {
 			await new Promise<void>((resolve, reject) => {
 				httpResponse.once("drain", resolve);
@@ -871,67 +871,51 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 		};
 		let auxillary: Auxillary = {
 			socket
-		}
+		};
 		let filteredEndpoints = endpoints.map((endpoint) => endpoint(raw, auxillary));
 		filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsComponents());
 		if (filteredEndpoints.length === 0) {
 			return respond(httpResponse, {
-				status: 404,
-				headers: [],
-				payload: []
+				status: 404
 			});
 		}
 		filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsMethod());
 		if (filteredEndpoints.length === 0) {
 			return respond(httpResponse, {
-				status: 405,
-				headers: [],
-				payload: []
+				status: 405
 			});
 		}
 		let endpoint = filteredEndpoints[0];
+		let valid = await endpoint.validateRequest();
 		try {
-			let valid = await endpoint.validateRequest();
+			let handled = await valid.handleRequest();
 			try {
-				let handled = await valid.handleRequest();
-				try {
-					let raw = await handled.validateResponse();
-					return await respond(httpResponse, raw);
-				} catch (error) {
-					let payload = serializeStringPayload(String(error));
-					return respond(httpResponse, {
-						status: 500,
-						headers: [],
-						payload: payload
-					});
-				}
+				let raw = await handled.validateResponse();
+				return await respond(httpResponse, raw);
 			} catch (error) {
-				let response: RawResponse = {
+				return respond(httpResponse, {
 					status: 500,
-					headers: [],
-					payload: []
-				};
-				if (Number.isInteger(error) && error >= 100 && error <= 999) {
-					response.status = error;
-				} else if (error instanceof EndpointError) {
-					response = error.getResponse();
-				}
-				return respond(httpResponse, response);
+					payload: serializeStringPayload(String(error))
+				});
 			}
 		} catch (error) {
-			let payload = serializeStringPayload(String(error));
+			if (Number.isInteger(error) && error >= 100 && error <= 999) {
+				return respond(httpResponse, {
+					status: error
+				});
+			}
+			if (error instanceof EndpointError) {
+				let raw = error.getResponse();
+				return respond(httpResponse, raw);
+			}
 			return respond(httpResponse, {
-				status: 400,
-				headers: [],
-				payload: payload
+				status: 500
 			});
 		}
 	} catch (error) {
-		let payload = serializeStringPayload(String(error));
 		return respond(httpResponse, {
 			status: 400,
-			headers: [],
-			payload: payload
+			payload: serializeStringPayload(String(error))
 		});
 	}
 };
