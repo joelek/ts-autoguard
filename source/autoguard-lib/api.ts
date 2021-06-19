@@ -846,68 +846,77 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 		throw `Expected url "${url}" to have prefix "${urlPrefix}"!`;
 	}
 	url = url.slice(urlPrefix?.length);
-	let components = splitComponents(url);
-	let parameters = splitParameters(url);
-	let headers = splitHeaders(combineRawHeaders(httpRequest.rawHeaders));
-	let payload = {
-		[Symbol.asyncIterator]: () => httpRequest[Symbol.asyncIterator]()
-	};
-	let socket = httpRequest.socket;
-	let raw: RawRequest = {
-		method,
-		components,
-		parameters,
-		headers,
-		payload
-	};
-	let auxillary: Auxillary = {
-		socket
-	}
-	let filteredEndpoints = endpoints.map((endpoint) => endpoint(raw, auxillary));
-	filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsComponents());
-	if (filteredEndpoints.length === 0) {
-		return respond(httpResponse, {
-			status: 404,
-			headers: [],
-			payload: []
-		});
-	}
-	filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsMethod());
-	if (filteredEndpoints.length === 0) {
-		return respond(httpResponse, {
-			status: 405,
-			headers: [],
-			payload: []
-		});
-	}
-	let endpoint = filteredEndpoints[0];
 	try {
-		let valid = await endpoint.validateRequest();
-		try {
-			let handled = await valid.handleRequest();
-			try {
-				let raw = await handled.validateResponse();
-				return await respond(httpResponse, raw);
-			} catch (error) {
-				let payload = serializeStringPayload(String(error));
-				return respond(httpResponse, {
-					status: 500,
-					headers: [],
-					payload: payload
-				});
-			}
-		} catch (error) {
-			let response: RawResponse = {
-				status: 500,
+		let components = splitComponents(url);
+		let parameters = splitParameters(url);
+		let headers = splitHeaders(combineRawHeaders(httpRequest.rawHeaders));
+		let payload = {
+			[Symbol.asyncIterator]: () => httpRequest[Symbol.asyncIterator]()
+		};
+		let socket = httpRequest.socket;
+		let raw: RawRequest = {
+			method,
+			components,
+			parameters,
+			headers,
+			payload
+		};
+		let auxillary: Auxillary = {
+			socket
+		}
+		let filteredEndpoints = endpoints.map((endpoint) => endpoint(raw, auxillary));
+		filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsComponents());
+		if (filteredEndpoints.length === 0) {
+			return respond(httpResponse, {
+				status: 404,
 				headers: [],
 				payload: []
-			};
-			if (Number.isInteger(error) && error >= 100 && error <= 999) {
-				response.status = error;
-			} else if (error instanceof EndpointError) {
-				response = error.getResponse();
+			});
+		}
+		filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsMethod());
+		if (filteredEndpoints.length === 0) {
+			return respond(httpResponse, {
+				status: 405,
+				headers: [],
+				payload: []
+			});
+		}
+		let endpoint = filteredEndpoints[0];
+		try {
+			let valid = await endpoint.validateRequest();
+			try {
+				let handled = await valid.handleRequest();
+				try {
+					let raw = await handled.validateResponse();
+					return await respond(httpResponse, raw);
+				} catch (error) {
+					let payload = serializeStringPayload(String(error));
+					return respond(httpResponse, {
+						status: 500,
+						headers: [],
+						payload: payload
+					});
+				}
+			} catch (error) {
+				let response: RawResponse = {
+					status: 500,
+					headers: [],
+					payload: []
+				};
+				if (Number.isInteger(error) && error >= 100 && error <= 999) {
+					response.status = error;
+				} else if (error instanceof EndpointError) {
+					response = error.getResponse();
+				}
+				return respond(httpResponse, response);
 			}
-			return respond(httpResponse, response);
+		} catch (error) {
+			let payload = serializeStringPayload(String(error));
+			return respond(httpResponse, {
+				status: 400,
+				headers: [],
+				payload: payload
+			});
 		}
 	} catch (error) {
 		let payload = serializeStringPayload(String(error));

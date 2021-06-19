@@ -798,71 +798,81 @@ function route(endpoints, httpRequest, httpResponse, urlPrefix = "") {
             throw `Expected url "${url}" to have prefix "${urlPrefix}"!`;
         }
         url = url.slice(urlPrefix === null || urlPrefix === void 0 ? void 0 : urlPrefix.length);
-        let components = splitComponents(url);
-        let parameters = splitParameters(url);
-        let headers = splitHeaders(combineRawHeaders(httpRequest.rawHeaders));
-        let payload = {
-            [Symbol.asyncIterator]: () => httpRequest[Symbol.asyncIterator]()
-        };
-        let socket = httpRequest.socket;
-        let raw = {
-            method,
-            components,
-            parameters,
-            headers,
-            payload
-        };
-        let auxillary = {
-            socket
-        };
-        let filteredEndpoints = endpoints.map((endpoint) => endpoint(raw, auxillary));
-        filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsComponents());
-        if (filteredEndpoints.length === 0) {
-            return respond(httpResponse, {
-                status: 404,
-                headers: [],
-                payload: []
-            });
-        }
-        filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsMethod());
-        if (filteredEndpoints.length === 0) {
-            return respond(httpResponse, {
-                status: 405,
-                headers: [],
-                payload: []
-            });
-        }
-        let endpoint = filteredEndpoints[0];
         try {
-            let valid = yield endpoint.validateRequest();
+            let components = splitComponents(url);
+            let parameters = splitParameters(url);
+            let headers = splitHeaders(combineRawHeaders(httpRequest.rawHeaders));
+            let payload = {
+                [Symbol.asyncIterator]: () => httpRequest[Symbol.asyncIterator]()
+            };
+            let socket = httpRequest.socket;
+            let raw = {
+                method,
+                components,
+                parameters,
+                headers,
+                payload
+            };
+            let auxillary = {
+                socket
+            };
+            let filteredEndpoints = endpoints.map((endpoint) => endpoint(raw, auxillary));
+            filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsComponents());
+            if (filteredEndpoints.length === 0) {
+                return respond(httpResponse, {
+                    status: 404,
+                    headers: [],
+                    payload: []
+                });
+            }
+            filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsMethod());
+            if (filteredEndpoints.length === 0) {
+                return respond(httpResponse, {
+                    status: 405,
+                    headers: [],
+                    payload: []
+                });
+            }
+            let endpoint = filteredEndpoints[0];
             try {
-                let handled = yield valid.handleRequest();
+                let valid = yield endpoint.validateRequest();
                 try {
-                    let raw = yield handled.validateResponse();
-                    return yield respond(httpResponse, raw);
+                    let handled = yield valid.handleRequest();
+                    try {
+                        let raw = yield handled.validateResponse();
+                        return yield respond(httpResponse, raw);
+                    }
+                    catch (error) {
+                        let payload = serializeStringPayload(String(error));
+                        return respond(httpResponse, {
+                            status: 500,
+                            headers: [],
+                            payload: payload
+                        });
+                    }
                 }
                 catch (error) {
-                    let payload = serializeStringPayload(String(error));
-                    return respond(httpResponse, {
+                    let response = {
                         status: 500,
                         headers: [],
-                        payload: payload
-                    });
+                        payload: []
+                    };
+                    if (Number.isInteger(error) && error >= 100 && error <= 999) {
+                        response.status = error;
+                    }
+                    else if (error instanceof EndpointError) {
+                        response = error.getResponse();
+                    }
+                    return respond(httpResponse, response);
                 }
             }
             catch (error) {
-                let response = {
-                    status: 500,
+                let payload = serializeStringPayload(String(error));
+                return respond(httpResponse, {
+                    status: 400,
                     headers: [],
-                    payload: []
-                };
-                if (Number.isInteger(error) && error >= 100 && error <= 999) {
-                    response.status = error;
-                }
-                else if (error instanceof EndpointError) {
-                    response = error.getResponse();
-                }
-                return respond(httpResponse, response);
+                    payload: payload
+                });
             }
         }
         catch (error) {
