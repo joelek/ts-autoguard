@@ -239,16 +239,22 @@ route sendRequiredRequestHeader(): GET:/
 route sendOptionalRequestHeader(): GET:/
 	<= <{ request_header? }>;
 
+route sendRepeatedRequestHeader(): GET:/
+	<= <{ repeated_header* }>;
+
 route receiveRequiredResponseHeader(): GET:/
 	=> <{ response_header }>;
 
 route receiveOptionalResponseHeader(): GET:/
 	=> <{ response_header? }>;
 
+route receiveRepeatedResponseHeader(): GET:/
+	=> <{ repeated_header* }>;
+
 route receiveJSONPayload(): GET:/
 	=> {
 		required_in_response_payload: string,
-		optional_in_respnose_payload?: string
+		optional_in_response_payload?: string
 	};
 
 route sendJSONPayload(): POST:/
@@ -264,7 +270,13 @@ route sendBinaryPayload(): POST:/
 	<= binary;
 ```
 
-The full type language is available for the payload as well as for path components, query parameters and headers. Path components, query parameters and headers default to unparsed string (plain) when the type annotation is omitted.
+The full type language is available for the payload as well as for path components, query parameters and headers. The type of the payload defaults to binary when left unspecified while the type of path components, query parameters and headers default to plain string.
+
+Plain strings and JSON strings differ in that JSON strings will be JSON encoded and decoded automatically whereas plain strings will not. Plain strings are commonly used in path components, query parameters and headers whereas JSON strings are normally used in JSON payloads.
+
+NB: Path components, query parameters and headers declared with the "string" type will handled as if the "plain" type had been declared. This compatibility behaviour will be removed in the next major release and through that bring consistency to the type language. Please declare plain strings explicitly or remove the type declaration to use the default.
+
+Autoguard accepts and exposes undeclared request parameters as well as undeclared request and response headers. No parsing, encoding or decoding is performed since no assumptions can be made about the content. The responsibility of parsing, encoding and decoding undeclared data lies with the user. Autoguard expects undeclared request parameters, request headers and response headers to be strings fully compatible with the HTTP standard.
 
 ```
 guard Object: {
@@ -317,6 +329,7 @@ NB: This project targets TypeScript 4 in strict mode.
 
 ## Roadmap
 
+* Fix potential stack overflow in Reference guard.
 * Simplify import paths before resolving references.
 * Add more detailed error messages for syntax errors.
 * Extend type guards with functionality for deep structured cloning.
