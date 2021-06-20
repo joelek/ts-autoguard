@@ -41,7 +41,7 @@ exports.Array = {
                 return true;
             },
             ts(eol = "\n") {
-                return `${guard.ts(eol)}[]`;
+                return `array<${guard.ts(eol)}>`;
             }
         };
     }
@@ -100,7 +100,7 @@ exports.Group = {
                 return guard.is(subject);
             },
             ts(eol = "\n") {
-                return name !== null && name !== void 0 ? name : `(${guard.ts(eol)})`;
+                return name !== null && name !== void 0 ? name : guard.ts(eol);
             }
         };
     }
@@ -126,10 +126,9 @@ exports.Intersection = {
             ts(eol = "\n") {
                 let lines = new globalThis.Array();
                 for (let guard of guards) {
-                    lines.push(guard.ts(eol));
+                    lines.push("\t" + guard.ts(eol + "\t"));
                 }
-                let string = lines.join(" & ");
-                return string;
+                return "intersection<" + eol + lines.join("," + eol) + eol + ">";
             }
         };
     }
@@ -224,7 +223,7 @@ exports.Object = {
                 for (let [key, value] of globalThis.Object.entries(guards)) {
                     lines.push(`\t"${key}": ${value.ts(eol + "\t")}`);
                 }
-                return lines.length > 0 ? "{" + eol + lines.join("," + eol) + eol + "}" : "{}";
+                return "object<" + eol + lines.join("," + eol) + eol + ">";
             }
         };
     }
@@ -252,7 +251,7 @@ exports.Record = {
                 return true;
             },
             ts(eol = "\n") {
-                return `{ [key]: ${guard.ts(eol)} }`;
+                return `record<${guard.ts(eol)}>`;
             }
         };
     }
@@ -342,7 +341,7 @@ exports.Tuple = {
                 for (let guard of guards) {
                     lines.push(`\t${guard.ts(eol + "\t")}`);
                 }
-                return lines.length > 0 ? "[" + eol + lines.join("," + eol) + eol + "]" : "[]";
+                return "tuple<" + eol + lines.join("," + eol) + eol + ">";
             }
         };
     }
@@ -391,10 +390,9 @@ exports.Union = {
             ts(eol = "\n") {
                 let lines = new globalThis.Array();
                 for (let guard of guards) {
-                    lines.push(guard.ts(eol));
+                    lines.push("\t" + guard.ts(eol + "\t"));
                 }
-                let string = lines.join(" | ");
-                return string;
+                return "union<" + eol + lines.join("," + eol) + eol + ">";
             }
         };
     }

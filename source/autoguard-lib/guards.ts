@@ -51,7 +51,7 @@ export const Array = {
 				return true;
 			},
 			ts(eol: string = "\n"): string {
-				return `${guard.ts(eol)}[]`;
+				return `array<${guard.ts(eol)}>`;
 			}
 		};
 	}
@@ -111,7 +111,7 @@ export const Group = {
 				return guard.is(subject);
 			},
 			ts(eol: string = "\n"): string {
-				return name ?? `(${guard.ts(eol)})`;
+				return name ?? guard.ts(eol);
 			}
 		};
 	}
@@ -137,10 +137,9 @@ export const Intersection = {
 			ts(eol: string = "\n"): string {
 				let lines = new globalThis.Array<string>();
 				for (let guard of guards) {
-					lines.push(guard.ts(eol));
+					lines.push("\t" + guard.ts(eol + "\t"));
 				}
-				let string = lines.join(" & ");
-				return string;
+				return "intersection<" + eol + lines.join("," + eol) + eol +">";
 			}
 		};
 	}
@@ -235,7 +234,7 @@ export const Object = {
 				for (let [key, value] of globalThis.Object.entries<serialization.MessageGuard<any>>(guards)) {
 					lines.push(`\t"${key}": ${value.ts(eol + "\t")}`);
 				}
-				return lines.length > 0 ? "{" + eol + lines.join("," + eol) + eol + "}" : "{}";
+				return "object<" + eol + lines.join("," + eol) + eol + ">";
 			}
 		};
 	}
@@ -263,7 +262,7 @@ export const Record = {
 				return true;
 			},
 			ts(eol: string = "\n"): string {
-				return `{ [key]: ${guard.ts(eol)} }`;
+				return `record<${guard.ts(eol)}>`;
 			}
 		};
 	}
@@ -354,7 +353,7 @@ export const Tuple = {
 				for (let guard of guards) {
 					lines.push(`\t${guard.ts(eol + "\t")}`);
 				}
-				return lines.length > 0 ? "[" + eol + lines.join("," + eol) + eol + "]" : "[]";
+				return "tuple<" + eol + lines.join("," + eol) + eol + ">";
 			}
 		};
 	}
@@ -402,10 +401,9 @@ export const Union = {
 			ts(eol: string = "\n"): string {
 				let lines = new globalThis.Array<string>();
 				for (let guard of guards) {
-					lines.push(guard.ts(eol));
+					lines.push("\t" + guard.ts(eol + "\t"));
 				}
-				let string = lines.join(" | ");
-				return string;
+				return "union<" + eol + lines.join("," + eol) + eol +">";
 			}
 		};
 	}
