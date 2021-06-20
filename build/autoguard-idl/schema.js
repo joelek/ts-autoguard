@@ -75,8 +75,8 @@ function getRequestType(route) {
     }
     request.add("options", {
         type: new types.IntersectionType([
-            types.Options.INSTANCE,
-            options
+            options,
+            types.Options.INSTANCE
         ]),
         optional: areAllMembersOptional(options)
     });
@@ -103,8 +103,8 @@ function getRequestType(route) {
     }
     request.add("headers", {
         type: new types.IntersectionType([
-            types.Headers.INSTANCE,
-            headers
+            headers,
+            types.Headers.INSTANCE
         ]),
         optional: areAllMembersOptional(headers)
     });
@@ -144,8 +144,8 @@ function getResponseType(route) {
     });
     response.add("headers", {
         type: new types.IntersectionType([
-            types.Headers.INSTANCE,
-            headers
+            headers,
+            types.Headers.INSTANCE
         ]),
         optional: areAllMembersOptional(headers)
     });
