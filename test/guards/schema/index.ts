@@ -18,7 +18,7 @@ export const MyBooleanliteralType = autoguard.guards.BooleanLiteral.of(true);
 
 export type MyBooleanliteralType = ReturnType<typeof MyBooleanliteralType["as"]>;
 
-export const MyGroupType = autoguard.guards.Any;
+export const MyGroupType = autoguard.guards.Group.of(autoguard.guards.Any);
 
 export type MyGroupType = ReturnType<typeof MyGroupType["as"]>;
 

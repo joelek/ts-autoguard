@@ -138,10 +138,10 @@ export const reference2 = autoguard.guards.Object.of({});
 
 export type reference2 = ReturnType<typeof reference2["as"]>;
 
-export const nested = autoguard.guards.Array.of(autoguard.guards.Union.of(
+export const nested = autoguard.guards.Array.of(autoguard.guards.Group.of(autoguard.guards.Union.of(
 	autoguard.guards.Array.of(autoguard.guards.String),
 	autoguard.guards.String
-));
+)));
 
 export type nested = ReturnType<typeof nested["as"]>;
 
