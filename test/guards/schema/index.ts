@@ -48,8 +48,8 @@ export type MyNumberLiteralType = ReturnType<typeof MyNumberLiteralType["as"]>;
 export const MyObjectType = autoguard.guards.Object.of({
 	"string_member": autoguard.guards.String,
 	"optional_member": autoguard.guards.Union.of(
-		autoguard.guards.Undefined,
-		autoguard.guards.String
+		autoguard.guards.String,
+		autoguard.guards.Undefined
 	),
 	"quoted-member": autoguard.guards.String
 });

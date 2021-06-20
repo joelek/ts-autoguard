@@ -17,12 +17,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/"];
@@ -30,7 +30,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -51,12 +51,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["POST:/"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["POST:/"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["POST:/"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["POST:/"];
@@ -64,7 +64,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -85,12 +85,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/one"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/one"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/one"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/one"];
@@ -98,7 +98,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -120,12 +120,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/one/"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/one/"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/one/"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/one/"];
@@ -133,7 +133,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -155,12 +155,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/one/two"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/one/two"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/one/two"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/one/two"];
@@ -168,7 +168,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -190,12 +190,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/<dynamic_component>"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/<dynamic_component>"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/<dynamic_component>"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/<dynamic_component>"];
@@ -203,7 +203,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -225,12 +225,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/<dynamic_plain_component>"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/<dynamic_plain_component>"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/<dynamic_plain_component>"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/<dynamic_plain_component>"];
@@ -238,7 +238,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -260,12 +260,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/<dynamic_boolean_component>"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/<dynamic_boolean_component>"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/<dynamic_boolean_component>"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/<dynamic_boolean_component>"];
@@ -273,7 +273,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -295,12 +295,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/<dynamic_number_component>"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/<dynamic_number_component>"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/<dynamic_number_component>"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/<dynamic_number_component>"];
@@ -308,7 +308,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -330,12 +330,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/<dynamic_string_component>"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/<dynamic_string_component>"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/<dynamic_string_component>"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/<dynamic_string_component>"];
@@ -343,7 +343,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -367,12 +367,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/<dynamic_component_one>/<dynamic_component_two>"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/<dynamic_component_one>/<dynamic_component_two>"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/<dynamic_component_one>/<dynamic_component_two>"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/<dynamic_component_one>/<dynamic_component_two>"];
@@ -380,7 +380,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -402,12 +402,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/<quoted key>"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/<quoted key>"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/<quoted key>"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/<quoted key>"];
@@ -415,7 +415,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -436,12 +436,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/%22r%C3%A4ksm%C3%B6rg%C3%A5s%22"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/%22r%C3%A4ksm%C3%B6rg%C3%A5s%22"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/%22r%C3%A4ksm%C3%B6rg%C3%A5s%22"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/%22r%C3%A4ksm%C3%B6rg%C3%A5s%22"];
@@ -449,7 +449,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -470,12 +470,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/parameters01"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters01"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/parameters01"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters01"];
@@ -483,7 +483,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -505,12 +505,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/parameters02"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters02"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/parameters02"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters02"];
@@ -518,7 +518,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -540,12 +540,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/parameters03"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters03"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/parameters03"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters03"];
@@ -553,7 +553,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -575,12 +575,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/parameters04"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters04"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/parameters04"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters04"];
@@ -588,7 +588,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -610,12 +610,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/parameters05"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters05"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/parameters05"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters05"];
@@ -623,7 +623,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -645,12 +645,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/parameters06"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters06"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/parameters06"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters06"];
@@ -658,7 +658,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -680,12 +680,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/parameters07"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters07"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/parameters07"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters07"];
@@ -693,7 +693,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -716,12 +716,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/parameters08"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters08"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/parameters08"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters08"];
@@ -729,7 +729,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -751,12 +751,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/parameters09"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters09"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/parameters09"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters09"];
@@ -764,7 +764,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -786,12 +786,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/parameters10"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters10"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/parameters10"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters10"];
@@ -799,7 +799,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -821,12 +821,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/parameters11"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters11"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/parameters11"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters11"];
@@ -834,7 +834,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -856,12 +856,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/parameters12"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters12"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/parameters12"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters12"];
@@ -869,7 +869,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -891,12 +891,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/parameters13"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/parameters13"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/parameters13"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/parameters13"];
@@ -904,7 +904,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -938,7 +938,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -973,7 +973,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -1008,7 +1008,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -1043,7 +1043,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -1078,7 +1078,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -1113,7 +1113,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -1148,7 +1148,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -1184,7 +1184,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -1219,7 +1219,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -1254,7 +1254,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -1289,7 +1289,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -1324,7 +1324,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -1359,7 +1359,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -1380,12 +1380,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/response_headers01"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers01"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/response_headers01"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers01"];
@@ -1414,12 +1414,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/response_headers02"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers02"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/response_headers02"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers02"];
@@ -1449,12 +1449,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/response_headers03"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers03"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/response_headers03"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers03"];
@@ -1484,12 +1484,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/response_headers04"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers04"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/response_headers04"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers04"];
@@ -1519,12 +1519,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/response_headers05"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers05"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/response_headers05"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers05"];
@@ -1554,12 +1554,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/response_headers06"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers06"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/response_headers06"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers06"];
@@ -1589,12 +1589,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/response_headers07"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers07"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/response_headers07"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers07"];
@@ -1624,12 +1624,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/response_headers08"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers08"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/response_headers08"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers08"];
@@ -1660,12 +1660,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/response_headers09"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers09"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/response_headers09"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers09"];
@@ -1695,12 +1695,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/response_headers10"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers10"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/response_headers10"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers10"];
@@ -1730,12 +1730,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/response_headers11"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers11"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/response_headers11"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers11"];
@@ -1765,12 +1765,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/response_headers12"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers12"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/response_headers12"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers12"];
@@ -1800,12 +1800,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/response_headers13"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_headers13"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/response_headers13"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_headers13"];
@@ -1848,7 +1848,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -1882,7 +1882,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -1903,12 +1903,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/response_payload01"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_payload01"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/response_payload01"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_payload01"];
@@ -1937,12 +1937,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/response_payload02"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/response_payload02"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/response_payload02"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/response_payload02"];
@@ -2008,12 +2008,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/reference"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/reference"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/reference"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/reference"];
@@ -2055,7 +2055,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
@@ -2076,12 +2076,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/binary_response"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/binary_response"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/binary_response"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/binary_response"];
@@ -2113,12 +2113,12 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				options = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };
 				let headers: Record<string, autoguard.api.JSON> = {};
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };
-				let payload = await autoguard.api.deserializePayload(raw.payload);
+				let payload = raw.payload;
 				let guard = shared.Autoguard.Requests["GET:/number/<number>"];
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
-						let response = await routes["GET:/number/<number>"](new autoguard.api.ClientRequest(request, false, auxillary));
+						let response = await routes["GET:/number/<number>"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
 								let guard = shared.Autoguard.Responses["GET:/number/<number>"];
@@ -2126,7 +2126,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
 								headers.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));
-								let payload = autoguard.api.serializePayload(response.payload);
+								let payload = response.payload ?? [];
 								return autoguard.api.finalizeResponse({ status, headers, payload }, "application/octet-stream");
 							}
 						};
