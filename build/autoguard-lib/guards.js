@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Union = exports.Undefined = exports.Tuple = exports.StringLiteral = exports.String = exports.Reference = exports.Record = exports.Object = exports.NumberLiteral = exports.Number = exports.Null = exports.Intersection = exports.BooleanLiteral = exports.Boolean = exports.Array = exports.Any = void 0;
+exports.Union = exports.Undefined = exports.Tuple = exports.StringLiteral = exports.String = exports.Reference = exports.Record = exports.Object = exports.NumberLiteral = exports.Number = exports.Null = exports.Intersection = exports.Group = exports.BooleanLiteral = exports.Boolean = exports.Array = exports.Any = void 0;
 const serialization = require("./serialization");
 exports.Any = {
     as(subject, path = "") {
@@ -86,6 +86,21 @@ exports.BooleanLiteral = {
             },
             ts(eol = "\n") {
                 return `${value}`;
+            }
+        };
+    }
+};
+exports.Group = {
+    of(guard) {
+        return {
+            as(subject, path = "") {
+                return guard.as(subject, path);
+            },
+            is(subject) {
+                return guard.is(subject);
+            },
+            ts(eol = "\n") {
+                return `(${guard.ts(eol)})`;
             }
         };
     }

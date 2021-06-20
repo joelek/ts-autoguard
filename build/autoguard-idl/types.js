@@ -266,7 +266,9 @@ class GroupType {
         return "(" + this.type.generateType(options) + ")";
     }
     generateTypeGuard(options) {
-        return this.type.generateTypeGuard(options);
+        let lines = new Array();
+        lines.push("autoguard.guards.Group.of(" + this.type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol })) + ")");
+        return lines.join(options.eol);
     }
     getReferences() {
         return this.type.getReferences();

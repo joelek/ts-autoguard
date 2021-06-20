@@ -101,6 +101,22 @@ export const BooleanLiteral = {
 	}
 };
 
+export const Group = {
+	of<A extends serialization.Message>(guard: serialization.MessageGuard<A>): serialization.MessageGuard<A> {
+		return {
+			as(subject: any, path: string = ""): A {
+				return guard.as(subject, path);
+			},
+			is(subject: any): subject is A {
+				return guard.is(subject);
+			},
+			ts(eol: string = "\n"): string {
+				return `(${guard.ts(eol)})`;
+			}
+		};
+	}
+};
+
 export const Intersection = {
 	of<A extends TupleOf<serialization.Message>>(...guards: TupleOf<serialization.MessageGuardTuple<A>>): serialization.MessageGuard<IntersectionOf<A>> {
 		return {

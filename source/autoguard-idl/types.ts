@@ -316,7 +316,9 @@ export class GroupType implements Type {
 	}
 
 	generateTypeGuard(options: shared.Options): string {
-		return this.type.generateTypeGuard(options);
+		let lines = new Array<string>();
+		lines.push("autoguard.guards.Group.of(" + this.type.generateTypeGuard({ ...options, eol: options.eol }) + ")");
+		return lines.join(options.eol);
 	}
 
 	getReferences(): Array<shared.Reference> {
