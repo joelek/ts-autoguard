@@ -329,7 +329,6 @@ NB: This project targets TypeScript 4 in strict mode.
 
 ## Roadmap
 
-* Fix potential stack overflow in Reference guard.
 * Simplify import paths before resolving references.
 * Add more detailed error messages for syntax errors.
 * Extend type guards with functionality for deep structured cloning.

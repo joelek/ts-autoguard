@@ -430,7 +430,7 @@ export const Primitive: serialization.MessageGuard<Primitive> = guards.Union.of(
 
 export type JSON = boolean | null | number | string | JSON[] | { [key: string]: JSON } | undefined;
 
-export const JSON: serialization.MessageGuard<JSON> = guards.Union.of(
+export const JSON: serialization.MessageGuard<JSON> = guards.Group.of(guards.Union.of(
 	guards.Boolean,
 	guards.Null,
 	guards.Number,
@@ -438,7 +438,7 @@ export const JSON: serialization.MessageGuard<JSON> = guards.Union.of(
 	guards.Array.of(guards.Reference.of(() => JSON)),
 	guards.Record.of(guards.Reference.of(() => JSON)),
 	guards.Undefined
-);
+), "JSON");
 
 export const Options = guards.Record.of(JSON);
 export const Headers = guards.Record.of(JSON);
