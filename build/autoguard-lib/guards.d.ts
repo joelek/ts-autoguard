@@ -44,7 +44,7 @@ export declare const BooleanLiteral: {
     of<A extends boolean>(value: A): serialization.MessageGuard<A>;
 };
 export declare const Group: {
-    of<A extends unknown>(guard: serialization.MessageGuard<A>): serialization.MessageGuard<A>;
+    of<A extends unknown>(guard: serialization.MessageGuard<A>, name?: string | undefined): serialization.MessageGuard<A>;
 };
 export declare const Intersection: {
     of<A extends any[]>(...guards_0: serialization.MessageGuardTuple<A>): serialization.MessageGuard<ExpansionOf<Unwrap<IntersectionOfUnion<ValuesOf<Wrap<A>>>>>>;

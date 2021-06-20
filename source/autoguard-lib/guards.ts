@@ -102,7 +102,7 @@ export const BooleanLiteral = {
 };
 
 export const Group = {
-	of<A extends serialization.Message>(guard: serialization.MessageGuard<A>): serialization.MessageGuard<A> {
+	of<A extends serialization.Message>(guard: serialization.MessageGuard<A>, name?: string): serialization.MessageGuard<A> {
 		return {
 			as(subject: any, path: string = ""): A {
 				return guard.as(subject, path);
@@ -111,7 +111,7 @@ export const Group = {
 				return guard.is(subject);
 			},
 			ts(eol: string = "\n"): string {
-				return `(${guard.ts(eol)})`;
+				return name ?? `(${guard.ts(eol)})`;
 			}
 		};
 	}

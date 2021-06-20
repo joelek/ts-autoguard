@@ -91,7 +91,7 @@ exports.BooleanLiteral = {
     }
 };
 exports.Group = {
-    of(guard) {
+    of(guard, name) {
         return {
             as(subject, path = "") {
                 return guard.as(subject, path);
@@ -100,7 +100,7 @@ exports.Group = {
                 return guard.is(subject);
             },
             ts(eol = "\n") {
-                return `(${guard.ts(eol)})`;
+                return name !== null && name !== void 0 ? name : `(${guard.ts(eol)})`;
             }
         };
     }
