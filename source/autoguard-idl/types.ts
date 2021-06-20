@@ -33,7 +33,6 @@ export function makeInclude(): TypenameMap {
 
 export interface Type {
 	generateSchema(options: shared.Options): string;
-	generateType(options: shared.Options): string;
 	generateTypeGuard(options: shared.Options): string;
 	getReferences(): Array<shared.Reference>;
 };
@@ -107,10 +106,6 @@ export class AnyType implements Type {
 		return "any";
 	}
 
-	generateType(options: shared.Options): string {
-		return "any";
-	}
-
 	generateTypeGuard(options: shared.Options): string {
 		let lines = new Array<string>();
 		lines.push("autoguard.guards.Any");
@@ -143,10 +138,6 @@ export class ArrayType implements Type {
 
 	generateSchema(options: shared.Options): string {
 		return this.type.generateSchema(options) + "[]";
-	}
-
-	generateType(options: shared.Options): string {
-		return this.type.generateType(options) + "[]";
 	}
 
 	generateTypeGuard(options: shared.Options): string {
@@ -196,10 +187,6 @@ export class Binary implements Type {
 		return "binary";
 	}
 
-	generateType(options: shared.Options): string {
-		return "autoguard.api.Binary";
-	}
-
 	generateTypeGuard(options: shared.Options): string {
 		return "autoguard.api.Binary";
 	}
@@ -224,10 +211,6 @@ export class BooleanType implements Type {
 	}
 
 	generateSchema(options: shared.Options): string {
-		return "boolean";
-	}
-
-	generateType(options: shared.Options): string {
 		return "boolean";
 	}
 
@@ -265,13 +248,9 @@ export class BooleanLiteralType implements Type {
 		return "" + this.value;
 	}
 
-	generateType(options: shared.Options): string {
-		return "" + this.value;
-	}
-
 	generateTypeGuard(options: shared.Options): string {
 		let lines = new Array<string>();
-		lines.push("autoguard.guards.BooleanLiteral.of(" + this.generateType({ ...options, eol: options.eol }) + ")");
+		lines.push("autoguard.guards.BooleanLiteral.of(" + this.value + ")");
 		return lines.join(options.eol);
 	}
 
@@ -309,10 +288,6 @@ export class GroupType implements Type {
 
 	generateSchema(options: shared.Options): string {
 		return "(" + this.type.generateSchema(options) + ")";
-	}
-
-	generateType(options: shared.Options): string {
-		return "(" + this.type.generateType(options) + ")";
 	}
 
 	generateTypeGuard(options: shared.Options): string {
@@ -354,15 +329,6 @@ export class IntersectionType implements Type {
 		let lines = new Array<string>();
 		for (let type of this.types) {
 			lines.push(type.generateSchema(options));
-		}
-		let string = lines.join(" & ");
-		return string;
-	}
-
-	generateType(options: shared.Options): string {
-		let lines = new Array<string>();
-		for (let type of this.types) {
-			lines.push(type.generateType(options));
 		}
 		let string = lines.join(" & ");
 		return string;
@@ -423,10 +389,6 @@ export class NullType implements Type {
 		return "null";
 	}
 
-	generateType(options: shared.Options): string {
-		return "null";
-	}
-
 	generateTypeGuard(options: shared.Options): string {
 		let lines = new Array<string>();
 		lines.push("autoguard.guards.Null");
@@ -456,10 +418,6 @@ export class NumberType implements Type {
 	}
 
 	generateSchema(options: shared.Options): string {
-		return "number";
-	}
-
-	generateType(options: shared.Options): string {
 		return "number";
 	}
 
@@ -497,13 +455,9 @@ export class NumberLiteralType implements Type {
 		return "" + this.value;
 	}
 
-	generateType(options: shared.Options): string {
-		return "" + this.value;
-	}
-
 	generateTypeGuard(options: shared.Options): string {
 		let lines = new Array<string>();
-		lines.push("autoguard.guards.NumberLiteral.of(" + this.generateType({ ...options, eol: options.eol }) + ")");
+		lines.push("autoguard.guards.NumberLiteral.of(" + this.value + ")");
 		return lines.join(options.eol);
 	}
 
@@ -546,18 +500,6 @@ export class ObjectType implements Type {
 		let lines = new Array<string>();
 		for (let [key, value] of this.members) {
 			lines.push("	\"" + key + "\"" + (value.optional ? "?" : "") + ": " + value.type.generateSchema({ ...options, eol: options.eol + "\t" }));
-		}
-		let string = lines.length > 0 ? options.eol + lines.join("," + options.eol) + options.eol : "";
-		return "{" + string + "}";
-	}
-
-	generateType(options: shared.Options): string {
-		if (this.members.size === 0) {
-			return "{}";
-		}
-		let lines = new Array<string>();
-		for (let [key, value] of this.members) {
-			lines.push("	\"" + key + "\"" + (value.optional ? "?" : "") + ": " + value.type.generateType({ ...options, eol: options.eol + "\t" }));
 		}
 		let string = lines.length > 0 ? options.eol + lines.join("," + options.eol) + options.eol : "";
 		return "{" + string + "}";
@@ -636,10 +578,6 @@ export class RecordType implements Type {
 		return "{ " + this.type.generateSchema(options) + " }";
 	}
 
-	generateType(options: shared.Options): string {
-		return "Record<string, undefined | " + this.type.generateType(options) + ">";
-	}
-
 	generateTypeGuard(options: shared.Options): string {
 		let lines = new Array<string>();
 		lines.push("autoguard.guards.Record.of(" + this.type.generateTypeGuard({ ...options, eol: options.eol }) + ")");
@@ -674,10 +612,6 @@ export class ReferenceType implements Type {
 
 	generateSchema(options: shared.Options): string {
 		return [...this.path, ""].join("/") + this.typename;
-	}
-
-	generateType(options: shared.Options): string {
-		return this.typename;
 	}
 
 	generateTypeGuard(options: shared.Options): string {
@@ -724,10 +658,6 @@ export class StringType implements Type {
 		return "string";
 	}
 
-	generateType(options: shared.Options): string {
-		return "string";
-	}
-
 	generateTypeGuard(options: shared.Options): string {
 		let lines = new Array<string>();
 		lines.push("autoguard.guards.String");
@@ -759,10 +689,6 @@ export class StringLiteralType implements Type {
 	}
 
 	generateSchema(options: shared.Options): string {
-		return "\"" + this.value + "\"";
-	}
-
-	generateType(options: shared.Options): string {
 		return "\"" + this.value + "\"";
 	}
 
@@ -803,15 +729,6 @@ export class TupleType implements Type {
 		let strings = new Array<string>();
 		for (let type of this.types) {
 			strings.push("	" + type.generateSchema({ ...options, eol: options.eol + "\t" }));
-		}
-		let string = strings.length > 0 ? options.eol + strings.join("," + options.eol) + options.eol : "";
-		return "[" + string + "]";
-	}
-
-	generateType(options: shared.Options): string {
-		let strings = new Array<string>();
-		for (let type of this.types) {
-			strings.push("	" + type.generateType({ ...options, eol: options.eol + "\t" }));
 		}
 		let string = strings.length > 0 ? options.eol + strings.join("," + options.eol) + options.eol : "";
 		return "[" + string + "]";
@@ -866,10 +783,6 @@ export class UndefinedType implements Type {
 		return "undefined";
 	}
 
-	generateType(options: shared.Options): string {
-		return "undefined";
-	}
-
 	generateTypeGuard(options: shared.Options): string {
 		let lines = new Array<string>();
 		lines.push("autoguard.guards.Undefined");
@@ -909,15 +822,6 @@ export class UnionType implements Type {
 		let lines = new Array<string>();
 		for (let type of this.types) {
 			lines.push(type.generateSchema(options));
-		}
-		let string = lines.join(" | ");
-		return string;
-	}
-
-	generateType(options: shared.Options): string {
-		let lines = new Array<string>();
-		for (let type of this.types) {
-			lines.push(type.generateType(options));
 		}
 		let string = lines.join(" | ");
 		return string;
@@ -978,10 +882,6 @@ export class Headers implements Type {
 		throw `Method not implemented!`;
 	}
 
-	generateType(options: shared.Options): string {
-		return "autoguard.api.Headers";
-	}
-
 	generateTypeGuard(options: shared.Options): string {
 		return "autoguard.api.Headers";
 	}
@@ -1002,10 +902,6 @@ export class Options implements Type {
 		throw `Method not implemented!`;
 	}
 
-	generateType(options: shared.Options): string {
-		return "autoguard.api.Options";
-	}
-
 	generateTypeGuard(options: shared.Options): string {
 		return "autoguard.api.Options";
 	}
@@ -1024,10 +920,6 @@ export class PlainType implements Type {
 
 	generateSchema(options: shared.Options): string {
 		throw `plain`;
-	}
-
-	generateType(options: shared.Options): string {
-		return "string";
 	}
 
 	generateTypeGuard(options: shared.Options): string {
