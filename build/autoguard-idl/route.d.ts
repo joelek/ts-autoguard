@@ -59,8 +59,8 @@ export declare class Headers {
 }
 export declare class Message {
     headers: Headers;
-    payload: types.Type | types.Binary;
-    constructor(headers: Headers, payload: types.Type | types.Binary);
+    payload: types.Type;
+    constructor(headers: Headers, payload: types.Type);
     generateSchema(options: shared.Options): string;
     static parse(tokenizer: tokenization.Tokenizer): Message;
 }

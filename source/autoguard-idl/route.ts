@@ -304,9 +304,9 @@ export class Headers {
 
 export class Message {
 	headers: Headers;
-	payload: types.Type | types.Binary;
+	payload: types.Type;
 
-	constructor(headers: Headers, payload: types.Type | types.Binary) {
+	constructor(headers: Headers, payload: types.Type) {
 		this.headers = headers;
 		this.payload = payload;
 	}
@@ -331,7 +331,7 @@ export class Message {
 			if (peek()?.family === "<") {
 				headers = Headers.parse(tokenizer);
 			}
-			let payload: types.Type | types.Binary = types.Binary.INSTANCE;
+			let payload: types.Type = types.Binary.INSTANCE;
 			if (peek()?.family === "binary") {
 				tokenization.expect(read(), "binary");
 				payload = types.Binary.INSTANCE;
@@ -396,12 +396,12 @@ export class Route {
 				tokenization.expect(read(), "?");
 				parameters = Parameters.parse(tokenizer);
 			}
-			let request = new Message(new Headers([]), types.UndefinedType.INSTANCE);
+			let request = new Message(new Headers([]), types.Binary.INSTANCE);
 			if (peek()?.family === "<=") {
 				tokenization.expect(read(), "<=");
 				request = Message.parse(tokenizer);
 			}
-			let response = new Message(new Headers([]), types.UndefinedType.INSTANCE);
+			let response = new Message(new Headers([]), types.Binary.INSTANCE);
 			if (peek()?.family === "=>") {
 				tokenization.expect(read(), "=>");
 				response = Message.parse(tokenizer);

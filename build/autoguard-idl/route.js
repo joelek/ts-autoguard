@@ -372,12 +372,12 @@ class Route {
                 tokenization.expect(read(), "?");
                 parameters = Parameters.parse(tokenizer);
             }
-            let request = new Message(new Headers([]), types.UndefinedType.INSTANCE);
+            let request = new Message(new Headers([]), types.Binary.INSTANCE);
             if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === "<=") {
                 tokenization.expect(read(), "<=");
                 request = Message.parse(tokenizer);
             }
-            let response = new Message(new Headers([]), types.UndefinedType.INSTANCE);
+            let response = new Message(new Headers([]), types.Binary.INSTANCE);
             if (((_c = peek()) === null || _c === void 0 ? void 0 : _c.family) === "=>") {
                 tokenization.expect(read(), "=>");
                 response = Message.parse(tokenizer);
