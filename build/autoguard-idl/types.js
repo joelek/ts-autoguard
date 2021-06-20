@@ -166,12 +166,6 @@ class Binary {
     getReferences() {
         return [];
     }
-    static parse(tokenizer) {
-        return tokenizer.newContext((read, peek) => {
-            tokenization.expect(read(), "binary");
-            return Binary.INSTANCE;
-        });
-    }
 }
 exports.Binary = Binary;
 Binary.INSTANCE = new Binary();

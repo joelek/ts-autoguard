@@ -196,13 +196,6 @@ export class Binary implements Type {
 	}
 
 	static readonly INSTANCE = new Binary();
-
-	static parse(tokenizer: tokenization.Tokenizer): UndefinedType {
-		return tokenizer.newContext((read, peek) => {
-			tokenization.expect(read(), "binary");
-			return Binary.INSTANCE;
-		});
-	}
 };
 
 export class BooleanType implements Type {

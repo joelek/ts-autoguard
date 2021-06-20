@@ -36,7 +36,6 @@ export declare class Binary implements Type {
     generateTypeGuard(options: shared.Options): string;
     getReferences(): shared.Reference[];
     static readonly INSTANCE: Binary;
-    static parse(tokenizer: tokenization.Tokenizer): UndefinedType;
 }
 export declare class BooleanType implements Type {
     constructor();
