@@ -504,8 +504,8 @@ export class ObjectType implements Type {
 			let type = value.type;
 			if (value.optional) {
 				let union = new UnionType();
-				union.add(UndefinedType.INSTANCE);
 				union.add(type);
+				union.add(UndefinedType.INSTANCE);
 				type = union;
 			}
 			lines.push("	\"" + key + "\": " + type.generateTypeGuard({ ...options, eol: options.eol + "\t" }));

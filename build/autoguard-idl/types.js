@@ -425,8 +425,8 @@ class ObjectType {
             let type = value.type;
             if (value.optional) {
                 let union = new UnionType();
-                union.add(UndefinedType.INSTANCE);
                 union.add(type);
+                union.add(UndefinedType.INSTANCE);
                 type = union;
             }
             lines.push("	\"" + key + "\": " + type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
