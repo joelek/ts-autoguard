@@ -1,84 +1,36 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PlainType = exports.Options = exports.Headers = exports.UnionType = exports.UndefinedType = exports.TupleType = exports.StringLiteralType = exports.StringType = exports.ReferenceType = exports.RecordType = exports.ObjectType = exports.NumberLiteralType = exports.NumberType = exports.NullType = exports.IntersectionType = exports.GroupType = exports.BooleanLiteralType = exports.BooleanType = exports.Binary = exports.ArrayType = exports.AnyType = exports.Type = exports.makeInclude = exports.Typenames = void 0;
+exports.PlainType = exports.Options = exports.Headers = exports.UnionType = exports.UndefinedType = exports.TupleType = exports.StringLiteralType = exports.StringType = exports.ReferenceType = exports.RecordType = exports.ObjectType = exports.NumberLiteralType = exports.NumberType = exports.NullType = exports.IntersectionType = exports.GroupType = exports.BooleanLiteralType = exports.BooleanType = exports.Binary = exports.ArrayType = exports.AnyType = exports.Type = void 0;
 const tokenization = require("./tokenization");
-exports.Typenames = ((...tuple) => tuple)("Any", "Array", "Boolean", "BooleanLiteral", "Group", "Intersection", "Null", "Number", "NumberLiteral", "Object", "Record", "Reference", "String", "StringLiteral", "Tuple", "Undefined", "Union");
-function makeInclude() {
-    return exports.Typenames.reduce((include, typename) => (Object.assign(Object.assign({}, include), { [typename]: true })), {});
-}
-exports.makeInclude = makeInclude;
-;
 ;
 exports.Type = {
-    parse(tokenizer, include = makeInclude(), exclude = {}) {
-        try {
-            return UnionType.parse(tokenizer, include, exclude);
+    parse(tokenizer, options) {
+        var _a;
+        let parsers = (_a = options === null || options === void 0 ? void 0 : options.parsers) !== null && _a !== void 0 ? _a : [
+            UnionType.parse,
+            IntersectionType.parse,
+            ArrayType.parse,
+            AnyType.parse,
+            BooleanType.parse,
+            BooleanLiteralType.parse,
+            NullType.parse,
+            NumberType.parse,
+            NumberLiteralType.parse,
+            StringType.parse,
+            StringLiteralType.parse,
+            UndefinedType.parse,
+            ReferenceType.parse,
+            TupleType.parse,
+            ObjectType.parse,
+            GroupType.parse,
+            RecordType.parse
+        ];
+        for (let parser of parsers) {
+            try {
+                return parser(tokenizer, parsers);
+            }
+            catch (error) { }
         }
-        catch (error) { }
-        try {
-            return IntersectionType.parse(tokenizer, include, exclude);
-        }
-        catch (error) { }
-        try {
-            return ArrayType.parse(tokenizer, include, exclude);
-        }
-        catch (error) { }
-        try {
-            return AnyType.parse(tokenizer, include, exclude);
-        }
-        catch (error) { }
-        try {
-            return BooleanType.parse(tokenizer, include, exclude);
-        }
-        catch (error) { }
-        try {
-            return BooleanLiteralType.parse(tokenizer, include, exclude);
-        }
-        catch (error) { }
-        try {
-            return NullType.parse(tokenizer, include, exclude);
-        }
-        catch (error) { }
-        try {
-            return NumberType.parse(tokenizer, include, exclude);
-        }
-        catch (error) { }
-        try {
-            return NumberLiteralType.parse(tokenizer, include, exclude);
-        }
-        catch (error) { }
-        try {
-            return StringType.parse(tokenizer, include, exclude);
-        }
-        catch (error) { }
-        try {
-            return StringLiteralType.parse(tokenizer, include, exclude);
-        }
-        catch (error) { }
-        try {
-            return UndefinedType.parse(tokenizer, include, exclude);
-        }
-        catch (error) { }
-        try {
-            return ReferenceType.parse(tokenizer, include, exclude);
-        }
-        catch (error) { }
-        try {
-            return TupleType.parse(tokenizer, include, exclude);
-        }
-        catch (error) { }
-        try {
-            return ObjectType.parse(tokenizer, include, exclude);
-        }
-        catch (error) { }
-        try {
-            return GroupType.parse(tokenizer, include, exclude);
-        }
-        catch (error) { }
-        try {
-            return RecordType.parse(tokenizer, include, exclude);
-        }
-        catch (error) { }
         return tokenizer.newContext((read, peek) => {
             let token = read();
             throw `Unexpected ${token.family} at row ${token.row}, col ${token.col}!`;
@@ -99,10 +51,7 @@ class AnyType {
     getReferences() {
         return [];
     }
-    static parse(tokenizer, include, exclude) {
-        if (!include.Any || exclude.Any) {
-            throw `Type not included!`;
-        }
+    static parse(tokenizer, parsers) {
         return tokenizer.newContext((read, peek) => {
             tokenization.expect(read(), "any");
             return AnyType.INSTANCE;
@@ -127,12 +76,11 @@ class ArrayType {
     getReferences() {
         return this.type.getReferences();
     }
-    static parse(tokenizer, include, exclude) {
-        if (!include.Array || exclude.Array) {
-            throw `Type not included!`;
-        }
+    static parse(tokenizer, parsers) {
         return tokenizer.newContext((read, peek) => {
-            let type = exports.Type.parse(tokenizer, include, Object.assign(Object.assign({}, exclude), { Array: true }));
+            let type = exports.Type.parse(tokenizer, {
+                parsers: parsers.filter((parser) => parser !== ArrayType.parse)
+            });
             tokenization.expect(read(), "[");
             tokenization.expect(read(), "]");
             let array = new ArrayType(type);
@@ -184,10 +132,7 @@ class BooleanType {
     getReferences() {
         return [];
     }
-    static parse(tokenizer, include, exclude) {
-        if (!include.Boolean || exclude.Boolean) {
-            throw `Type not included!`;
-        }
+    static parse(tokenizer, parsers) {
         return tokenizer.newContext((read, peek) => {
             tokenization.expect(read(), "boolean");
             return BooleanType.INSTANCE;
@@ -212,10 +157,7 @@ class BooleanLiteralType {
     getReferences() {
         return [];
     }
-    static parse(tokenizer, include, exclude) {
-        if (!include.BooleanLiteral || exclude.BooleanLiteral) {
-            throw `Type not included!`;
-        }
+    static parse(tokenizer, parsers) {
         return tokenizer.newContext((read, peek) => {
             let token = tokenization.expect(read(), [
                 "true",
@@ -249,13 +191,10 @@ class GroupType {
     getReferences() {
         return this.type.getReferences();
     }
-    static parse(tokenizer, include, exclude) {
-        if (!include.Group || exclude.Group) {
-            throw `Type not included!`;
-        }
+    static parse(tokenizer, parsers) {
         return tokenizer.newContext((read, peek) => {
             tokenization.expect(read(), "(");
-            let type = exports.Type.parse(tokenizer, include);
+            let type = exports.Type.parse(tokenizer);
             tokenization.expect(read(), ")");
             return new GroupType(type);
         });
@@ -293,13 +232,12 @@ class IntersectionType {
         }
         return references;
     }
-    static parse(tokenizer, include, exclude) {
-        if (!include.Intersection || exclude.Intersection) {
-            throw `Type not included!`;
-        }
+    static parse(tokenizer, parsers) {
         return tokenizer.newContext((read, peek) => {
             var _a;
-            let type = exports.Type.parse(tokenizer, include, Object.assign(Object.assign({}, exclude), { Intersection: true }));
+            let type = exports.Type.parse(tokenizer, {
+                parsers: parsers.filter((parser) => parser !== IntersectionType.parse)
+            });
             let instance = new IntersectionType();
             instance.add(type);
             while (true) {
@@ -307,7 +245,9 @@ class IntersectionType {
                     break;
                 }
                 tokenization.expect(read(), "&");
-                let type = exports.Type.parse(tokenizer, include, Object.assign(Object.assign({}, exclude), { Intersection: true }));
+                let type = exports.Type.parse(tokenizer, {
+                    parsers: parsers.filter((parser) => parser !== IntersectionType.parse)
+                });
                 instance.add(type);
             }
             if (instance.types.size === 1) {
@@ -333,10 +273,7 @@ class NullType {
     getReferences() {
         return [];
     }
-    static parse(tokenizer, include, exclude) {
-        if (!include.Null || exclude.Null) {
-            throw `Type not included!`;
-        }
+    static parse(tokenizer, parsers) {
         return tokenizer.newContext((read, peek) => {
             tokenization.expect(read(), "null");
             return NullType.INSTANCE;
@@ -360,10 +297,7 @@ class NumberType {
     getReferences() {
         return [];
     }
-    static parse(tokenizer, include, exclude) {
-        if (!include.Number || exclude.Number) {
-            throw `Type not included!`;
-        }
+    static parse(tokenizer, parsers) {
         return tokenizer.newContext((read, peek) => {
             tokenization.expect(read(), "number");
             return NumberType.INSTANCE;
@@ -388,10 +322,7 @@ class NumberLiteralType {
     getReferences() {
         return [];
     }
-    static parse(tokenizer, include, exclude) {
-        if (!include.NumberLiteral || exclude.NumberLiteral) {
-            throw `Type not included!`;
-        }
+    static parse(tokenizer, parsers) {
         return tokenizer.newContext((read, peek) => {
             let value = tokenization.expect(read(), "NUMBER_LITERAL").value;
             return new NumberLiteralType(Number.parseInt(value));
@@ -442,10 +373,7 @@ class ObjectType {
         }
         return references;
     }
-    static parse(tokenizer, include, exclude) {
-        if (!include.Object || exclude.Object) {
-            throw `Type not included!`;
-        }
+    static parse(tokenizer, parsers) {
         return tokenizer.newContext((read, peek) => {
             var _a, _b, _c;
             tokenization.expect(read(), "{");
@@ -463,7 +391,7 @@ class ObjectType {
                         optional = true;
                     }
                     tokenization.expect(read(), ":");
-                    let type = exports.Type.parse(tokenizer, include);
+                    let type = exports.Type.parse(tokenizer);
                     instance.add(key, {
                         type,
                         optional
@@ -496,13 +424,10 @@ class RecordType {
     getReferences() {
         return this.type.getReferences();
     }
-    static parse(tokenizer, include, exclude) {
-        if (!include.Record || exclude.Record) {
-            throw `Type not included!`;
-        }
+    static parse(tokenizer, parsers) {
         return tokenizer.newContext((read, peek) => {
             tokenization.expect(read(), "{");
-            let type = exports.Type.parse(tokenizer, include);
+            let type = exports.Type.parse(tokenizer);
             tokenization.expect(read(), "}");
             return new RecordType(type);
         });
@@ -529,10 +454,7 @@ class ReferenceType {
             }
         ];
     }
-    static parse(tokenizer, include, exclude) {
-        if (!include.Reference || exclude.Reference) {
-            throw `Type not included!`;
-        }
+    static parse(tokenizer, parsers) {
         return tokenizer.newContext((read, peek) => {
             var _a;
             let tokens = new Array();
@@ -567,10 +489,7 @@ class StringType {
     getReferences() {
         return [];
     }
-    static parse(tokenizer, include, exclude) {
-        if (!include.String || exclude.String) {
-            throw `Type not included!`;
-        }
+    static parse(tokenizer, parsers) {
         return tokenizer.newContext((read, peek) => {
             tokenization.expect(read(), "string");
             return StringType.INSTANCE;
@@ -595,10 +514,7 @@ class StringLiteralType {
     getReferences() {
         return [];
     }
-    static parse(tokenizer, include, exclude) {
-        if (!include.StringLiteral || exclude.StringLiteral) {
-            throw `Type not included!`;
-        }
+    static parse(tokenizer, parsers) {
         return tokenizer.newContext((read, peek) => {
             let value = tokenization.expect(read(), "STRING_LITERAL").value;
             return new StringLiteralType(value.slice(1, -1));
@@ -638,17 +554,14 @@ class TupleType {
         }
         return references;
     }
-    static parse(tokenizer, include, exclude) {
-        if (!include.Tuple || exclude.Tuple) {
-            throw `Type not included!`;
-        }
+    static parse(tokenizer, parsers) {
         return tokenizer.newContext((read, peek) => {
             var _a, _b;
             tokenization.expect(read(), "[");
             let instance = new TupleType();
             if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.value) !== "]") {
                 while (true) {
-                    let type = exports.Type.parse(tokenizer, include);
+                    let type = exports.Type.parse(tokenizer);
                     instance.add(type);
                     if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.value) !== ",") {
                         break;
@@ -677,10 +590,7 @@ class UndefinedType {
     getReferences() {
         return [];
     }
-    static parse(tokenizer, include, exclude) {
-        if (!include.Undefined || exclude.Undefined) {
-            throw `Type not included!`;
-        }
+    static parse(tokenizer, parsers) {
         return tokenizer.newContext((read, peek) => {
             tokenization.expect(read(), "undefined");
             return UndefinedType.INSTANCE;
@@ -720,13 +630,12 @@ class UnionType {
         }
         return references;
     }
-    static parse(tokenizer, include, exclude) {
-        if (!include.Union || exclude.Union) {
-            throw `Type not included!`;
-        }
+    static parse(tokenizer, parsers) {
         return tokenizer.newContext((read, peek) => {
             var _a;
-            let type = exports.Type.parse(tokenizer, include, Object.assign(Object.assign({}, exclude), { Union: true }));
+            let type = exports.Type.parse(tokenizer, {
+                parsers: parsers.filter((parser) => parser !== UnionType.parse)
+            });
             let instance = new UnionType();
             instance.add(type);
             while (true) {
@@ -734,7 +643,9 @@ class UnionType {
                     break;
                 }
                 tokenization.expect(read(), "|");
-                let type = exports.Type.parse(tokenizer, include, Object.assign(Object.assign({}, exclude), { Union: true }));
+                let type = exports.Type.parse(tokenizer, {
+                    parsers: parsers.filter((parser) => parser !== UnionType.parse)
+                });
                 instance.add(type);
             }
             if (instance.types.size === 1) {
