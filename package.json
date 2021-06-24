@@ -28,5 +28,5 @@
 		"test:node": "node ./build/autoguard-cli/index.js --root=./test/node/",
 		"test": "node ./build/autoguard-cli/index.js --root=./test/"
 	},
-	"version": "5.6.0"
+	"version": "5.6.1"
 }
