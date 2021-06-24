@@ -240,7 +240,7 @@ route sendOptionalRequestHeader(): GET:/
 	<= <{ request_header? }>;
 
 route sendRepeatedRequestHeader(): GET:/
-	<= <{ repeated_header* }>;
+	<= <{ request_header* }>;
 
 route receiveRequiredResponseHeader(): GET:/
 	=> <{ response_header }>;
@@ -249,7 +249,7 @@ route receiveOptionalResponseHeader(): GET:/
 	=> <{ response_header? }>;
 
 route receiveRepeatedResponseHeader(): GET:/
-	=> <{ repeated_header* }>;
+	=> <{ response_header* }>;
 
 route receiveJSONPayload(): GET:/
 	=> {
