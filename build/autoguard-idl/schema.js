@@ -537,8 +537,9 @@ class Schema {
                 }
             }
             tokenization.expect(read(), "}");
-            if (is.present(peek())) {
-                throw `Expected end of stream!`;
+            let token = peek();
+            if (is.present(token)) {
+                throw new tokenization.SyntaxError(token);
             }
             return new Schema(guards, routes);
         });
@@ -547,21 +548,23 @@ class Schema {
         return tokenizer.newContext((read, peek) => {
             let guards = new Array();
             let routes = new Array();
+            let errors = new Array();
             while (peek()) {
                 try {
                     guards.push(guard.Guard.parse(tokenizer));
                     continue;
                 }
-                catch (error) { }
+                catch (error) {
+                    errors.push(error);
+                }
                 try {
                     routes.push(route.Route.parse(tokenizer));
                     continue;
                 }
-                catch (error) { }
-                return tokenizer.newContext((read, peek) => {
-                    let token = read();
-                    throw `Unexpected ${token.family} at row ${token.row}, col ${token.col}!`;
-                });
+                catch (error) {
+                    errors.push(error);
+                }
+                throw tokenization.SyntaxError.getError(tokenizer, errors);
             }
             return new Schema(guards, routes);
         });

@@ -20,4 +20,10 @@ export declare class Tokenizer {
     constructor(string: string);
     newContext<A>(producer: (read: () => Token, peek: () => Token | undefined) => A): A;
 }
+export declare class SyntaxError {
+    private token;
+    constructor(token: Token);
+    toString(): string;
+    static getError(tokenizer: Tokenizer, errors: Array<any>): any;
+}
 export declare function expect(token: Token, family: Family | Family[]): Token;

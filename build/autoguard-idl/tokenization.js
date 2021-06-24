@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.expect = exports.Tokenizer = exports.removeWhitespaceAndComments = exports.IdentifierFamilies = exports.Families = void 0;
+exports.expect = exports.SyntaxError = exports.Tokenizer = exports.removeWhitespaceAndComments = exports.IdentifierFamilies = exports.Families = void 0;
 exports.Families = ((...tuple) => tuple)("LS", "WS", "(", ")", "[", "]", "{", "}", "?", "|", ".", "..", "/", "*", "#", "&", ",", ":", ";", "<", ">", "=>", "<=", "any", "binary", "boolean", "false", "guard", "null", "number", "plain", "route", "string", "true", "undefined", "IDENTIFIER", "NUMBER_LITERAL", "STRING_LITERAL", "PATH_COMPONENT");
 exports.IdentifierFamilies = ((...tuple) => tuple)("any", "binary", "boolean", "false", "guard", "null", "number", "plain", "route", "string", "true", "undefined", "IDENTIFIER");
 function removeWhitespaceAndComments(unfiltered) {
@@ -128,10 +128,46 @@ class Tokenizer {
 }
 exports.Tokenizer = Tokenizer;
 ;
+class SyntaxError {
+    constructor(token) {
+        this.token = token;
+    }
+    toString() {
+        return `Unexpected ${this.token.family} at row ${this.token.row}, col ${this.token.col}!`;
+    }
+    static getError(tokenizer, errors) {
+        return tokenizer.newContext((read, peek) => {
+            for (let error of errors) {
+                if (!(error instanceof SyntaxError)) {
+                    return error;
+                }
+            }
+            let syntaxErrors = errors;
+            syntaxErrors.sort((one, two) => {
+                if (two.token.row > one.token.row) {
+                    return -1;
+                }
+                if (two.token.row < one.token.row) {
+                    return 1;
+                }
+                if (two.token.col > one.token.col) {
+                    return -1;
+                }
+                if (two.token.col < one.token.col) {
+                    return 1;
+                }
+                return 0;
+            });
+            return syntaxErrors.pop();
+        });
+    }
+}
+exports.SyntaxError = SyntaxError;
+;
 function expect(token, family) {
     let families = Array.isArray(family) ? family : [family];
     if (!families.includes(token.family)) {
-        throw `Unexpected ${token.family} at row ${token.row}, col ${token.col}!`;
+        throw new SyntaxError(token);
     }
     return token;
 }

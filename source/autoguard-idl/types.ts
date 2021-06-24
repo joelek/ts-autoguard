@@ -11,33 +11,35 @@ export interface Type {
 
 export const Type = {
 	parse(tokenizer: tokenization.Tokenizer, options?: Partial<{ parsers: Array<TypeParser> }>): Type {
-		let parsers = options?.parsers ?? [
-			UnionType.parse,
-			IntersectionType.parse,
-			ArrayType.parse,
-			AnyType.parse,
-			BooleanType.parse,
-			BooleanLiteralType.parse,
-			NullType.parse,
-			NumberType.parse,
-			NumberLiteralType.parse,
-			StringType.parse,
-			StringLiteralType.parse,
-			UndefinedType.parse,
-			ReferenceType.parse,
-			TupleType.parse,
-			ObjectType.parse,
-			GroupType.parse,
-			RecordType.parse
-		];
-		for (let parser of parsers) {
-			try {
-				return parser(tokenizer, parsers);
-			} catch (error) {}
-		}
 		return tokenizer.newContext((read, peek) => {
-			let token = read();
-			throw `Unexpected ${token.family} at row ${token.row}, col ${token.col}!`;
+			let parsers = options?.parsers ?? [
+				UnionType.parse,
+				IntersectionType.parse,
+				ArrayType.parse,
+				AnyType.parse,
+				BooleanType.parse,
+				BooleanLiteralType.parse,
+				NullType.parse,
+				NumberType.parse,
+				NumberLiteralType.parse,
+				StringType.parse,
+				StringLiteralType.parse,
+				UndefinedType.parse,
+				ReferenceType.parse,
+				TupleType.parse,
+				ObjectType.parse,
+				GroupType.parse,
+				RecordType.parse
+			];
+			let errors = new Array<any>();
+			for (let parser of parsers) {
+				try {
+					return parser(tokenizer, parsers);
+				} catch (error) {
+					errors.push(error);
+				}
+			}
+			throw tokenization.SyntaxError.getError(tokenizer, errors);
 		});
 	}
 };

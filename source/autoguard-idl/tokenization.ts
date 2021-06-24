@@ -199,10 +199,49 @@ export class Tokenizer {
 	}
 };
 
+export class SyntaxError {
+	private token: Token;
+
+	constructor(token: Token) {
+		this.token = token;
+	}
+
+	toString(): string {
+		return `Unexpected ${this.token.family} at row ${this.token.row}, col ${this.token.col}!`;
+	}
+
+	static getError(tokenizer: Tokenizer, errors: Array<any>): any {
+		return tokenizer.newContext((read, peek) => {
+			for (let error of errors) {
+				if (!(error instanceof SyntaxError)) {
+					return error;
+				}
+			}
+			let syntaxErrors = errors as Array<SyntaxError>;
+			syntaxErrors.sort((one, two) => {
+				if (two.token.row > one.token.row) {
+					return -1;
+				}
+				if (two.token.row < one.token.row) {
+					return 1;
+				}
+				if (two.token.col > one.token.col) {
+					return -1;
+				}
+				if (two.token.col < one.token.col) {
+					return 1;
+				}
+				return 0;
+			});
+			return syntaxErrors.pop();
+		});
+	}
+};
+
 export function expect(token: Token, family: Family | Family[]): Token {
 	let families = Array.isArray(family) ? family : [family];
 	if (!families.includes(token.family)) {
-		throw `Unexpected ${token.family} at row ${token.row}, col ${token.col}!`;
+		throw new SyntaxError(token);
 	}
 	return token;
 };

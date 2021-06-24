@@ -330,7 +330,6 @@ NB: This project targets TypeScript 4 in strict mode.
 ## Roadmap
 
 * Simplify import paths before resolving references.
-* Add more detailed error messages for syntax errors.
 * Extend type guards with functionality for deep structured cloning.
 * Add strict option that performs automatic JSON payload filtering.
 * Structure code using TypeScript project references.
