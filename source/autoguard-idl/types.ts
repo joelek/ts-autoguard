@@ -912,7 +912,7 @@ export class PlainType implements Type {
 	}
 
 	generateSchema(options: shared.Options): string {
-		throw `plain`;
+		return `plain`;
 	}
 
 	generateTypeGuard(options: shared.Options): string {

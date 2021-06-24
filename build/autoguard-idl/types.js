@@ -782,7 +782,7 @@ class PlainType {
     constructor() {
     }
     generateSchema(options) {
-        throw `plain`;
+        return `plain`;
     }
     generateTypeGuard(options) {
         return "autoguard.guards.String";
