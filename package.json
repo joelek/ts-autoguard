@@ -20,7 +20,7 @@
 		"build": "npm run compile && npm run package",
 		"clean": "rm -rf ./build/ ./node_modules/",
 		"compile": "rm -rf ./build/* && npx tsc --build",
-		"package": "rm -rf ./dist/* && cd ./build/ && cp --parents ./**/*.js ./**/*.d.ts ../dist/",
+		"package": "rm -rf ./dist/* && cd ./build/ && cp -r ./* ../dist/",
 		"preversion": "npm run build && git add ./",
 		"postversion": "git push && git push --tags",
 		"test:guards": "node ./dist/cli/index.js --root=./test/guards/",
