@@ -4,7 +4,7 @@ import * as libfs from "fs";
 import * as libos from "os";
 import * as libpath from "path";
 import * as libts from "typescript";
-import * as idl from "../autoguard-idl";
+import * as idl from "../idl";
 
 type Options = idl.shared.Options & {
 	root: string;

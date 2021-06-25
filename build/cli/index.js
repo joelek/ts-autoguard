@@ -5,7 +5,7 @@ const libfs = require("fs");
 const libos = require("os");
 const libpath = require("path");
 const libts = require("typescript");
-const idl = require("../autoguard-idl");
+const idl = require("../idl");
 function findFiles(path, paths = []) {
     let stat = libfs.statSync(path);
     if (stat.isDirectory() && libpath.basename(path) !== "node_modules") {
