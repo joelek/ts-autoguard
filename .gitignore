@@ -1,2 +1,3 @@
+build/**/*.tsbuildinfo
 node_modules/
 private/

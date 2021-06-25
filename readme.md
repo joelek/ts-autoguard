@@ -332,7 +332,6 @@ NB: This project targets TypeScript 4 in strict mode.
 * Simplify import paths before resolving references.
 * Extend type guards with functionality for deep structured cloning.
 * Add strict option that performs automatic JSON payload filtering.
-* Structure code using TypeScript project references.
 * Modernize code to use string templates.
 * Write unit tests.
 

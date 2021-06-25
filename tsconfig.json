@@ -1,13 +1,22 @@
 {
 	"compilerOptions": {
-		"declaration": true,
+		"composite": true,
 		"module": "commonjs",
 		"outDir": "./build/",
 		"rootDir": "./source/",
 		"strict": true,
 		"target": "es6"
 	},
-	"include": [
-		"./source/"
+	"include": [],
+	"references": [
+		{
+			"path": "./source/cli/"
+		},
+		{
+			"path": "./source/idl/"
+		},
+		{
+			"path": "./source/lib/"
+		}
 	]
 }
