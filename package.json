@@ -1,6 +1,6 @@
 {
 	"bin": {
-		"autoguard": "./build/cli/index.js"
+		"autoguard": "./dist/cli/index.js"
 	},
 	"devDependencies": {
 		"@types/node": "^14.14.43",
@@ -10,23 +10,25 @@
 		"@joelek/ts-stdlib": "github:joelek/ts-stdlib#semver:^1"
 	},
 	"license": "MIT",
-	"main": "./build/lib/index.js",
+	"main": "./dist/lib/index.js",
 	"name": "@joelek/ts-autoguard",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/joelek/ts-autoguard.git"
 	},
 	"scripts": {
-		"build": "rm -rf ./build/ && npx tsc --build",
+		"build": "npm run compile && npm run package",
 		"clean": "rm -rf ./build/ ./node_modules/",
+		"compile": "rm -rf ./build/* && npx tsc --build",
+		"package": "rm -rf ./dist/* && cd ./build/ && cp --parents ./**/*.js ./**/*.d.ts ../dist/",
 		"preversion": "npm run build && git add ./",
 		"postversion": "git push && git push --tags",
-		"test:guards": "node ./build/cli/index.js --root=./test/guards/",
-		"test:recursion": "node ./build/cli/index.js --root=./test/recursion/",
-		"test:modules": "node ./build/cli/index.js --root=./test/modules/",
-		"test:rpc": "node ./build/cli/index.js --root=./test/rpc/",
-		"test:node": "node ./build/cli/index.js --root=./test/node/",
-		"test": "node ./build/cli/index.js --root=./test/"
+		"test:guards": "node ./dist/cli/index.js --root=./test/guards/",
+		"test:recursion": "node ./dist/cli/index.js --root=./test/recursion/",
+		"test:modules": "node ./dist/cli/index.js --root=./test/modules/",
+		"test:rpc": "node ./dist/cli/index.js --root=./test/rpc/",
+		"test:node": "node ./dist/cli/index.js --root=./test/node/",
+		"test": "node ./dist/cli/index.js --root=./test/"
 	},
 	"version": "5.6.1"
 }
