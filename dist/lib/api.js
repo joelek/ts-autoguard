@@ -17,7 +17,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.route = exports.combineRawHeaders = exports.respond = exports.makeNodeRequestHandler = exports.xhr = exports.acceptsMethod = exports.acceptsComponents = exports.finalizeResponse = exports.deserializePayload = exports.deserializeStringPayload = exports.compareArrays = exports.serializePayload = exports.serializeStringPayload = exports.collectPayload = exports.EndpointError = exports.ServerResponse = exports.ClientRequest = exports.deserializeValue = exports.serializeValue = exports.Headers = exports.Options = exports.JSON = exports.Primitive = exports.Binary = exports.SyncBinary = exports.AsyncBinary = exports.DynamicRouteMatcher = exports.StaticRouteMatcher = exports.decodeUndeclaredHeaders = exports.decodeHeaderValue = exports.decodeHeaderValues = exports.decodeUndeclaredParameters = exports.decodeParameterValue = exports.decodeParameterValues = exports.encodeUndeclaredParameterPairs = exports.encodeParameterPairs = exports.escapeParameterValue = exports.escapeParameterKey = exports.encodeComponents = exports.escapeComponent = exports.encodeUndeclaredHeaderPairs = exports.encodeHeaderPairs = exports.escapeHeaderValue = exports.escapeHeaderKey = exports.splitHeaders = exports.combineParameters = exports.splitParameters = exports.combineComponents = exports.splitComponents = exports.decodeURIComponent = void 0;
-exports.makeReadStreamResponse = exports.getContentTypeFromExtension = exports.parseRangeHeader = void 0;
+exports.makeReadStreamResponse = exports.makeDirectoryListing = exports.getContentTypeFromExtension = exports.parseRangeHeader = void 0;
 const guards = require("./guards");
 function decodeURIComponent(string) {
     try {
@@ -965,6 +965,49 @@ function getContentTypeFromExtension(extension) {
     return extensions[extension];
 }
 exports.getContentTypeFromExtension = getContentTypeFromExtension;
+;
+function makeDirectoryListing(pathPrefix, pathSuffix, request) {
+    let libfs = require("fs");
+    let libpath = require("path");
+    let pathSuffixParts = libpath.normalize(pathSuffix).split(libpath.sep);
+    if (pathSuffixParts[0] === "..") {
+        throw 400;
+    }
+    if (pathSuffixParts[pathSuffixParts.length - 1] !== "") {
+        pathSuffixParts.push("");
+    }
+    let fullPath = libpath.join(pathPrefix, ...pathSuffixParts);
+    if (!libfs.existsSync(fullPath) || !libfs.statSync(fullPath).isDirectory()) {
+        throw 404;
+    }
+    let entries = libfs.readdirSync(fullPath, { withFileTypes: true });
+    let directories = entries
+        .filter((entry) => entry.isDirectory())
+        .map((entry) => {
+        return {
+            name: entry.name
+        };
+    })
+        .sort((one, two) => one.name.localeCompare(two.name));
+    let files = entries
+        .filter((entry) => entry.isFile())
+        .map((entry) => {
+        let stat = libfs.statSync(libpath.join(fullPath, entry.name));
+        return {
+            name: entry.name,
+            size: stat.size,
+            timestamp: stat.mtime.valueOf()
+        };
+    })
+        .sort((one, two) => one.name.localeCompare(two.name));
+    let components = pathSuffixParts;
+    return {
+        components,
+        directories,
+        files
+    };
+}
+exports.makeDirectoryListing = makeDirectoryListing;
 ;
 function makeReadStreamResponse(pathPrefix, pathSuffix, request) {
     let libfs = require("fs");

@@ -1010,6 +1010,60 @@ export function getContentTypeFromExtension(extension: string): string | undefin
 	return extensions[extension];
 };
 
+export type DirectoryListing = {
+	components: Array<string>;
+	directories: Array<{
+		name: string;
+	}>;
+	files: Array<{
+		name: string;
+		size: number;
+		timestamp: number;
+	}>;
+};
+
+export function makeDirectoryListing(pathPrefix: string, pathSuffix: string, request: ClientRequest<EndpointRequest>): DirectoryListing {
+	let libfs = require("fs") as typeof import("fs");
+	let libpath = require("path") as typeof import("path");
+	let pathSuffixParts = libpath.normalize(pathSuffix).split(libpath.sep);
+	if (pathSuffixParts[0] === "..") {
+		throw 400;
+	}
+	if (pathSuffixParts[pathSuffixParts.length - 1] !== "") {
+		pathSuffixParts.push("");
+	}
+	let fullPath = libpath.join(pathPrefix, ...pathSuffixParts);
+	if (!libfs.existsSync(fullPath) || !libfs.statSync(fullPath).isDirectory()) {
+		throw 404;
+	}
+	let entries = libfs.readdirSync(fullPath, { withFileTypes: true });
+	let directories = entries
+		.filter((entry) => entry.isDirectory())
+		.map((entry) => {
+			return {
+				name: entry.name
+			};
+		})
+		.sort((one, two) => one.name.localeCompare(two.name));
+	let files = entries
+		.filter((entry) => entry.isFile())
+		.map((entry) => {
+			let stat = libfs.statSync(libpath.join(fullPath, entry.name));
+			return {
+				name: entry.name,
+				size: stat.size,
+				timestamp: stat.mtime.valueOf()
+			};
+		})
+		.sort((one, two) => one.name.localeCompare(two.name));
+	let components = pathSuffixParts;
+	return {
+		components,
+		directories,
+		files
+	};
+};
+
 export function makeReadStreamResponse(pathPrefix: string, pathSuffix: string, request: ClientRequest<EndpointRequest>): EndpointResponse & { payload: Binary } {
 	let libfs = require("fs") as typeof import("fs");
 	let libpath = require("path") as typeof import("path");

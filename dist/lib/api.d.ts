@@ -179,6 +179,18 @@ export declare function parseRangeHeader(value: JSON, size: number): {
     size: number;
 };
 export declare function getContentTypeFromExtension(extension: string): string | undefined;
+export declare type DirectoryListing = {
+    components: Array<string>;
+    directories: Array<{
+        name: string;
+    }>;
+    files: Array<{
+        name: string;
+        size: number;
+        timestamp: number;
+    }>;
+};
+export declare function makeDirectoryListing(pathPrefix: string, pathSuffix: string, request: ClientRequest<EndpointRequest>): DirectoryListing;
 export declare function makeReadStreamResponse(pathPrefix: string, pathSuffix: string, request: ClientRequest<EndpointRequest>): EndpointResponse & {
     payload: Binary;
 };
