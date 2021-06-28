@@ -1005,7 +1005,8 @@ export function getContentTypeFromExtension(extension: string): string | undefin
 		".jpeg": "image/jpeg",
 		".js": "text/javascript",
 		".json": "application/json",
-		".png": "image/png"
+		".png": "image/png",
+		".svg": "image/svg+xml"
 	};
 	return extensions[extension];
 };

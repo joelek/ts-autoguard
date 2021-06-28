@@ -960,7 +960,8 @@ function getContentTypeFromExtension(extension) {
         ".jpeg": "image/jpeg",
         ".js": "text/javascript",
         ".json": "application/json",
-        ".png": "image/png"
+        ".png": "image/png",
+        ".svg": "image/svg+xml"
     };
     return extensions[extension];
 }
