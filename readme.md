@@ -13,14 +13,6 @@ route getObject(): GET:/objects/<object_id:number>/ => Object;
 
 Template project with working client and server now available at https://github.com/joelek/autoguard-template.
 
-## Sponsorship
-
-The continued development of this software depends on your sponsorship. Please consider sponsoring this project if you find that the software creates value for you and your organization.
-
-The sponsor button can be used to view the different sponsoring options. Contributions of all sizes are welcome.
-
-Thank you for your support!
-
 ## Background
 
 JSON is a standardized and commonly used format for which JavaScript runtimes contain built-in serialization functionality. The TypeScript return type of the deserialization function `JSON.parse()` is `any` since there is no way for the TypeScript compiler to know what the serialized data consists of. The TypeScript `any` type is flexible and unsurprisingly allows you to treat it as anything. This is both extremely useful and incredibly dangerous for the runtime safety of an application.
@@ -312,6 +304,14 @@ The serialized value may be stored on disk or transmitted through a network and 
 ```ts
 serializer.deserialize(serialized, (type, data) => { /* ... */ });
 ```
+
+## Sponsorship
+
+The continued development of this software depends on your sponsorship. Please consider sponsoring this project if you find that the software creates value for you and your organization.
+
+The sponsor button can be used to view the different sponsoring options. Contributions of all sizes are welcome.
+
+Thank you for your support!
 
 ## Installation
 
