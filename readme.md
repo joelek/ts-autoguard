@@ -17,7 +17,9 @@ Template project with working client and server now available at https://github.
 
 The continued development of this software depends on your sponsorship. Please consider sponsoring this project if you find that the software creates value for you and your organization.
 
-The sponsor button can be used to view the different sponsoring options. Contributions of all sizes are welcome. Thank you for your contribution!
+The sponsor button can be used to view the different sponsoring options. Contributions of all sizes are welcome.
+
+Thank you for your support!
 
 ## Background
 
