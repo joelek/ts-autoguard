@@ -63,7 +63,7 @@ export declare const NumberLiteral: {
     of<A extends number>(value: A): serialization.MessageGuard<A>;
 };
 export declare const Object: {
-    of<A extends import("@joelek/ts-stdlib/build/routing").MessageMap<A>>(guards: serialization.MessageGuardMap<A>): serialization.MessageGuard<ExpansionOf<{ [B in RequiredKeys<A>]: A[B]; } & { [B_1 in OptionalKeys<A>]?: A[B_1] | undefined; }>>;
+    of<A extends import("@joelek/ts-stdlib/dist/lib/routing").MessageMap<A>>(guards: serialization.MessageGuardMap<A>): serialization.MessageGuard<ExpansionOf<{ [B in RequiredKeys<A>]: A[B]; } & { [B_1 in OptionalKeys<A>]?: A[B_1] | undefined; }>>;
 };
 export declare const Record: {
     of<A extends unknown>(guard: serialization.MessageGuard<A>): serialization.MessageGuard<Record<string, A | undefined>>;
