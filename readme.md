@@ -331,6 +331,7 @@ NB: This project targets TypeScript 4 in strict mode.
 
 ## Roadmap
 
+* Remove dependency on @types/node in generated client code.
 * Simplify import paths before resolving references.
 * Extend type guards with functionality for deep structured cloning.
 * Add strict option that performs automatic JSON payload filtering.
