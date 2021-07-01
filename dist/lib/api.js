@@ -1023,7 +1023,8 @@ function makeReadStreamResponse(pathPrefix, pathSuffix, request) {
     if (!libfs.existsSync(path)) {
         throw 404;
     }
-    let range = parseRangeHeader(request.headers().range, libfs.statSync(path).size);
+    let stat = libfs.statSync(path);
+    let range = parseRangeHeader(request.headers().range, stat.size);
     let stream = libfs.createReadStream(path, {
         start: range.offset,
         end: range.offset + range.length
@@ -1034,7 +1035,8 @@ function makeReadStreamResponse(pathPrefix, pathSuffix, request) {
             "Accept-Ranges": "bytes",
             "Content-Length": `${range.length}`,
             "Content-Range": range.length > 0 ? `bytes ${range.offset}-${range.offset + range.length - 1}/${range.size}` : `bytes */${range.size}`,
-            "Content-Type": getContentTypeFromExtension(libpath.extname(path))
+            "Content-Type": getContentTypeFromExtension(libpath.extname(path)),
+            "Last-Modified": stat.mtime.toUTCString()
         },
         payload: stream
     };
