@@ -645,6 +645,7 @@ export async function collectPayload(binary: Binary): Promise<Uint8Array> {
 };
 
 export function serializeStringPayload(string: string): Binary {
+	// @ts-ignore
 	let encoder = new TextEncoder();
 	let array = encoder.encode(string);
 	return [array];
@@ -672,8 +673,10 @@ export function compareArrays(one: Uint8Array, two: Uint8Array): boolean {
 
 export async function deserializeStringPayload(binary: Binary): Promise<string> {
 	let buffer = await collectPayload(binary);
+	// @ts-ignore
 	let decoder = new TextDecoder();
 	let string = decoder.decode(buffer);
+	// @ts-ignore
 	let encoder = new TextEncoder();
 	let encoded = encoder.encode(string);
 	if (!compareArrays(buffer, encoded)) {
@@ -751,6 +754,7 @@ export type RequestHandler = (raw: RawRequest, urlPrefix?: string) => Promise<Ra
 
 export function xhr(raw: RawRequest, urlPrefix?: string): Promise<RawResponse> {
 	return new Promise(async (resolve, reject) => {
+		// @ts-ignore
 		let xhr = new XMLHttpRequest();
 		xhr.onerror = reject;
 		xhr.onabort = reject;
