@@ -16,6 +16,12 @@
 			"path": "./source/idl/"
 		},
 		{
+			"path": "./source/lib-client/"
+		},
+		{
+			"path": "./source/lib-server/"
+		},
+		{
 			"path": "./source/lib-shared/"
 		}
 	]
