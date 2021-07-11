@@ -1,4 +1,4 @@
-import * as autoguard from "../../../build/autoguard-lib";
+import * as autoguard from "../../../dist/lib-server";
 import * as libclient from "../schema/client";
 
 const client = libclient.makeClient({
