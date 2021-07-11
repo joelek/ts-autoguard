@@ -10,7 +10,7 @@
 		"@joelek/ts-stdlib": "github:joelek/ts-stdlib#semver:^1"
 	},
 	"license": "MIT",
-	"main": "./dist/lib/index.js",
+	"main": "./dist/lib-shared/index.js",
 	"name": "@joelek/ts-autoguard",
 	"repository": {
 		"type": "git",

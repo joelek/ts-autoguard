@@ -16,7 +16,7 @@
 			"path": "./source/idl/"
 		},
 		{
-			"path": "./source/lib/"
+			"path": "./source/lib-shared/"
 		}
 	]
 }
