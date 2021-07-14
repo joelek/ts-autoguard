@@ -13,3 +13,4 @@ export declare type Client<A extends shared.api.RequestMap<A>, B extends shared.
     [C in keyof A & keyof B]: (request: A[C]) => Promise<ServerResponse<B[C]>>;
 };
 export declare function xhr(raw: shared.api.RawRequest, urlPrefix?: string): Promise<shared.api.RawResponse>;
+export declare function finalizeRequest(raw: shared.api.RawRequest, defaultHeaders: Array<[string, string]>): shared.api.RawRequest;

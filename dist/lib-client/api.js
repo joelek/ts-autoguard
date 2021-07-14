@@ -19,7 +19,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.xhr = exports.ServerResponse = void 0;
+exports.finalizeRequest = exports.xhr = exports.ServerResponse = void 0;
 const shared = require("../lib-shared");
 __exportStar(require("../lib-shared/api"), exports);
 class ServerResponse {
@@ -79,4 +79,16 @@ function xhr(raw, urlPrefix) {
     }));
 }
 exports.xhr = xhr;
+;
+function finalizeRequest(raw, defaultHeaders) {
+    let headersToAppend = defaultHeaders.filter((defaultHeader) => {
+        let found = raw.headers.find((header) => header[0].toLowerCase() === defaultHeader[0].toLowerCase());
+        return found === undefined;
+    });
+    return Object.assign(Object.assign({}, raw), { headers: [
+            ...raw.headers,
+            ...headersToAppend
+        ] });
+}
+exports.finalizeRequest = finalizeRequest;
 ;

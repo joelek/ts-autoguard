@@ -220,7 +220,10 @@ function generateClientRoute(route: route.Route, options: shared.Options): strin
 		lines.push(`\tlet payload = autoguard.api.serializePayload(request.payload);`);
 	}
 	lines.push(`\tlet requestHandler = options?.requestHandler ?? autoguard.api.xhr;`);
-	lines.push(`\tlet raw = await requestHandler({ method, components, parameters, headers, payload }, options?.urlPrefix);`);
+	lines.push(`\tlet defaultHeaders = new Array<[string, string]>();`);
+	lines.push(`\tdefaultHeaders.push(["Content-Type", "${getContentTypeFromType(route.request.payload)}"]);`);
+	lines.push(`\tdefaultHeaders.push(["Accept", "${getContentTypeFromType(route.response.payload)}"]);`);
+	lines.push(`\tlet raw = await requestHandler(autoguard.api.finalizeRequest({ method, components, parameters, headers, payload }, defaultHeaders), options?.urlPrefix);`);
 	lines.push(`\t{`);
 	lines.push(`\t\tlet status = raw.status;`);
 	lines.push(`\t\tlet headers: Record<string, autoguard.api.JSON> = {};`);

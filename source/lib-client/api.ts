@@ -68,3 +68,17 @@ export function xhr(raw: shared.api.RawRequest, urlPrefix?: string): Promise<sha
 		xhr.send(await shared.api.collectPayload(raw.payload));
 	});
 };
+
+export function finalizeRequest(raw: shared.api.RawRequest, defaultHeaders: Array<[string, string]>): shared.api.RawRequest {
+	let headersToAppend = defaultHeaders.filter((defaultHeader) => {
+		let found = raw.headers.find((header) => header[0].toLowerCase() === defaultHeader[0].toLowerCase());
+		return found === undefined;
+	});
+	return {
+		...raw,
+		headers: [
+			...raw.headers,
+			...headersToAppend
+		]
+	};
+};
