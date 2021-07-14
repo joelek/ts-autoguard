@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.expect = exports.SyntaxError = exports.Tokenizer = exports.removeWhitespaceAndComments = exports.IdentifierFamilies = exports.Families = void 0;
-exports.Families = ((...tuple) => tuple)("LS", "WS", "(", ")", "[", "]", "{", "}", "?", "|", ".", "..", "/", "*", "#", "&", ",", ":", ";", "<", ">", "=>", "<=", "any", "binary", "boolean", "false", "guard", "null", "number", "plain", "route", "string", "true", "undefined", "IDENTIFIER", "NUMBER_LITERAL", "STRING_LITERAL", "PATH_COMPONENT");
+exports.Families = ((...tuple) => tuple)("LS", "WS", "(", ")", "[", "]", "{", "}", "?", "|", ".", "..", "/", "*", "&", ",", ":", ";", "<", ">", "=>", "<=", "any", "binary", "boolean", "false", "guard", "null", "number", "plain", "route", "string", "true", "undefined", "IDENTIFIER", "NUMBER_LITERAL", "STRING_LITERAL", "PATH_COMPONENT", "COMMENT");
 exports.IdentifierFamilies = ((...tuple) => tuple)("any", "binary", "boolean", "false", "guard", "null", "number", "plain", "route", "string", "true", "undefined", "IDENTIFIER");
 function removeWhitespaceAndComments(unfiltered) {
     let filtered = new Array();
@@ -9,17 +9,7 @@ function removeWhitespaceAndComments(unfiltered) {
     while (offset < unfiltered.length) {
         let token = unfiltered[offset];
         offset += 1;
-        if (token.family === "WS" || token.family === "LS") {
-            continue;
-        }
-        if (token.family === "#") {
-            while (offset < unfiltered.length) {
-                let token = unfiltered[offset];
-                offset += 1;
-                if (token.family === "LS") {
-                    break;
-                }
-            }
+        if (token.family === "WS" || token.family === "LS" || token.family === "COMMENT") {
             continue;
         }
         filtered.push(token);
@@ -45,7 +35,6 @@ class Tokenizer {
             "..": /^([\.][\.])/su,
             "/": /^([\/])/su,
             "*": /^([*])/su,
-            "#": /^([#])/su,
             "&": /^([&])/su,
             ",": /^([,])/su,
             ":": /^([:])/su,
@@ -69,7 +58,8 @@ class Tokenizer {
             "IDENTIFIER": /^([a-zA-Z][a-zA-Z0-9_]*)/su,
             "NUMBER_LITERAL": /^(([1-9][0-9]+)|([0-9]))/su,
             "STRING_LITERAL": /^(["][^"]*["])/su,
-            "PATH_COMPONENT": /^(([a-zA-Z0-9_.~-]|[%][0-9a-fA-F]{2})+)/su
+            "PATH_COMPONENT": /^(([a-zA-Z0-9_.~-]|[%][0-9a-fA-F]{2})+)/su,
+            "COMMENT": /^([#][^\r\n]*)/su
         };
         let tokens = new Array();
         let row = 1;

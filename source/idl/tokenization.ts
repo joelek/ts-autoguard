@@ -13,7 +13,6 @@ export const Families = (<A extends string[]>(...tuple: A): [...A] => tuple)(
 	"..",
 	"/",
 	"*",
-	"#",
 	"&",
 	",",
 	":",
@@ -37,7 +36,8 @@ export const Families = (<A extends string[]>(...tuple: A): [...A] => tuple)(
 	"IDENTIFIER",
 	"NUMBER_LITERAL",
 	"STRING_LITERAL",
-	"PATH_COMPONENT"
+	"PATH_COMPONENT",
+	"COMMENT"
 );
 
 export type Families = typeof Families;
@@ -77,17 +77,7 @@ export function removeWhitespaceAndComments(unfiltered: Array<Token>): Array<Tok
 	while (offset < unfiltered.length) {
 		let token = unfiltered[offset];
 		offset += 1;
-		if (token.family === "WS" || token.family === "LS") {
-			continue;
-		}
-		if (token.family === "#") {
-			while (offset < unfiltered.length) {
-				let token = unfiltered[offset];
-				offset += 1;
-				if (token.family === "LS") {
-					break;
-				}
-			}
+		if (token.family === "WS" || token.family === "LS" || token.family === "COMMENT") {
 			continue;
 		}
 		filtered.push(token);
@@ -126,7 +116,6 @@ export class Tokenizer {
 			"..": /^([\.][\.])/su,
 			"/": /^([\/])/su,
 			"*": /^([*])/su,
-			"#": /^([#])/su,
 			"&": /^([&])/su,
 			",": /^([,])/su,
 			":": /^([:])/su,
@@ -150,7 +139,8 @@ export class Tokenizer {
 			"IDENTIFIER": /^([a-zA-Z][a-zA-Z0-9_]*)/su,
 			"NUMBER_LITERAL": /^(([1-9][0-9]+)|([0-9]))/su,
 			"STRING_LITERAL": /^(["][^"]*["])/su,
-			"PATH_COMPONENT": /^(([a-zA-Z0-9_.~-]|[%][0-9a-fA-F]{2})+)/su
+			"PATH_COMPONENT": /^(([a-zA-Z0-9_.~-]|[%][0-9a-fA-F]{2})+)/su,
+			"COMMENT": /^([#][^\r\n]*)/su
 		};
 		let tokens = new Array<Token>();
 		let row = 1;
