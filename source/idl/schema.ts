@@ -158,7 +158,7 @@ function getResponseType(route: route.Route): types.Type {
 	return response;
 }
 
-function getDefaultContentType(payload: types.Type | types.Binary): string {
+function getContentTypeFromType(payload: types.Type | types.Binary): string {
 	if (payload instanceof types.Binary) {
 		return "application/octet-stream";
 	}
@@ -322,8 +322,9 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 	} else {
 		lines.push(`\t\t\t\t\t\t\tlet payload = autoguard.api.serializePayload(response.payload);`);
 	}
-	let contentType = getDefaultContentType(route.response.payload);
-	lines.push(`\t\t\t\t\t\t\treturn autoguard.api.finalizeResponse({ status, headers, payload }, "${contentType}");`);
+	lines.push(`\t\t\t\t\t\t\tlet defaultHeaders = new Array<[string, string]>();`);
+	lines.push(`\t\t\t\t\t\t\tdefaultHeaders.push(["Content-Type", "${getContentTypeFromType(route.response.payload)}"]);`);
+	lines.push(`\t\t\t\t\t\t\treturn autoguard.api.finalizeResponse({ status, headers, payload }, defaultHeaders);`);
 	lines.push(`\t\t\t\t\t\t}`);
 	lines.push(`\t\t\t\t\t};`);
 	lines.push(`\t\t\t\t}`);

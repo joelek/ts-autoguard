@@ -261,20 +261,17 @@ export function acceptsMethod(one: string, two: string): boolean {
 	return one === two;
 };
 
-export function finalizeResponse(raw: shared.api.RawResponse, defaultContentType: string): shared.api.RawResponse {
-	let headers = raw.headers;
-	let contentType = headers.find((header) => {
-		return header[0].toLowerCase() === "content-type";
+export function finalizeResponse(raw: shared.api.RawResponse, defaultHeaders: Array<[string, string]>): shared.api.RawResponse {
+	let headersToAppend = defaultHeaders.filter((defaultHeader) => {
+		let found = raw.headers.find((header) => header[0].toLowerCase() === defaultHeader[0].toLowerCase());
+		return found === undefined;
 	});
-	if (contentType === undefined) {
-		headers = [
-			...headers,
-			["Content-Type", defaultContentType]
-		];
-	}
 	return {
 		...raw,
-		headers
+		headers: [
+			...raw.headers,
+			...headersToAppend
+		]
 	};
 };
 

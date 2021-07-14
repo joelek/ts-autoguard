@@ -225,18 +225,15 @@ function acceptsMethod(one, two) {
 }
 exports.acceptsMethod = acceptsMethod;
 ;
-function finalizeResponse(raw, defaultContentType) {
-    let headers = raw.headers;
-    let contentType = headers.find((header) => {
-        return header[0].toLowerCase() === "content-type";
+function finalizeResponse(raw, defaultHeaders) {
+    let headersToAppend = defaultHeaders.filter((defaultHeader) => {
+        let found = raw.headers.find((header) => header[0].toLowerCase() === defaultHeader[0].toLowerCase());
+        return found === undefined;
     });
-    if (contentType === undefined) {
-        headers = [
-            ...headers,
-            ["Content-Type", defaultContentType]
-        ];
-    }
-    return Object.assign(Object.assign({}, raw), { headers });
+    return Object.assign(Object.assign({}, raw), { headers: [
+            ...raw.headers,
+            ...headersToAppend
+        ] });
 }
 exports.finalizeResponse = finalizeResponse;
 ;
