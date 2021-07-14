@@ -31,7 +31,7 @@ exports.removeWhitespaceAndComments = removeWhitespaceAndComments;
 class Tokenizer {
     constructor(string) {
         let matchers = {
-            "LS": /^([\r][\n]|\n)/su,
+            "LS": /^([\r][\n]|[\r]|[\n])/su,
             "WS": /^([\t ]+)/su,
             "(": /^([\(])/su,
             ")": /^([\)])/su,

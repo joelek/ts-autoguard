@@ -112,7 +112,7 @@ export class Tokenizer {
 
 	constructor(string: string) {
 		let matchers: TypeMap<Families, RegExp> = {
-			"LS": /^([\r][\n]|\n)/su,
+			"LS": /^([\r][\n]|[\r]|[\n])/su,
 			"WS": /^([\t ]+)/su,
 			"(": /^([\(])/su,
 			")": /^([\)])/su,

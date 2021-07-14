@@ -344,7 +344,7 @@ The interface descriptor language is formally defined as a language that shares 
 White space and line separators may occur between tokens and is considered insignificant.
 
 ```
-LineSeparator = "\r\n" or "\n"
+LineSeparator = "\r\n" or "\r" or "\n"
 Whitespace = "\t" or " "
 TokenSeparator = Whitespace or LineSeparator
 Comment = "#" (not LineSeparator)*
