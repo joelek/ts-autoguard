@@ -5,6 +5,10 @@ import * as libnet from "net";
 import * as libtls from "tls";
 import * as shared from "../lib-shared";
 export * from "../lib-shared/api";
+export declare type MakeServerOptions = {
+    urlPrefix?: string;
+    defaultHeaders?: Array<[string, string]>;
+};
 export declare type RequestLike = shared.api.AsyncBinary & {
     method?: string;
     rawHeaders: string[];
@@ -81,7 +85,7 @@ export declare function acceptsComponents(components: Array<string>, matchers: A
 export declare function acceptsMethod(one: string, two: string): boolean;
 export declare function finalizeResponse(raw: shared.api.RawResponse, defaultHeaders: Array<[string, string]>): shared.api.RawResponse;
 export declare function respond(httpResponse: ResponseLike, raw: Partial<shared.api.RawResponse>): Promise<void>;
-export declare function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike, urlPrefix?: string): Promise<void>;
+export declare function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike, serverOptions?: MakeServerOptions): Promise<void>;
 export declare function parseRangeHeader(value: shared.api.JSON, size: number): {
     status: number;
     offset: number;

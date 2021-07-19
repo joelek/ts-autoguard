@@ -271,15 +271,16 @@ function respond(httpResponse, raw) {
 }
 exports.respond = respond;
 ;
-function route(endpoints, httpRequest, httpResponse, urlPrefix = "") {
-    var _a, _b;
+function route(endpoints, httpRequest, httpResponse, serverOptions) {
+    var _a, _b, _c;
     return __awaiter(this, void 0, void 0, function* () {
-        let method = (_a = httpRequest.method) !== null && _a !== void 0 ? _a : "GET";
-        let url = (_b = httpRequest.url) !== null && _b !== void 0 ? _b : "";
+        let urlPrefix = (_a = serverOptions === null || serverOptions === void 0 ? void 0 : serverOptions.urlPrefix) !== null && _a !== void 0 ? _a : "";
+        let method = (_b = httpRequest.method) !== null && _b !== void 0 ? _b : "GET";
+        let url = (_c = httpRequest.url) !== null && _c !== void 0 ? _c : "";
         if (!url.startsWith(urlPrefix)) {
             throw `Expected url "${url}" to have prefix "${urlPrefix}"!`;
         }
-        url = url.slice(urlPrefix === null || urlPrefix === void 0 ? void 0 : urlPrefix.length);
+        url = url.slice(urlPrefix.length);
         try {
             let components = shared.api.splitComponents(url);
             let parameters = shared.api.splitParameters(url);
@@ -351,6 +352,7 @@ function route(endpoints, httpRequest, httpResponse, urlPrefix = "") {
 }
 exports.route = route;
 ;
+// TODO: Move to serveit in v6.
 function parseRangeHeader(value, size) {
     var _a, _b, _c;
     if (value === undefined) {
@@ -424,6 +426,7 @@ function parseRangeHeader(value, size) {
 }
 exports.parseRangeHeader = parseRangeHeader;
 ;
+// TODO: Move to serveit in v6.
 function getContentTypeFromExtension(extension) {
     let extensions = {
         ".css": "text/css",
@@ -440,6 +443,7 @@ function getContentTypeFromExtension(extension) {
 }
 exports.getContentTypeFromExtension = getContentTypeFromExtension;
 ;
+// TODO: Move to serveit in v6.
 function makeDirectoryListing(pathPrefix, pathSuffix, request) {
     let pathSuffixParts = libpath.normalize(pathSuffix).split(libpath.sep);
     if (pathSuffixParts[0] === "..") {
@@ -481,6 +485,7 @@ function makeDirectoryListing(pathPrefix, pathSuffix, request) {
 }
 exports.makeDirectoryListing = makeDirectoryListing;
 ;
+// TODO: Move to serveit in v6.
 function makeReadStreamResponse(pathPrefix, pathSuffix, request) {
     if (libpath.normalize(pathSuffix).split(libpath.sep)[0] === "..") {
         throw 400;

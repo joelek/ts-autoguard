@@ -1,5 +1,10 @@
 import * as shared from "../lib-shared";
 export * from "../lib-shared/api";
+export declare type MakeClientOptions = {
+    urlPrefix?: string;
+    requestHandler?: shared.api.RequestHandler;
+    defaultHeaders?: Array<[string, string]>;
+};
 export declare class ServerResponse<A extends shared.api.EndpointResponse> {
     private response;
     private collect;
