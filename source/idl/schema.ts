@@ -219,11 +219,11 @@ function generateClientRoute(route: route.Route, options: shared.Options): strin
 	} else {
 		lines.push(`\tlet payload = autoguard.api.serializePayload(request.payload);`);
 	}
-	lines.push(`\tlet requestHandler = options?.requestHandler ?? autoguard.api.xhr;`);
+	lines.push(`\tlet requestHandler = clientOptions?.requestHandler ?? autoguard.api.xhr;`);
 	lines.push(`\tlet defaultHeaders = new Array<[string, string]>();`);
 	lines.push(`\tdefaultHeaders.push(["Content-Type", "${getContentTypeFromType(route.request.payload)}"]);`);
 	lines.push(`\tdefaultHeaders.push(["Accept", "${getContentTypeFromType(route.response.payload)}"]);`);
-	lines.push(`\tlet raw = await requestHandler(autoguard.api.finalizeRequest({ method, components, parameters, headers, payload }, defaultHeaders), options?.urlPrefix);`);
+	lines.push(`\tlet raw = await requestHandler(autoguard.api.finalizeRequest({ method, components, parameters, headers, payload }, defaultHeaders), clientOptions?.urlPrefix);`);
 	lines.push(`\t{`);
 	lines.push(`\t\tlet status = raw.status;`);
 	lines.push(`\t\tlet headers: Record<string, autoguard.api.JSON> = {};`);
@@ -451,7 +451,7 @@ export class Schema {
 			lines.push(`import { ${entry.typename} } from "${entry.path.join("/")}";`);
 		}
 		lines.push(``);
-		lines.push(`export const makeClient = (options?: autoguard.api.MakeClientOptions): autoguard.api.Client<shared.Autoguard.Requests, shared.Autoguard.Responses> => ({`);
+		lines.push(`export const makeClient = (clientOptions?: autoguard.api.MakeClientOptions): autoguard.api.Client<shared.Autoguard.Requests, shared.Autoguard.Responses> => ({`);
 		for (let route of this.routes) {
 			let tag = makeRouteTag(route);
 			lines.push(`\t"${tag}": ${generateClientRoute(route, { ...options, eol: options.eol + "\t" })},`);
@@ -471,12 +471,12 @@ export class Schema {
 			lines.push(`import { ${entry.typename} } from "${entry.path.join("/")}";`);
 		}
 		lines.push(``);
-		lines.push(`export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Requests, shared.Autoguard.Responses>, options?: autoguard.api.MakeServerOptions): autoguard.api.RequestListener => {`);
+		lines.push(`export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Requests, shared.Autoguard.Responses>, serverOptions?: autoguard.api.MakeServerOptions): autoguard.api.RequestListener => {`);
 		lines.push(`\tlet endpoints = new Array<autoguard.api.Endpoint>();`);
 		for (let route of this.routes) {
 			lines.push(`\tendpoints.push(${generateServerRoute(route, { ...options, eol: options.eol + "\t" })});`);
 		}
-		lines.push(`\treturn (request, response) => autoguard.api.route(endpoints, request, response, options);`);
+		lines.push(`\treturn (request, response) => autoguard.api.route(endpoints, request, response, serverOptions);`);
 		lines.push(`};`);
 		lines.push(``);
 		return lines.join(options.eol);

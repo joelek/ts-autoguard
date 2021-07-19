@@ -298,8 +298,8 @@ export async function respond(httpResponse: ResponseLike, raw: Partial<shared.ap
 	});
 };
 
-export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike, options?: MakeServerOptions): Promise<void> {
-	let urlPrefix = options?.urlPrefix ?? "";
+export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike, serverOptions?: MakeServerOptions): Promise<void> {
+	let urlPrefix = serverOptions?.urlPrefix ?? "";
 	let method = httpRequest.method ?? "GET";
 	let url = httpRequest.url ?? "";
 	if (!url.startsWith(urlPrefix)) {
