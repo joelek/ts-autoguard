@@ -10,6 +10,7 @@ export * from "../lib-shared/api";
 
 export type MakeServerOptions = {
 	urlPrefix?: string;
+	defaultHeaders?: Array<[string, string]>;
 };
 
 export type RequestLike = shared.api.AsyncBinary & {

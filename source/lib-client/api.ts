@@ -5,6 +5,7 @@ export * from "../lib-shared/api";
 export type MakeClientOptions = {
 	urlPrefix?: string;
 	requestHandler?: shared.api.RequestHandler;
+	defaultHeaders?: Array<[string, string]>;
 };
 
 export class ServerResponse<A extends shared.api.EndpointResponse> {

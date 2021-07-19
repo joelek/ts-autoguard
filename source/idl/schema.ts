@@ -220,7 +220,7 @@ function generateClientRoute(route: route.Route, options: shared.Options): strin
 		lines.push(`\tlet payload = autoguard.api.serializePayload(request.payload);`);
 	}
 	lines.push(`\tlet requestHandler = clientOptions?.requestHandler ?? autoguard.api.xhr;`);
-	lines.push(`\tlet defaultHeaders = new Array<[string, string]>();`);
+	lines.push(`\tlet defaultHeaders = clientOptions?.defaultHeaders?.slice() ?? [];`);
 	lines.push(`\tdefaultHeaders.push(["Content-Type", "${getContentTypeFromType(route.request.payload)}"]);`);
 	lines.push(`\tdefaultHeaders.push(["Accept", "${getContentTypeFromType(route.response.payload)}"]);`);
 	lines.push(`\tlet raw = await requestHandler(autoguard.api.finalizeRequest({ method, components, parameters, headers, payload }, defaultHeaders), clientOptions?.urlPrefix);`);
@@ -325,7 +325,7 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 	} else {
 		lines.push(`\t\t\t\t\t\t\tlet payload = autoguard.api.serializePayload(response.payload);`);
 	}
-	lines.push(`\t\t\t\t\t\t\tlet defaultHeaders = new Array<[string, string]>();`);
+	lines.push(`\t\t\t\t\t\t\tlet defaultHeaders = serverOptions?.defaultHeaders?.slice() ?? [];`);
 	lines.push(`\t\t\t\t\t\t\tdefaultHeaders.push(["Content-Type", "${getContentTypeFromType(route.response.payload)}"]);`);
 	lines.push(`\t\t\t\t\t\t\treturn autoguard.api.finalizeResponse({ status, headers, payload }, defaultHeaders);`);
 	lines.push(`\t\t\t\t\t\t}`);
