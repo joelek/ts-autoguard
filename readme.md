@@ -331,8 +331,6 @@ NB: This project targets TypeScript 4 in strict mode.
 
 ## Roadmap
 
-* Add debug option to makeClient and makeServer.
-* Add options to select which modules get generated.
 * Simplify import paths before resolving references.
 * Extend type guards with functionality for deep structured cloning.
 * Add strict option that performs automatic JSON payload filtering.
