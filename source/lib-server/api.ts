@@ -8,6 +8,10 @@ import * as shared from "../lib-shared";
 
 export * from "../lib-shared/api";
 
+export type MakeServerOptions = {
+	urlPrefix?: string;
+};
+
 export type RequestLike = shared.api.AsyncBinary & {
 	method?: string;
 	rawHeaders: string[];
@@ -294,13 +298,14 @@ export async function respond(httpResponse: ResponseLike, raw: Partial<shared.ap
 	});
 };
 
-export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike, urlPrefix: string = ""): Promise<void> {
+export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike, options?: MakeServerOptions): Promise<void> {
+	let urlPrefix = options?.urlPrefix ?? "";
 	let method = httpRequest.method ?? "GET";
 	let url = httpRequest.url ?? "";
 	if (!url.startsWith(urlPrefix)) {
 		throw `Expected url "${url}" to have prefix "${urlPrefix}"!`;
 	}
-	url = url.slice(urlPrefix?.length);
+	url = url.slice(urlPrefix.length);
 	try {
 		let components = shared.api.splitComponents(url);
 		let parameters = shared.api.splitParameters(url);

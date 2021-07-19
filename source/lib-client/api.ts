@@ -2,6 +2,11 @@ import * as shared from "../lib-shared";
 
 export * from "../lib-shared/api";
 
+export type MakeClientOptions = {
+	urlPrefix?: string;
+	requestHandler?: shared.api.RequestHandler;
+};
+
 export class ServerResponse<A extends shared.api.EndpointResponse> {
 	private response: A;
 	private collect: boolean;
