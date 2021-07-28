@@ -196,7 +196,10 @@ export function makeNodeRequestHandler(options?: NodeRequestHandlerOptions): sha
 	return (raw, urlPrefix) => {
 		let lib = (urlPrefix ?? "").startsWith("https:") ? libhttps : libhttp;
 		return new Promise(async (resolve, reject) => {
-			let headers: Record<string, Array<string>> = {};
+			let payload = await shared.api.collectPayload(raw.payload);
+			let headers: Record<string, Array<string>> = {
+				"Content-Length": [`${payload.length}`]
+			};
 			for (let header of raw.headers) {
 				let key = header[0];
 				let value = header[1];
@@ -224,7 +227,7 @@ export function makeNodeRequestHandler(options?: NodeRequestHandlerOptions): sha
 			});
 			request.on("abort", reject);
 			request.on("error", reject);
-			request.write(await shared.api.collectPayload(raw.payload));
+			request.write(payload);
 			request.end();
 		});
 	};
