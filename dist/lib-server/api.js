@@ -153,7 +153,10 @@ function makeNodeRequestHandler(options) {
     return (raw, urlPrefix) => {
         let lib = (urlPrefix !== null && urlPrefix !== void 0 ? urlPrefix : "").startsWith("https:") ? libhttps : libhttp;
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            let headers = {};
+            let payload = yield shared.api.collectPayload(raw.payload);
+            let headers = {
+                "Content-Length": [`${payload.length}`]
+            };
             for (let header of raw.headers) {
                 let key = header[0];
                 let value = header[1];
@@ -178,7 +181,7 @@ function makeNodeRequestHandler(options) {
             });
             request.on("abort", reject);
             request.on("error", reject);
-            request.write(yield shared.api.collectPayload(raw.payload));
+            request.write(payload);
             request.end();
         }));
     };
@@ -352,7 +355,7 @@ function route(endpoints, httpRequest, httpResponse, serverOptions) {
 }
 exports.route = route;
 ;
-// TODO: Move to serveit in v6.
+// TODO: Move to Nexus in v6.
 function parseRangeHeader(value, size) {
     var _a, _b, _c;
     if (value === undefined) {
@@ -426,7 +429,7 @@ function parseRangeHeader(value, size) {
 }
 exports.parseRangeHeader = parseRangeHeader;
 ;
-// TODO: Move to serveit in v6.
+// TODO: Move to Nexus in v6.
 function getContentTypeFromExtension(extension) {
     let extensions = {
         ".css": "text/css",
@@ -443,7 +446,7 @@ function getContentTypeFromExtension(extension) {
 }
 exports.getContentTypeFromExtension = getContentTypeFromExtension;
 ;
-// TODO: Move to serveit in v6.
+// TODO: Move to Nexus in v6.
 function makeDirectoryListing(pathPrefix, pathSuffix, request) {
     let pathSuffixParts = libpath.normalize(pathSuffix).split(libpath.sep);
     if (pathSuffixParts[0] === "..") {
@@ -485,7 +488,7 @@ function makeDirectoryListing(pathPrefix, pathSuffix, request) {
 }
 exports.makeDirectoryListing = makeDirectoryListing;
 ;
-// TODO: Move to serveit in v6.
+// TODO: Move to Nexus in v6.
 function makeReadStreamResponse(pathPrefix, pathSuffix, request) {
     if (libpath.normalize(pathSuffix).split(libpath.sep)[0] === "..") {
         throw 400;
