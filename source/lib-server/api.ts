@@ -373,7 +373,7 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 	}
 };
 
-// TODO: Move to serveit in v6.
+// TODO: Move to Nexus in v6.
 export function parseRangeHeader(value: shared.api.JSON, size: number): {
 	status: number,
 	offset: number,
@@ -450,7 +450,7 @@ export function parseRangeHeader(value: shared.api.JSON, size: number): {
 	return s416;
 };
 
-// TODO: Move to serveit in v6.
+// TODO: Move to Nexus in v6.
 export function getContentTypeFromExtension(extension: string): string | undefined {
 	let extensions: Record<string, string | undefined> = {
 		".css": "text/css",
@@ -466,7 +466,7 @@ export function getContentTypeFromExtension(extension: string): string | undefin
 	return extensions[extension];
 };
 
-// TODO: Move to serveit in v6.
+// TODO: Move to Nexus in v6.
 export type DirectoryListing = {
 	components: Array<string>;
 	directories: Array<{
@@ -479,7 +479,7 @@ export type DirectoryListing = {
 	}>;
 };
 
-// TODO: Move to serveit in v6.
+// TODO: Move to Nexus in v6.
 export function makeDirectoryListing(pathPrefix: string, pathSuffix: string, request: ClientRequest<shared.api.EndpointRequest>): DirectoryListing {
 	let pathSuffixParts = libpath.normalize(pathSuffix).split(libpath.sep);
 	if (pathSuffixParts[0] === "..") {
@@ -520,7 +520,7 @@ export function makeDirectoryListing(pathPrefix: string, pathSuffix: string, req
 	};
 };
 
-// TODO: Move to serveit in v6.
+// TODO: Move to Nexus in v6.
 export function makeReadStreamResponse(pathPrefix: string, pathSuffix: string, request: ClientRequest<shared.api.EndpointRequest>): shared.api.EndpointResponse & { payload: shared.api.Binary } {
 	if (libpath.normalize(pathSuffix).split(libpath.sep)[0] === "..") {
 		throw 400;
