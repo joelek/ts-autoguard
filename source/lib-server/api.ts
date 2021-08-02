@@ -456,15 +456,32 @@ export function parseRangeHeader(value: shared.api.JSON, size: number): {
 // TODO: Move to Nexus in v6.
 export function getContentTypeFromExtension(extension: string): string | undefined {
 	let extensions: Record<string, string | undefined> = {
+		".aac": "audio/aac",
+		".bmp": "image/bmp",
 		".css": "text/css",
+		".csv": "text/csv",
+		".gif": "image/gif",
 		".htm": "text/html",
 		".html": "text/html",
 		".jpg": "image/jpeg",
 		".jpeg": "image/jpeg",
 		".js": "text/javascript",
 		".json": "application/json",
+		".mid": "audio/midi",
+		".mp3": "audio/mpeg",
+		".mp4": "video/mp4",
+		".otf": "font/otf",
+		".pdf": "application/pdf",
 		".png": "image/png",
-		".svg": "image/svg+xml"
+		".svg": "image/svg+xml",
+		".tif": "image/tiff",
+		".tiff": "image/tiff",
+		".ttf": "font/ttf",
+		".txt": "text/plain",
+		".wav": "audio/wav",
+		".woff": "font/woff",
+		".woff2": "font/woff2",
+		".xml": "text/xml"
 	};
 	return extensions[extension];
 };
