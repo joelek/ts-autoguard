@@ -331,6 +331,7 @@ NB: This project targets TypeScript 4 in strict mode.
 
 ## Roadmap
 
+* Only generate client and server modules for schemas with routes defined.
 * Add support for enumerations.
 * Resolve issue with recursive type definitions.
 * Resolve issue with imported type and local type sharing identical typenames.
