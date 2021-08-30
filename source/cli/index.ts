@@ -40,29 +40,15 @@ function transpile(source: string): string {
 	return result.outputText;
 }
 
-function transform(string: string, options: Options): { client: string, server: string, shared: string } {
+function parse(string: string): idl.schema.Schema {
 	let tokenizer = new idl.tokenization.Tokenizer(string);
 	try {
 		let schema = idl.schema.Schema.parseOld(tokenizer);
 		process.stderr.write(`\tSupport for legacy schemas has been deprecated. Please upgrade using "--upgrade=true".\n`);
-		let client = schema.generateClient(options);
-		let server = schema.generateServer(options);
-		let shared = schema.generateShared(options);
-		return {
-			client,
-			server,
-			shared
-		};
+		return schema;
 	} catch (error) {};
 	let schema = idl.schema.Schema.parse(tokenizer);
-	let client = schema.generateClient(options);
-	let server = schema.generateServer(options);
-	let shared = schema.generateShared(options);
-	return {
-		client,
-		server,
-		shared
-	};
+	return schema;
 }
 
 function upgrade(string: string, options: Options): string {
@@ -125,21 +111,26 @@ function run(): void {
 			} else {
 				let input = libfs.readFileSync(path, "utf8");
 				let start = Date.now();
-				let generated = transform(input, options);
+				let schema = parse(input);
 				let duration = Date.now() - start;
-				process.stderr.write("	Transform: " + duration + " ms\n");
+				process.stderr.write("	Parse: " + duration + " ms\n");
 				let directory = libpath.join(libpath.dirname(path), filename(path));
+				let generated = libpath.join(libpath.dirname(path), filename(path) + ".ts");
 				libfs.rmSync(directory, { force: true, recursive: true });
-				libfs.rmSync(libpath.join(libpath.dirname(path), filename(path) + ".ts"), { force: true, recursive: true });
+				libfs.rmSync(generated, { force: true, recursive: true });
 				libfs.mkdirSync(directory, { recursive: true });
+				let client = schema.generateClient(options);
+				let shared = schema.generateShared(options);
+				let server = schema.generateServer(options);
 				if (options.target === "js") {
-					libfs.writeFileSync(libpath.join(directory, "client.js"), transpile(generated.client), "utf8");
-					libfs.writeFileSync(libpath.join(directory, "server.js"), transpile(generated.server), "utf8");
-					libfs.writeFileSync(libpath.join(directory, "index.js"), transpile(generated.shared), "utf8");
-				} else {
-					libfs.writeFileSync(libpath.join(directory, "client.ts"), generated.client, "utf8");
-					libfs.writeFileSync(libpath.join(directory, "server.ts"), generated.server, "utf8");
-					libfs.writeFileSync(libpath.join(directory, "index.ts"), generated.shared, "utf8");
+					client = transpile(client);
+					shared = transpile(shared);
+					server = transpile(server);
+				}
+				libfs.writeFileSync(libpath.join(directory, "index.ts"), shared, "utf8");
+				if (schema.routes.length > 0) {
+					libfs.writeFileSync(libpath.join(directory, "client.ts"), client, "utf8");
+					libfs.writeFileSync(libpath.join(directory, "server.ts"), server, "utf8");
 				}
 			}
 			return sum + 0;

@@ -339,8 +339,8 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 }
 
 export class Schema {
-	private guards: Array<guard.Guard>;
-	private routes: Array<route.Route>;
+	readonly guards: Array<guard.Guard>;
+	readonly routes: Array<route.Route>;
 
 	private getClientImports(): Array<shared.Reference> {
 		let imports = new Map<string, string[]>();
