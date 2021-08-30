@@ -4,8 +4,8 @@ type IntersectionOf<A extends any[]> = ExpansionOf<Unwrap<IntersectionOfUnion<Va
 type IntersectionOfUnion<A> = (A extends any ? (_: A) => void : never) extends ((_: infer B) => void) ? B : never;
 type TupleOf<A extends any[]> = [...A];
 type UnionOf<A extends any[]> = A[number];
-type RequiredKeys<A> = { [B in keyof A]: undefined extends A[B] ? never : B; }[keyof A];
-type OptionalKeys<A> = { [B in keyof A]: undefined extends A[B] ? B : never; }[keyof A];
+type RequiredKeys<A> = { [B in keyof A]-?: undefined extends A[B] ? never : B; }[keyof A];
+type OptionalKeys<A> = { [B in keyof A]-?: undefined extends A[B] ? B : never; }[keyof A];
 type MakeUndefinedOptional<A> = ExpansionOf<{ [B in RequiredKeys<A>]: A[B]; } & { [B in OptionalKeys<A>]?: A[B]; }>;
 type IndicesOfTuple<A extends any[]> = Exclude<keyof A, keyof []>;
 type Wrap<A extends any[]> = { [B in IndicesOfTuple<A>]: { wrappee: A[B] }; };
