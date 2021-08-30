@@ -492,7 +492,7 @@ export class Schema {
 		}
 		lines.push(``);
 		for (let guard of this.guards) {
-			lines.push(`export const ${guard.typename} = ${guard.type.generateTypeGuard({ ...options, eol: options.eol })};`);
+			lines.push(`export const ${guard.typename}: autoguard.serialization.MessageGuard<${guard.typename}> = ${guard.type.generateTypeGuard({ ...options, eol: options.eol })};`);
 			lines.push(``);
 			lines.push(`export type ${guard.typename} = ${guard.type.generateType({ ...options, eol: options.eol })};`);
 			lines.push(``);
