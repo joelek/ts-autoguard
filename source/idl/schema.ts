@@ -235,7 +235,7 @@ function generateClientRoute(route: route.Route, options: shared.Options): strin
 			lines.push(`\t\theaders["${header.name}"] = autoguard.api.decodeHeaderValue(raw.headers, "${header.name}", ${plain});`);
 		}
 	}
-	lines.push(`\t\theaders = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };`);
+	lines.push(`\t\theaders = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };`);
 	if (route.response.payload === types.Binary.INSTANCE) {
 		lines.push(`\t\tlet payload = raw.payload;`);
 	} else {
@@ -283,7 +283,7 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 			lines.push(`\t\t\toptions["${parameter.name}"] = autoguard.api.decodeParameterValue(raw.parameters, "${parameter.name}", ${plain});`);
 		}
 	}
-	lines.push(`\t\t\toptions = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters ?? {}, Object.keys(options)) };`);
+	lines.push(`\t\t\toptions = { ...options, ...autoguard.api.decodeUndeclaredParameters(raw.parameters, Object.keys(options)) };`);
 	lines.push(`\t\t\tlet headers: Record<string, autoguard.api.JSON> = {};`);
 	for (let header of route.request.headers.headers) {
 		let plain = header.type === types.PlainType.INSTANCE;
@@ -293,7 +293,7 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 			lines.push(`\t\t\theaders["${header.name}"] = autoguard.api.decodeHeaderValue(raw.headers, "${header.name}", ${plain});`);
 		}
 	}
-	lines.push(`\t\t\theaders = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers ?? {}, Object.keys(headers)) };`);
+	lines.push(`\t\t\theaders = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };`);
 	if (route.request.payload === types.Binary.INSTANCE) {
 		lines.push(`\t\t\tlet payload = raw.payload;`);
 	} else {
