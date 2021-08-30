@@ -198,12 +198,17 @@ exports.NumberLiteral = {
     }
 };
 exports.Object = {
-    of(guards) {
+    of(required, optional) {
         return {
             as(subject, path = "") {
                 if ((subject != null) && (subject.constructor === globalThis.Object)) {
-                    for (let key in guards) {
-                        guards[key].as(subject[key], path + (/^([a-z][a-z0-9_]*)$/isu.test(key) ? "." + key : "[\"" + key + "\"]"));
+                    for (let key in required) {
+                        required[key].as(subject[key], path + (/^([a-z][a-z0-9_]*)$/isu.test(key) ? "." + key : "[\"" + key + "\"]"));
+                    }
+                    for (let key in optional) {
+                        if (key in subject && subject[key] !== undefined) {
+                            optional[key].as(subject[key], path + (/^([a-z][a-z0-9_]*)$/isu.test(key) ? "." + key : "[\"" + key + "\"]"));
+                        }
                     }
                     return subject;
                 }
@@ -220,8 +225,11 @@ exports.Object = {
             },
             ts(eol = "\n") {
                 let lines = new globalThis.Array();
-                for (let [key, value] of globalThis.Object.entries(guards)) {
+                for (let [key, value] of globalThis.Object.entries(required)) {
                     lines.push(`\t"${key}": ${value.ts(eol + "\t")}`);
+                }
+                for (let [key, value] of globalThis.Object.entries(optional !== null && optional !== void 0 ? optional : {})) {
+                    lines.push(`\t"${key}"?: ${value.ts(eol + "\t")}`);
                 }
                 return "object<" + eol + lines.join("," + eol) + eol + ">";
             }

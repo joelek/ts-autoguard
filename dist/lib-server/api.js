@@ -155,17 +155,21 @@ function makeNodeRequestHandler(options) {
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             let payload = yield shared.api.collectPayload(raw.payload);
             let headers = {
-                "Content-Length": [`${payload.length}`]
+                "Content-Length": `${payload.length}`
             };
             for (let header of raw.headers) {
                 let key = header[0];
                 let value = header[1];
                 let values = headers[key];
                 if (values === undefined) {
-                    values = new Array();
-                    headers[key] = values;
+                    headers[key] = value;
                 }
-                values.push(value);
+                else if (Array.isArray(values)) {
+                    values.push(value);
+                }
+                else {
+                    headers[key] = [values, value];
+                }
             }
             let url = urlPrefix !== null && urlPrefix !== void 0 ? urlPrefix : "";
             url += shared.api.combineComponents(raw.components);
@@ -432,15 +436,32 @@ exports.parseRangeHeader = parseRangeHeader;
 // TODO: Move to Nexus in v6.
 function getContentTypeFromExtension(extension) {
     let extensions = {
+        ".aac": "audio/aac",
+        ".bmp": "image/bmp",
         ".css": "text/css",
+        ".csv": "text/csv",
+        ".gif": "image/gif",
         ".htm": "text/html",
         ".html": "text/html",
         ".jpg": "image/jpeg",
         ".jpeg": "image/jpeg",
         ".js": "text/javascript",
         ".json": "application/json",
+        ".mid": "audio/midi",
+        ".mp3": "audio/mpeg",
+        ".mp4": "video/mp4",
+        ".otf": "font/otf",
+        ".pdf": "application/pdf",
         ".png": "image/png",
-        ".svg": "image/svg+xml"
+        ".svg": "image/svg+xml",
+        ".tif": "image/tiff",
+        ".tiff": "image/tiff",
+        ".ttf": "font/ttf",
+        ".txt": "text/plain",
+        ".wav": "audio/wav",
+        ".woff": "font/woff",
+        ".woff2": "font/woff2",
+        ".xml": "text/xml"
     };
     return extensions[extension];
 }

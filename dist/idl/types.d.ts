@@ -3,6 +3,7 @@ import * as tokenization from "./tokenization";
 export declare type TypeParser = (tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>) => Type;
 export interface Type {
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): Array<shared.Reference>;
 }
@@ -14,6 +15,7 @@ export declare const Type: {
 export declare class AnyType implements Type {
     constructor();
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): Array<shared.Reference>;
     static readonly INSTANCE: AnyType;
@@ -23,6 +25,7 @@ export declare class ArrayType implements Type {
     type: Type;
     constructor(type: Type);
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): ArrayType;
@@ -30,6 +33,7 @@ export declare class ArrayType implements Type {
 export declare class Binary implements Type {
     constructor();
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): shared.Reference[];
     static readonly INSTANCE: Binary;
@@ -37,6 +41,7 @@ export declare class Binary implements Type {
 export declare class BooleanType implements Type {
     constructor();
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): Array<shared.Reference>;
     static readonly INSTANCE: BooleanType;
@@ -46,6 +51,7 @@ export declare class BooleanLiteralType implements Type {
     value: boolean;
     constructor(value: boolean);
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): Array<shared.Reference>;
     static readonly INSTANCE_TRUE: BooleanLiteralType;
@@ -56,6 +62,7 @@ export declare class GroupType implements Type {
     type: Type;
     constructor(type: Type);
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): GroupType;
@@ -65,6 +72,7 @@ export declare class IntersectionType implements Type {
     constructor(types?: Iterable<Type>);
     add(type: Type): this;
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): Type;
@@ -72,6 +80,7 @@ export declare class IntersectionType implements Type {
 export declare class NullType implements Type {
     constructor();
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): Array<shared.Reference>;
     static readonly INSTANCE: NullType;
@@ -80,6 +89,7 @@ export declare class NullType implements Type {
 export declare class NumberType implements Type {
     constructor();
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): Array<shared.Reference>;
     static readonly INSTANCE: NumberType;
@@ -89,6 +99,7 @@ export declare class NumberLiteralType implements Type {
     value: number;
     constructor(value: number);
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): NumberLiteralType;
@@ -102,6 +113,7 @@ export declare class ObjectType implements Type {
     constructor(members?: Iterable<[string, ObjectMember]>);
     add(key: string, value: ObjectMember): this;
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): ObjectType;
@@ -110,6 +122,7 @@ export declare class RecordType implements Type {
     type: Type;
     constructor(type: Type);
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): RecordType;
@@ -119,6 +132,7 @@ export declare class ReferenceType implements Type {
     typename: string;
     constructor(path: string[], typename: string);
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): ReferenceType;
@@ -126,6 +140,7 @@ export declare class ReferenceType implements Type {
 export declare class StringType implements Type {
     constructor();
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): Array<shared.Reference>;
     static readonly INSTANCE: StringType;
@@ -135,6 +150,7 @@ export declare class StringLiteralType implements Type {
     value: string;
     constructor(value: string);
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): StringLiteralType;
@@ -144,6 +160,7 @@ export declare class TupleType implements Type {
     constructor(types?: Iterable<Type>);
     add(type: Type): this;
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): TupleType;
@@ -151,6 +168,7 @@ export declare class TupleType implements Type {
 export declare class UndefinedType implements Type {
     constructor();
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): Array<shared.Reference>;
     static readonly INSTANCE: UndefinedType;
@@ -161,6 +179,7 @@ export declare class UnionType implements Type {
     constructor(types?: Iterable<Type>);
     add(type: Type): this;
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): Type;
@@ -168,6 +187,7 @@ export declare class UnionType implements Type {
 export declare class Headers implements Type {
     constructor();
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): shared.Reference[];
     static readonly INSTANCE: Headers;
@@ -175,6 +195,7 @@ export declare class Headers implements Type {
 export declare class Options implements Type {
     constructor();
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): shared.Reference[];
     static readonly INSTANCE: Options;
@@ -182,6 +203,7 @@ export declare class Options implements Type {
 export declare class PlainType implements Type {
     constructor();
     generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): shared.Reference[];
     static readonly INSTANCE: PlainType;

@@ -481,9 +481,9 @@ class Schema {
         }
         lines.push(``);
         for (let guard of this.guards) {
-            lines.push(`export const ${guard.typename} = ${guard.type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol }))};`);
+            lines.push(`export const ${guard.typename}: autoguard.serialization.MessageGuard<${guard.typename}> = ${guard.type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol }))};`);
             lines.push(``);
-            lines.push(`export type ${guard.typename} = ReturnType<typeof ${guard.typename}["as"]>;`);
+            lines.push(`export type ${guard.typename} = ${guard.type.generateType(Object.assign(Object.assign({}, options), { eol: options.eol }))};`);
             lines.push(``);
         }
         let guards = new Array();

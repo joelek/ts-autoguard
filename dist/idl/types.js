@@ -45,6 +45,9 @@ class AnyType {
     generateSchema(options) {
         return "any";
     }
+    generateType(options) {
+        return "autoguard.guards.Any";
+    }
     generateTypeGuard(options) {
         let lines = new Array();
         lines.push("autoguard.guards.Any");
@@ -69,6 +72,9 @@ class ArrayType {
     }
     generateSchema(options) {
         return this.type.generateSchema(options) + "[]";
+    }
+    generateType(options) {
+        return `autoguard.guards.Array<${this.type.generateType(options)}>`;
     }
     generateTypeGuard(options) {
         let lines = new Array();
@@ -110,6 +116,9 @@ class Binary {
     generateSchema(options) {
         return "binary";
     }
+    generateType(options) {
+        return "autoguard.api.Binary";
+    }
     generateTypeGuard(options) {
         return "autoguard.api.Binary";
     }
@@ -125,6 +134,9 @@ class BooleanType {
     }
     generateSchema(options) {
         return "boolean";
+    }
+    generateType(options) {
+        return "autoguard.guards.Boolean";
     }
     generateTypeGuard(options) {
         let lines = new Array();
@@ -150,6 +162,9 @@ class BooleanLiteralType {
     }
     generateSchema(options) {
         return "" + this.value;
+    }
+    generateType(options) {
+        return `autoguard.guards.BooleanLiteral<${this.value}>`;
     }
     generateTypeGuard(options) {
         let lines = new Array();
@@ -185,6 +200,9 @@ class GroupType {
     generateSchema(options) {
         return "(" + this.type.generateSchema(options) + ")";
     }
+    generateType(options) {
+        return `autoguard.guards.Group<${this.type.generateType(options)}>`;
+    }
     generateTypeGuard(options) {
         let lines = new Array();
         lines.push("autoguard.guards.Group.of(" + this.type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol })) + ")");
@@ -219,6 +237,13 @@ class IntersectionType {
         }
         let string = lines.join(" & ");
         return string;
+    }
+    generateType(options) {
+        let lines = new Array();
+        for (let type of this.types) {
+            lines.push("	" + type.generateType(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
+        }
+        return "autoguard.guards.Intersection<[" + options.eol + lines.join("," + options.eol) + options.eol + "]>";
     }
     generateTypeGuard(options) {
         let lines = new Array();
@@ -267,6 +292,9 @@ class NullType {
     generateSchema(options) {
         return "null";
     }
+    generateType(options) {
+        return "autoguard.guards.Null";
+    }
     generateTypeGuard(options) {
         let lines = new Array();
         lines.push("autoguard.guards.Null");
@@ -290,6 +318,9 @@ class NumberType {
     }
     generateSchema(options) {
         return "number";
+    }
+    generateType(options) {
+        return "autoguard.guards.Number";
     }
     generateTypeGuard(options) {
         let lines = new Array();
@@ -315,6 +346,9 @@ class NumberLiteralType {
     }
     generateSchema(options) {
         return "" + this.value;
+    }
+    generateType(options) {
+        return `autoguard.guards.NumberLiteral<${this.value}>`;
     }
     generateTypeGuard(options) {
         let lines = new Array();
@@ -352,20 +386,37 @@ class ObjectType {
         let string = lines.length > 0 ? options.eol + lines.join("," + options.eol) + options.eol : "";
         return "{" + string + "}";
     }
-    generateTypeGuard(options) {
-        let lines = new Array();
+    generateType(options) {
+        let rlines = new Array();
+        let olines = new Array();
         for (let [key, value] of this.members) {
-            let type = value.type;
-            if (value.optional) {
-                let union = new UnionType();
-                union.add(type);
-                union.add(UndefinedType.INSTANCE);
-                type = union;
+            let { optional, type } = Object.assign({}, value);
+            if (optional) {
+                olines.push("	\"" + key + "\": " + type.generateType(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
             }
-            lines.push("	\"" + key + "\": " + type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
+            else {
+                rlines.push("	\"" + key + "\": " + type.generateType(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
+            }
         }
-        let guard = lines.length > 0 ? options.eol + lines.join("," + options.eol) + options.eol : "";
-        return "autoguard.guards.Object.of({" + guard + "})";
+        let required = rlines.length > 0 ? options.eol + rlines.join("," + options.eol) + options.eol : "";
+        let optional = olines.length > 0 ? options.eol + olines.join("," + options.eol) + options.eol : "";
+        return "autoguard.guards.Object<{" + required + "}, {" + optional + "}>";
+    }
+    generateTypeGuard(options) {
+        let rlines = new Array();
+        let olines = new Array();
+        for (let [key, value] of this.members) {
+            let { optional, type } = Object.assign({}, value);
+            if (optional) {
+                olines.push("	\"" + key + "\": " + type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
+            }
+            else {
+                rlines.push("	\"" + key + "\": " + type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
+            }
+        }
+        let required = rlines.length > 0 ? options.eol + rlines.join("," + options.eol) + options.eol : "";
+        let optional = olines.length > 0 ? options.eol + olines.join("," + options.eol) + options.eol : "";
+        return "autoguard.guards.Object.of({" + required + "}, {" + optional + "})";
     }
     getReferences() {
         let references = new Array();
@@ -418,6 +469,9 @@ class RecordType {
     generateSchema(options) {
         return "{ " + this.type.generateSchema(options) + " }";
     }
+    generateType(options) {
+        return `autoguard.guards.Record<${this.type.generateType(options)}>`;
+    }
     generateTypeGuard(options) {
         let lines = new Array();
         lines.push("autoguard.guards.Record.of(" + this.type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol })) + ")");
@@ -444,6 +498,9 @@ class ReferenceType {
     }
     generateSchema(options) {
         return [...this.path, ""].join("/") + this.typename;
+    }
+    generateType(options) {
+        return `autoguard.guards.Reference<${this.typename}>`;
     }
     generateTypeGuard(options) {
         return "autoguard.guards.Reference.of(() => " + this.typename + ")";
@@ -483,6 +540,9 @@ class StringType {
     generateSchema(options) {
         return "string";
     }
+    generateType(options) {
+        return "autoguard.guards.String";
+    }
     generateTypeGuard(options) {
         let lines = new Array();
         lines.push("autoguard.guards.String");
@@ -507,6 +567,9 @@ class StringLiteralType {
     }
     generateSchema(options) {
         return "\"" + this.value + "\"";
+    }
+    generateType(options) {
+        return `autoguard.guards.StringLiteral<"${this.value}">`;
     }
     generateTypeGuard(options) {
         let lines = new Array();
@@ -540,6 +603,14 @@ class TupleType {
         }
         let string = strings.length > 0 ? options.eol + strings.join("," + options.eol) + options.eol : "";
         return "[" + string + "]";
+    }
+    generateType(options) {
+        let lines = new Array();
+        for (let type of this.types) {
+            lines.push("	" + type.generateType(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
+        }
+        let string = lines.length > 0 ? options.eol + lines.join("," + options.eol) + options.eol : "";
+        return `autoguard.guards.Tuple<[${string}]>`;
     }
     generateTypeGuard(options) {
         let lines = new Array();
@@ -584,6 +655,9 @@ class UndefinedType {
     generateSchema(options) {
         return "undefined";
     }
+    generateType(options) {
+        return "autoguard.guards.Undefined";
+    }
     generateTypeGuard(options) {
         let lines = new Array();
         lines.push("autoguard.guards.Undefined");
@@ -617,6 +691,13 @@ class UnionType {
         }
         let string = lines.join(" | ");
         return string;
+    }
+    generateType(options) {
+        let lines = new Array();
+        for (let type of this.types) {
+            lines.push("	" + type.generateType(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" })));
+        }
+        return "autoguard.guards.Union<[" + options.eol + lines.join("," + options.eol) + options.eol + "]>";
     }
     generateTypeGuard(options) {
         let lines = new Array();
@@ -665,6 +746,9 @@ class Headers {
     generateSchema(options) {
         throw `Method not implemented!`;
     }
+    generateType(options) {
+        return "autoguard.api.Headers";
+    }
     generateTypeGuard(options) {
         return "autoguard.api.Headers";
     }
@@ -681,6 +765,9 @@ class Options {
     generateSchema(options) {
         throw `Method not implemented!`;
     }
+    generateType(options) {
+        return "autoguard.api.Options";
+    }
     generateTypeGuard(options) {
         return "autoguard.api.Options";
     }
@@ -696,6 +783,9 @@ class PlainType {
     }
     generateSchema(options) {
         return `plain`;
+    }
+    generateType(options) {
+        return "autoguard.guards.String";
     }
     generateTypeGuard(options) {
         return "autoguard.guards.String";
