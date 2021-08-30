@@ -416,19 +416,19 @@ export class ObjectType implements Type {
 	}
 
 	generateTypeGuard(options: shared.Options): string {
-		let lines = new Array<string>();
+		let rlines = new Array<string>();
+		let olines = new Array<string>();
 		for (let [key, value] of this.members) {
-			let type = value.type;
-			if (value.optional) {
-				let union = new UnionType();
-				union.add(type);
-				union.add(UndefinedType.INSTANCE);
-				type = union;
+			let { optional, type } = { ...value };
+			if (optional) {
+				olines.push("	\"" + key + "\": " + type.generateTypeGuard({ ...options, eol: options.eol + "\t" }));
+			} else {
+				rlines.push("	\"" + key + "\": " + type.generateTypeGuard({ ...options, eol: options.eol + "\t" }));
 			}
-			lines.push("	\"" + key + "\": " + type.generateTypeGuard({ ...options, eol: options.eol + "\t" }));
 		}
-		let guard = lines.length > 0 ? options.eol + lines.join("," + options.eol) + options.eol : "";
-		return "autoguard.guards.Object.of({" + guard + "})";
+		let required = rlines.length > 0 ? options.eol + rlines.join("," + options.eol) + options.eol : "";
+		let optional = olines.length > 0 ? options.eol + olines.join("," + options.eol) + options.eol : "";
+		return "autoguard.guards.Object.of({" + required + "}, {" + optional + "})";
 	}
 
 	getReferences(): Array<shared.Reference> {

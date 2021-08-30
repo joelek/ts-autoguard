@@ -12,6 +12,7 @@ type Wrap<A extends any[]> = { [B in IndicesOfTuple<A>]: { wrappee: A[B] }; };
 type Unwrap<A> = A extends { wrappee: any } ? A["wrappee"] : never;
 type ValuesOf<A> = A[keyof A];
 type ExpansionOf<A> = A extends infer B ? { [C in keyof B]: B[C] } : never;
+type ObjectOf<A, B> = ExpansionOf<A & Partial<B>>;
 
 export const Any = {
 	as(subject: any, path: string = ""): any {
@@ -210,18 +211,23 @@ export const NumberLiteral = {
 };
 
 export const Object = {
-	of<A extends serialization.MessageMap<A>>(guards: serialization.MessageGuardMap<A>): serialization.MessageGuard<MakeUndefinedOptional<A>> {
+	of<A extends serialization.MessageMap<A>, B extends serialization.MessageMap<B> = {}>(required: serialization.MessageGuardMap<A>, optional?: serialization.MessageGuardMap<B>): serialization.MessageGuard<ObjectOf<A, B>> {
 		return {
-			as(subject: any, path: string = ""): MakeUndefinedOptional<A> {
+			as(subject: any, path: string = ""): ObjectOf<A, B> {
 				if ((subject != null) && (subject.constructor === globalThis.Object)) {
-					for (let key in guards) {
-						guards[key].as(subject[key], path + (/^([a-z][a-z0-9_]*)$/isu.test(key) ? "." + key : "[\"" + key + "\"]"));
+					for (let key in required) {
+						required[key].as(subject[key], path + (/^([a-z][a-z0-9_]*)$/isu.test(key) ? "." + key : "[\"" + key + "\"]"));
+					}
+					for (let key in optional) {
+						if (key in subject && subject[key] !== undefined) {
+							optional[key].as(subject[key], path + (/^([a-z][a-z0-9_]*)$/isu.test(key) ? "." + key : "[\"" + key + "\"]"));
+						}
 					}
 					return subject;
 				}
 				throw new serialization.MessageGuardError(this, subject, path);
 			},
-			is(subject: any): subject is MakeUndefinedOptional<A> {
+			is(subject: any): subject is ObjectOf<A, B> {
 				try {
 					this.as(subject);
 				} catch (error) {
@@ -231,8 +237,11 @@ export const Object = {
 			},
 			ts(eol: string = "\n"): string {
 				let lines = new globalThis.Array<string>();
-				for (let [key, value] of globalThis.Object.entries<serialization.MessageGuard<any>>(guards)) {
+				for (let [key, value] of globalThis.Object.entries<serialization.MessageGuard<any>>(required)) {
 					lines.push(`\t"${key}": ${value.ts(eol + "\t")}`);
+				}
+				for (let [key, value] of globalThis.Object.entries<serialization.MessageGuard<any>>(optional ?? {})) {
+					lines.push(`\t"${key}"?: ${value.ts(eol + "\t")}`);
 				}
 				return "object<" + eol + lines.join("," + eol) + eol + ">";
 			}
