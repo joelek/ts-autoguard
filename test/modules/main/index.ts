@@ -5,37 +5,41 @@ import { ExternalType1 } from ".././module";
 import { ExternalType2 } from "../../modules/module";
 import { ExternalType3 } from ".././dummy/../module/.";
 
-export const ExternalReference1 = autoguard.guards.Reference.of(() => ExternalType1);
+export const ExternalReference1: autoguard.serialization.MessageGuard<ExternalReference1> = autoguard.guards.Reference.of(() => ExternalType1);
 
-export type ExternalReference1 = ReturnType<typeof ExternalReference1["as"]>;
+export type ExternalReference1 = autoguard.guards.Reference<ExternalType1>;
 
-export const ExternalReference2 = autoguard.guards.Reference.of(() => ExternalType2);
+export const ExternalReference2: autoguard.serialization.MessageGuard<ExternalReference2> = autoguard.guards.Reference.of(() => ExternalType2);
 
-export type ExternalReference2 = ReturnType<typeof ExternalReference2["as"]>;
+export type ExternalReference2 = autoguard.guards.Reference<ExternalType2>;
 
-export const ExternalReference3 = autoguard.guards.Reference.of(() => ExternalType3);
+export const ExternalReference3: autoguard.serialization.MessageGuard<ExternalReference3> = autoguard.guards.Reference.of(() => ExternalType3);
 
-export type ExternalReference3 = ReturnType<typeof ExternalReference3["as"]>;
+export type ExternalReference3 = autoguard.guards.Reference<ExternalType3>;
 
-export const ExternalReference4 = autoguard.guards.Object.of({
+export const ExternalReference4: autoguard.serialization.MessageGuard<ExternalReference4> = autoguard.guards.Object.of({
 	"key": autoguard.guards.Reference.of(() => ExternalType1)
-});
+}, {});
 
-export type ExternalReference4 = ReturnType<typeof ExternalReference4["as"]>;
+export type ExternalReference4 = autoguard.guards.Object<{
+	"key": autoguard.guards.Reference<ExternalType1>
+}, {}>;
 
-export const InternalReference1 = autoguard.guards.Reference.of(() => InternalType);
+export const InternalReference1: autoguard.serialization.MessageGuard<InternalReference1> = autoguard.guards.Reference.of(() => InternalType);
 
-export type InternalReference1 = ReturnType<typeof InternalReference1["as"]>;
+export type InternalReference1 = autoguard.guards.Reference<InternalType>;
 
-export const InternalReference2 = autoguard.guards.Object.of({
+export const InternalReference2: autoguard.serialization.MessageGuard<InternalReference2> = autoguard.guards.Object.of({
 	"key": autoguard.guards.Reference.of(() => InternalType)
-});
+}, {});
 
-export type InternalReference2 = ReturnType<typeof InternalReference2["as"]>;
+export type InternalReference2 = autoguard.guards.Object<{
+	"key": autoguard.guards.Reference<InternalType>
+}, {}>;
 
-export const InternalType = autoguard.guards.String;
+export const InternalType: autoguard.serialization.MessageGuard<InternalType> = autoguard.guards.String;
 
-export type InternalType = ReturnType<typeof InternalType["as"]>;
+export type InternalType = autoguard.guards.String;
 
 export namespace Autoguard {
 	export const Guards = {

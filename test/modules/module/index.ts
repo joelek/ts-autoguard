@@ -2,17 +2,17 @@
 
 import * as autoguard from "../../../dist/lib-shared";
 
-export const ExternalType1 = autoguard.guards.String;
+export const ExternalType1: autoguard.serialization.MessageGuard<ExternalType1> = autoguard.guards.String;
 
-export type ExternalType1 = ReturnType<typeof ExternalType1["as"]>;
+export type ExternalType1 = autoguard.guards.String;
 
-export const ExternalType2 = autoguard.guards.String;
+export const ExternalType2: autoguard.serialization.MessageGuard<ExternalType2> = autoguard.guards.String;
 
-export type ExternalType2 = ReturnType<typeof ExternalType2["as"]>;
+export type ExternalType2 = autoguard.guards.String;
 
-export const ExternalType3 = autoguard.guards.String;
+export const ExternalType3: autoguard.serialization.MessageGuard<ExternalType3> = autoguard.guards.String;
 
-export type ExternalType3 = ReturnType<typeof ExternalType3["as"]>;
+export type ExternalType3 = autoguard.guards.String;
 
 export namespace Autoguard {
 	export const Guards = {

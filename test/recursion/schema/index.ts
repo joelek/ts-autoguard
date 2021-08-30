@@ -2,148 +2,195 @@
 
 import * as autoguard from "../../../dist/lib-shared";
 
-export const array1 = autoguard.guards.Array.of(autoguard.guards.String);
+export const array1: autoguard.serialization.MessageGuard<array1> = autoguard.guards.Array.of(autoguard.guards.String);
 
-export type array1 = ReturnType<typeof array1["as"]>;
+export type array1 = autoguard.guards.Array<autoguard.guards.String>;
 
-export const array2 = autoguard.guards.Array.of(autoguard.guards.Array.of(autoguard.guards.String));
+export const array2: autoguard.serialization.MessageGuard<array2> = autoguard.guards.Array.of(autoguard.guards.Array.of(autoguard.guards.String));
 
-export type array2 = ReturnType<typeof array2["as"]>;
+export type array2 = autoguard.guards.Array<autoguard.guards.Array<autoguard.guards.String>>;
 
-export const array3 = autoguard.guards.Array.of(autoguard.guards.Array.of(autoguard.guards.Array.of(autoguard.guards.String)));
+export const array3: autoguard.serialization.MessageGuard<array3> = autoguard.guards.Array.of(autoguard.guards.Array.of(autoguard.guards.Array.of(autoguard.guards.String)));
 
-export type array3 = ReturnType<typeof array3["as"]>;
+export type array3 = autoguard.guards.Array<autoguard.guards.Array<autoguard.guards.Array<autoguard.guards.String>>>;
 
-export const array4 = autoguard.guards.Array.of(autoguard.guards.Array.of(autoguard.guards.Array.of(autoguard.guards.Array.of(autoguard.guards.String))));
+export const array4: autoguard.serialization.MessageGuard<array4> = autoguard.guards.Array.of(autoguard.guards.Array.of(autoguard.guards.Array.of(autoguard.guards.Array.of(autoguard.guards.String))));
 
-export type array4 = ReturnType<typeof array4["as"]>;
+export type array4 = autoguard.guards.Array<autoguard.guards.Array<autoguard.guards.Array<autoguard.guards.Array<autoguard.guards.String>>>>;
 
-export const array5 = autoguard.guards.Array.of(autoguard.guards.Array.of(autoguard.guards.Array.of(autoguard.guards.Array.of(autoguard.guards.Array.of(autoguard.guards.String)))));
+export const array5: autoguard.serialization.MessageGuard<array5> = autoguard.guards.Array.of(autoguard.guards.Array.of(autoguard.guards.Array.of(autoguard.guards.Array.of(autoguard.guards.Array.of(autoguard.guards.String)))));
 
-export type array5 = ReturnType<typeof array5["as"]>;
+export type array5 = autoguard.guards.Array<autoguard.guards.Array<autoguard.guards.Array<autoguard.guards.Array<autoguard.guards.Array<autoguard.guards.String>>>>>;
 
-export const intersection1 = autoguard.guards.Object.of({});
+export const intersection1: autoguard.serialization.MessageGuard<intersection1> = autoguard.guards.Object.of({}, {});
 
-export type intersection1 = ReturnType<typeof intersection1["as"]>;
+export type intersection1 = autoguard.guards.Object<{}, {}>;
 
-export const intersection2 = autoguard.guards.Intersection.of(
-	autoguard.guards.Object.of({}),
-	autoguard.guards.Object.of({})
+export const intersection2: autoguard.serialization.MessageGuard<intersection2> = autoguard.guards.Intersection.of(
+	autoguard.guards.Object.of({}, {}),
+	autoguard.guards.Object.of({}, {})
 );
 
-export type intersection2 = ReturnType<typeof intersection2["as"]>;
+export type intersection2 = autoguard.guards.Intersection<[
+	autoguard.guards.Object<{}, {}>,
+	autoguard.guards.Object<{}, {}>
+]>;
 
-export const intersection3 = autoguard.guards.Intersection.of(
-	autoguard.guards.Object.of({}),
-	autoguard.guards.Object.of({}),
-	autoguard.guards.Object.of({})
+export const intersection3: autoguard.serialization.MessageGuard<intersection3> = autoguard.guards.Intersection.of(
+	autoguard.guards.Object.of({}, {}),
+	autoguard.guards.Object.of({}, {}),
+	autoguard.guards.Object.of({}, {})
 );
 
-export type intersection3 = ReturnType<typeof intersection3["as"]>;
+export type intersection3 = autoguard.guards.Intersection<[
+	autoguard.guards.Object<{}, {}>,
+	autoguard.guards.Object<{}, {}>,
+	autoguard.guards.Object<{}, {}>
+]>;
 
-export const intersection4 = autoguard.guards.Intersection.of(
-	autoguard.guards.Object.of({}),
-	autoguard.guards.Object.of({}),
-	autoguard.guards.Object.of({}),
-	autoguard.guards.Object.of({})
+export const intersection4: autoguard.serialization.MessageGuard<intersection4> = autoguard.guards.Intersection.of(
+	autoguard.guards.Object.of({}, {}),
+	autoguard.guards.Object.of({}, {}),
+	autoguard.guards.Object.of({}, {}),
+	autoguard.guards.Object.of({}, {})
 );
 
-export type intersection4 = ReturnType<typeof intersection4["as"]>;
+export type intersection4 = autoguard.guards.Intersection<[
+	autoguard.guards.Object<{}, {}>,
+	autoguard.guards.Object<{}, {}>,
+	autoguard.guards.Object<{}, {}>,
+	autoguard.guards.Object<{}, {}>
+]>;
 
-export const intersection5 = autoguard.guards.Intersection.of(
-	autoguard.guards.Object.of({}),
-	autoguard.guards.Object.of({}),
-	autoguard.guards.Object.of({}),
-	autoguard.guards.Object.of({}),
-	autoguard.guards.Object.of({})
+export const intersection5: autoguard.serialization.MessageGuard<intersection5> = autoguard.guards.Intersection.of(
+	autoguard.guards.Object.of({}, {}),
+	autoguard.guards.Object.of({}, {}),
+	autoguard.guards.Object.of({}, {}),
+	autoguard.guards.Object.of({}, {}),
+	autoguard.guards.Object.of({}, {})
 );
 
-export type intersection5 = ReturnType<typeof intersection5["as"]>;
+export type intersection5 = autoguard.guards.Intersection<[
+	autoguard.guards.Object<{}, {}>,
+	autoguard.guards.Object<{}, {}>,
+	autoguard.guards.Object<{}, {}>,
+	autoguard.guards.Object<{}, {}>,
+	autoguard.guards.Object<{}, {}>
+]>;
 
-export const union1 = autoguard.guards.String;
+export const union1: autoguard.serialization.MessageGuard<union1> = autoguard.guards.String;
 
-export type union1 = ReturnType<typeof union1["as"]>;
+export type union1 = autoguard.guards.String;
 
-export const union2 = autoguard.guards.String;
+export const union2: autoguard.serialization.MessageGuard<union2> = autoguard.guards.String;
 
-export type union2 = ReturnType<typeof union2["as"]>;
+export type union2 = autoguard.guards.String;
 
-export const union3 = autoguard.guards.String;
+export const union3: autoguard.serialization.MessageGuard<union3> = autoguard.guards.String;
 
-export type union3 = ReturnType<typeof union3["as"]>;
+export type union3 = autoguard.guards.String;
 
-export const union4 = autoguard.guards.String;
+export const union4: autoguard.serialization.MessageGuard<union4> = autoguard.guards.String;
 
-export type union4 = ReturnType<typeof union4["as"]>;
+export type union4 = autoguard.guards.String;
 
-export const union5 = autoguard.guards.String;
+export const union5: autoguard.serialization.MessageGuard<union5> = autoguard.guards.String;
 
-export type union5 = ReturnType<typeof union5["as"]>;
+export type union5 = autoguard.guards.String;
 
-export const preceedence1 = autoguard.guards.Union.of(
+export const preceedence1: autoguard.serialization.MessageGuard<preceedence1> = autoguard.guards.Union.of(
 	autoguard.guards.Array.of(autoguard.guards.String),
 	autoguard.guards.String
 );
 
-export type preceedence1 = ReturnType<typeof preceedence1["as"]>;
+export type preceedence1 = autoguard.guards.Union<[
+	autoguard.guards.Array<autoguard.guards.String>,
+	autoguard.guards.String
+]>;
 
-export const preceedence2 = autoguard.guards.Union.of(
+export const preceedence2: autoguard.serialization.MessageGuard<preceedence2> = autoguard.guards.Union.of(
 	autoguard.guards.String,
 	autoguard.guards.Array.of(autoguard.guards.String)
 );
 
-export type preceedence2 = ReturnType<typeof preceedence2["as"]>;
+export type preceedence2 = autoguard.guards.Union<[
+	autoguard.guards.String,
+	autoguard.guards.Array<autoguard.guards.String>
+]>;
 
-export const preceedence3 = autoguard.guards.Union.of(
+export const preceedence3: autoguard.serialization.MessageGuard<preceedence3> = autoguard.guards.Union.of(
 	autoguard.guards.String,
 	autoguard.guards.Intersection.of(
 		autoguard.guards.Object.of({
 			"a": autoguard.guards.String
-		}),
+		}, {}),
 		autoguard.guards.Object.of({
 			"b": autoguard.guards.String
-		})
+		}, {})
 	)
 );
 
-export type preceedence3 = ReturnType<typeof preceedence3["as"]>;
+export type preceedence3 = autoguard.guards.Union<[
+	autoguard.guards.String,
+	autoguard.guards.Intersection<[
+		autoguard.guards.Object<{
+			"a": autoguard.guards.String
+		}, {}>,
+		autoguard.guards.Object<{
+			"b": autoguard.guards.String
+		}, {}>
+	]>
+]>;
 
-export const preceedence4 = autoguard.guards.Union.of(
+export const preceedence4: autoguard.serialization.MessageGuard<preceedence4> = autoguard.guards.Union.of(
 	autoguard.guards.Intersection.of(
 		autoguard.guards.Object.of({
 			"a": autoguard.guards.String
-		}),
+		}, {}),
 		autoguard.guards.Object.of({
 			"b": autoguard.guards.String
-		})
+		}, {})
 	),
 	autoguard.guards.String
 );
 
-export type preceedence4 = ReturnType<typeof preceedence4["as"]>;
+export type preceedence4 = autoguard.guards.Union<[
+	autoguard.guards.Intersection<[
+		autoguard.guards.Object<{
+			"a": autoguard.guards.String
+		}, {}>,
+		autoguard.guards.Object<{
+			"b": autoguard.guards.String
+		}, {}>
+	]>,
+	autoguard.guards.String
+]>;
 
-export const empty1 = autoguard.guards.Tuple.of();
+export const empty1: autoguard.serialization.MessageGuard<empty1> = autoguard.guards.Tuple.of();
 
-export type empty1 = ReturnType<typeof empty1["as"]>;
+export type empty1 = autoguard.guards.Tuple<[]>;
 
-export const empty2 = autoguard.guards.Object.of({});
+export const empty2: autoguard.serialization.MessageGuard<empty2> = autoguard.guards.Object.of({}, {});
 
-export type empty2 = ReturnType<typeof empty2["as"]>;
+export type empty2 = autoguard.guards.Object<{}, {}>;
 
-export const reference1 = autoguard.guards.Reference.of(() => reference2);
+export const reference1: autoguard.serialization.MessageGuard<reference1> = autoguard.guards.Reference.of(() => reference2);
 
-export type reference1 = ReturnType<typeof reference1["as"]>;
+export type reference1 = autoguard.guards.Reference<reference2>;
 
-export const reference2 = autoguard.guards.Object.of({});
+export const reference2: autoguard.serialization.MessageGuard<reference2> = autoguard.guards.Object.of({}, {});
 
-export type reference2 = ReturnType<typeof reference2["as"]>;
+export type reference2 = autoguard.guards.Object<{}, {}>;
 
-export const nested = autoguard.guards.Array.of(autoguard.guards.Group.of(autoguard.guards.Union.of(
+export const nested: autoguard.serialization.MessageGuard<nested> = autoguard.guards.Array.of(autoguard.guards.Group.of(autoguard.guards.Union.of(
 	autoguard.guards.Array.of(autoguard.guards.String),
 	autoguard.guards.String
 )));
 
-export type nested = ReturnType<typeof nested["as"]>;
+export type nested = autoguard.guards.Array<autoguard.guards.Group<autoguard.guards.Union<[
+	autoguard.guards.Array<autoguard.guards.String>,
+	autoguard.guards.String
+]>>>;
 
 export namespace Autoguard {
 	export const Guards = {

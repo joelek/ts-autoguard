@@ -2,93 +2,109 @@
 
 import * as autoguard from "../../../dist/lib-shared";
 
-export const MyAnyType = autoguard.guards.Any;
+export const MyAnyType: autoguard.serialization.MessageGuard<MyAnyType> = autoguard.guards.Any;
 
-export type MyAnyType = ReturnType<typeof MyAnyType["as"]>;
+export type MyAnyType = autoguard.guards.Any;
 
-export const MyArrayOfStringType = autoguard.guards.Array.of(autoguard.guards.String);
+export const MyArrayOfStringType: autoguard.serialization.MessageGuard<MyArrayOfStringType> = autoguard.guards.Array.of(autoguard.guards.String);
 
-export type MyArrayOfStringType = ReturnType<typeof MyArrayOfStringType["as"]>;
+export type MyArrayOfStringType = autoguard.guards.Array<autoguard.guards.String>;
 
-export const MyBooleanType = autoguard.guards.Boolean;
+export const MyBooleanType: autoguard.serialization.MessageGuard<MyBooleanType> = autoguard.guards.Boolean;
 
-export type MyBooleanType = ReturnType<typeof MyBooleanType["as"]>;
+export type MyBooleanType = autoguard.guards.Boolean;
 
-export const MyBooleanliteralType = autoguard.guards.BooleanLiteral.of(true);
+export const MyBooleanliteralType: autoguard.serialization.MessageGuard<MyBooleanliteralType> = autoguard.guards.BooleanLiteral.of(true);
 
-export type MyBooleanliteralType = ReturnType<typeof MyBooleanliteralType["as"]>;
+export type MyBooleanliteralType = autoguard.guards.BooleanLiteral<true>;
 
-export const MyGroupType = autoguard.guards.Group.of(autoguard.guards.Any);
+export const MyGroupType: autoguard.serialization.MessageGuard<MyGroupType> = autoguard.guards.Group.of(autoguard.guards.Any);
 
-export type MyGroupType = ReturnType<typeof MyGroupType["as"]>;
+export type MyGroupType = autoguard.guards.Group<autoguard.guards.Any>;
 
-export const MyIntersectionType = autoguard.guards.Intersection.of(
+export const MyIntersectionType: autoguard.serialization.MessageGuard<MyIntersectionType> = autoguard.guards.Intersection.of(
 	autoguard.guards.Object.of({
 		"a_string_member": autoguard.guards.String
-	}),
+	}, {}),
 	autoguard.guards.Object.of({
 		"another_string_member": autoguard.guards.String
-	})
+	}, {})
 );
 
-export type MyIntersectionType = ReturnType<typeof MyIntersectionType["as"]>;
+export type MyIntersectionType = autoguard.guards.Intersection<[
+	autoguard.guards.Object<{
+		"a_string_member": autoguard.guards.String
+	}, {}>,
+	autoguard.guards.Object<{
+		"another_string_member": autoguard.guards.String
+	}, {}>
+]>;
 
-export const MyNullType = autoguard.guards.Null;
+export const MyNullType: autoguard.serialization.MessageGuard<MyNullType> = autoguard.guards.Null;
 
-export type MyNullType = ReturnType<typeof MyNullType["as"]>;
+export type MyNullType = autoguard.guards.Null;
 
-export const MyNumberType = autoguard.guards.Number;
+export const MyNumberType: autoguard.serialization.MessageGuard<MyNumberType> = autoguard.guards.Number;
 
-export type MyNumberType = ReturnType<typeof MyNumberType["as"]>;
+export type MyNumberType = autoguard.guards.Number;
 
-export const MyNumberLiteralType = autoguard.guards.NumberLiteral.of(1337);
+export const MyNumberLiteralType: autoguard.serialization.MessageGuard<MyNumberLiteralType> = autoguard.guards.NumberLiteral.of(1337);
 
-export type MyNumberLiteralType = ReturnType<typeof MyNumberLiteralType["as"]>;
+export type MyNumberLiteralType = autoguard.guards.NumberLiteral<1337>;
 
-export const MyObjectType = autoguard.guards.Object.of({
+export const MyObjectType: autoguard.serialization.MessageGuard<MyObjectType> = autoguard.guards.Object.of({
 	"string_member": autoguard.guards.String,
-	"optional_member": autoguard.guards.Union.of(
-		autoguard.guards.String,
-		autoguard.guards.Undefined
-	),
 	"quoted-member": autoguard.guards.String
+}, {
+	"optional_member": autoguard.guards.String
 });
 
-export type MyObjectType = ReturnType<typeof MyObjectType["as"]>;
+export type MyObjectType = autoguard.guards.Object<{
+	"string_member": autoguard.guards.String,
+	"quoted-member": autoguard.guards.String
+}, {
+	"optional_member": autoguard.guards.String
+}>;
 
-export const MyRecordOfStringType = autoguard.guards.Record.of(autoguard.guards.String);
+export const MyRecordOfStringType: autoguard.serialization.MessageGuard<MyRecordOfStringType> = autoguard.guards.Record.of(autoguard.guards.String);
 
-export type MyRecordOfStringType = ReturnType<typeof MyRecordOfStringType["as"]>;
+export type MyRecordOfStringType = autoguard.guards.Record<autoguard.guards.String>;
 
-export const MyReferenceType = autoguard.guards.Reference.of(() => MyObjectType);
+export const MyReferenceType: autoguard.serialization.MessageGuard<MyReferenceType> = autoguard.guards.Reference.of(() => MyObjectType);
 
-export type MyReferenceType = ReturnType<typeof MyReferenceType["as"]>;
+export type MyReferenceType = autoguard.guards.Reference<MyObjectType>;
 
-export const MyStringType = autoguard.guards.String;
+export const MyStringType: autoguard.serialization.MessageGuard<MyStringType> = autoguard.guards.String;
 
-export type MyStringType = ReturnType<typeof MyStringType["as"]>;
+export type MyStringType = autoguard.guards.String;
 
-export const MyStringLiteralType = autoguard.guards.StringLiteral.of("räksmörgås");
+export const MyStringLiteralType: autoguard.serialization.MessageGuard<MyStringLiteralType> = autoguard.guards.StringLiteral.of("räksmörgås");
 
-export type MyStringLiteralType = ReturnType<typeof MyStringLiteralType["as"]>;
+export type MyStringLiteralType = autoguard.guards.StringLiteral<"räksmörgås">;
 
-export const MyTupleType = autoguard.guards.Tuple.of(
+export const MyTupleType: autoguard.serialization.MessageGuard<MyTupleType> = autoguard.guards.Tuple.of(
 	autoguard.guards.String,
 	autoguard.guards.Number
 );
 
-export type MyTupleType = ReturnType<typeof MyTupleType["as"]>;
+export type MyTupleType = autoguard.guards.Tuple<[
+	autoguard.guards.String,
+	autoguard.guards.Number
+]>;
 
-export const MyUndefinedType = autoguard.guards.Undefined;
+export const MyUndefinedType: autoguard.serialization.MessageGuard<MyUndefinedType> = autoguard.guards.Undefined;
 
-export type MyUndefinedType = ReturnType<typeof MyUndefinedType["as"]>;
+export type MyUndefinedType = autoguard.guards.Undefined;
 
-export const MyUnionType = autoguard.guards.Union.of(
+export const MyUnionType: autoguard.serialization.MessageGuard<MyUnionType> = autoguard.guards.Union.of(
 	autoguard.guards.String,
 	autoguard.guards.Null
 );
 
-export type MyUnionType = ReturnType<typeof MyUnionType["as"]>;
+export type MyUnionType = autoguard.guards.Union<[
+	autoguard.guards.String,
+	autoguard.guards.Null
+]>;
 
 export namespace Autoguard {
 	export const Guards = {

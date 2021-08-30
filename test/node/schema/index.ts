@@ -12,87 +12,51 @@ export namespace Autoguard {
 			"options": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({
 					"ca": autoguard.guards.String,
-					"cb": autoguard.guards.Union.of(
-						autoguard.guards.String,
-						autoguard.guards.Undefined
-					),
-					"cc": autoguard.guards.Union.of(
-						autoguard.guards.Array.of(autoguard.guards.String),
-						autoguard.guards.Undefined
-					),
-					"pa": autoguard.guards.String,
-					"pb": autoguard.guards.Union.of(
-						autoguard.guards.String,
-						autoguard.guards.Undefined
-					),
-					"pc": autoguard.guards.Union.of(
-						autoguard.guards.Array.of(autoguard.guards.String),
-						autoguard.guards.Undefined
-					)
+					"pa": autoguard.guards.String
+				}, {
+					"cb": autoguard.guards.String,
+					"cc": autoguard.guards.Array.of(autoguard.guards.String),
+					"pb": autoguard.guards.String,
+					"pc": autoguard.guards.Array.of(autoguard.guards.String)
 				}),
 				autoguard.api.Options
 			),
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({
-					"ha": autoguard.guards.String,
-					"hb": autoguard.guards.Union.of(
-						autoguard.guards.String,
-						autoguard.guards.Undefined
-					),
-					"hc": autoguard.guards.Union.of(
-						autoguard.guards.Array.of(autoguard.guards.String),
-						autoguard.guards.Undefined
-					)
+					"ha": autoguard.guards.String
+				}, {
+					"hb": autoguard.guards.String,
+					"hc": autoguard.guards.Array.of(autoguard.guards.String)
 				}),
 				autoguard.api.Headers
-			),
-			"payload": autoguard.guards.Union.of(
-				autoguard.api.Binary,
-				autoguard.guards.Undefined
 			)
+		}, {
+			"payload": autoguard.api.Binary
 		}),
 		"json": autoguard.guards.Object.of({
 			"options": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({
 					"ca": autoguard.guards.Number,
-					"cb": autoguard.guards.Union.of(
-						autoguard.guards.Number,
-						autoguard.guards.Undefined
-					),
-					"cc": autoguard.guards.Union.of(
-						autoguard.guards.Array.of(autoguard.guards.Number),
-						autoguard.guards.Undefined
-					),
-					"pa": autoguard.guards.Number,
-					"pb": autoguard.guards.Union.of(
-						autoguard.guards.Number,
-						autoguard.guards.Undefined
-					),
-					"pc": autoguard.guards.Union.of(
-						autoguard.guards.Array.of(autoguard.guards.Number),
-						autoguard.guards.Undefined
-					)
+					"pa": autoguard.guards.Number
+				}, {
+					"cb": autoguard.guards.Number,
+					"cc": autoguard.guards.Array.of(autoguard.guards.Number),
+					"pb": autoguard.guards.Number,
+					"pc": autoguard.guards.Array.of(autoguard.guards.Number)
 				}),
 				autoguard.api.Options
 			),
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({
-					"ha": autoguard.guards.Number,
-					"hb": autoguard.guards.Union.of(
-						autoguard.guards.Number,
-						autoguard.guards.Undefined
-					),
-					"hc": autoguard.guards.Union.of(
-						autoguard.guards.Array.of(autoguard.guards.Number),
-						autoguard.guards.Undefined
-					)
+					"ha": autoguard.guards.Number
+				}, {
+					"hb": autoguard.guards.Number,
+					"hc": autoguard.guards.Array.of(autoguard.guards.Number)
 				}),
 				autoguard.api.Headers
-			),
-			"payload": autoguard.guards.Union.of(
-				autoguard.api.Binary,
-				autoguard.guards.Undefined
 			)
+		}, {
+			"payload": autoguard.api.Binary
 		})
 	};
 
@@ -100,52 +64,32 @@ export namespace Autoguard {
 
 	export const Responses = {
 		"plain": autoguard.guards.Object.of({
-			"status": autoguard.guards.Union.of(
-				autoguard.guards.Number,
-				autoguard.guards.Undefined
-			),
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({
-					"ha": autoguard.guards.String,
-					"hb": autoguard.guards.Union.of(
-						autoguard.guards.String,
-						autoguard.guards.Undefined
-					),
-					"hc": autoguard.guards.Union.of(
-						autoguard.guards.Array.of(autoguard.guards.String),
-						autoguard.guards.Undefined
-					)
+					"ha": autoguard.guards.String
+				}, {
+					"hb": autoguard.guards.String,
+					"hc": autoguard.guards.Array.of(autoguard.guards.String)
 				}),
 				autoguard.api.Headers
-			),
-			"payload": autoguard.guards.Union.of(
-				autoguard.api.Binary,
-				autoguard.guards.Undefined
 			)
+		}, {
+			"status": autoguard.guards.Number,
+			"payload": autoguard.api.Binary
 		}),
 		"json": autoguard.guards.Object.of({
-			"status": autoguard.guards.Union.of(
-				autoguard.guards.Number,
-				autoguard.guards.Undefined
-			),
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({
-					"ha": autoguard.guards.Number,
-					"hb": autoguard.guards.Union.of(
-						autoguard.guards.Number,
-						autoguard.guards.Undefined
-					),
-					"hc": autoguard.guards.Union.of(
-						autoguard.guards.Array.of(autoguard.guards.Number),
-						autoguard.guards.Undefined
-					)
+					"ha": autoguard.guards.Number
+				}, {
+					"hb": autoguard.guards.Number,
+					"hc": autoguard.guards.Array.of(autoguard.guards.Number)
 				}),
 				autoguard.api.Headers
-			),
-			"payload": autoguard.guards.Union.of(
-				autoguard.api.Binary,
-				autoguard.guards.Undefined
 			)
+		}, {
+			"status": autoguard.guards.Number,
+			"payload": autoguard.api.Binary
 		})
 	};
 
