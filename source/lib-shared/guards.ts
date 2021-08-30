@@ -31,6 +31,8 @@ export const Any = {
 	}
 };
 
+export type Any = any;
+
 export const Array = {
 	of<A extends serialization.Message>(guard: serialization.MessageGuard<A>): serialization.MessageGuard<Array<A>> {
 		return {
@@ -58,6 +60,8 @@ export const Array = {
 	}
 };
 
+export type Array<A extends serialization.Message> = globalThis.Array<A>;
+
 export const Boolean = {
 	as(subject: any, path: string = ""): boolean {
 		if ((subject != null) && (subject.constructor === globalThis.Boolean)) {
@@ -77,6 +81,8 @@ export const Boolean = {
 		return `boolean`;
 	}
 };
+
+export type Boolean = boolean;
 
 export const BooleanLiteral = {
 	of<A extends boolean>(value: A): serialization.MessageGuard<A> {
@@ -102,6 +108,8 @@ export const BooleanLiteral = {
 	}
 };
 
+export type BooleanLiteral<A extends boolean> = A;
+
 export const Group = {
 	of<A extends serialization.Message>(guard: serialization.MessageGuard<A>, name?: string): serialization.MessageGuard<A> {
 		return {
@@ -117,6 +125,8 @@ export const Group = {
 		};
 	}
 };
+
+export type Group<A extends serialization.Message> = A;
 
 export const Intersection = {
 	of<A extends TupleOf<serialization.Message>>(...guards: TupleOf<serialization.MessageGuardTuple<A>>): serialization.MessageGuard<IntersectionOf<A>> {
@@ -146,6 +156,8 @@ export const Intersection = {
 	}
 };
 
+export type Intersection<A extends TupleOf<serialization.Message>> = IntersectionOf<A>;
+
 export const Null = {
 	as(subject: any, path: string = ""): null {
 		if (subject === null) {
@@ -166,6 +178,8 @@ export const Null = {
 	}
 };
 
+export type Null = null;
+
 export const Number = {
 	as(subject: any, path: string = ""): number {
 		if ((subject != null) && (subject.constructor === globalThis.Number)) {
@@ -185,6 +199,8 @@ export const Number = {
 		return `number`;
 	}
 };
+
+export type Number = number;
 
 export const NumberLiteral = {
 	of<A extends number>(value: A): serialization.MessageGuard<A> {
@@ -209,6 +225,8 @@ export const NumberLiteral = {
 		};
 	}
 };
+
+export type NumberLiteral<A extends number> = A;
 
 export const Object = {
 	of<A extends serialization.MessageMap<A>, B extends serialization.MessageMap<B> = {}>(required: serialization.MessageGuardMap<A>, optional?: serialization.MessageGuardMap<B>): serialization.MessageGuard<ObjectOf<A, B>> {
@@ -249,10 +267,12 @@ export const Object = {
 	}
 };
 
+export type Object<A extends serialization.MessageMap<A>, B extends serialization.MessageMap<B> = {}> = ObjectOf<A, B>;
+
 export const Record = {
-	of<A extends serialization.Message>(guard: serialization.MessageGuard<A>): serialization.MessageGuard<Record<string, undefined | A>> {
+	of<A extends serialization.Message>(guard: serialization.MessageGuard<A>): serialization.MessageGuard<globalThis.Record<string, undefined | A>> {
 		return {
-			as(subject: any, path: string = ""): Record<string, undefined | A> {
+			as(subject: any, path: string = ""): globalThis.Record<string, undefined | A> {
 				if ((subject != null) && (subject.constructor === globalThis.Object)) {
 					let wrapped = Union.of(Undefined, guard);
 					for (let key of globalThis.Object.keys(subject)) {
@@ -262,7 +282,7 @@ export const Record = {
 				}
 				throw new serialization.MessageGuardError(this, subject, path);
 			},
-			is(subject: any): subject is Record<string, undefined | A> {
+			is(subject: any): subject is globalThis.Record<string, undefined | A> {
 				try {
 					this.as(subject);
 				} catch (error) {
@@ -276,6 +296,8 @@ export const Record = {
 		};
 	}
 };
+
+export type Record<A extends serialization.Message> = globalThis.Record<string, undefined | A>;
 
 export const Reference = {
 	of<A extends serialization.Message>(guard: () => serialization.MessageGuard<A>): serialization.MessageGuard<A> {
@@ -292,6 +314,8 @@ export const Reference = {
 		};
 	}
 };
+
+export type Reference<A extends serialization.Message> = A;
 
 export const String = {
 	as(subject: any, path: string = ""): string {
@@ -312,6 +336,8 @@ export const String = {
 		return "string";
 	}
 };
+
+export type String = string;
 
 export const StringLiteral = {
 	of<A extends string>(value: A): serialization.MessageGuard<A> {
@@ -336,6 +362,8 @@ export const StringLiteral = {
 		};
 	}
 };
+
+export type StringLiteral<A extends string> = A;
 
 export const Tuple = {
 	of<A extends TupleOf<serialization.Message>>(...guards: TupleOf<serialization.MessageGuardTuple<A>>): serialization.MessageGuard<TupleOf<A>> {
@@ -368,6 +396,8 @@ export const Tuple = {
 	}
 };
 
+export type Tuple<A extends TupleOf<serialization.Message>> = TupleOf<A>;
+
 export const Undefined = {
 	as(subject: any, path: string = ""): undefined {
 		if (subject === undefined) {
@@ -387,6 +417,8 @@ export const Undefined = {
 		return "undefined";
 	}
 };
+
+export type Undefined = undefined;
 
 export const Union = {
 	of<A extends TupleOf<serialization.Message>>(...guards: TupleOf<serialization.MessageGuardTuple<A>>): serialization.MessageGuard<UnionOf<A>> {
@@ -417,3 +449,5 @@ export const Union = {
 		};
 	}
 };
+
+export type Union<A extends TupleOf<serialization.Message>> = UnionOf<A>;
