@@ -14,7 +14,7 @@ type ValuesOf<A> = A[keyof A];
 type ExpansionOf<A> = A extends infer B ? { [C in keyof B]: B[C] } : never;
 type ObjectOf<A, B> = ExpansionOf<A & Partial<B>>;
 
-export const Any = {
+export const Any: serialization.MessageGuard<Any> = {
 	as(subject: any, path: string = ""): Any {
 		return subject;
 	},
@@ -62,7 +62,7 @@ export const Array = {
 
 export type Array<A extends serialization.Message> = globalThis.Array<A>;
 
-export const Boolean = {
+export const Boolean: serialization.MessageGuard<Boolean> = {
 	as(subject: any, path: string = ""): Boolean {
 		if ((subject != null) && (subject.constructor === globalThis.Boolean)) {
 			return subject as boolean;
@@ -158,7 +158,7 @@ export const Intersection = {
 
 export type Intersection<A extends TupleOf<serialization.Message>> = IntersectionOf<A>;
 
-export const Null = {
+export const Null: serialization.MessageGuard<Null> = {
 	as(subject: any, path: string = ""): Null {
 		if (subject === null) {
 			return subject;
@@ -180,7 +180,7 @@ export const Null = {
 
 export type Null = null;
 
-export const Number = {
+export const Number: serialization.MessageGuard<Number> = {
 	as(subject: any, path: string = ""): Number {
 		if ((subject != null) && (subject.constructor === globalThis.Number)) {
 			return subject as number;
@@ -317,7 +317,7 @@ export const Reference = {
 
 export type Reference<A extends serialization.Message> = A;
 
-export const String = {
+export const String: serialization.MessageGuard<String> = {
 	as(subject: any, path: string = ""): String {
 		if ((subject != null) && (subject.constructor === globalThis.String)) {
 			return subject as string;
@@ -398,7 +398,7 @@ export const Tuple = {
 
 export type Tuple<A extends TupleOf<serialization.Message>> = TupleOf<A>;
 
-export const Undefined = {
+export const Undefined: serialization.MessageGuard<Undefined> = {
 	as(subject: any, path: string = ""): Undefined {
 		if (subject === undefined) {
 			return subject;
