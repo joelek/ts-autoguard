@@ -1,3 +1,4 @@
+import * as guards from "./guards";
 import * as serialization from "./serialization";
 export declare function decodeURIComponent(string: string): string | undefined;
 export declare function splitComponents(url: string): Array<string>;
@@ -41,8 +42,8 @@ export declare type JSON = boolean | null | number | string | JSON[] | {
     [key: string]: JSON;
 } | undefined;
 export declare const JSON: serialization.MessageGuard<JSON>;
-export declare const Options: serialization.MessageGuard<Record<string, JSON>>;
-export declare const Headers: serialization.MessageGuard<Record<string, JSON>>;
+export declare const Options: serialization.MessageGuard<guards.Record<JSON>>;
+export declare const Headers: serialization.MessageGuard<guards.Record<JSON>>;
 export declare function serializeValue(value: JSON, plain: boolean): string | undefined;
 export declare function deserializeValue(value: string | undefined, plain: boolean): JSON;
 export declare type RawRequest = {

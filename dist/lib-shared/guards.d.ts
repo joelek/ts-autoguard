@@ -17,21 +17,13 @@ declare type ExpansionOf<A> = A extends infer B ? {
     [C in keyof B]: B[C];
 } : never;
 declare type ObjectOf<A, B> = ExpansionOf<A & Partial<B>>;
-export declare const Any: {
-    as(subject: any, path?: string): any;
-    is(subject: any): subject is any;
-    ts(eol?: string): string;
-};
+export declare const Any: serialization.MessageGuard<Any>;
 export declare type Any = any;
 export declare const Array: {
     of<A extends unknown>(guard: serialization.MessageGuard<A>): serialization.MessageGuard<Array<A>>;
 };
 export declare type Array<A extends serialization.Message> = globalThis.Array<A>;
-export declare const Boolean: {
-    as(subject: any, path?: string): boolean;
-    is(subject: any): subject is boolean;
-    ts(eol?: string): string;
-};
+export declare const Boolean: serialization.MessageGuard<Boolean>;
 export declare type Boolean = boolean;
 export declare const BooleanLiteral: {
     of<A extends boolean>(value: A): serialization.MessageGuard<A>;
@@ -45,17 +37,9 @@ export declare const Intersection: {
     of<A extends any[]>(...guards_0: serialization.MessageGuardTuple<A>): serialization.MessageGuard<ExpansionOf<Unwrap<IntersectionOfUnion<ValuesOf<Wrap<A>>>>>>;
 };
 export declare type Intersection<A extends TupleOf<serialization.Message>> = IntersectionOf<A>;
-export declare const Null: {
-    as(subject: any, path?: string): null;
-    is(subject: any): subject is null;
-    ts(eol?: string): string;
-};
+export declare const Null: serialization.MessageGuard<Null>;
 export declare type Null = null;
-export declare const Number: {
-    as(subject: any, path?: string): number;
-    is(subject: any): subject is number;
-    ts(eol?: string): string;
-};
+export declare const Number: serialization.MessageGuard<Number>;
 export declare type Number = number;
 export declare const NumberLiteral: {
     of<A extends number>(value: A): serialization.MessageGuard<A>;
@@ -66,18 +50,14 @@ export declare const Object: {
 };
 export declare type Object<A extends serialization.MessageMap<A>, B extends serialization.MessageMap<B> = {}> = ObjectOf<A, B>;
 export declare const Record: {
-    of<A extends unknown>(guard: serialization.MessageGuard<A>): serialization.MessageGuard<globalThis.Record<string, A | undefined>>;
+    of<A extends unknown>(guard: serialization.MessageGuard<A>): serialization.MessageGuard<Record<A>>;
 };
 export declare type Record<A extends serialization.Message> = globalThis.Record<string, undefined | A>;
 export declare const Reference: {
     of<A extends unknown>(guard: () => serialization.MessageGuard<A>): serialization.MessageGuard<A>;
 };
 export declare type Reference<A extends serialization.Message> = A;
-export declare const String: {
-    as(subject: any, path?: string): string;
-    is(subject: any): subject is string;
-    ts(eol?: string): string;
-};
+export declare const String: serialization.MessageGuard<String>;
 export declare type String = string;
 export declare const StringLiteral: {
     of<A extends string>(value: A): serialization.MessageGuard<A>;
@@ -87,14 +67,10 @@ export declare const Tuple: {
     of<A extends any[]>(...guards_0: serialization.MessageGuardTuple<A>): serialization.MessageGuard<[...A]>;
 };
 export declare type Tuple<A extends TupleOf<serialization.Message>> = TupleOf<A>;
-export declare const Undefined: {
-    as(subject: any, path?: string): undefined;
-    is(subject: any): subject is undefined;
-    ts(eol?: string): string;
-};
+export declare const Undefined: serialization.MessageGuard<Undefined>;
 export declare type Undefined = undefined;
 export declare const Union: {
-    of<A extends any[]>(...guards_0: serialization.MessageGuardTuple<A>): serialization.MessageGuard<UnionOf<A>>;
+    of<A extends any[]>(...guards_0: serialization.MessageGuardTuple<A>): serialization.MessageGuard<Union<A>>;
 };
 export declare type Union<A extends TupleOf<serialization.Message>> = UnionOf<A>;
 export {};
