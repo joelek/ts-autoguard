@@ -335,7 +335,7 @@ function route(endpoints, httpRequest, httpResponse, serverOptions) {
                 }
             }
             catch (error) {
-                if (Number.isInteger(error) && error >= 100 && error <= 999) {
+                if (typeof error === "number" && Number.isInteger(error) && error >= 100 && error <= 999) {
                     return respond(httpResponse, {
                         status: error
                     });
