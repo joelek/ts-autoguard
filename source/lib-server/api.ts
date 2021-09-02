@@ -357,7 +357,7 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 				});
 			}
 		} catch (error) {
-			if (Number.isInteger(error) && error >= 100 && error <= 999) {
+			if (typeof error === "number" && Number.isInteger(error) && error >= 100 && error <= 999) {
 				return respond(httpResponse, {
 					status: error
 				});
