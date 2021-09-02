@@ -499,7 +499,7 @@ export class Schema {
 		}
 		let guards = new Array<string>();
 		for (let guard of this.guards) {
-			let reference = new types.ReferenceType([], guard.typename);
+			let reference = new types.ReferenceType([], guard.typename, []);
 			guards.push(`\t\t"${guard.typename}": ${reference.generateTypeGuard({ ...options, eol: options.eol + "\t\t" })}`);
 		}
 		lines.push(`export namespace Autoguard {`);

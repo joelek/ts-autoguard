@@ -573,22 +573,33 @@ export class RecordType implements Type {
 export class ReferenceType implements Type {
 	path: string[];
 	typename: string;
+	members: string[];
 
-	constructor(path: string[], typename: string) {
+	constructor(path: string[], typename: string, members: string[]) {
 		this.path = path;
 		this.typename = typename;
+		this.members = members;
 	}
 
 	generateSchema(options: shared.Options): string {
-		return [...this.path, ""].join("/") + this.typename;
+		let members = this.members.map((member) => {
+			return `.${member}`;
+		}).join("");
+		return [...this.path, ""].join("/") + this.typename + members;
 	}
 
 	generateType(options: shared.Options): string {
-		return `autoguard.guards.Reference<${this.typename}>`;
+		let members = this.members.map((member) => {
+			return `.${member}`;
+		}).join("");
+		return `autoguard.guards.Reference<${this.typename}${members}>`;
 	}
 
 	generateTypeGuard(options: shared.Options): string {
-		return "autoguard.guards.Reference.of(() => " + this.typename + ")";
+		let members = this.members.map((member) => {
+			return `.${member}`;
+		}).join("");
+		return "autoguard.guards.Reference.of(() => " + this.typename + members + ")";
 	}
 
 	getReferences(): Array<shared.Reference> {
@@ -612,9 +623,14 @@ export class ReferenceType implements Type {
 				}
 				tokenization.expect(read(), "/");
 			}
-			let last = tokens.pop() as tokenization.Token;
-			tokenization.expect(last, "IDENTIFIER");
-			return new ReferenceType(tokens.map((token) => token.value), last.value);
+			let typename = tokenization.expect(tokens.pop() as tokenization.Token, "IDENTIFIER").value;
+			let members = new Array<string>();
+			while (peek()?.family === ".") {
+				tokenization.expect(read(), ".");
+				let token = tokenization.expect(read(), "IDENTIFIER");
+				members.push(token.value);
+			}
+			return new ReferenceType(tokens.map((token) => token.value), typename, members);
 		});
 	}
 };
