@@ -2,6 +2,7 @@ import * as guard from "./guard";
 import * as is from "./is";
 import * as route from "./route";
 import * as shared from "./shared";
+import * as table from "./table";
 import * as tokenization from "./tokenization";
 import * as types from "./types";
 
@@ -340,6 +341,7 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 
 export class Schema {
 	readonly guards: Array<guard.Guard>;
+	readonly tables: Array<table.Table>;
 	readonly routes: Array<route.Route>;
 
 	private getClientImports(): Array<shared.Reference> {
@@ -423,8 +425,9 @@ export class Schema {
 			}));
 	}
 
-	private constructor(guards: Array<guard.Guard>, routes: Array<route.Route>) {
+	private constructor(guards: Array<guard.Guard>, tables: Array<table.Table>, routes: Array<route.Route>) {
 		this.guards = guards;
+		this.tables = tables;
 		this.routes = routes;
 	}
 
@@ -491,6 +494,35 @@ export class Schema {
 			lines.push(`import { ${entry.typename} } from "${entry.path.join("/")}";`);
 		}
 		lines.push(``);
+		for (let table of this.tables) {
+			let elines = new Array<string>();
+			for (let { key, value } of table.members) {
+				elines.push(`\t"${key.value}" = ${value.value}`);
+			}
+			let ebody = elines.length > 0 ? options.eol + elines.join("," + options.eol) + options.eol : "";
+			lines.push(`export enum ${table.typename} {${ebody}};`);
+			lines.push(``);
+			let keys = new types.UnionType(table.members.map((member) => member.key));
+			let values = new types.UnionType(table.members.map((member) => member.value));
+			lines.push(`export namespace ${table.typename} {`);
+			lines.push(`\texport const Key: autoguard.serialization.MessageGuard<Key> = ${keys.generateTypeGuard({ ...options, eol: options.eol + "\t" })};`);
+			lines.push(``);
+			lines.push(`\texport type Key = ${keys.generateType({ ...options, eol: options.eol + "\t" })};`);
+			lines.push(``);
+			lines.push(`\texport const Value: autoguard.serialization.MessageGuard<Value> = ${values.generateTypeGuard({ ...options, eol: options.eol + "\t" })};`);
+			lines.push(``);
+			lines.push(`\texport type Value = ${values.generateType({ ...options, eol: options.eol + "\t" })};`);
+			lines.push(``);
+			lines.push(`\texport function keyFromValue(value: number): Key {`);
+			lines.push(`\t\treturn Key.as(${table.typename}[Value.as(value)]);`);
+			lines.push(`\t};`);
+			lines.push(``);
+			lines.push(`\texport function valueFromKey(key: string): Value {`);
+			lines.push(`\t\treturn Value.as(${table.typename}[Key.as(key)]);`);
+			lines.push(`\t};`);
+			lines.push(`};`);
+			lines.push(``);
+		}
 		for (let guard of this.guards) {
 			lines.push(`export const ${guard.typename}: autoguard.serialization.MessageGuard<${guard.typename}> = ${guard.type.generateTypeGuard({ ...options, eol: options.eol })};`);
 			lines.push(``);
@@ -534,6 +566,7 @@ export class Schema {
 	static parseOld(tokenizer: tokenization.Tokenizer): Schema {
 		return tokenizer.newContext((read, peek) => {
 			let guards = new Array<guard.Guard>();
+			let tables = new Array<table.Table>();
 			let routes = new Array<route.Route>();
 			tokenization.expect(read(), "{");
 			while (peek()?.value !== "}") {
@@ -552,18 +585,25 @@ export class Schema {
 			if (is.present(token)) {
 				throw new tokenization.SyntaxError(token);
 			}
-			return new Schema(guards, routes);
+			return new Schema(guards, tables, routes);
 		});
 	}
 
 	static parse(tokenizer: tokenization.Tokenizer): Schema {
 		return tokenizer.newContext((read, peek) => {
 			let guards = new Array<guard.Guard>();
+			let tables = new Array<table.Table>();
 			let routes = new Array<route.Route>();
 			let errors = new Array<any>();
 			while (peek()) {
 				try {
 					guards.push(guard.Guard.parse(tokenizer));
+					continue;
+				} catch (error) {
+					errors.push(error);
+				}
+				try {
+					tables.push(table.Table.parse(tokenizer));
 					continue;
 				} catch (error) {
 					errors.push(error);
@@ -576,7 +616,7 @@ export class Schema {
 				}
 				throw tokenization.SyntaxError.getError(tokenizer, errors);
 			}
-			return new Schema(guards, routes);
+			return new Schema(guards, tables, routes);
 		});
 	}
 };

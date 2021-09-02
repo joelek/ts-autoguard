@@ -31,6 +31,7 @@ export const Families = (<A extends string[]>(...tuple: A): [...A] => tuple)(
 	"plain",
 	"route",
 	"string",
+	"table",
 	"true",
 	"undefined",
 	"IDENTIFIER",
@@ -55,6 +56,7 @@ export const IdentifierFamilies = (<A extends string[]>(...tuple: A): [...A] => 
 	"plain",
 	"route",
 	"string",
+	"table",
 	"true",
 	"undefined",
 	"IDENTIFIER"
@@ -134,6 +136,7 @@ export class Tokenizer {
 			"plain" : /^(plain)/su,
 			"route": /^(route)/su,
 			"string": /^(string)/su,
+			"table": /^(table)/su,
 			"true": /^(true)/su,
 			"undefined": /^(undefined)/su,
 			"IDENTIFIER": /^([a-zA-Z][a-zA-Z0-9_]*)/su,

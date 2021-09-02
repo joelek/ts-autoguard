@@ -115,6 +115,8 @@ npx autoguard
 
 Schemas may contain any number of `guard` constructs. These define types and will generate type guards for runtime type assertions and type checks.
 
+Schemas may contain any number of `table` constructs. These define lookup tables and will generate functionality for bi-directional and type-safe mapping between keys and values.
+
 Schemas may contain any number of `route` constructs. These define API functionality and will generate fully-functional methods that invoke functionality on a remote system or process when called (RPC). Autoguard also generates server-side functionality that only requires the actual business logic in order to create fully-functional API servers.
 
 The generated code handles runtime type-checking of requests as well as of responses. Serialization, transport and deserialization is delegated to shared functionality shipped togheter with Autoguard.
@@ -206,6 +208,19 @@ guard MyTupleType: [
 guard MyUndefinedType: undefined;
 
 guard MyUnionType: string | null;
+```
+
+#### Tables
+
+The following example illustrates how the `table` construct can be used.
+
+```
+table MyTable: {
+	"CAT",
+	"BIRD",
+	"DOG",
+	"FISH"
+};
 ```
 
 #### Routes
@@ -414,5 +429,9 @@ Request = "<=" Headers? Payload?
 Response = "=>" Headers? Payload?
 Alias = Identifier "(" ")" ":"
 Route = "route" Alias? Method ":" Path Parameters? Request? Response? ";"
-Schema = (Guard or Route)*
+TableKeyValue = StringLiteralType (":" NumberLiteralType)?
+TableBodyTail = "," TableKeyValue
+TableBody = TableKeyValue TableBodyTail*
+Table = "table" Identifier ":" "{" TableBody* "}" ";"
+Schema = (Guard or Table or Route)*
 ```
