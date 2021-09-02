@@ -4,6 +4,7 @@ exports.Schema = void 0;
 const guard = require("./guard");
 const is = require("./is");
 const route = require("./route");
+const table = require("./table");
 const tokenization = require("./tokenization");
 const types = require("./types");
 function areAllMembersOptional(object) {
@@ -347,8 +348,9 @@ function generateServerRoute(route, options) {
     return lines.join(options.eol);
 }
 class Schema {
-    constructor(guards, routes) {
+    constructor(guards, tables, routes) {
         this.guards = guards;
+        this.tables = tables;
         this.routes = routes;
     }
     getClientImports() {
@@ -480,6 +482,35 @@ class Schema {
             lines.push(`import { ${entry.typename} } from "${entry.path.join("/")}";`);
         }
         lines.push(``);
+        for (let table of this.tables) {
+            let elines = new Array();
+            for (let { key, value } of table.members) {
+                elines.push(`\t"${key.value}" = ${value.value}`);
+            }
+            let ebody = elines.length > 0 ? options.eol + elines.join("," + options.eol) + options.eol : "";
+            lines.push(`export enum ${table.typename} {${ebody}};`);
+            lines.push(``);
+            let keys = new types.UnionType(table.members.map((member) => member.key));
+            let values = new types.UnionType(table.members.map((member) => member.value));
+            lines.push(`export namespace ${table.typename} {`);
+            lines.push(`\texport const Key: autoguard.serialization.MessageGuard<Key> = ${keys.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" }))};`);
+            lines.push(``);
+            lines.push(`\texport type Key = ${keys.generateType(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" }))};`);
+            lines.push(``);
+            lines.push(`\texport const Value: autoguard.serialization.MessageGuard<Value> = ${values.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" }))};`);
+            lines.push(``);
+            lines.push(`\texport type Value = ${values.generateType(Object.assign(Object.assign({}, options), { eol: options.eol + "\t" }))};`);
+            lines.push(``);
+            lines.push(`\texport function keyFromValue(value: number): Key {`);
+            lines.push(`\t\treturn Key.as(${table.typename}[Value.as(value)]);`);
+            lines.push(`\t};`);
+            lines.push(``);
+            lines.push(`\texport function valueFromKey(key: string): Value {`);
+            lines.push(`\t\treturn Value.as(${table.typename}[Key.as(key)]);`);
+            lines.push(`\t};`);
+            lines.push(`};`);
+            lines.push(``);
+        }
         for (let guard of this.guards) {
             lines.push(`export const ${guard.typename}: autoguard.serialization.MessageGuard<${guard.typename}> = ${guard.type.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol }))};`);
             lines.push(``);
@@ -488,7 +519,7 @@ class Schema {
         }
         let guards = new Array();
         for (let guard of this.guards) {
-            let reference = new types.ReferenceType([], guard.typename);
+            let reference = new types.ReferenceType([], guard.typename, []);
             guards.push(`\t\t"${guard.typename}": ${reference.generateTypeGuard(Object.assign(Object.assign({}, options), { eol: options.eol + "\t\t" }))}`);
         }
         lines.push(`export namespace Autoguard {`);
@@ -523,6 +554,7 @@ class Schema {
         return tokenizer.newContext((read, peek) => {
             var _a, _b;
             let guards = new Array();
+            let tables = new Array();
             let routes = new Array();
             tokenization.expect(read(), "{");
             while (((_a = peek()) === null || _a === void 0 ? void 0 : _a.value) !== "}") {
@@ -542,17 +574,25 @@ class Schema {
             if (is.present(token)) {
                 throw new tokenization.SyntaxError(token);
             }
-            return new Schema(guards, routes);
+            return new Schema(guards, tables, routes);
         });
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
             let guards = new Array();
+            let tables = new Array();
             let routes = new Array();
             let errors = new Array();
             while (peek()) {
                 try {
                     guards.push(guard.Guard.parse(tokenizer));
+                    continue;
+                }
+                catch (error) {
+                    errors.push(error);
+                }
+                try {
+                    tables.push(table.Table.parse(tokenizer));
                     continue;
                 }
                 catch (error) {
@@ -567,7 +607,7 @@ class Schema {
                 }
                 throw tokenization.SyntaxError.getError(tokenizer, errors);
             }
-            return new Schema(guards, routes);
+            return new Schema(guards, tables, routes);
         });
     }
 }

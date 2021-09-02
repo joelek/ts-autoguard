@@ -130,7 +130,8 @@ export declare class RecordType implements Type {
 export declare class ReferenceType implements Type {
     path: string[];
     typename: string;
-    constructor(path: string[], typename: string);
+    members: string[];
+    constructor(path: string[], typename: string, members: string[]);
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;

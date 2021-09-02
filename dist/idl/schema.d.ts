@@ -1,9 +1,11 @@
 import * as guard from "./guard";
 import * as route from "./route";
 import * as shared from "./shared";
+import * as table from "./table";
 import * as tokenization from "./tokenization";
 export declare class Schema {
     readonly guards: Array<guard.Guard>;
+    readonly tables: Array<table.Table>;
     readonly routes: Array<route.Route>;
     private getClientImports;
     private getServerImports;
