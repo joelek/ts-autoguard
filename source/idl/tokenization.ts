@@ -139,7 +139,7 @@ export class Tokenizer {
 			"IDENTIFIER": /^([a-zA-Z][a-zA-Z0-9_]*)/su,
 			"NUMBER_LITERAL": /^(([1-9][0-9]+)|([0-9]))/su,
 			"STRING_LITERAL": /^(["][^"]*["])/su,
-			"PATH_COMPONENT": /^(([a-zA-Z0-9_.~-]|[%][0-9a-fA-F]{2})+)/su,
+			"PATH_COMPONENT": /^(([a-zA-Z0-9_]|[%][0-9a-fA-F]{2})+)/su,
 			"COMMENT": /^([#][^\r\n]*)/su
 		};
 		let tokens = new Array<Token>();
