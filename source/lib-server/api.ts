@@ -189,9 +189,6 @@ export type NodeRequestHandlerOptions = Partial<Omit<libhttps.RequestOptions, ke
 
 export function makeNodeRequestHandler(options?: NodeRequestHandlerOptions): shared.api.RequestHandler {
 	return (raw, clientOptions) => {
-		if (clientOptions?.debugMode) {
-			console.log("Outgoing raw request", raw);
-		}
 		let urlPrefix = clientOptions?.urlPrefix ?? "";
 		let lib = urlPrefix.startsWith("https:") ? libhttps : libhttp;
 		return new Promise(async (resolve, reject) => {
@@ -229,9 +226,6 @@ export function makeNodeRequestHandler(options?: NodeRequestHandlerOptions): sha
 					headers,
 					payload
 				};
-				if (clientOptions?.debugMode) {
-					console.log("Incoming raw response", raw);
-				}
 				resolve(raw);
 			});
 			request.on("abort", reject);
@@ -293,9 +287,6 @@ export function finalizeResponse(raw: shared.api.RawResponse, defaultHeaders: Ar
 };
 
 export async function respond(httpResponse: ResponseLike, raw: Partial<shared.api.RawResponse>, serverOptions?: shared.api.ServerOptions): Promise<void> {
-	if (serverOptions?.debugMode) {
-		console.log("Outgoing raw response", raw);
-	}
 	let rawHeaders = new Array<string>();
 	for (let header of raw.headers ?? []) {
 		rawHeaders.push(...header);
@@ -337,9 +328,6 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 			headers,
 			payload
 		};
-		if (serverOptions?.debugMode) {
-			console.log("Incoming raw request", raw);
-		}
 		let auxillary: Auxillary = {
 			socket
 		};

@@ -40,9 +40,6 @@ export type Client<A extends shared.api.RequestMap<A>, B extends shared.api.Resp
 };
 
 export function xhr(raw: shared.api.RawRequest, clientOptions?: shared.api.ClientOptions): Promise<shared.api.RawResponse> {
-	if (clientOptions?.debugMode) {
-		console.log("Outgoing raw request", raw);
-	}
 	return new Promise(async (resolve, reject) => {
 		// @ts-ignore
 		let xhr = new XMLHttpRequest();
@@ -58,9 +55,6 @@ export function xhr(raw: shared.api.RawRequest, clientOptions?: shared.api.Clien
 				headers,
 				payload
 			};
-			if (clientOptions?.debugMode) {
-				console.log("Incoming raw response", raw);
-			}
 			resolve(raw);
 		};
 		let url = clientOptions?.urlPrefix ?? "";
