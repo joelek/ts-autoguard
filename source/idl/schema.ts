@@ -454,7 +454,7 @@ export class Schema {
 			lines.push(`import { ${entry.typename} } from "${entry.path.join("/")}";`);
 		}
 		lines.push(``);
-		lines.push(`export const makeClient = (clientOptions?: autoguard.api.MakeClientOptions): autoguard.api.Client<shared.Autoguard.Requests, shared.Autoguard.Responses> => ({`);
+		lines.push(`export const makeClient = (clientOptions?: autoguard.api.ClientOptions): autoguard.api.Client<shared.Autoguard.Requests, shared.Autoguard.Responses> => ({`);
 		for (let route of this.routes) {
 			let tag = makeRouteTag(route);
 			lines.push(`\t"${tag}": ${generateClientRoute(route, { ...options, eol: options.eol + "\t" })},`);
@@ -474,7 +474,7 @@ export class Schema {
 			lines.push(`import { ${entry.typename} } from "${entry.path.join("/")}";`);
 		}
 		lines.push(``);
-		lines.push(`export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Requests, shared.Autoguard.Responses>, serverOptions?: autoguard.api.MakeServerOptions): autoguard.api.RequestListener => {`);
+		lines.push(`export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Requests, shared.Autoguard.Responses>, serverOptions?: autoguard.api.ServerOptions): autoguard.api.RequestListener => {`);
 		lines.push(`\tlet endpoints = new Array<autoguard.api.Endpoint>();`);
 		for (let route of this.routes) {
 			lines.push(`\tendpoints.push(${generateServerRoute(route, { ...options, eol: options.eol + "\t" })});`);

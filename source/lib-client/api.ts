@@ -2,7 +2,7 @@ import * as shared from "../lib-shared";
 
 export * from "../lib-shared/api";
 
-export type MakeClientOptions = {
+export type ClientOptions = {
 	urlPrefix?: string;
 	requestHandler?: shared.api.RequestHandler;
 	defaultHeaders?: Array<[string, string]>;

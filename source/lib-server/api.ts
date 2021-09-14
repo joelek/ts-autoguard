@@ -8,7 +8,7 @@ import * as shared from "../lib-shared";
 
 export * from "../lib-shared/api";
 
-export type MakeServerOptions = {
+export type ServerOptions = {
 	urlPrefix?: string;
 	defaultHeaders?: Array<[string, string]>;
 };
@@ -304,7 +304,7 @@ export async function respond(httpResponse: ResponseLike, raw: Partial<shared.ap
 	});
 };
 
-export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike, serverOptions?: MakeServerOptions): Promise<void> {
+export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike, serverOptions?: ServerOptions): Promise<void> {
 	let urlPrefix = serverOptions?.urlPrefix ?? "";
 	let method = httpRequest.method ?? "GET";
 	let url = httpRequest.url ?? "";
