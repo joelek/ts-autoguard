@@ -50,9 +50,6 @@ class ServerResponse {
 exports.ServerResponse = ServerResponse;
 ;
 function xhr(raw, clientOptions) {
-    if (clientOptions === null || clientOptions === void 0 ? void 0 : clientOptions.debugMode) {
-        console.log("Outgoing raw request", raw);
-    }
     return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
         var _a;
         // @ts-ignore
@@ -69,9 +66,6 @@ function xhr(raw, clientOptions) {
                 headers,
                 payload
             };
-            if (clientOptions === null || clientOptions === void 0 ? void 0 : clientOptions.debugMode) {
-                console.log("Incoming raw response", raw);
-            }
             resolve(raw);
         };
         let url = (_a = clientOptions === null || clientOptions === void 0 ? void 0 : clientOptions.urlPrefix) !== null && _a !== void 0 ? _a : "";

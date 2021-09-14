@@ -152,9 +152,6 @@ exports.combineNodeRawHeaders = combineNodeRawHeaders;
 function makeNodeRequestHandler(options) {
     return (raw, clientOptions) => {
         var _a;
-        if (clientOptions === null || clientOptions === void 0 ? void 0 : clientOptions.debugMode) {
-            console.log("Outgoing raw request", raw);
-        }
         let urlPrefix = (_a = clientOptions === null || clientOptions === void 0 ? void 0 : clientOptions.urlPrefix) !== null && _a !== void 0 ? _a : "";
         let lib = urlPrefix.startsWith("https:") ? libhttps : libhttp;
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
@@ -191,9 +188,6 @@ function makeNodeRequestHandler(options) {
                     headers,
                     payload
                 };
-                if (clientOptions === null || clientOptions === void 0 ? void 0 : clientOptions.debugMode) {
-                    console.log("Incoming raw response", raw);
-                }
                 resolve(raw);
             });
             request.on("abort", reject);
@@ -261,9 +255,6 @@ function respond(httpResponse, raw, serverOptions) {
     var e_1, _a;
     var _b, _c, _d;
     return __awaiter(this, void 0, void 0, function* () {
-        if (serverOptions === null || serverOptions === void 0 ? void 0 : serverOptions.debugMode) {
-            console.log("Outgoing raw response", raw);
-        }
         let rawHeaders = new Array();
         for (let header of (_b = raw.headers) !== null && _b !== void 0 ? _b : []) {
             rawHeaders.push(...header);
@@ -319,9 +310,6 @@ function route(endpoints, httpRequest, httpResponse, serverOptions) {
                 headers,
                 payload
             };
-            if (serverOptions === null || serverOptions === void 0 ? void 0 : serverOptions.debugMode) {
-                console.log("Incoming raw request", raw);
-            }
             let auxillary = {
                 socket
             };

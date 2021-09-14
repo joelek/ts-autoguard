@@ -23,17 +23,9 @@ export declare function decodeHeaderValues(pairs: Iterable<[string, string]>, ke
 export declare function decodeHeaderValue(pairs: Iterable<[string, string]>, key: string, plain: boolean): JSON;
 export declare function decodeUndeclaredHeaders(pairs: Array<[string, string]>, exclude: Array<string>): Record<string, JSON>;
 export declare type AsyncBinary = AsyncIterable<Uint8Array>;
-export declare const AsyncBinary: {
-    as(subject: any, path?: string): AsyncBinary;
-    is(subject: any): subject is AsyncBinary;
-    ts(eol?: string): string;
-};
+export declare const AsyncBinary: serialization.MessageGuard<AsyncBinary>;
 export declare type SyncBinary = Iterable<Uint8Array>;
-export declare const SyncBinary: {
-    as(subject: any, path?: string): SyncBinary;
-    is(subject: any): subject is SyncBinary;
-    ts(eol?: string): string;
-};
+export declare const SyncBinary: serialization.MessageGuard<SyncBinary>;
 export declare const Binary: serialization.MessageGuard<AsyncBinary | SyncBinary>;
 export declare type Binary = ReturnType<typeof Binary.as>;
 export declare type Primitive = boolean | number | string | undefined;
@@ -82,6 +74,7 @@ export declare function serializePayload(payload: JSON): Binary;
 export declare function compareArrays(one: Uint8Array, two: Uint8Array): boolean;
 export declare function deserializeStringPayload(binary: Binary): Promise<string>;
 export declare function deserializePayload(binary: Binary): Promise<JSON>;
+export declare function wrapMessageGuard<A>(guard: serialization.MessageGuard<A>, log?: boolean): serialization.MessageGuard<A>;
 export declare type ClientOptions = {
     urlPrefix?: string;
     requestHandler?: RequestHandler;
