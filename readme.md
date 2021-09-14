@@ -347,7 +347,6 @@ NB: This project targets TypeScript 4 in strict mode.
 ## Roadmap
 
 * Add extension capabilities.
-* Generate Client and Server type in client and server modules.
 * Resolve issue with imported type and local type sharing identical typenames.
 * Make ServerResponse return payload synchronously.
 * Simplify import paths before resolving references.
