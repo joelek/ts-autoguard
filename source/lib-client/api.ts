@@ -39,7 +39,7 @@ export type Client<A extends shared.api.RequestMap<A>, B extends shared.api.Resp
 	[C in keyof A & keyof B]: (request: A[C]) => Promise<ServerResponse<B[C]>>;
 };
 
-export function xhr(raw: shared.api.RawRequest, urlPrefix?: string): Promise<shared.api.RawResponse> {
+export function xhr(raw: shared.api.RawRequest, clientOptions?: shared.api.ClientOptions): Promise<shared.api.RawResponse> {
 	return new Promise(async (resolve, reject) => {
 		// @ts-ignore
 		let xhr = new XMLHttpRequest();
@@ -56,7 +56,7 @@ export function xhr(raw: shared.api.RawRequest, urlPrefix?: string): Promise<sha
 				payload
 			});
 		};
-		let url = urlPrefix ?? "";
+		let url = clientOptions?.urlPrefix ?? "";
 		url += shared.api.combineComponents(raw.components);
 		url += shared.api.combineParameters(raw.parameters);
 		xhr.open(raw.method, url, true);

@@ -188,8 +188,9 @@ export function combineNodeRawHeaders(raw: Array<string>): Array<string> {
 export type NodeRequestHandlerOptions = Partial<Omit<libhttps.RequestOptions, keyof libhttp.RequestOptions>>;
 
 export function makeNodeRequestHandler(options?: NodeRequestHandlerOptions): shared.api.RequestHandler {
-	return (raw, urlPrefix) => {
-		let lib = (urlPrefix ?? "").startsWith("https:") ? libhttps : libhttp;
+	return (raw, clientOptions) => {
+		let urlPrefix = clientOptions?.urlPrefix ?? "";
+		let lib = urlPrefix.startsWith("https:") ? libhttps : libhttp;
 		return new Promise(async (resolve, reject) => {
 			let payload = await shared.api.collectPayload(raw.payload);
 			let headers: Record<string, string | Array<string> | undefined> = {
@@ -207,7 +208,7 @@ export function makeNodeRequestHandler(options?: NodeRequestHandlerOptions): sha
 					headers[key] = [values, value];
 				}
 			}
-			let url = urlPrefix ?? "";
+			let url = urlPrefix;
 			url += shared.api.combineComponents(raw.components);
 			url += shared.api.combineParameters(raw.parameters);
 			let request = lib.request(url, {

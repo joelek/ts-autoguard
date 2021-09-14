@@ -502,4 +502,4 @@ export type ServerOptions = {
 	defaultHeaders?: Array<[string, string]>;
 };
 
-export type RequestHandler = (raw: RawRequest, urlPrefix?: string) => Promise<RawResponse>;
+export type RequestHandler = (raw: RawRequest, clientOptions?: ClientOptions) => Promise<RawResponse>;
