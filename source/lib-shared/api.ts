@@ -491,6 +491,18 @@ export async function deserializePayload(binary: Binary): Promise<JSON> {
 	return value;
 };
 
+export function wrapMessageGuard<A>(guard: serialization.MessageGuard<A>, log?: boolean): serialization.MessageGuard<A> {
+	return {
+		...guard,
+		as(subject, path): A {
+			if (log) {
+				console.log(subject);
+			}
+			return guard.as(subject, path);
+		}
+	};
+};
+
 export type ClientOptions = {
 	urlPrefix?: string;
 	requestHandler?: RequestHandler;

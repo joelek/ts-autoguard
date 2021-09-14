@@ -173,7 +173,7 @@ function generateClientRoute(route: route.Route, options: shared.Options): strin
 	let lines = new Array<string>();
 	let tag = makeRouteTag(route);
 	lines.push(`async (request) => {`);
-	lines.push(`\tlet guard = shared.Autoguard.Requests["${tag}"];`);
+	lines.push(`\tlet guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["${tag}"], clientOptions?.debugMode);`);
 	lines.push(`\tguard.as(request, "request");`);
 	lines.push(`\tlet method = "${route.method.method}";`);
 	lines.push(`\tlet components = new Array<string>();`);
@@ -242,7 +242,7 @@ function generateClientRoute(route: route.Route, options: shared.Options): strin
 	} else {
 		lines.push(`\t\tlet payload = await autoguard.api.deserializePayload(raw.payload);`);
 	}
-	lines.push(`\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);
+	lines.push(`\t\tlet guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["${tag}"], clientOptions?.debugMode);`);
 	lines.push(`\t\tlet response = guard.as({ status, headers, payload }, "response");`);
 	let collect = route.response.payload === types.Binary.INSTANCE;
 	lines.push(`\t\treturn new autoguard.api.ServerResponse(response, ${collect});`);
@@ -300,7 +300,7 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 	} else {
 		lines.push(`\t\t\tlet payload = await autoguard.api.deserializePayload(raw.payload);`);
 	}
-	lines.push(`\t\t\tlet guard = shared.Autoguard.Requests["${tag}"];`);
+	lines.push(`\t\t\tlet guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["${tag}"], serverOptions?.debugMode);`);
 	lines.push(`\t\t\tlet request = guard.as({ options, headers, payload }, "request");`);
 	lines.push(`\t\t\treturn {`);
 	lines.push(`\t\t\t\thandleRequest: async () => {`);
@@ -308,7 +308,7 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 	lines.push(`\t\t\t\t\tlet response = await routes["${tag}"](new autoguard.api.ClientRequest(request, ${collect}, auxillary));`);
 	lines.push(`\t\t\t\t\treturn {`);
 	lines.push(`\t\t\t\t\t\tvalidateResponse: async () => {`);
-	lines.push(`\t\t\t\t\t\t\tlet guard = shared.Autoguard.Responses["${tag}"];`);
+	lines.push(`\t\t\t\t\t\t\tlet guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["${tag}"], serverOptions?.debugMode);`);
 	lines.push(`\t\t\t\t\t\t\tguard.as(response, "response");`);
 	lines.push(`\t\t\t\t\t\t\tlet status = response.status ?? 200;`);
 	lines.push(`\t\t\t\t\t\t\tlet headers = new Array<[string, string]>();`);
