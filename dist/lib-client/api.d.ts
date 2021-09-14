@@ -1,10 +1,5 @@
 import * as shared from "../lib-shared";
 export * from "../lib-shared/api";
-export declare type MakeClientOptions = {
-    urlPrefix?: string;
-    requestHandler?: shared.api.RequestHandler;
-    defaultHeaders?: Array<[string, string]>;
-};
 export declare class ServerResponse<A extends shared.api.EndpointResponse> {
     private response;
     private collect;
@@ -17,5 +12,5 @@ export declare class ServerResponse<A extends shared.api.EndpointResponse> {
 export declare type Client<A extends shared.api.RequestMap<A>, B extends shared.api.ResponseMap<B>> = {
     [C in keyof A & keyof B]: (request: A[C]) => Promise<ServerResponse<B[C]>>;
 };
-export declare function xhr(raw: shared.api.RawRequest, urlPrefix?: string): Promise<shared.api.RawResponse>;
+export declare function xhr(raw: shared.api.RawRequest, clientOptions?: shared.api.ClientOptions): Promise<shared.api.RawResponse>;
 export declare function finalizeRequest(raw: shared.api.RawRequest, defaultHeaders: Array<[string, string]>): shared.api.RawRequest;

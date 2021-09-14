@@ -49,8 +49,12 @@ class ServerResponse {
 }
 exports.ServerResponse = ServerResponse;
 ;
-function xhr(raw, urlPrefix) {
+function xhr(raw, clientOptions) {
+    if (clientOptions === null || clientOptions === void 0 ? void 0 : clientOptions.debugMode) {
+        console.log("Outgoing raw request", raw);
+    }
     return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+        var _a;
         // @ts-ignore
         let xhr = new XMLHttpRequest();
         xhr.onerror = reject;
@@ -60,13 +64,17 @@ function xhr(raw, urlPrefix) {
             // Header values for the same header name are joined by he XHR implementation.
             let headers = shared.api.splitHeaders(xhr.getAllResponseHeaders().split("\r\n").slice(0, -1));
             let payload = [new Uint8Array(xhr.response)];
-            resolve({
+            let raw = {
                 status,
                 headers,
                 payload
-            });
+            };
+            if (clientOptions === null || clientOptions === void 0 ? void 0 : clientOptions.debugMode) {
+                console.log("Incoming raw response", raw);
+            }
+            resolve(raw);
         };
-        let url = urlPrefix !== null && urlPrefix !== void 0 ? urlPrefix : "";
+        let url = (_a = clientOptions === null || clientOptions === void 0 ? void 0 : clientOptions.urlPrefix) !== null && _a !== void 0 ? _a : "";
         url += shared.api.combineComponents(raw.components);
         url += shared.api.combineParameters(raw.parameters);
         xhr.open(raw.method, url, true);

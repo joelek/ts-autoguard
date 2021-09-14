@@ -150,8 +150,13 @@ function combineNodeRawHeaders(raw) {
 exports.combineNodeRawHeaders = combineNodeRawHeaders;
 ;
 function makeNodeRequestHandler(options) {
-    return (raw, urlPrefix) => {
-        let lib = (urlPrefix !== null && urlPrefix !== void 0 ? urlPrefix : "").startsWith("https:") ? libhttps : libhttp;
+    return (raw, clientOptions) => {
+        var _a;
+        if (clientOptions === null || clientOptions === void 0 ? void 0 : clientOptions.debugMode) {
+            console.log("Outgoing raw request", raw);
+        }
+        let urlPrefix = (_a = clientOptions === null || clientOptions === void 0 ? void 0 : clientOptions.urlPrefix) !== null && _a !== void 0 ? _a : "";
+        let lib = urlPrefix.startsWith("https:") ? libhttps : libhttp;
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             let payload = yield shared.api.collectPayload(raw.payload);
             let headers = {
@@ -171,7 +176,7 @@ function makeNodeRequestHandler(options) {
                     headers[key] = [values, value];
                 }
             }
-            let url = urlPrefix !== null && urlPrefix !== void 0 ? urlPrefix : "";
+            let url = urlPrefix;
             url += shared.api.combineComponents(raw.components);
             url += shared.api.combineParameters(raw.parameters);
             let request = lib.request(url, Object.assign(Object.assign({}, options), { method: raw.method, headers: headers }), (response) => {
@@ -181,7 +186,15 @@ function makeNodeRequestHandler(options) {
                 let payload = {
                     [Symbol.asyncIterator]: () => response[Symbol.asyncIterator]()
                 };
-                resolve({ status, headers, payload });
+                let raw = {
+                    status,
+                    headers,
+                    payload
+                };
+                if (clientOptions === null || clientOptions === void 0 ? void 0 : clientOptions.debugMode) {
+                    console.log("Incoming raw response", raw);
+                }
+                resolve(raw);
             });
             request.on("abort", reject);
             request.on("error", reject);
@@ -244,10 +257,13 @@ function finalizeResponse(raw, defaultHeaders) {
 }
 exports.finalizeResponse = finalizeResponse;
 ;
-function respond(httpResponse, raw) {
+function respond(httpResponse, raw, serverOptions) {
     var e_1, _a;
     var _b, _c, _d;
     return __awaiter(this, void 0, void 0, function* () {
+        if (serverOptions === null || serverOptions === void 0 ? void 0 : serverOptions.debugMode) {
+            console.log("Outgoing raw response", raw);
+        }
         let rawHeaders = new Array();
         for (let header of (_b = raw.headers) !== null && _b !== void 0 ? _b : []) {
             rawHeaders.push(...header);
@@ -303,6 +319,9 @@ function route(endpoints, httpRequest, httpResponse, serverOptions) {
                 headers,
                 payload
             };
+            if (serverOptions === null || serverOptions === void 0 ? void 0 : serverOptions.debugMode) {
+                console.log("Incoming raw request", raw);
+            }
             let auxillary = {
                 socket
             };
@@ -311,13 +330,13 @@ function route(endpoints, httpRequest, httpResponse, serverOptions) {
             if (filteredEndpoints.length === 0) {
                 return respond(httpResponse, {
                     status: 404
-                });
+                }, serverOptions);
             }
             filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsMethod());
             if (filteredEndpoints.length === 0) {
                 return respond(httpResponse, {
                     status: 405
-                });
+                }, serverOptions);
             }
             let endpoint = filteredEndpoints[0];
             let valid = yield endpoint.validateRequest();
@@ -325,35 +344,35 @@ function route(endpoints, httpRequest, httpResponse, serverOptions) {
                 let handled = yield valid.handleRequest();
                 try {
                     let raw = yield handled.validateResponse();
-                    return yield respond(httpResponse, raw);
+                    return yield respond(httpResponse, raw, serverOptions);
                 }
                 catch (error) {
                     return respond(httpResponse, {
                         status: 500,
                         payload: shared.api.serializeStringPayload(String(error))
-                    });
+                    }, serverOptions);
                 }
             }
             catch (error) {
                 if (typeof error === "number" && Number.isInteger(error) && error >= 100 && error <= 999) {
                     return respond(httpResponse, {
                         status: error
-                    });
+                    }, serverOptions);
                 }
                 if (error instanceof EndpointError) {
                     let raw = error.getResponse();
-                    return respond(httpResponse, raw);
+                    return respond(httpResponse, raw, serverOptions);
                 }
                 return respond(httpResponse, {
                     status: 500
-                });
+                }, serverOptions);
             }
         }
         catch (error) {
             return respond(httpResponse, {
                 status: 400,
                 payload: shared.api.serializeStringPayload(String(error))
-            });
+            }, serverOptions);
         }
     });
 }

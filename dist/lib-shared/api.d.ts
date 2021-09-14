@@ -82,4 +82,15 @@ export declare function serializePayload(payload: JSON): Binary;
 export declare function compareArrays(one: Uint8Array, two: Uint8Array): boolean;
 export declare function deserializeStringPayload(binary: Binary): Promise<string>;
 export declare function deserializePayload(binary: Binary): Promise<JSON>;
-export declare type RequestHandler = (raw: RawRequest, urlPrefix?: string) => Promise<RawResponse>;
+export declare type ClientOptions = {
+    urlPrefix?: string;
+    requestHandler?: RequestHandler;
+    defaultHeaders?: Array<[string, string]>;
+    debugMode?: boolean;
+};
+export declare type ServerOptions = {
+    urlPrefix?: string;
+    defaultHeaders?: Array<[string, string]>;
+    debugMode?: boolean;
+};
+export declare type RequestHandler = (raw: RawRequest, clientOptions?: ClientOptions) => Promise<RawResponse>;
