@@ -491,4 +491,15 @@ export async function deserializePayload(binary: Binary): Promise<JSON> {
 	return value;
 };
 
+export type ClientOptions = {
+	urlPrefix?: string;
+	requestHandler?: RequestHandler;
+	defaultHeaders?: Array<[string, string]>;
+};
+
+export type ServerOptions = {
+	urlPrefix?: string;
+	defaultHeaders?: Array<[string, string]>;
+};
+
 export type RequestHandler = (raw: RawRequest, urlPrefix?: string) => Promise<RawResponse>;

@@ -2,12 +2,6 @@ import * as shared from "../lib-shared";
 
 export * from "../lib-shared/api";
 
-export type ClientOptions = {
-	urlPrefix?: string;
-	requestHandler?: shared.api.RequestHandler;
-	defaultHeaders?: Array<[string, string]>;
-};
-
 export class ServerResponse<A extends shared.api.EndpointResponse> {
 	private response: A;
 	private collect: boolean;
