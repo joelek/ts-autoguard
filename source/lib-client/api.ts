@@ -40,6 +40,9 @@ export type Client<A extends shared.api.RequestMap<A>, B extends shared.api.Resp
 };
 
 export function xhr(raw: shared.api.RawRequest, clientOptions?: shared.api.ClientOptions): Promise<shared.api.RawResponse> {
+	if (clientOptions?.debugMode) {
+		console.log("Outgoing raw request", raw);
+	}
 	return new Promise(async (resolve, reject) => {
 		// @ts-ignore
 		let xhr = new XMLHttpRequest();
@@ -50,11 +53,15 @@ export function xhr(raw: shared.api.RawRequest, clientOptions?: shared.api.Clien
 			// Header values for the same header name are joined by he XHR implementation.
 			let headers = shared.api.splitHeaders(xhr.getAllResponseHeaders().split("\r\n").slice(0, -1));
 			let payload = [new Uint8Array(xhr.response as ArrayBuffer)];
-			resolve({
+			let raw: shared.api.RawResponse = {
 				status,
 				headers,
 				payload
-			});
+			};
+			if (clientOptions?.debugMode) {
+				console.log("Incoming raw response", raw);
+			}
+			resolve(raw);
 		};
 		let url = clientOptions?.urlPrefix ?? "";
 		url += shared.api.combineComponents(raw.components);

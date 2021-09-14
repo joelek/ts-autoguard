@@ -189,6 +189,9 @@ export type NodeRequestHandlerOptions = Partial<Omit<libhttps.RequestOptions, ke
 
 export function makeNodeRequestHandler(options?: NodeRequestHandlerOptions): shared.api.RequestHandler {
 	return (raw, clientOptions) => {
+		if (clientOptions?.debugMode) {
+			console.log("Outgoing raw request", raw);
+		}
 		let urlPrefix = clientOptions?.urlPrefix ?? "";
 		let lib = urlPrefix.startsWith("https:") ? libhttps : libhttp;
 		return new Promise(async (resolve, reject) => {
@@ -221,7 +224,15 @@ export function makeNodeRequestHandler(options?: NodeRequestHandlerOptions): sha
 				let payload = {
 					[Symbol.asyncIterator]: () => response[Symbol.asyncIterator]()
 				};
-				resolve({ status, headers, payload });
+				let raw: shared.api.RawResponse = {
+					status,
+					headers,
+					payload
+				};
+				if (clientOptions?.debugMode) {
+					console.log("Incoming raw response", raw);
+				}
+				resolve(raw);
 			});
 			request.on("abort", reject);
 			request.on("error", reject);
@@ -281,7 +292,10 @@ export function finalizeResponse(raw: shared.api.RawResponse, defaultHeaders: Ar
 	};
 };
 
-export async function respond(httpResponse: ResponseLike, raw: Partial<shared.api.RawResponse>): Promise<void> {
+export async function respond(httpResponse: ResponseLike, raw: Partial<shared.api.RawResponse>, serverOptions?: shared.api.ServerOptions): Promise<void> {
+	if (serverOptions?.debugMode) {
+		console.log("Outgoing raw response", raw);
+	}
 	let rawHeaders = new Array<string>();
 	for (let header of raw.headers ?? []) {
 		rawHeaders.push(...header);
@@ -323,6 +337,9 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 			headers,
 			payload
 		};
+		if (serverOptions?.debugMode) {
+			console.log("Incoming raw request", raw);
+		}
 		let auxillary: Auxillary = {
 			socket
 		};
@@ -331,13 +348,13 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 		if (filteredEndpoints.length === 0) {
 			return respond(httpResponse, {
 				status: 404
-			});
+			}, serverOptions);
 		}
 		filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsMethod());
 		if (filteredEndpoints.length === 0) {
 			return respond(httpResponse, {
 				status: 405
-			});
+			}, serverOptions);
 		}
 		let endpoint = filteredEndpoints[0];
 		let valid = await endpoint.validateRequest();
@@ -345,32 +362,32 @@ export async function route(endpoints: Array<Endpoint>, httpRequest: RequestLike
 			let handled = await valid.handleRequest();
 			try {
 				let raw = await handled.validateResponse();
-				return await respond(httpResponse, raw);
+				return await respond(httpResponse, raw, serverOptions);
 			} catch (error) {
 				return respond(httpResponse, {
 					status: 500,
 					payload: shared.api.serializeStringPayload(String(error))
-				});
+				}, serverOptions);
 			}
 		} catch (error) {
 			if (typeof error === "number" && Number.isInteger(error) && error >= 100 && error <= 999) {
 				return respond(httpResponse, {
 					status: error
-				});
+				}, serverOptions);
 			}
 			if (error instanceof EndpointError) {
 				let raw = error.getResponse();
-				return respond(httpResponse, raw);
+				return respond(httpResponse, raw, serverOptions);
 			}
 			return respond(httpResponse, {
 				status: 500
-			});
+			}, serverOptions);
 		}
 	} catch (error) {
 		return respond(httpResponse, {
 			status: 400,
 			payload: shared.api.serializeStringPayload(String(error))
-		});
+		}, serverOptions);
 	}
 };
 

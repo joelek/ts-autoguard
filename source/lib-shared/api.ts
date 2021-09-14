@@ -495,11 +495,13 @@ export type ClientOptions = {
 	urlPrefix?: string;
 	requestHandler?: RequestHandler;
 	defaultHeaders?: Array<[string, string]>;
+	debugMode?: boolean;
 };
 
 export type ServerOptions = {
 	urlPrefix?: string;
 	defaultHeaders?: Array<[string, string]>;
+	debugMode?: boolean;
 };
 
 export type RequestHandler = (raw: RawRequest, clientOptions?: ClientOptions) => Promise<RawResponse>;
