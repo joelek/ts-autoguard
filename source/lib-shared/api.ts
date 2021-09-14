@@ -290,7 +290,7 @@ export function decodeUndeclaredHeaders(pairs: Array<[string, string]>, exclude:
 
 export type AsyncBinary = AsyncIterable<Uint8Array>;
 
-export const AsyncBinary = {
+export const AsyncBinary: serialization.MessageGuard<AsyncBinary> = {
 	as(subject: any, path: string = ""): AsyncBinary {
 		if (subject != null) {
 			let member = subject[Symbol.asyncIterator];
@@ -315,7 +315,7 @@ export const AsyncBinary = {
 
 export type SyncBinary = Iterable<Uint8Array>;
 
-export const SyncBinary = {
+export const SyncBinary: serialization.MessageGuard<SyncBinary> = {
 	as(subject: any, path: string = ""): SyncBinary {
 		if (subject != null) {
 			let member = subject[Symbol.iterator];
