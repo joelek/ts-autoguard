@@ -224,7 +224,7 @@ function generateClientRoute(route: route.Route, options: shared.Options): strin
 	lines.push(`\tlet defaultHeaders = clientOptions?.defaultHeaders?.slice() ?? [];`);
 	lines.push(`\tdefaultHeaders.push(["Content-Type", "${getContentTypeFromType(route.request.payload)}"]);`);
 	lines.push(`\tdefaultHeaders.push(["Accept", "${getContentTypeFromType(route.response.payload)}"]);`);
-	lines.push(`\tlet raw = await requestHandler(autoguard.api.finalizeRequest({ method, components, parameters, headers, payload }, defaultHeaders), clientOptions?.urlPrefix);`);
+	lines.push(`\tlet raw = await requestHandler(autoguard.api.finalizeRequest({ method, components, parameters, headers, payload }, defaultHeaders), clientOptions);`);
 	lines.push(`\t{`);
 	lines.push(`\t\tlet status = raw.status;`);
 	lines.push(`\t\tlet headers: Record<string, autoguard.api.JSON> = {};`);
