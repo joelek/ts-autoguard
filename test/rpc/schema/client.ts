@@ -7,7 +7,7 @@ export type Client = autoguard.api.Client<shared.Autoguard.Requests, shared.Auto
 
 export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client => ({
 	"GET:/": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -27,13 +27,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"POST:/": async (request) => {
-		let guard = shared.Autoguard.Requests["POST:/"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["POST:/"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "POST";
 		let components = new Array<string>();
@@ -53,13 +53,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["POST:/"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["POST:/"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/one": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/one"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/one"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -79,13 +79,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/one"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/one"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/one/": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/one/"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/one/"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -106,13 +106,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/one/"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/one/"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/one/two": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/one/two"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/one/two"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -133,13 +133,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/one/two"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/one/two"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/<dynamic_component>": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/<dynamic_component>"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/<dynamic_component>"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -159,13 +159,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/<dynamic_component>"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/<dynamic_component>"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/<dynamic_plain_component>": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/<dynamic_plain_component>"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/<dynamic_plain_component>"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -185,13 +185,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/<dynamic_plain_component>"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/<dynamic_plain_component>"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/<dynamic_boolean_component>": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/<dynamic_boolean_component>"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/<dynamic_boolean_component>"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -211,13 +211,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/<dynamic_boolean_component>"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/<dynamic_boolean_component>"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/<dynamic_number_component>": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/<dynamic_number_component>"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/<dynamic_number_component>"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -237,13 +237,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/<dynamic_number_component>"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/<dynamic_number_component>"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/<dynamic_string_component>": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/<dynamic_string_component>"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/<dynamic_string_component>"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -263,13 +263,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/<dynamic_string_component>"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/<dynamic_string_component>"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/<dynamic_component_one>/<dynamic_component_two>": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/<dynamic_component_one>/<dynamic_component_two>"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/<dynamic_component_one>/<dynamic_component_two>"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -290,13 +290,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/<dynamic_component_one>/<dynamic_component_two>"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/<dynamic_component_one>/<dynamic_component_two>"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/<quoted key>": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/<quoted key>"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/<quoted key>"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -316,13 +316,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/<quoted key>"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/<quoted key>"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/%22r%C3%A4ksm%C3%B6rg%C3%A5s%22": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/%22r%C3%A4ksm%C3%B6rg%C3%A5s%22"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/%22r%C3%A4ksm%C3%B6rg%C3%A5s%22"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -342,13 +342,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/%22r%C3%A4ksm%C3%B6rg%C3%A5s%22"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/%22r%C3%A4ksm%C3%B6rg%C3%A5s%22"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/parameters01": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/parameters01"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/parameters01"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -368,13 +368,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/parameters01"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/parameters01"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/parameters02": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/parameters02"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/parameters02"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -395,13 +395,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/parameters02"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/parameters02"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/parameters03": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/parameters03"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/parameters03"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -422,13 +422,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/parameters03"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/parameters03"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/parameters04": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/parameters04"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/parameters04"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -449,13 +449,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/parameters04"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/parameters04"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/parameters05": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/parameters05"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/parameters05"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -476,13 +476,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/parameters05"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/parameters05"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/parameters06": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/parameters06"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/parameters06"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -503,13 +503,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/parameters06"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/parameters06"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/parameters07": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/parameters07"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/parameters07"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -530,13 +530,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/parameters07"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/parameters07"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/parameters08": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/parameters08"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/parameters08"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -558,13 +558,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/parameters08"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/parameters08"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/parameters09": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/parameters09"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/parameters09"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -585,13 +585,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/parameters09"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/parameters09"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/parameters10": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/parameters10"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/parameters10"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -612,13 +612,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/parameters10"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/parameters10"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/parameters11": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/parameters11"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/parameters11"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -639,13 +639,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/parameters11"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/parameters11"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/parameters12": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/parameters12"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/parameters12"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -666,13 +666,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/parameters12"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/parameters12"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/parameters13": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/parameters13"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/parameters13"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -693,13 +693,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/parameters13"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/parameters13"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/request_headers01": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/request_headers01"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/request_headers01"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -719,13 +719,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/request_headers01"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/request_headers01"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/request_headers02": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/request_headers02"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/request_headers02"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -746,13 +746,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/request_headers02"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/request_headers02"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/request_headers03": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/request_headers03"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/request_headers03"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -773,13 +773,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/request_headers03"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/request_headers03"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/request_headers04": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/request_headers04"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/request_headers04"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -800,13 +800,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/request_headers04"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/request_headers04"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/request_headers05": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/request_headers05"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/request_headers05"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -827,13 +827,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/request_headers05"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/request_headers05"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/request_headers06": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/request_headers06"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/request_headers06"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -854,13 +854,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/request_headers06"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/request_headers06"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/request_headers07": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/request_headers07"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/request_headers07"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -881,13 +881,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/request_headers07"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/request_headers07"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/request_headers08": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/request_headers08"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/request_headers08"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -909,13 +909,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/request_headers08"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/request_headers08"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/request_headers09": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/request_headers09"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/request_headers09"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -936,13 +936,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/request_headers09"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/request_headers09"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/request_headers10": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/request_headers10"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/request_headers10"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -963,13 +963,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/request_headers10"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/request_headers10"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/request_headers11": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/request_headers11"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/request_headers11"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -990,13 +990,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/request_headers11"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/request_headers11"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/request_headers12": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/request_headers12"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/request_headers12"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1017,13 +1017,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/request_headers12"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/request_headers12"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/request_headers13": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/request_headers13"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/request_headers13"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1044,13 +1044,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/request_headers13"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/request_headers13"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/response_headers01": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/response_headers01"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/response_headers01"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1070,13 +1070,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/response_headers01"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/response_headers01"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/response_headers02": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/response_headers02"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/response_headers02"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1097,13 +1097,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			headers["required_boolean_response_header"] = autoguard.api.decodeHeaderValue(raw.headers, "required_boolean_response_header", false);
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/response_headers02"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/response_headers02"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/response_headers03": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/response_headers03"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/response_headers03"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1124,13 +1124,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			headers["optional_boolean_response_header"] = autoguard.api.decodeHeaderValue(raw.headers, "optional_boolean_response_header", false);
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/response_headers03"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/response_headers03"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/response_headers04": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/response_headers04"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/response_headers04"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1151,13 +1151,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			headers["required_number_response_header"] = autoguard.api.decodeHeaderValue(raw.headers, "required_number_response_header", false);
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/response_headers04"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/response_headers04"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/response_headers05": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/response_headers05"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/response_headers05"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1178,13 +1178,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			headers["optional_number_response_header"] = autoguard.api.decodeHeaderValue(raw.headers, "optional_number_response_header", false);
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/response_headers05"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/response_headers05"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/response_headers06": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/response_headers06"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/response_headers06"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1205,13 +1205,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			headers["required_string_response_header"] = autoguard.api.decodeHeaderValue(raw.headers, "required_string_response_header", true);
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/response_headers06"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/response_headers06"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/response_headers07": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/response_headers07"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/response_headers07"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1232,13 +1232,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			headers["optional_string_response_header"] = autoguard.api.decodeHeaderValue(raw.headers, "optional_string_response_header", true);
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/response_headers07"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/response_headers07"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/response_headers08": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/response_headers08"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/response_headers08"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1260,13 +1260,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			headers["response_header_two"] = autoguard.api.decodeHeaderValue(raw.headers, "response_header_two", true);
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/response_headers08"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/response_headers08"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/response_headers09": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/response_headers09"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/response_headers09"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1287,13 +1287,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			headers["quoted key"] = autoguard.api.decodeHeaderValue(raw.headers, "quoted key", true);
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/response_headers09"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/response_headers09"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/response_headers10": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/response_headers10"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/response_headers10"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1314,13 +1314,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			headers["required_response_header"] = autoguard.api.decodeHeaderValue(raw.headers, "required_response_header", true);
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/response_headers10"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/response_headers10"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/response_headers11": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/response_headers11"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/response_headers11"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1341,13 +1341,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			headers["optional_response_header"] = autoguard.api.decodeHeaderValue(raw.headers, "optional_response_header", true);
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/response_headers11"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/response_headers11"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/response_headers12": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/response_headers12"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/response_headers12"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1368,13 +1368,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			headers["required_plain_response_header"] = autoguard.api.decodeHeaderValue(raw.headers, "required_plain_response_header", true);
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/response_headers12"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/response_headers12"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/response_headers13": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/response_headers13"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/response_headers13"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1395,13 +1395,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			headers["optional_plain_response_header"] = autoguard.api.decodeHeaderValue(raw.headers, "optional_plain_response_header", true);
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/response_headers13"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/response_headers13"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/request_payload01": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/request_payload01"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/request_payload01"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1421,13 +1421,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/request_payload01"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/request_payload01"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/request_payload02": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/request_payload02"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/request_payload02"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1447,13 +1447,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/request_payload02"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/request_payload02"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/response_payload01": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/response_payload01"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/response_payload01"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1473,13 +1473,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = await autoguard.api.deserializePayload(raw.payload);
-			let guard = shared.Autoguard.Responses["GET:/response_payload01"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/response_payload01"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/response_payload02": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/response_payload02"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/response_payload02"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1499,13 +1499,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = await autoguard.api.deserializePayload(raw.payload);
-			let guard = shared.Autoguard.Responses["GET:/response_payload02"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/response_payload02"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/full_example": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/full_example"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/full_example"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1528,13 +1528,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			headers["response_header"] = autoguard.api.decodeHeaderValue(raw.headers, "response_header", true);
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = await autoguard.api.deserializePayload(raw.payload);
-			let guard = shared.Autoguard.Responses["GET:/full_example"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/full_example"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/reference": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/reference"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/reference"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1554,13 +1554,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = await autoguard.api.deserializePayload(raw.payload);
-			let guard = shared.Autoguard.Responses["GET:/reference"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/reference"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, false);
 		}
 	},
 	"GET:/binary_request": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/binary_request"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/binary_request"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1580,13 +1580,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/binary_request"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/binary_request"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/binary_response": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/binary_response"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/binary_response"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1606,13 +1606,13 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/binary_response"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/binary_response"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}
 	},
 	"GET:/number/<number>": async (request) => {
-		let guard = shared.Autoguard.Requests["GET:/number/<number>"];
+		let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["GET:/number/<number>"], clientOptions?.debugMode);
 		guard.as(request, "request");
 		let method = "GET";
 		let components = new Array<string>();
@@ -1634,7 +1634,7 @@ export const makeClient = (clientOptions?: autoguard.api.ClientOptions): Client 
 			let headers: Record<string, autoguard.api.JSON> = {};
 			headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 			let payload = raw.payload;
-			let guard = shared.Autoguard.Responses["GET:/number/<number>"];
+			let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["GET:/number/<number>"], clientOptions?.debugMode);
 			let response = guard.as({ status, headers, payload }, "response");
 			return new autoguard.api.ServerResponse(response, true);
 		}

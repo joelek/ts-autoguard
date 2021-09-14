@@ -32,14 +32,14 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				headers["hc"] = autoguard.api.decodeHeaderValues(raw.headers, "hc", true);
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 				let payload = raw.payload;
-				let guard = shared.Autoguard.Requests["plain"];
+				let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["plain"], serverOptions?.debugMode);
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["plain"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
-								let guard = shared.Autoguard.Responses["plain"];
+								let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["plain"], serverOptions?.debugMode);
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
@@ -83,14 +83,14 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 				headers["hc"] = autoguard.api.decodeHeaderValues(raw.headers, "hc", false);
 				headers = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };
 				let payload = raw.payload;
-				let guard = shared.Autoguard.Requests["json"];
+				let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["json"], serverOptions?.debugMode);
 				let request = guard.as({ options, headers, payload }, "request");
 				return {
 					handleRequest: async () => {
 						let response = await routes["json"](new autoguard.api.ClientRequest(request, true, auxillary));
 						return {
 							validateResponse: async () => {
-								let guard = shared.Autoguard.Responses["json"];
+								let guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["json"], serverOptions?.debugMode);
 								guard.as(response, "response");
 								let status = response.status ?? 200;
 								let headers = new Array<[string, string]>();
