@@ -10,6 +10,11 @@ export type MessageGuard<A extends stdlib.routing.Message> = {
 	ts(eol?: string): string;
 };
 
+export interface MessageCodec {
+	decode(buffer: Uint8Array): Message;
+	encode(subject: Message): Uint8Array;
+};
+
 export abstract class MessageGuardBase<A extends Message> implements MessageGuard<A> {
 	constructor() {}
 
@@ -24,6 +29,14 @@ export abstract class MessageGuardBase<A extends Message> implements MessageGuar
 		} catch (error) {
 			return false;
 		}
+	}
+
+	decode(codec: MessageCodec, buffer: Uint8Array): A {
+		return this.as(codec.decode(buffer));
+	}
+
+	encode(codec: MessageCodec, subject: A): Uint8Array {
+		return codec.encode(this.as(subject));
 	}
 };
 
