@@ -10,6 +10,23 @@ export type MessageGuard<A extends stdlib.routing.Message> = {
 	ts(eol?: string): string;
 };
 
+export abstract class MessageGuardBase<A extends Message> implements MessageGuard<A> {
+	constructor() {}
+
+	abstract as(subject: any, path?: string): A;
+
+	abstract ts(eol?: string): string;
+
+	is(subject: any, path?: string): subject is A {
+		try {
+			this.as(subject, path);
+			return true;
+		} catch (error) {
+			return false;
+		}
+	}
+};
+
 export class MessageGuardError<A extends Message> {
 	private guard: MessageGuard<A>;
 	private subject: any;
