@@ -346,6 +346,7 @@ NB: This project targets TypeScript 4 in strict mode.
 
 ## Roadmap
 
+* Extend language with additional types.
 * Document extension capabilities.
 * Resolve issue with imported type and local type sharing identical typenames.
 * Simplify import paths before resolving references.
