@@ -63,6 +63,48 @@ export const Array = {
 	}
 };
 
+export type BigInt = bigint;
+
+export class BigIntGuard extends serialization.MessageGuardBase<BigInt> {
+	constructor() {
+		super();
+	}
+
+	as(subject: any, path: string = ""): BigInt {
+		if ((subject != null) && (subject.constructor === globalThis.BigInt)) {
+			return subject as bigint;
+		}
+		throw new serialization.MessageGuardError(this, subject, path);
+	}
+
+	ts(eol: string = "\n"): string {
+		return "bigint";
+	}
+};
+
+export const BigInt = new BigIntGuard();
+
+export type Binary = Uint8Array;
+
+export class BinaryGuard extends serialization.MessageGuardBase<Binary> {
+	constructor() {
+		super();
+	}
+
+	as(subject: any, path: string = ""): Binary {
+		if ((subject != null) && (subject.constructor === globalThis.Uint8Array)) {
+			return subject;
+		}
+		throw new serialization.MessageGuardError(this, subject, path);
+	}
+
+	ts(eol: string = "\n"): string {
+		return "binary";
+	}
+};
+
+export const Binary = new BinaryGuard();
+
 export type Boolean = boolean;
 
 export class BooleanGuard extends serialization.MessageGuardBase<Boolean> {
