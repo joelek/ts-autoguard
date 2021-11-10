@@ -1,6 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MessageSerializer = exports.MessageGuardError = void 0;
+exports.MessageSerializer = exports.MessageGuardError = exports.MessageGuardBase = void 0;
+;
+class MessageGuardBase {
+    constructor() { }
+    is(subject, path) {
+        try {
+            this.as(subject, path);
+            return true;
+        }
+        catch (error) {
+            return false;
+        }
+    }
+    decode(codec, buffer) {
+        return this.as(codec.decode(buffer));
+    }
+    encode(codec, subject) {
+        return codec.encode(this.as(subject));
+    }
+}
+exports.MessageGuardBase = MessageGuardBase;
+;
 class MessageGuardError {
     constructor(guard, subject, path) {
         this.guard = guard;

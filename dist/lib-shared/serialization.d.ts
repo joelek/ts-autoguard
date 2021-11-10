@@ -6,6 +6,18 @@ export declare type MessageGuard<A extends stdlib.routing.Message> = {
     is(subject: any, path?: string): subject is A;
     ts(eol?: string): string;
 };
+export interface MessageCodec {
+    decode(buffer: Uint8Array): Message;
+    encode(subject: Message): Uint8Array;
+}
+export declare abstract class MessageGuardBase<A extends Message> implements MessageGuard<A> {
+    constructor();
+    abstract as(subject: any, path?: string): A;
+    abstract ts(eol?: string): string;
+    is(subject: any, path?: string): subject is A;
+    decode(codec: MessageCodec, buffer: Uint8Array): A;
+    encode(codec: MessageCodec, subject: A): Uint8Array;
+}
 export declare class MessageGuardError<A extends Message> {
     private guard;
     private subject;

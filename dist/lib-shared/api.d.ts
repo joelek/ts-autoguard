@@ -26,7 +26,7 @@ export declare type AsyncBinary = AsyncIterable<Uint8Array>;
 export declare const AsyncBinary: serialization.MessageGuard<AsyncBinary>;
 export declare type SyncBinary = Iterable<Uint8Array>;
 export declare const SyncBinary: serialization.MessageGuard<SyncBinary>;
-export declare const Binary: serialization.MessageGuard<AsyncBinary | SyncBinary>;
+export declare const Binary: guards.UnionGuard<[AsyncBinary, SyncBinary]>;
 export declare type Binary = ReturnType<typeof Binary.as>;
 export declare type Primitive = boolean | number | string | undefined;
 export declare const Primitive: serialization.MessageGuard<Primitive>;
@@ -34,8 +34,8 @@ export declare type JSON = boolean | null | number | string | JSON[] | {
     [key: string]: JSON;
 } | undefined;
 export declare const JSON: serialization.MessageGuard<JSON>;
-export declare const Options: serialization.MessageGuard<guards.Record<JSON>>;
-export declare const Headers: serialization.MessageGuard<guards.Record<JSON>>;
+export declare const Options: guards.RecordGuard<JSON>;
+export declare const Headers: guards.RecordGuard<JSON>;
 export declare function serializeValue(value: JSON, plain: boolean): string | undefined;
 export declare function deserializeValue(value: string | undefined, plain: boolean): JSON;
 export declare type RawRequest = {
