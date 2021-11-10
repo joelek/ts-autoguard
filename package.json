@@ -7,7 +7,7 @@
 		"typescript": "^4.4"
 	},
 	"dependencies": {
-		"@joelek/bedrock": "github:joelek/bedrock#semver:^0.1",
+		"@joelek/bedrock": "github:joelek/bedrock#semver:^0.2",
 		"@joelek/ts-stdlib": "github:joelek/ts-stdlib#semver:^1.0"
 	},
 	"license": "MIT",
