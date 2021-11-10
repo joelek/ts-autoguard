@@ -6,6 +6,30 @@ import * as table from "./table";
 import * as tokenization from "./tokenization";
 import * as types from "./types";
 
+class BinaryPayloadType implements types.Type {
+	constructor() {
+
+	}
+
+	generateSchema(options: shared.Options): string {
+		return "binary";
+	}
+
+	generateType(options: shared.Options): string {
+		return "autoguard.api.Binary";
+	}
+
+	generateTypeGuard(options: shared.Options): string {
+		return "autoguard.api.Binary";
+	}
+
+	getReferences(): shared.Reference[] {
+		return [];
+	}
+
+	static readonly INSTANCE = new BinaryPayloadType();
+};
+
 function areAllMembersOptional(object: types.ObjectType): boolean {
 	for (let [key, value] of object.members) {
 		if (!value.optional) {
@@ -111,8 +135,8 @@ function getRequestType(route: route.Route): types.Type {
 	});
 	let payload = route.request.payload;
 	request.add("payload", {
-		type: payload,
-		optional: payload === types.UndefinedType.INSTANCE || payload === types.Binary.INSTANCE
+		type: payload === types.BinaryType.INSTANCE ? BinaryPayloadType.INSTANCE : payload,
+		optional: payload === types.UndefinedType.INSTANCE || payload === types.BinaryType.INSTANCE
 	});
 	return request;
 }
@@ -153,14 +177,14 @@ function getResponseType(route: route.Route): types.Type {
 	});
 	let payload = route.response.payload;
 	response.add("payload", {
-		type: payload,
-		optional: payload === types.UndefinedType.INSTANCE || payload === types.Binary.INSTANCE
+		type: payload === types.BinaryType.INSTANCE ? BinaryPayloadType.INSTANCE : payload,
+		optional: payload === types.UndefinedType.INSTANCE || payload === types.BinaryType.INSTANCE
 	});
 	return response;
 }
 
-function getContentTypeFromType(payload: types.Type | types.Binary): string {
-	if (payload instanceof types.Binary) {
+function getContentTypeFromType(payload: types.Type | types.BinaryType): string {
+	if (payload instanceof types.BinaryType) {
 		return "application/octet-stream";
 	}
 	if (payload instanceof types.UndefinedType) {
@@ -215,7 +239,7 @@ function generateClientRoute(route: route.Route, options: shared.Options): strin
 		}
 	}
 	lines.push(`\theaders.push(...autoguard.api.encodeUndeclaredHeaderPairs(request.headers ?? {}, headers.map((header) => header[0])));`);
-	if (route.request.payload === types.Binary.INSTANCE) {
+	if (route.request.payload === types.BinaryType.INSTANCE) {
 		lines.push(`\tlet payload = request.payload ?? [];`);
 	} else {
 		lines.push(`\tlet payload = autoguard.api.serializePayload(request.payload);`);
@@ -237,14 +261,14 @@ function generateClientRoute(route: route.Route, options: shared.Options): strin
 		}
 	}
 	lines.push(`\t\theaders = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };`);
-	if (route.response.payload === types.Binary.INSTANCE) {
+	if (route.response.payload === types.BinaryType.INSTANCE) {
 		lines.push(`\t\tlet payload = raw.payload;`);
 	} else {
 		lines.push(`\t\tlet payload = await autoguard.api.deserializePayload(raw.payload);`);
 	}
 	lines.push(`\t\tlet guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["${tag}"], clientOptions?.debugMode);`);
 	lines.push(`\t\tlet response = guard.as({ status, headers, payload }, "response");`);
-	let collect = route.response.payload === types.Binary.INSTANCE;
+	let collect = route.response.payload === types.BinaryType.INSTANCE;
 	lines.push(`\t\treturn new autoguard.api.ServerResponse(response, ${collect});`);
 	lines.push(`\t}`);
 	lines.push(`}`);
@@ -295,7 +319,7 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 		}
 	}
 	lines.push(`\t\t\theaders = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };`);
-	if (route.request.payload === types.Binary.INSTANCE) {
+	if (route.request.payload === types.BinaryType.INSTANCE) {
 		lines.push(`\t\t\tlet payload = raw.payload;`);
 	} else {
 		lines.push(`\t\t\tlet payload = await autoguard.api.deserializePayload(raw.payload);`);
@@ -304,7 +328,7 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 	lines.push(`\t\t\tlet request = guard.as({ options, headers, payload }, "request");`);
 	lines.push(`\t\t\treturn {`);
 	lines.push(`\t\t\t\thandleRequest: async () => {`);
-	let collect = route.request.payload === types.Binary.INSTANCE;
+	let collect = route.request.payload === types.BinaryType.INSTANCE;
 	lines.push(`\t\t\t\t\tlet response = await routes["${tag}"](new autoguard.api.ClientRequest(request, ${collect}, auxillary));`);
 	lines.push(`\t\t\t\t\treturn {`);
 	lines.push(`\t\t\t\t\t\tvalidateResponse: async () => {`);
@@ -321,7 +345,7 @@ function generateServerRoute(route: route.Route, options: shared.Options): strin
 		}
 	}
 	lines.push(`\t\t\t\t\t\t\theaders.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));`);
-	if (route.response.payload === types.Binary.INSTANCE) {
+	if (route.response.payload === types.BinaryType.INSTANCE) {
 		lines.push(`\t\t\t\t\t\t\tlet payload = response.payload ?? [];`);
 	} else {
 		lines.push(`\t\t\t\t\t\t\tlet payload = autoguard.api.serializePayload(response.payload);`);

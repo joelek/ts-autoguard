@@ -10,6 +10,14 @@ export const MyArrayOfStringType: autoguard.serialization.MessageGuard<MyArrayOf
 
 export type MyArrayOfStringType = autoguard.guards.Array<autoguard.guards.String>;
 
+export const MyBigIntType: autoguard.serialization.MessageGuard<MyBigIntType> = autoguard.guards.BigInt;
+
+export type MyBigIntType = autoguard.guards.BigInt;
+
+export const MyBinaryType: autoguard.serialization.MessageGuard<MyBinaryType> = autoguard.guards.Binary;
+
+export type MyBinaryType = autoguard.guards.Binary;
+
 export const MyBooleanType: autoguard.serialization.MessageGuard<MyBooleanType> = autoguard.guards.Boolean;
 
 export type MyBooleanType = autoguard.guards.Boolean;
@@ -110,6 +118,8 @@ export namespace Autoguard {
 	export const Guards = {
 		"MyAnyType": autoguard.guards.Reference.of(() => MyAnyType),
 		"MyArrayOfStringType": autoguard.guards.Reference.of(() => MyArrayOfStringType),
+		"MyBigIntType": autoguard.guards.Reference.of(() => MyBigIntType),
+		"MyBinaryType": autoguard.guards.Reference.of(() => MyBinaryType),
 		"MyBooleanType": autoguard.guards.Reference.of(() => MyBooleanType),
 		"MyBooleanliteralType": autoguard.guards.Reference.of(() => MyBooleanliteralType),
 		"MyGroupType": autoguard.guards.Reference.of(() => MyGroupType),

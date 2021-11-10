@@ -2,6 +2,10 @@ guard MyAnyType: any;
 
 guard MyArrayOfStringType: string[];
 
+guard MyBigIntType: bigint;
+
+guard MyBinaryType: binary;
+
 guard MyBooleanType: boolean;
 
 guard MyBooleanliteralType: true;

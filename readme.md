@@ -166,6 +166,10 @@ guard MyAnyType: any;
 
 guard MyArrayOfStringType: string[];
 
+guard MyBigIntType: bigint;
+
+guard MyBinaryType: binary;
+
 guard MyBooleanType: boolean;
 
 guard MyBooleanliteralType: true;
@@ -346,7 +350,6 @@ NB: This project targets TypeScript 4 in strict mode.
 
 ## Roadmap
 
-* Extend language with additional types.
 * Document extension capabilities.
 * Resolve issue with imported type and local type sharing identical typenames.
 * Simplify import paths before resolving references.
@@ -402,7 +405,9 @@ TupleBody = Type TupleBodyTail*
 TupleType = "[" TupleBody* "]"
 UndefinedType = "undefined"
 UnionType = Type "|" Type
-PrimitiveType = BooleanType or NumberType or StringType
+BigIntType = "bigint"
+BinaryType = "binary"
+PrimitiveType = BigIntType or BinaryType or BooleanType or NumberType or StringType
 SupportType = AnyType or NullType or UndefinedType;
 LiteralType = BooleanLiteralType or NumberLiteralType or StringLiteralType
 ComplexType = ArrayType or GroupType or IntersectionType or ObjectType or RecordType or ReferenceType or TupleType or UnionType
@@ -423,7 +428,7 @@ Component = StaticComponent or DynamicComponent
 Path = "/" Component Path*
 Method = Identifier
 Headers = Options
-Payload = Type or "binary"
+Payload = Type
 Parameters = "?" Options
 Request = "<=" Headers? Payload?
 Response = "=>" Headers? Payload?

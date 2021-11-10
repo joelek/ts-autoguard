@@ -22,6 +22,7 @@ export const Families = (<A extends string[]>(...tuple: A): [...A] => tuple)(
 	"=>",
 	"<=",
 	"any",
+	"bigint",
 	"binary",
 	"boolean",
 	"false",
@@ -47,6 +48,7 @@ export type Family = typeof Families[number];
 
 export const IdentifierFamilies = (<A extends string[]>(...tuple: A): [...A] => tuple)(
 	"any",
+	"bigint",
 	"binary",
 	"boolean",
 	"false",
@@ -127,6 +129,7 @@ export class Tokenizer {
 			"=>": /^([=][>])/su,
 			"<=": /^([<][=])/su,
 			"any": /^(any)/su,
+			"bigint": /^(bigint)/su,
 			"binary": /^(binary)/su,
 			"boolean": /^(boolean)/su,
 			"false": /^(false)/su,

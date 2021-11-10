@@ -30,7 +30,9 @@ export const Type = {
 				TupleType.parse,
 				ObjectType.parse,
 				GroupType.parse,
-				RecordType.parse
+				RecordType.parse,
+				BigIntType.parse,
+				BinaryType.parse
 			];
 			let errors = new Array<any>();
 			for (let parser of parsers) {
@@ -127,7 +129,38 @@ export class ArrayType implements Type {
 	}
 };
 
-export class Binary implements Type {
+export class BigIntType implements Type {
+	constructor() {
+
+	}
+
+	generateSchema(options: shared.Options): string {
+		return "bigint";
+	}
+
+	generateType(options: shared.Options): string {
+		return "autoguard.guards.BigInt";
+	}
+
+	generateTypeGuard(options: shared.Options): string {
+		return "autoguard.guards.BigInt";
+	}
+
+	getReferences(): shared.Reference[] {
+		return [];
+	}
+
+	static readonly INSTANCE = new BigIntType();
+
+	static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): BigIntType {
+		return tokenizer.newContext((read, peek) => {
+			tokenization.expect(read(), "bigint");
+			return BigIntType.INSTANCE;
+		});
+	}
+};
+
+export class BinaryType implements Type {
 	constructor() {
 
 	}
@@ -137,18 +170,25 @@ export class Binary implements Type {
 	}
 
 	generateType(options: shared.Options): string {
-		return "autoguard.api.Binary";
+		return "autoguard.guards.Binary";
 	}
 
 	generateTypeGuard(options: shared.Options): string {
-		return "autoguard.api.Binary";
+		return "autoguard.guards.Binary";
 	}
 
 	getReferences(): shared.Reference[] {
 		return [];
 	}
 
-	static readonly INSTANCE = new Binary();
+	static readonly INSTANCE = new BinaryType();
+
+	static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): BinaryType {
+		return tokenizer.newContext((read, peek) => {
+			tokenization.expect(read(), "binary");
+			return BinaryType.INSTANCE;
+		});
+	}
 };
 
 export class BooleanType implements Type {
