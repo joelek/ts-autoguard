@@ -30,13 +30,23 @@ export declare class ArrayType implements Type {
     getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): ArrayType;
 }
-export declare class Binary implements Type {
+export declare class BigIntType implements Type {
     constructor();
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
     getReferences(): shared.Reference[];
-    static readonly INSTANCE: Binary;
+    static readonly INSTANCE: BigIntType;
+    static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): BigIntType;
+}
+export declare class BinaryType implements Type {
+    constructor();
+    generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
+    generateTypeGuard(options: shared.Options): string;
+    getReferences(): shared.Reference[];
+    static readonly INSTANCE: BinaryType;
+    static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): BinaryType;
 }
 export declare class BooleanType implements Type {
     constructor();

@@ -34,6 +34,20 @@ export declare class ArrayGuard<A extends serialization.Message> extends seriali
 export declare const Array: {
     of<A extends unknown>(guard: serialization.MessageGuardBase<A>): ArrayGuard<A>;
 };
+export declare type BigInt = bigint;
+export declare class BigIntGuard extends serialization.MessageGuardBase<BigInt> {
+    constructor();
+    as(subject: any, path?: string): BigInt;
+    ts(eol?: string): string;
+}
+export declare const BigInt: BigIntGuard;
+export declare type Binary = Uint8Array;
+export declare class BinaryGuard extends serialization.MessageGuardBase<Binary> {
+    constructor();
+    as(subject: any, path?: string): Binary;
+    ts(eol?: string): string;
+}
+export declare const Binary: BinaryGuard;
 export declare type Boolean = boolean;
 export declare class BooleanGuard extends serialization.MessageGuardBase<Boolean> {
     constructor();
@@ -96,7 +110,7 @@ export declare class NumberLiteralGuard<A extends number> extends serialization.
 export declare const NumberLiteral: {
     of<A extends number>(value: A): NumberLiteralGuard<A>;
 };
-export declare type Object<A extends serialization.MessageMap<A>, B extends serialization.MessageMap<B> = {}> = ObjectOf<A, B>;
+export declare type Object<A extends serialization.MessageMap<A>, B extends serialization.MessageMap<B> = {}> = globalThis.Record<string, any> & ObjectOf<A, B>;
 export declare class ObjectGuard<A extends serialization.MessageMap<A>, B extends serialization.MessageMap<B> = {}> extends serialization.MessageGuardBase<Object<A, B>> {
     readonly required: serialization.MessageGuardMap<A>;
     readonly optional: serialization.MessageGuardMap<B>;
@@ -144,7 +158,7 @@ export declare class StringLiteralGuard<A extends string> extends serialization.
 export declare const StringLiteral: {
     of<A extends string>(value: A): StringLiteralGuard<A>;
 };
-export declare type Tuple<A extends TupleOf<serialization.Message>> = TupleOf<A>;
+export declare type Tuple<A extends TupleOf<serialization.Message>> = [...TupleOf<A>, ...any[]];
 export declare class TupleGuard<A extends TupleOf<serialization.Message>> extends serialization.MessageGuardBase<Tuple<A>> {
     readonly guards: TupleOf<serialization.MessageGuardTuple<A>>;
     constructor(...guards: TupleOf<serialization.MessageGuardTuple<A>>);

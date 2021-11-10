@@ -42,6 +42,18 @@ for (let CODEC of CODECS) {
         guard.as(value);
     }));
     test(``, () => __awaiter(void 0, void 0, void 0, function* () {
+        let guard = guards.BigInt;
+        let array = guard.encode(CODEC, BigInt(0));
+        let value = guard.decode(CODEC, array);
+        guard.as(value);
+    }));
+    test(``, () => __awaiter(void 0, void 0, void 0, function* () {
+        let guard = guards.Binary;
+        let array = guard.encode(CODEC, Uint8Array.of());
+        let value = guard.decode(CODEC, array);
+        guard.as(value);
+    }));
+    test(``, () => __awaiter(void 0, void 0, void 0, function* () {
         let guard = guards.Boolean;
         let array = guard.encode(CODEC, false);
         let value = guard.decode(CODEC, array);

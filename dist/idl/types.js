@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PlainType = exports.Options = exports.Headers = exports.UnionType = exports.UndefinedType = exports.TupleType = exports.StringLiteralType = exports.StringType = exports.ReferenceType = exports.RecordType = exports.ObjectType = exports.NumberLiteralType = exports.NumberType = exports.NullType = exports.IntersectionType = exports.GroupType = exports.BooleanLiteralType = exports.BooleanType = exports.Binary = exports.ArrayType = exports.AnyType = exports.Type = void 0;
+exports.PlainType = exports.Options = exports.Headers = exports.UnionType = exports.UndefinedType = exports.TupleType = exports.StringLiteralType = exports.StringType = exports.ReferenceType = exports.RecordType = exports.ObjectType = exports.NumberLiteralType = exports.NumberType = exports.NullType = exports.IntersectionType = exports.GroupType = exports.BooleanLiteralType = exports.BooleanType = exports.BinaryType = exports.BigIntType = exports.ArrayType = exports.AnyType = exports.Type = void 0;
 const tokenization = require("./tokenization");
 ;
 exports.Type = {
@@ -24,7 +24,9 @@ exports.Type = {
                 TupleType.parse,
                 ObjectType.parse,
                 GroupType.parse,
-                RecordType.parse
+                RecordType.parse,
+                BigIntType.parse,
+                BinaryType.parse
             ];
             let errors = new Array();
             for (let parser of parsers) {
@@ -110,24 +112,55 @@ class ArrayType {
 }
 exports.ArrayType = ArrayType;
 ;
-class Binary {
+class BigIntType {
+    constructor() {
+    }
+    generateSchema(options) {
+        return "bigint";
+    }
+    generateType(options) {
+        return "autoguard.guards.BigInt";
+    }
+    generateTypeGuard(options) {
+        return "autoguard.guards.BigInt";
+    }
+    getReferences() {
+        return [];
+    }
+    static parse(tokenizer, parsers) {
+        return tokenizer.newContext((read, peek) => {
+            tokenization.expect(read(), "bigint");
+            return BigIntType.INSTANCE;
+        });
+    }
+}
+exports.BigIntType = BigIntType;
+BigIntType.INSTANCE = new BigIntType();
+;
+class BinaryType {
     constructor() {
     }
     generateSchema(options) {
         return "binary";
     }
     generateType(options) {
-        return "autoguard.api.Binary";
+        return "autoguard.guards.Binary";
     }
     generateTypeGuard(options) {
-        return "autoguard.api.Binary";
+        return "autoguard.guards.Binary";
     }
     getReferences() {
         return [];
     }
+    static parse(tokenizer, parsers) {
+        return tokenizer.newContext((read, peek) => {
+            tokenization.expect(read(), "binary");
+            return BinaryType.INSTANCE;
+        });
+    }
 }
-exports.Binary = Binary;
-Binary.INSTANCE = new Binary();
+exports.BinaryType = BinaryType;
+BinaryType.INSTANCE = new BinaryType();
 ;
 class BooleanType {
     constructor() {

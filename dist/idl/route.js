@@ -306,22 +306,16 @@ class Message {
     }
     static parse(tokenizer) {
         return tokenizer.newContext((read, peek) => {
-            var _a, _b;
+            var _a;
             let headers = new Headers([]);
             if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) === "<") {
                 headers = Headers.parse(tokenizer);
             }
-            let payload = types.Binary.INSTANCE;
-            if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === "binary") {
-                tokenization.expect(read(), "binary");
-                payload = types.Binary.INSTANCE;
+            let payload = types.BinaryType.INSTANCE;
+            try {
+                payload = types.Type.parse(tokenizer);
             }
-            else {
-                try {
-                    payload = types.Type.parse(tokenizer);
-                }
-                catch (error) { }
-            }
+            catch (error) { }
             return new Message(headers, payload);
         });
     }
@@ -372,12 +366,12 @@ class Route {
                 tokenization.expect(read(), "?");
                 parameters = Parameters.parse(tokenizer);
             }
-            let request = new Message(new Headers([]), types.Binary.INSTANCE);
+            let request = new Message(new Headers([]), types.BinaryType.INSTANCE);
             if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === "<=") {
                 tokenization.expect(read(), "<=");
                 request = Message.parse(tokenizer);
             }
-            let response = new Message(new Headers([]), types.Binary.INSTANCE);
+            let response = new Message(new Headers([]), types.BinaryType.INSTANCE);
             if (((_c = peek()) === null || _c === void 0 ? void 0 : _c.family) === "=>") {
                 tokenization.expect(read(), "=>");
                 response = Message.parse(tokenizer);

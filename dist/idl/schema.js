@@ -7,6 +7,24 @@ const route = require("./route");
 const table = require("./table");
 const tokenization = require("./tokenization");
 const types = require("./types");
+class BinaryPayloadType {
+    constructor() {
+    }
+    generateSchema(options) {
+        return "binary";
+    }
+    generateType(options) {
+        return "autoguard.api.Binary";
+    }
+    generateTypeGuard(options) {
+        return "autoguard.api.Binary";
+    }
+    getReferences() {
+        return [];
+    }
+}
+BinaryPayloadType.INSTANCE = new BinaryPayloadType();
+;
 function areAllMembersOptional(object) {
     for (let [key, value] of object.members) {
         if (!value.optional) {
@@ -111,8 +129,8 @@ function getRequestType(route) {
     });
     let payload = route.request.payload;
     request.add("payload", {
-        type: payload,
-        optional: payload === types.UndefinedType.INSTANCE || payload === types.Binary.INSTANCE
+        type: payload === types.BinaryType.INSTANCE ? BinaryPayloadType.INSTANCE : payload,
+        optional: payload === types.UndefinedType.INSTANCE || payload === types.BinaryType.INSTANCE
     });
     return request;
 }
@@ -152,13 +170,13 @@ function getResponseType(route) {
     });
     let payload = route.response.payload;
     response.add("payload", {
-        type: payload,
-        optional: payload === types.UndefinedType.INSTANCE || payload === types.Binary.INSTANCE
+        type: payload === types.BinaryType.INSTANCE ? BinaryPayloadType.INSTANCE : payload,
+        optional: payload === types.UndefinedType.INSTANCE || payload === types.BinaryType.INSTANCE
     });
     return response;
 }
 function getContentTypeFromType(payload) {
-    if (payload instanceof types.Binary) {
+    if (payload instanceof types.BinaryType) {
         return "application/octet-stream";
     }
     if (payload instanceof types.UndefinedType) {
@@ -216,7 +234,7 @@ function generateClientRoute(route, options) {
         }
     }
     lines.push(`\theaders.push(...autoguard.api.encodeUndeclaredHeaderPairs(request.headers ?? {}, headers.map((header) => header[0])));`);
-    if (route.request.payload === types.Binary.INSTANCE) {
+    if (route.request.payload === types.BinaryType.INSTANCE) {
         lines.push(`\tlet payload = request.payload ?? [];`);
     }
     else {
@@ -240,7 +258,7 @@ function generateClientRoute(route, options) {
         }
     }
     lines.push(`\t\theaders = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };`);
-    if (route.response.payload === types.Binary.INSTANCE) {
+    if (route.response.payload === types.BinaryType.INSTANCE) {
         lines.push(`\t\tlet payload = raw.payload;`);
     }
     else {
@@ -248,7 +266,7 @@ function generateClientRoute(route, options) {
     }
     lines.push(`\t\tlet guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Responses["${tag}"], clientOptions?.debugMode);`);
     lines.push(`\t\tlet response = guard.as({ status, headers, payload }, "response");`);
-    let collect = route.response.payload === types.Binary.INSTANCE;
+    let collect = route.response.payload === types.BinaryType.INSTANCE;
     lines.push(`\t\treturn new autoguard.api.ServerResponse(response, ${collect});`);
     lines.push(`\t}`);
     lines.push(`}`);
@@ -301,7 +319,7 @@ function generateServerRoute(route, options) {
         }
     }
     lines.push(`\t\t\theaders = { ...headers, ...autoguard.api.decodeUndeclaredHeaders(raw.headers, Object.keys(headers)) };`);
-    if (route.request.payload === types.Binary.INSTANCE) {
+    if (route.request.payload === types.BinaryType.INSTANCE) {
         lines.push(`\t\t\tlet payload = raw.payload;`);
     }
     else {
@@ -311,7 +329,7 @@ function generateServerRoute(route, options) {
     lines.push(`\t\t\tlet request = guard.as({ options, headers, payload }, "request");`);
     lines.push(`\t\t\treturn {`);
     lines.push(`\t\t\t\thandleRequest: async () => {`);
-    let collect = route.request.payload === types.Binary.INSTANCE;
+    let collect = route.request.payload === types.BinaryType.INSTANCE;
     lines.push(`\t\t\t\t\tlet response = await routes["${tag}"](new autoguard.api.ClientRequest(request, ${collect}, auxillary));`);
     lines.push(`\t\t\t\t\treturn {`);
     lines.push(`\t\t\t\t\t\tvalidateResponse: async () => {`);
@@ -329,7 +347,7 @@ function generateServerRoute(route, options) {
         }
     }
     lines.push(`\t\t\t\t\t\t\theaders.push(...autoguard.api.encodeUndeclaredHeaderPairs(response.headers ?? {}, headers.map((header) => header[0])));`);
-    if (route.response.payload === types.Binary.INSTANCE) {
+    if (route.response.payload === types.BinaryType.INSTANCE) {
         lines.push(`\t\t\t\t\t\t\tlet payload = response.payload ?? [];`);
     }
     else {
