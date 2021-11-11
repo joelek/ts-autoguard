@@ -16,8 +16,7 @@ export class JSONCodec implements serialization.MessageCodec {
 	constructor() {}
 
 	decode(buffer: Uint8Array): serialization.Message {
-		// @ts-ignore
-		let string = new TextDecoder().decode(buffer);
+		let string = bedrock.utils.Chunk.toString(buffer, "utf-8");
 		let subject = string.length === 0 ? undefined : JSON.parse(string, (key, subject) => {
 			if (BIGINT_GUARD.is(subject)) {
 				return BigInt(subject.data);
@@ -46,8 +45,7 @@ export class JSONCodec implements serialization.MessageCodec {
 			}
 			return subject;
 		});
-		// @ts-ignore
-		let packet = new TextEncoder().encode(string);
+		let packet = bedrock.utils.Chunk.fromString(string, "utf-8");
 		return packet;
 	}
 };
