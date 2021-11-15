@@ -337,7 +337,7 @@ Thank you for your support!
 Releases follow semantic versioning and release packages are published using the GitHub platform. Use the following command to install the latest release.
 
 ```
-npm install joelek/ts-autoguard#semver:^5
+npm install joelek/ts-autoguard#semver:^5.10
 ```
 
 Use the following command to install the very latest build. The very latest build may include breaking changes and should not be used in production environments.
