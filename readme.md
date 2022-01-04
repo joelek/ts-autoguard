@@ -363,6 +363,7 @@ NB: This project targets TypeScript 4 in strict mode.
 * Add strict option that performs automatic JSON payload filtering.
 * Modernize code to use string templates.
 * Write unit tests.
+* Unify MessageGuard and MessageGuardBase.
 
 ## Syntax
 
