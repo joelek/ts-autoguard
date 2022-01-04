@@ -283,7 +283,7 @@ export const NumberLiteral = {
 	}
 };
 
-export type Object<A extends serialization.MessageMap<A>, B extends serialization.MessageMap<B> = {}> = globalThis.Record<string, any> & ObjectOf<A, B>;
+export type Object<A extends serialization.MessageMap<A>, B extends serialization.MessageMap<B> = {}> = ObjectOf<A, B>;
 
 export class ObjectGuard<A extends serialization.MessageMap<A>, B extends serialization.MessageMap<B> = {}> extends serialization.MessageGuardBase<Object<A, B>> {
 	readonly required: serialization.MessageGuardMap<A>;
@@ -434,7 +434,7 @@ export const StringLiteral = {
 	}
 };
 
-export type Tuple<A extends TupleOf<serialization.Message>> = [...TupleOf<A>, ...any[]];
+export type Tuple<A extends TupleOf<serialization.Message>> = TupleOf<A>;
 
 export class TupleGuard<A extends TupleOf<serialization.Message>> extends serialization.MessageGuardBase<Tuple<A>> {
 	readonly guards: TupleOf<serialization.MessageGuardTuple<A>>;
