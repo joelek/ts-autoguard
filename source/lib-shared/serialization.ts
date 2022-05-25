@@ -89,7 +89,7 @@ export class MessageSerializer<A extends stdlib.routing.MessageMap<A>> {
 				let data = json.data;
 				let guard = this.guards[type];
 				if (guard === undefined) {
-					throw "Unknown message type \"" + type + "\"!";
+					throw "Unknown message type \"" + String(type) + "\"!";
 				}
 				cb(type, guard.as(data));
 				return;
