@@ -1,4 +1,7 @@
 /// <reference types="node" />
+/// <reference types="node" />
+/// <reference types="node" />
+/// <reference types="node" />
 import * as libhttp from "http";
 import * as libhttps from "https";
 import * as libnet from "net";

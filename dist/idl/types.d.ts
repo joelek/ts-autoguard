@@ -10,7 +10,7 @@ export interface Type {
 export declare const Type: {
     parse(tokenizer: tokenization.Tokenizer, options?: Partial<{
         parsers: Array<TypeParser>;
-    }> | undefined): Type;
+    }>): Type;
 };
 export declare class AnyType implements Type {
     constructor();

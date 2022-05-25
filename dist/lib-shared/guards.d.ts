@@ -74,7 +74,7 @@ export declare class GroupGuard<A extends serialization.Message> extends seriali
     ts(eol?: string): string;
 }
 export declare const Group: {
-    of<A extends unknown>(guard: serialization.MessageGuard<A>, name?: string | undefined): GroupGuard<A>;
+    of<A extends unknown>(guard: serialization.MessageGuard<A>, name?: string): GroupGuard<A>;
 };
 export declare type Intersection<A extends TupleOf<serialization.MessageMap<any>[]>> = IntersectionOf<A>;
 export declare class IntersectionGuard<A extends TupleOf<serialization.MessageMap<any>[]>> extends serialization.MessageGuardBase<Intersection<A>> {
