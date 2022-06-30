@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Route = exports.Message = exports.Headers = exports.Parameters = exports.Parameter = exports.Alias = exports.Method = exports.Path = exports.Component = exports.Quantifier = void 0;
+exports.Route = exports.Message = exports.Headers = exports.Parameters = exports.Option = exports.Alias = exports.Method = exports.Path = exports.Component = exports.Quantifier = void 0;
 const is = require("./is");
 const tokenization = require("./tokenization");
 const types = require("./types");
@@ -171,7 +171,7 @@ class Alias {
 }
 exports.Alias = Alias;
 ;
-class Parameter {
+class Option {
     constructor(name, quantifier, type) {
         this.name = name;
         this.quantifier = quantifier;
@@ -203,11 +203,11 @@ class Parameter {
                     }
                 }
             }
-            return new Parameter(name, quantifier, type);
+            return new Option(name, quantifier, type);
         });
     }
 }
-exports.Parameter = Parameter;
+exports.Option = Option;
 ;
 class Parameters {
     constructor(parameters) {
@@ -221,16 +221,17 @@ class Parameters {
         for (let parameter of this.parameters) {
             parts.push(parameter.generateSchema(options));
         }
-        return "? <{ " + parts.join(", ") + " }>";
+        return "? " + parts.join(" & ");
     }
-    static parse(tokenizer) {
+    static parseOld(tokenizer) {
         return tokenizer.newContext((read, peek) => {
             var _a, _b;
             let parameters = new Array();
+            tokenization.expect(read(), "?");
             tokenization.expect(read(), "<");
             tokenization.expect(read(), "{");
             while (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) !== "}") {
-                let parameter = Parameter.parse(tokenizer);
+                let parameter = Option.parse(tokenizer);
                 parameters.push(parameter);
                 if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === ",") {
                     tokenization.expect(read(), ",");
@@ -241,6 +242,31 @@ class Parameters {
             }
             tokenization.expect(read(), "}");
             tokenization.expect(read(), ">");
+            return new Parameters(parameters);
+        });
+    }
+    static parse(tokenizer) {
+        // TODO: Remove compatibility behaviour in v6.
+        try {
+            return Parameters.parseOld(tokenizer);
+        }
+        catch (error) { }
+        return tokenizer.newContext((read, peek) => {
+            var _a;
+            let parameters = new Array();
+            tokenization.expect(read(), "?");
+            while (true) {
+                tokenization.expect(read(), "<");
+                let parameter = Option.parse(tokenizer);
+                tokenization.expect(read(), ">");
+                parameters.push(parameter);
+                if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) === "&") {
+                    tokenization.expect(read(), "&");
+                }
+                else {
+                    break;
+                }
+            }
             return new Parameters(parameters);
         });
     }
@@ -268,7 +294,7 @@ class Headers {
             tokenization.expect(read(), "<");
             tokenization.expect(read(), "{");
             while (((_a = peek()) === null || _a === void 0 ? void 0 : _a.value) !== "}") {
-                let header = Parameter.parse(tokenizer);
+                let header = Option.parse(tokenizer);
                 header.name = header.name.toLowerCase();
                 headers.push(header);
                 if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === ",") {
@@ -363,7 +389,6 @@ class Route {
             let path = Path.parse(tokenizer);
             let parameters = new Parameters([]);
             if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) === "?") {
-                tokenization.expect(read(), "?");
                 parameters = Parameters.parse(tokenizer);
             }
             let request = new Message(new Headers([]), types.BinaryType.INSTANCE);
