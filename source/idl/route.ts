@@ -238,12 +238,13 @@ export class Parameters {
 		for (let parameter of this.parameters) {
 			parts.push(parameter.generateSchema(options));
 		}
-		return "? <{ " + parts.join(", ") + " }>";
+		return "? " + parts.join(" & ");
 	}
 
-	static parse(tokenizer: tokenization.Tokenizer): Parameters {
+	static parseOld(tokenizer: tokenization.Tokenizer): Parameters {
 		return tokenizer.newContext((read, peek) => {
 			let parameters = new Array<Parameter>();
+			tokenization.expect(read(), "?");
 			tokenization.expect(read(), "<");
 			tokenization.expect(read(), "{");
 			while (peek()?.family !== "}") {
@@ -257,6 +258,29 @@ export class Parameters {
 			}
 			tokenization.expect(read(), "}");
 			tokenization.expect(read(), ">");
+			return new Parameters(parameters);
+		});
+	}
+
+	static parse(tokenizer: tokenization.Tokenizer): Parameters {
+		// TODO: Remove compatibility behaviour in v6.
+		try {
+			return Parameters.parseOld(tokenizer);
+		} catch (error) {}
+		return tokenizer.newContext((read, peek) => {
+			let parameters = new Array<Parameter>();
+			tokenization.expect(read(), "?");
+			while (true) {
+				tokenization.expect(read(), "<");
+				let parameter = Parameter.parse(tokenizer);
+				tokenization.expect(read(), ">");
+				parameters.push(parameter);
+				if (peek()?.family === "&") {
+					tokenization.expect(read(), "&");
+				} else {
+					break;
+				}
+			}
 			return new Parameters(parameters);
 		});
 	}
@@ -388,7 +412,6 @@ export class Route {
 			let path = Path.parse(tokenizer);
 			let parameters = new Parameters([]);
 			if (peek()?.family === "?") {
-				tokenization.expect(read(), "?");
 				parameters = Parameters.parse(tokenizer);
 			}
 			let request = new Message(new Headers([]), types.BinaryType.INSTANCE);

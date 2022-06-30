@@ -436,7 +436,12 @@ Path = "/" Component Path*
 Method = Identifier
 Headers = Options
 Payload = Type
-Parameters = "?" Options
+ParametersType = PlainType or Type
+ParametersKey = Identifier or StringLiteral
+ParametersKeyValue =  "<" ParametersKey Quantifier? (":" ParametersType)? ">"
+ParametersBodyTail = "&" ParametersKeyValue
+ParametersBody = ParametersKeyValue ParametersBodyTail*
+Parameters = "?" (Headers or ParametersBody)
 Request = "<=" Headers? Payload?
 Response = "=>" Headers? Payload?
 Alias = Identifier "(" ")" ":"
