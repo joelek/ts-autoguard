@@ -50,6 +50,30 @@ route GET:/parameters12 ? <{ required_plain_parameter: plain }>;
 
 route GET:/parameters13 ? <{ optional_plain_parameter?: plain }>;
 
+route GET:/query02 ? <required_boolean_parameter:boolean>;
+
+route GET:/query03 ? <optional_boolean_parameter?:boolean>;
+
+route GET:/query04 ? <required_number_parameter:number>;
+
+route GET:/query05 ? <optional_number_parameter?:number>;
+
+route GET:/query06 ? <required_string_parameter:string>;
+
+route GET:/query07 ? <optional_string_parameter?:string>;
+
+route GET:/query08 ? <parameter_one:string> & <parameter_two:string>;
+
+route GET:/query09 ? <"quoted key":string>;
+
+route GET:/query10 ? <required_parameter>;
+
+route GET:/query11 ? <optional_parameter?>;
+
+route GET:/query12 ? <required_plain_parameter:plain>;
+
+route GET:/query13 ? <optional_plain_parameter?:plain>;
+
 route GET:/request_headers01 <= <{}>;
 
 route GET:/request_headers02 <= <{ required_boolean_request_header: boolean }>;
