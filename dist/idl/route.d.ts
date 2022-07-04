@@ -37,24 +37,24 @@ export declare class Alias {
     generateSchema(options: shared.Options): string;
     static parse(tokenizer: tokenization.Tokenizer): Alias;
 }
-export declare class Option {
+export declare class Parameter {
     name: string;
     quantifier: Quantifier;
     type: types.Type;
     constructor(name: string, quantifier: Quantifier, type: types.Type);
     generateSchema(options: shared.Options): string;
-    static parse(tokenizer: tokenization.Tokenizer): Option;
+    static parse(tokenizer: tokenization.Tokenizer): Parameter;
 }
 export declare class Parameters {
-    parameters: Array<Option>;
-    constructor(parameters: Array<Option>);
+    parameters: Array<Parameter>;
+    constructor(parameters: Array<Parameter>);
     generateSchema(options: shared.Options): string;
     static parseOld(tokenizer: tokenization.Tokenizer): Parameters;
     static parse(tokenizer: tokenization.Tokenizer): Parameters;
 }
 export declare class Headers {
-    headers: Array<Option>;
-    constructor(headers: Array<Option>);
+    headers: Array<Parameter>;
+    constructor(headers: Array<Parameter>);
     generateSchema(options: shared.Options): string;
     static parse(tokenizer: tokenization.Tokenizer): Headers;
 }

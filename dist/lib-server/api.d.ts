@@ -82,7 +82,7 @@ export declare type NodeRequestHandlerOptions = Partial<Omit<libhttps.RequestOpt
 export declare function makeNodeRequestHandler(options?: NodeRequestHandlerOptions): shared.api.RequestHandler;
 export declare function acceptsComponents(components: Array<string>, matchers: Array<RouteMatcher>): boolean;
 export declare function acceptsMethod(one: string, two: string): boolean;
-export declare function finalizeResponse(raw: shared.api.RawResponse, defaultHeaders: Array<[string, string]>): shared.api.RawResponse;
+export declare function finalizeResponse(raw: shared.api.RawResponse, defaultHeaders: Array<[string, string]>): Promise<shared.api.RawResponse>;
 export declare function respond(httpResponse: ResponseLike, raw: Partial<shared.api.RawResponse>, serverOptions?: shared.api.ServerOptions): Promise<void>;
 export declare function route(endpoints: Array<Endpoint>, httpRequest: RequestLike, httpResponse: ResponseLike, serverOptions?: shared.api.ServerOptions): Promise<void>;
 export declare function parseRangeHeader(value: shared.api.JSON, size: number): {

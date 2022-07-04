@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Route = exports.Message = exports.Headers = exports.Parameters = exports.Option = exports.Alias = exports.Method = exports.Path = exports.Component = exports.Quantifier = void 0;
+exports.Route = exports.Message = exports.Headers = exports.Parameters = exports.Parameter = exports.Alias = exports.Method = exports.Path = exports.Component = exports.Quantifier = void 0;
 const is = require("./is");
 const tokenization = require("./tokenization");
 const types = require("./types");
@@ -171,7 +171,7 @@ class Alias {
 }
 exports.Alias = Alias;
 ;
-class Option {
+class Parameter {
     constructor(name, quantifier, type) {
         this.name = name;
         this.quantifier = quantifier;
@@ -203,11 +203,11 @@ class Option {
                     }
                 }
             }
-            return new Option(name, quantifier, type);
+            return new Parameter(name, quantifier, type);
         });
     }
 }
-exports.Option = Option;
+exports.Parameter = Parameter;
 ;
 class Parameters {
     constructor(parameters) {
@@ -231,7 +231,7 @@ class Parameters {
             tokenization.expect(read(), "<");
             tokenization.expect(read(), "{");
             while (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) !== "}") {
-                let parameter = Option.parse(tokenizer);
+                let parameter = Parameter.parse(tokenizer);
                 parameters.push(parameter);
                 if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === ",") {
                     tokenization.expect(read(), ",");
@@ -257,7 +257,7 @@ class Parameters {
             tokenization.expect(read(), "?");
             while (true) {
                 tokenization.expect(read(), "<");
-                let parameter = Option.parse(tokenizer);
+                let parameter = Parameter.parse(tokenizer);
                 tokenization.expect(read(), ">");
                 parameters.push(parameter);
                 if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) === "&") {
@@ -294,7 +294,7 @@ class Headers {
             tokenization.expect(read(), "<");
             tokenization.expect(read(), "{");
             while (((_a = peek()) === null || _a === void 0 ? void 0 : _a.value) !== "}") {
-                let header = Option.parse(tokenizer);
+                let header = Parameter.parse(tokenizer);
                 header.name = header.name.toLowerCase();
                 headers.push(header);
                 if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === ",") {
