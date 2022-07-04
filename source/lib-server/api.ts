@@ -272,7 +272,13 @@ export function acceptsMethod(one: string, two: string): boolean {
 	return one === two;
 };
 
-export function finalizeResponse(raw: shared.api.RawResponse, defaultHeaders: Array<[string, string]>): shared.api.RawResponse {
+export async function finalizeResponse(raw: shared.api.RawResponse, defaultHeaders: Array<[string, string]>): Promise<shared.api.RawResponse> {
+	let payload = raw.payload;
+	if (shared.api.SyncBinary.is(payload)) {
+		let collectedPayload = await shared.api.collectPayload(payload);
+		defaultHeaders.push(["Content-Length", `${collectedPayload.length}`]);
+		payload = [collectedPayload];
+	}
 	let headersToAppend = defaultHeaders.filter((defaultHeader) => {
 		let found = raw.headers.find((header) => header[0].toLowerCase() === defaultHeader[0].toLowerCase());
 		return found === undefined;
@@ -282,7 +288,8 @@ export function finalizeResponse(raw: shared.api.RawResponse, defaultHeaders: Ar
 		headers: [
 			...raw.headers,
 			...headersToAppend
-		]
+		],
+		payload
 	};
 };
 
