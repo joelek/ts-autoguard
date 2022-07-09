@@ -364,6 +364,7 @@ NB: This project targets TypeScript 4 in strict mode.
 * Modernize code to use string templates.
 * Write unit tests.
 * Unify MessageGuard and MessageGuardBase.
+* Provide defaults for values having only a single option in RPC.
 
 ## Syntax
 
