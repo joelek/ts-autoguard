@@ -365,6 +365,8 @@ NB: This project targets TypeScript 4 in strict mode.
 * Write unit tests.
 * Unify MessageGuard and MessageGuardBase.
 * Provide defaults for values having only a single option in RPC.
+* Set content-type for uppercased file suffixes.
+* Migrate functionality used in Nexus to Nexus.
 
 ## Syntax
 
