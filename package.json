@@ -31,5 +31,5 @@
 		"test:node": "node ./dist/cli/index.js --root=./test/node/",
 		"test": "node ./dist/cli/index.js --root=./test/"
 	},
-	"version": "5.11.3"
+	"version": "5.12.0"
 }
