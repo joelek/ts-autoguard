@@ -30,6 +30,10 @@ export const MyGroupType: autoguard.serialization.MessageGuard<MyGroupType> = au
 
 export type MyGroupType = autoguard.guards.Group<autoguard.guards.Any>;
 
+export const MyIntegerType: autoguard.serialization.MessageGuard<MyIntegerType> = autoguard.guards.Integer;
+
+export type MyIntegerType = autoguard.guards.Integer;
+
 export const MyIntersectionType: autoguard.serialization.MessageGuard<MyIntersectionType> = autoguard.guards.Intersection.of(
 	autoguard.guards.Object.of({
 		"a_string_member": autoguard.guards.String
@@ -123,6 +127,7 @@ export namespace Autoguard {
 		"MyBooleanType": autoguard.guards.Reference.of(() => MyBooleanType),
 		"MyBooleanliteralType": autoguard.guards.Reference.of(() => MyBooleanliteralType),
 		"MyGroupType": autoguard.guards.Reference.of(() => MyGroupType),
+		"MyIntegerType": autoguard.guards.Reference.of(() => MyIntegerType),
 		"MyIntersectionType": autoguard.guards.Reference.of(() => MyIntersectionType),
 		"MyNullType": autoguard.guards.Reference.of(() => MyNullType),
 		"MyNumberType": autoguard.guards.Reference.of(() => MyNumberType),

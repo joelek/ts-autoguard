@@ -12,6 +12,8 @@ guard MyBooleanliteralType: true;
 
 guard MyGroupType: (any); # Used when different precedence is required.
 
+guard MyIntegerType: integer;
+
 guard MyIntersectionType: {
 	"a_string_member": string
 } & {
