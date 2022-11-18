@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PlainType = exports.Options = exports.Headers = exports.UnionType = exports.UndefinedType = exports.TupleType = exports.StringLiteralType = exports.StringType = exports.ReferenceType = exports.RecordType = exports.ObjectType = exports.NumberLiteralType = exports.NumberType = exports.NullType = exports.IntersectionType = exports.GroupType = exports.BooleanLiteralType = exports.BooleanType = exports.BinaryType = exports.BigIntType = exports.ArrayType = exports.AnyType = exports.Type = void 0;
+exports.PlainType = exports.Options = exports.Headers = exports.UnionType = exports.UndefinedType = exports.TupleType = exports.StringLiteralType = exports.StringType = exports.ReferenceType = exports.RecordType = exports.ObjectType = exports.NumberLiteralType = exports.NumberType = exports.NullType = exports.IntersectionType = exports.IntegerType = exports.GroupType = exports.BooleanLiteralType = exports.BooleanType = exports.BinaryType = exports.BigIntType = exports.ArrayType = exports.AnyType = exports.Type = void 0;
 const tokenization = require("./tokenization");
 ;
 exports.Type = {
@@ -14,6 +14,7 @@ exports.Type = {
                 AnyType.parse,
                 BooleanType.parse,
                 BooleanLiteralType.parse,
+                IntegerType.parse,
                 NullType.parse,
                 NumberType.parse,
                 NumberLiteralType.parse,
@@ -254,6 +255,33 @@ class GroupType {
     }
 }
 exports.GroupType = GroupType;
+;
+class IntegerType {
+    constructor() {
+    }
+    generateSchema(options) {
+        return "integer";
+    }
+    generateType(options) {
+        return "autoguard.guards.Integer";
+    }
+    generateTypeGuard(options) {
+        let lines = new Array();
+        lines.push("autoguard.guards.Integer");
+        return lines.join(options.eol);
+    }
+    getReferences() {
+        return [];
+    }
+    static parse(tokenizer, parsers) {
+        return tokenizer.newContext((read, peek) => {
+            tokenization.expect(read(), "integer");
+            return IntegerType.INSTANCE;
+        });
+    }
+}
+exports.IntegerType = IntegerType;
+IntegerType.INSTANCE = new IntegerType();
 ;
 class IntersectionType {
     constructor(types = []) {

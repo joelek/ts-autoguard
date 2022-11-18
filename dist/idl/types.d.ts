@@ -77,6 +77,15 @@ export declare class GroupType implements Type {
     getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): GroupType;
 }
+export declare class IntegerType implements Type {
+    constructor();
+    generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
+    generateTypeGuard(options: shared.Options): string;
+    getReferences(): Array<shared.Reference>;
+    static readonly INSTANCE: IntegerType;
+    static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): IntegerType;
+}
 export declare class IntersectionType implements Type {
     types: Set<Type>;
     constructor(types?: Iterable<Type>);
