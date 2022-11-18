@@ -181,6 +181,27 @@ export const Group = {
 	}
 };
 
+export type Integer = number;
+
+export class IntegerGuard extends serialization.MessageGuardBase<Integer> {
+	constructor() {
+		super();
+	}
+
+	as(subject: any, path: string = ""): Integer {
+		if ((subject != null) && (subject.constructor === globalThis.Number) && globalThis.Number.isInteger(subject)) {
+			return subject as number;
+		}
+		throw new serialization.MessageGuardError(this, subject, path);
+	}
+
+	ts(eol: string = "\n"): string {
+		return "number";
+	}
+};
+
+export const Integer = new IntegerGuard();
+
 export type Intersection<A extends TupleOf<serialization.MessageMap<any>[]>> = IntersectionOf<A>;
 
 export class IntersectionGuard<A extends TupleOf<serialization.MessageMap<any>[]>> extends serialization.MessageGuardBase<Intersection<A>> {

@@ -178,6 +178,8 @@ guard MyGroupType: (any); # Used when different precedence is required.
 
 guard MyImportedType: ./module/MyExternalType;
 
+guard MyIntegerType: integer;
+
 guard MyIntersectionType: {
 	a_string_member: string
 } & {
@@ -393,6 +395,7 @@ ArrayType = Type "[" "]"
 BooleanType = "boolean"
 BooleanLiteralType = "true" or "false"
 GroupType = "(" Type ")"
+IntegerType = "integer"
 IntersectionType = Type "&" Type
 NullType = "null"
 NumberType = "number"
@@ -417,7 +420,7 @@ UndefinedType = "undefined"
 UnionType = Type "|" Type
 BigIntType = "bigint"
 BinaryType = "binary"
-PrimitiveType = BigIntType or BinaryType or BooleanType or NumberType or StringType
+PrimitiveType = BigIntType or BinaryType or BooleanType or IntegerType or NumberType or StringType
 SupportType = AnyType or NullType or UndefinedType;
 LiteralType = BooleanLiteralType or NumberLiteralType or StringLiteralType
 ComplexType = ArrayType or GroupType or IntersectionType or ObjectType or RecordType or ReferenceType or TupleType or UnionType

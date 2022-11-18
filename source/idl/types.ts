@@ -20,6 +20,7 @@ export const Type = {
 				AnyType.parse,
 				BooleanType.parse,
 				BooleanLiteralType.parse,
+				IntegerType.parse,
 				NullType.parse,
 				NumberType.parse,
 				NumberLiteralType.parse,
@@ -298,6 +299,39 @@ export class GroupType implements Type {
 			let type = Type.parse(tokenizer);
 			tokenization.expect(read(), ")");
 			return new GroupType(type);
+		});
+	}
+};
+
+export class IntegerType implements Type {
+	constructor() {
+
+	}
+
+	generateSchema(options: shared.Options): string {
+		return "integer";
+	}
+
+	generateType(options: shared.Options): string {
+		return "autoguard.guards.Integer";
+	}
+
+	generateTypeGuard(options: shared.Options): string {
+		let lines = new Array<string>();
+		lines.push("autoguard.guards.Integer");
+		return lines.join(options.eol);
+	}
+
+	getReferences(): Array<shared.Reference> {
+		return [];
+	}
+
+	static readonly INSTANCE = new IntegerType();
+
+	static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): IntegerType {
+		return tokenizer.newContext((read, peek) => {
+			tokenization.expect(read(), "integer");
+			return IntegerType.INSTANCE;
 		});
 	}
 };
