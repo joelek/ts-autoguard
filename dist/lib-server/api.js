@@ -325,20 +325,20 @@ function route(endpoints, httpRequest, httpResponse, serverOptions) {
             let auxillary = {
                 socket
             };
-            let filteredEndpoints = endpoints.map((endpoint) => endpoint(raw, auxillary));
-            filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsComponents());
-            if (filteredEndpoints.length === 0) {
+            let allEndpoints = endpoints.map((endpoint) => endpoint(raw, auxillary));
+            let endpointsAcceptingComponents = allEndpoints.filter((endpoint) => endpoint.acceptsComponents());
+            if (endpointsAcceptingComponents.length === 0) {
                 return respond(httpResponse, {
                     status: 404
                 }, serverOptions);
             }
-            filteredEndpoints = filteredEndpoints.filter((endpoint) => endpoint.acceptsMethod());
-            if (filteredEndpoints.length === 0) {
+            let endpointsAcceptingComponentsAndMethod = endpointsAcceptingComponents.filter((endpoint) => endpoint.acceptsMethod());
+            if (endpointsAcceptingComponentsAndMethod.length === 0) {
                 return respond(httpResponse, {
                     status: 405
                 }, serverOptions);
             }
-            let endpoint = filteredEndpoints[0];
+            let endpoint = endpointsAcceptingComponentsAndMethod[0];
             let valid = yield endpoint.validateRequest();
             try {
                 let handled = yield valid.handleRequest();
