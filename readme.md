@@ -369,6 +369,7 @@ NB: This project targets TypeScript 4 in strict mode.
 * Provide defaults for values having only a single option in RPC.
 * Set content-type for uppercased file suffixes.
 * Migrate functionality used in Nexus to Nexus.
+* Add support for bigint and binary in API.
 
 ## Syntax
 
