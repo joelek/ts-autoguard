@@ -92,7 +92,7 @@ export class BinaryGuard extends serialization.MessageGuardBase<Binary> {
 	}
 
 	as(subject: any, path: string = ""): Binary {
-		if ((subject != null) && (subject.constructor === globalThis.Uint8Array)) {
+		if ((subject != null) && (subject instanceof Uint8Array)) {
 			return subject;
 		}
 		throw new serialization.MessageGuardError(this, subject, path);
