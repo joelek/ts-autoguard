@@ -4,6 +4,7 @@ import * as libfs from "fs";
 import * as libos from "os";
 import * as libpath from "path";
 import * as libts from "typescript";
+import * as app from "../app.json";
 import * as idl from "../idl";
 
 type Options = idl.shared.Options & {
@@ -68,24 +69,29 @@ function run(): void {
 		upgrade: false,
 		target: "ts"
 	};
-	let found_unrecognized_argument = false;
-	for (let argv of process.argv.slice(2)) {
+	let unrecognizedArguments = [] as Array<string>;
+	for (let arg of process.argv.slice(2)) {
 		let parts: RegExpExecArray | null = null;
 		if (false) {
-		} else if ((parts = /^--eol=(.+)$/.exec(argv)) != null) {
+		} else if ((parts = /^--eol=(.+)$/.exec(arg)) != null) {
 			options.eol = parts[1];
-		} else if ((parts = /^--root=(.+)$/.exec(argv)) != null) {
+		} else if ((parts = /^--root=(.+)$/.exec(arg)) != null) {
 			options.root = parts[1];
-		} else if ((parts = /^--upgrade=(true|false)$/.exec(argv)) != null) {
+		} else if ((parts = /^--upgrade=(true|false)$/.exec(arg)) != null) {
 			options.upgrade = parts[1] === "true" ? true : false;
-		} else if ((parts = /^--target=(ts|js)$/.exec(argv)) != null) {
+		} else if ((parts = /^--target=(ts|js)$/.exec(arg)) != null) {
 			options.target = parts[1];
 		} else {
-			found_unrecognized_argument = true;
-			process.stderr.write("Unrecognized argument \"" + argv + "\"!\n");
+			unrecognizedArguments.push(arg);
 		}
 	}
-	if (found_unrecognized_argument) {
+	if (unrecognizedArguments.length > 0) {
+		process.stderr.write(`${app.name} v${app.version}\n`);
+		process.stderr.write(`\n`);
+		for (let unrecognizedArgument of unrecognizedArguments) {
+			process.stderr.write(`Unrecognized argument "${unrecognizedArgument}"!\n`);
+		}
+		process.stderr.write(`\n`);
 		process.stderr.write(`Arguments:\n`);
 		process.stderr.write(`	--eol=string\n`);
 		process.stderr.write(`		Set end of line for generated code.\n`);

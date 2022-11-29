@@ -6,7 +6,8 @@
 	},
 	"extends": "../../tsconfig.json",
 	"include": [
-		"./"
+		"./",
+		"../app.json"
 	],
 	"references": [
 		{
