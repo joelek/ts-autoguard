@@ -5,6 +5,7 @@ import * as libos from "os";
 import * as libpath from "path";
 import * as libts from "typescript";
 import * as app from "../app.json";
+import * as terminal from "./terminal";
 import * as idl from "../idl";
 
 type Options = idl.shared.Options & {
@@ -105,21 +106,21 @@ function run(): void {
 	}
 	let paths = findFiles(options.root);
 	let result = paths.reduce((sum, path) => {
-		process.stderr.write("Processing \"" + path + "\"...\n");
+		process.stderr.write("Processing " + terminal.stylize("\"" + path + "\"", terminal.FG_YELLOW) + "...\n");
 		try {
 			if (options.upgrade) {
 				let input = libfs.readFileSync(path, "utf8");
 				let start = Date.now();
 				let generated = upgrade(input, options);
 				let duration = Date.now() - start;
-				process.stderr.write("	Upgrade: " + duration + " ms\n");
+				process.stderr.write("	Upgrade: " + terminal.stylize(duration, terminal.FG_CYAN) + " ms\n");
 				libfs.writeFileSync(path, generated, "utf8");
 			} else {
 				let input = libfs.readFileSync(path, "utf8");
 				let start = Date.now();
 				let schema = parse(input);
 				let duration = Date.now() - start;
-				process.stderr.write("	Parse: " + duration + " ms\n");
+				process.stderr.write("	Parse: " + terminal.stylize(duration, terminal.FG_CYAN) + " ms\n");
 				let directory = libpath.join(libpath.dirname(path), filename(path));
 				let generated = libpath.join(libpath.dirname(path), filename(path) + ".ts");
 				libfs.rmSync(directory, { force: true, recursive: true });
