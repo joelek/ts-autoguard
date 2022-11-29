@@ -370,6 +370,7 @@ NB: This project targets TypeScript 4 in strict mode.
 * Set content-type for uppercased file suffixes.
 * Migrate functionality used in Nexus to Nexus.
 * Add support for bigint and binary in API.
+* Colorize terminal output.
 
 ## Syntax
 
