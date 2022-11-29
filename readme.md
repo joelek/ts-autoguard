@@ -371,6 +371,7 @@ NB: This project targets TypeScript 4 in strict mode.
 * Migrate functionality used in Nexus to Nexus.
 * Add support for bigint and binary in API.
 * Colorize terminal output.
+* Display name and version in CLI.
 
 ## Syntax
 
