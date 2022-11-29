@@ -4,7 +4,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "^16.7",
-		"typescript": "^4.4"
+		"typescript": "^4.0"
 	},
 	"dependencies": {
 		"@joelek/bedrock": "github:joelek/bedrock#semver:^1.0",
