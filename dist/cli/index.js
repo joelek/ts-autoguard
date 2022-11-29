@@ -5,6 +5,8 @@ const libfs = require("fs");
 const libos = require("os");
 const libpath = require("path");
 const libts = require("typescript");
+const app = require("../app.json");
+const terminal = require("./terminal");
 const idl = require("../idl");
 function findFiles(path, paths = []) {
     let stat = libfs.statSync(path);
@@ -62,29 +64,34 @@ function run() {
         upgrade: false,
         target: "ts"
     };
-    let found_unrecognized_argument = false;
-    for (let argv of process.argv.slice(2)) {
+    let unrecognizedArguments = [];
+    for (let arg of process.argv.slice(2)) {
         let parts = null;
         if (false) {
         }
-        else if ((parts = /^--eol=(.+)$/.exec(argv)) != null) {
+        else if ((parts = /^--eol=(.+)$/.exec(arg)) != null) {
             options.eol = parts[1];
         }
-        else if ((parts = /^--root=(.+)$/.exec(argv)) != null) {
+        else if ((parts = /^--root=(.+)$/.exec(arg)) != null) {
             options.root = parts[1];
         }
-        else if ((parts = /^--upgrade=(true|false)$/.exec(argv)) != null) {
+        else if ((parts = /^--upgrade=(true|false)$/.exec(arg)) != null) {
             options.upgrade = parts[1] === "true" ? true : false;
         }
-        else if ((parts = /^--target=(ts|js)$/.exec(argv)) != null) {
+        else if ((parts = /^--target=(ts|js)$/.exec(arg)) != null) {
             options.target = parts[1];
         }
         else {
-            found_unrecognized_argument = true;
-            process.stderr.write("Unrecognized argument \"" + argv + "\"!\n");
+            unrecognizedArguments.push(arg);
         }
     }
-    if (found_unrecognized_argument) {
+    if (unrecognizedArguments.length > 0) {
+        process.stderr.write(`${app.name} v${app.version}\n`);
+        process.stderr.write(`\n`);
+        for (let unrecognizedArgument of unrecognizedArguments) {
+            process.stderr.write(`Unrecognized argument "${unrecognizedArgument}"!\n`);
+        }
+        process.stderr.write(`\n`);
         process.stderr.write(`Arguments:\n`);
         process.stderr.write(`	--eol=string\n`);
         process.stderr.write(`		Set end of line for generated code.\n`);
@@ -98,14 +105,14 @@ function run() {
     }
     let paths = findFiles(options.root);
     let result = paths.reduce((sum, path) => {
-        process.stderr.write("Processing \"" + path + "\"...\n");
+        process.stderr.write("Processing " + terminal.stylize("\"" + path + "\"", terminal.FG_YELLOW) + "...\n");
         try {
             if (options.upgrade) {
                 let input = libfs.readFileSync(path, "utf8");
                 let start = Date.now();
                 let generated = upgrade(input, options);
                 let duration = Date.now() - start;
-                process.stderr.write("	Upgrade: " + duration + " ms\n");
+                process.stderr.write("	Upgrade: " + terminal.stylize(duration, terminal.FG_CYAN) + " ms\n");
                 libfs.writeFileSync(path, generated, "utf8");
             }
             else {
@@ -113,7 +120,7 @@ function run() {
                 let start = Date.now();
                 let schema = parse(input);
                 let duration = Date.now() - start;
-                process.stderr.write("	Parse: " + duration + " ms\n");
+                process.stderr.write("	Parse: " + terminal.stylize(duration, terminal.FG_CYAN) + " ms\n");
                 let directory = libpath.join(libpath.dirname(path), filename(path));
                 let generated = libpath.join(libpath.dirname(path), filename(path) + ".ts");
                 libfs.rmSync(directory, { force: true, recursive: true });
