@@ -3,6 +3,7 @@
 		"composite": true,
 		"module": "commonjs",
 		"outDir": "./build/",
+		"resolveJsonModule": true,
 		"rootDir": "./source/",
 		"strict": true,
 		"target": "es6"

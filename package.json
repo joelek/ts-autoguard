@@ -18,7 +18,8 @@
 		"url": "https://github.com/joelek/ts-autoguard.git"
 	},
 	"scripts": {
-		"build": "npm run compile && npm run package",
+		"appgen": "node -p \"JSON.stringify((({ name, version }) => ({ name, version }))(require('./package.json')), null, '\t')\" > ./source/app.json",
+		"build": "npm run appgen && npm run compile && npm run package",
 		"clean": "rm -rf ./build/ ./node_modules/",
 		"compile": "rm -rf ./build/* && npx tsc --build",
 		"package": "rm -rf ./dist/* && cp -r ./build/* ./dist/",
