@@ -8,24 +8,24 @@ import * as libnet from "net";
 import * as libtls from "tls";
 import * as shared from "../lib-shared";
 export * from "../lib-shared/api";
-export declare type RequestLike = shared.api.AsyncBinary & {
+export type RequestLike = shared.api.AsyncBinary & {
     method?: string;
     rawHeaders: string[];
     socket: libnet.Socket | libtls.TLSSocket;
     url?: string;
 };
-export declare type ResponseLike = {
+export type ResponseLike = {
     end(): void;
     once(type: string, callback: () => void): void;
     setHeader(key: string, value: string | Array<string>): void;
     write(payload: Uint8Array): boolean;
     writeHead(status: number, headers?: Record<string, string | Array<string>> | Array<string>): void;
 };
-export declare type RequestListener = (request: RequestLike, response: ResponseLike) => Promise<void>;
-export declare type Auxillary = {
+export type RequestListener = (request: RequestLike, response: ResponseLike) => Promise<void>;
+export type Auxillary = {
     socket: RequestLike["socket"];
 };
-export declare type Endpoint = (raw: shared.api.RawRequest, auxillary: Auxillary) => {
+export type Endpoint = (raw: shared.api.RawRequest, auxillary: Auxillary) => {
     acceptsComponents(): boolean;
     acceptsMethod(): boolean;
     validateRequest(): Promise<{
@@ -50,7 +50,7 @@ export declare class ClientRequest<A extends shared.api.EndpointRequest> {
     payload(): Promise<shared.api.CollectedPayload<A["payload"]>>;
     socket(): Auxillary["socket"];
 }
-export declare type Server<A extends shared.api.RequestMap<A>, B extends shared.api.ResponseMap<B>> = {
+export type Server<A extends shared.api.RequestMap<A>, B extends shared.api.ResponseMap<B>> = {
     [C in keyof A & keyof B]: (request: ClientRequest<A[C]>) => Promise<B[C]>;
 };
 export interface RouteMatcher {
@@ -78,7 +78,7 @@ export declare class DynamicRouteMatcher<A> implements RouteMatcher {
     isSatisfied(): boolean;
 }
 export declare function combineNodeRawHeaders(raw: Array<string>): Array<string>;
-export declare type NodeRequestHandlerOptions = Partial<Omit<libhttps.RequestOptions, keyof libhttp.RequestOptions>>;
+export type NodeRequestHandlerOptions = Partial<Omit<libhttps.RequestOptions, keyof libhttp.RequestOptions>>;
 export declare function makeNodeRequestHandler(options?: NodeRequestHandlerOptions): shared.api.RequestHandler;
 export declare function acceptsComponents(components: Array<string>, matchers: Array<RouteMatcher>): boolean;
 export declare function acceptsMethod(one: string, two: string): boolean;
@@ -92,7 +92,7 @@ export declare function parseRangeHeader(value: shared.api.JSON, size: number): 
     size: number;
 };
 export declare function getContentTypeFromExtension(extension: string): string | undefined;
-export declare type DirectoryListing = {
+export type DirectoryListing = {
     components: Array<string>;
     directories: Array<{
         name: string;

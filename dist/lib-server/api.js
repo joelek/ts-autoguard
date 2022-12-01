@@ -264,28 +264,35 @@ function finalizeResponse(raw, defaultHeaders) {
 exports.finalizeResponse = finalizeResponse;
 ;
 function respond(httpResponse, raw, serverOptions) {
-    var e_1, _a;
-    var _b, _c, _d;
+    var _a, e_1, _b, _c;
+    var _d, _e, _f;
     return __awaiter(this, void 0, void 0, function* () {
         let rawHeaders = new Array();
-        for (let header of (_b = raw.headers) !== null && _b !== void 0 ? _b : []) {
+        for (let header of (_d = raw.headers) !== null && _d !== void 0 ? _d : []) {
             rawHeaders.push(...header);
         }
-        httpResponse.writeHead((_c = raw.status) !== null && _c !== void 0 ? _c : 200, rawHeaders);
+        httpResponse.writeHead((_e = raw.status) !== null && _e !== void 0 ? _e : 200, rawHeaders);
         try {
-            for (var _e = __asyncValues((_d = raw.payload) !== null && _d !== void 0 ? _d : []), _f; _f = yield _e.next(), !_f.done;) {
-                let chunk = _f.value;
-                if (!httpResponse.write(chunk)) {
-                    yield new Promise((resolve, reject) => {
-                        httpResponse.once("drain", resolve);
-                    });
+            for (var _g = true, _h = __asyncValues((_f = raw.payload) !== null && _f !== void 0 ? _f : []), _j; _j = yield _h.next(), _a = _j.done, !_a;) {
+                _c = _j.value;
+                _g = false;
+                try {
+                    let chunk = _c;
+                    if (!httpResponse.write(chunk)) {
+                        yield new Promise((resolve, reject) => {
+                            httpResponse.once("drain", resolve);
+                        });
+                    }
+                }
+                finally {
+                    _g = true;
                 }
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
         finally {
             try {
-                if (_f && !_f.done && (_a = _e.return)) yield _a.call(_e);
+                if (!_g && !_a && (_b = _h.return)) yield _b.call(_h);
             }
             finally { if (e_1) throw e_1.error; }
         }

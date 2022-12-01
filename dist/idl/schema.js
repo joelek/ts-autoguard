@@ -366,11 +366,6 @@ function generateServerRoute(route, options) {
     return lines.join(options.eol);
 }
 class Schema {
-    constructor(guards, tables, routes) {
-        this.guards = guards;
-        this.tables = tables;
-        this.routes = routes;
-    }
     getClientImports() {
         let imports = new Map();
         return Array.from(imports.entries())
@@ -439,6 +434,11 @@ class Schema {
         }))
             .filter((entry) => entry.path.length > 0)
             .map((entry) => (Object.assign(Object.assign({}, entry), { path: ["..", ...entry.path] })));
+    }
+    constructor(guards, tables, routes) {
+        this.guards = guards;
+        this.tables = tables;
+        this.routes = routes;
     }
     generateSchema(options) {
         let lines = new Array();

@@ -1,6 +1,6 @@
 import * as shared from "./shared";
 import * as tokenization from "./tokenization";
-export declare type TypeParser = (tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>) => Type;
+export type TypeParser = (tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>) => Type;
 export interface Type {
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
@@ -123,7 +123,7 @@ export declare class NumberLiteralType implements Type {
     getReferences(): Array<shared.Reference>;
     static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): NumberLiteralType;
 }
-export declare type ObjectMember = {
+export type ObjectMember = {
     type: Type;
     optional: boolean;
 };

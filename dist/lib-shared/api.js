@@ -408,22 +408,29 @@ function deserializeValue(value, plain) {
 exports.deserializeValue = deserializeValue;
 ;
 function collectPayload(binary) {
-    var binary_1, binary_1_1;
-    var e_1, _a;
+    var _a, binary_1, binary_1_1;
+    var _b, e_1, _c, _d;
     return __awaiter(this, void 0, void 0, function* () {
         let chunks = new Array();
         let length = 0;
         try {
-            for (binary_1 = __asyncValues(binary); binary_1_1 = yield binary_1.next(), !binary_1_1.done;) {
-                let chunk = binary_1_1.value;
-                chunks.push(chunk);
-                length += chunk.length;
+            for (_a = true, binary_1 = __asyncValues(binary); binary_1_1 = yield binary_1.next(), _b = binary_1_1.done, !_b;) {
+                _d = binary_1_1.value;
+                _a = false;
+                try {
+                    let chunk = _d;
+                    chunks.push(chunk);
+                    length += chunk.length;
+                }
+                finally {
+                    _a = true;
+                }
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
         finally {
             try {
-                if (binary_1_1 && !binary_1_1.done && (_a = binary_1.return)) yield _a.call(binary_1);
+                if (!_a && !_b && (_c = binary_1.return)) yield _c.call(binary_1);
             }
             finally { if (e_1) throw e_1.error; }
         }

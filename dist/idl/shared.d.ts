@@ -1,7 +1,7 @@
-export declare type Reference = {
+export type Reference = {
     path: Array<string>;
     typename: string;
 };
-export declare type Options = {
+export type Options = {
     eol: string;
 };

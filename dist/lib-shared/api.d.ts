@@ -22,15 +22,15 @@ export declare function decodeUndeclaredParameters(pairs: Array<[string, string]
 export declare function decodeHeaderValues(pairs: Iterable<[string, string]>, key: string, plain: boolean): Array<JSON>;
 export declare function decodeHeaderValue(pairs: Iterable<[string, string]>, key: string, plain: boolean): JSON;
 export declare function decodeUndeclaredHeaders(pairs: Array<[string, string]>, exclude: Array<string>): Record<string, JSON>;
-export declare type AsyncBinary = AsyncIterable<Uint8Array>;
+export type AsyncBinary = AsyncIterable<Uint8Array>;
 export declare const AsyncBinary: serialization.MessageGuard<AsyncBinary>;
-export declare type SyncBinary = Iterable<Uint8Array>;
+export type SyncBinary = Iterable<Uint8Array>;
 export declare const SyncBinary: serialization.MessageGuard<SyncBinary>;
 export declare const Binary: guards.UnionGuard<[AsyncBinary, SyncBinary]>;
-export declare type Binary = ReturnType<typeof Binary.as>;
-export declare type Primitive = boolean | number | string | undefined;
+export type Binary = ReturnType<typeof Binary.as>;
+export type Primitive = boolean | number | string | undefined;
 export declare const Primitive: serialization.MessageGuard<Primitive>;
-export declare type JSON = boolean | null | number | string | JSON[] | {
+export type JSON = boolean | null | number | string | JSON[] | {
     [key: string]: JSON;
 } | undefined;
 export declare const JSON: serialization.MessageGuard<JSON>;
@@ -38,34 +38,34 @@ export declare const Options: guards.RecordGuard<JSON>;
 export declare const Headers: guards.RecordGuard<JSON>;
 export declare function serializeValue(value: JSON, plain: boolean): string | undefined;
 export declare function deserializeValue(value: string | undefined, plain: boolean): JSON;
-export declare type RawRequest = {
+export type RawRequest = {
     method: string;
     components: Array<string>;
     parameters: Array<[string, string]>;
     headers: Array<[string, string]>;
     payload: Binary;
 };
-export declare type RawResponse = {
+export type RawResponse = {
     status: number;
     headers: Array<[string, string]>;
     payload: Binary;
 };
-export declare type Payload = JSON | Binary;
-export declare type CollectedPayload<A extends Payload> = A extends Binary ? Uint8Array : A;
-export declare type EndpointRequest = {
+export type Payload = JSON | Binary;
+export type CollectedPayload<A extends Payload> = A extends Binary ? Uint8Array : A;
+export type EndpointRequest = {
     options?: Record<string, JSON>;
     headers?: Record<string, JSON>;
     payload?: Payload;
 };
-export declare type EndpointResponse = {
+export type EndpointResponse = {
     status?: number;
     headers?: Record<string, JSON>;
     payload?: Payload;
 };
-export declare type RequestMap<A extends RequestMap<A>> = {
+export type RequestMap<A extends RequestMap<A>> = {
     [B in keyof A]: EndpointRequest;
 };
-export declare type ResponseMap<A extends ResponseMap<A>> = {
+export type ResponseMap<A extends ResponseMap<A>> = {
     [B in keyof A]: EndpointResponse;
 };
 export declare function collectPayload(binary: Binary): Promise<Uint8Array>;
@@ -75,15 +75,15 @@ export declare function compareArrays(one: Uint8Array, two: Uint8Array): boolean
 export declare function deserializeStringPayload(binary: Binary): Promise<string>;
 export declare function deserializePayload(binary: Binary): Promise<JSON>;
 export declare function wrapMessageGuard<A>(guard: serialization.MessageGuard<A>, log?: boolean): serialization.MessageGuard<A>;
-export declare type ClientOptions = {
+export type ClientOptions = {
     urlPrefix?: string;
     requestHandler?: RequestHandler;
     defaultHeaders?: Array<[string, string]>;
     debugMode?: boolean;
 };
-export declare type ServerOptions = {
+export type ServerOptions = {
     urlPrefix?: string;
     defaultHeaders?: Array<[string, string]>;
     debugMode?: boolean;
 };
-export declare type RequestHandler = (raw: RawRequest, clientOptions?: ClientOptions) => Promise<RawResponse>;
+export type RequestHandler = (raw: RawRequest, clientOptions?: ClientOptions) => Promise<RawResponse>;

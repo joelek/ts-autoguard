@@ -9,7 +9,7 @@ export declare class ServerResponse<A extends shared.api.EndpointResponse> {
     headers(): {} & A["headers"];
     payload(): Promise<shared.api.CollectedPayload<A["payload"]>>;
 }
-export declare type Client<A extends shared.api.RequestMap<A>, B extends shared.api.ResponseMap<B>> = {
+export type Client<A extends shared.api.RequestMap<A>, B extends shared.api.ResponseMap<B>> = {
     [C in keyof A & keyof B]: (request: A[C]) => Promise<ServerResponse<B[C]>>;
 };
 export declare function xhr(raw: shared.api.RawRequest, clientOptions?: shared.api.ClientOptions): Promise<shared.api.RawResponse>;

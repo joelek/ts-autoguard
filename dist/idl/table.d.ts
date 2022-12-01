@@ -1,7 +1,7 @@
 import * as shared from "./shared";
 import * as tokenization from "./tokenization";
 import * as types from "./types";
-export declare type TableMember = {
+export type TableMember = {
     key: types.StringLiteralType;
     value: types.NumberLiteralType;
 };

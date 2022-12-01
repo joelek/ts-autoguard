@@ -19,6 +19,15 @@ function removeWhitespaceAndComments(unfiltered) {
 exports.removeWhitespaceAndComments = removeWhitespaceAndComments;
 ;
 class Tokenizer {
+    peek() {
+        return this.tokens[this.offset];
+    }
+    read() {
+        if (this.offset >= this.tokens.length) {
+            throw `Unexpectedly reached end of stream!`;
+        }
+        return this.tokens[this.offset++];
+    }
     constructor(string) {
         let matchers = {
             "LS": /^([\r][\n]|[\r]|[\n])/su,
@@ -98,15 +107,6 @@ class Tokenizer {
         }
         this.tokens = removeWhitespaceAndComments(tokens);
         this.offset = 0;
-    }
-    peek() {
-        return this.tokens[this.offset];
-    }
-    read() {
-        if (this.offset >= this.tokens.length) {
-            throw `Unexpectedly reached end of stream!`;
-        }
-        return this.tokens[this.offset++];
     }
     newContext(producer) {
         let offset = this.offset;

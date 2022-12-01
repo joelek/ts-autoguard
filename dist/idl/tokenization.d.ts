@@ -1,14 +1,14 @@
 export declare const Families: ["LS", "WS", "(", ")", "[", "]", "{", "}", "?", "|", ".", "..", "/", "*", "&", ",", ":", ";", "<", ">", "=>", "<=", "any", "bigint", "binary", "boolean", "false", "guard", "integer", "null", "number", "plain", "route", "string", "table", "true", "undefined", "IDENTIFIER", "NUMBER_LITERAL", "STRING_LITERAL", "PATH_COMPONENT", "COMMENT"];
-export declare type Families = typeof Families;
-export declare type Family = typeof Families[number];
+export type Families = typeof Families;
+export type Family = typeof Families[number];
 export declare const IdentifierFamilies: ["any", "bigint", "binary", "boolean", "false", "guard", "integer", "null", "number", "plain", "route", "string", "table", "true", "undefined", "IDENTIFIER"];
-export declare type Token = {
+export type Token = {
     row: number;
     col: number;
     family: Family;
     value: string;
 };
-export declare type TypeMap<A extends [...string[]], B> = {
+export type TypeMap<A extends [...string[]], B> = {
     [_ in A[number]]: B;
 };
 export declare function removeWhitespaceAndComments(unfiltered: Array<Token>): Array<Token>;
