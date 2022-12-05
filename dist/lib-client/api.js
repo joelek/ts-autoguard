@@ -72,12 +72,22 @@ function xhr(raw, clientOptions, requestOptions) {
             };
             resolve(raw);
         };
-        xhr.onprogress = (event) => {
-            var _a;
-            if (event.lengthComputable) {
-                (_a = requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.onprogress) === null || _a === void 0 ? void 0 : _a.call(requestOptions, event.loaded / event.total);
-            }
-        };
+        if ((requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.onresponseprogess) !== undefined) {
+            xhr.onprogress = (event) => {
+                var _a;
+                if (event.lengthComputable) {
+                    (_a = requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.onresponseprogess) === null || _a === void 0 ? void 0 : _a.call(requestOptions, event.loaded / event.total);
+                }
+            };
+        }
+        if ((requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.onrequestprogress) !== undefined) {
+            xhr.upload.onprogress = (event) => {
+                var _a;
+                if (event.lengthComputable) {
+                    (_a = requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.onrequestprogress) === null || _a === void 0 ? void 0 : _a.call(requestOptions, event.loaded / event.total);
+                }
+            };
+        }
         let url = (_a = clientOptions === null || clientOptions === void 0 ? void 0 : clientOptions.urlPrefix) !== null && _a !== void 0 ? _a : "";
         url += shared.api.combineComponents(raw.components);
         url += shared.api.combineParameters(raw.parameters);
