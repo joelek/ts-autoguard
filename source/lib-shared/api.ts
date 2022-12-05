@@ -422,12 +422,16 @@ export type ResponseMap<A extends ResponseMap<A>> = {
 	[B in keyof A]: EndpointResponse;
 };
 
-export async function collectPayload(binary: Binary): Promise<Uint8Array> {
+export async function collectPayload(binary: Binary, maxByteLength?: number): Promise<Uint8Array> {
+	maxByteLength = maxByteLength ?? Infinity;
 	let chunks = new Array<Uint8Array>();
 	let length = 0;
 	for await (let chunk of binary) {
 		chunks.push(chunk);
 		length += chunk.length;
+		if (length > maxByteLength) {
+			throw `Expected payload to contain at most ${maxByteLength} bytes!`;
+		}
 	}
 	let payload = new Uint8Array(length);
 	let offset = 0;

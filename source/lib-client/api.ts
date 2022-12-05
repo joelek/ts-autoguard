@@ -24,12 +24,12 @@ export class ServerResponse<A extends shared.api.EndpointResponse> {
 		};
 	}
 
-	async payload(): Promise<shared.api.CollectedPayload<A["payload"]>> {
+	async payload(maxByteLength?: number): Promise<shared.api.CollectedPayload<A["payload"]>> {
 		if (this.collectedPayload !== undefined) {
 			return this.collectedPayload;
 		}
 		let payload = this.response.payload;
-		let collectedPayload = (this.collect ? await shared.api.collectPayload(payload as shared.api.Binary) : payload) as any;
+		let collectedPayload = (this.collect ? await shared.api.collectPayload(payload as shared.api.Binary, maxByteLength) : payload) as any;
 		this.collectedPayload = collectedPayload;
 		return collectedPayload;
 	}
