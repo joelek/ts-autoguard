@@ -154,7 +154,7 @@ function combineNodeRawHeaders(raw) {
 exports.combineNodeRawHeaders = combineNodeRawHeaders;
 ;
 function makeNodeRequestHandler(options) {
-    return (raw, clientOptions) => {
+    return (raw, clientOptions, requestOptions) => {
         var _a;
         let urlPrefix = (_a = clientOptions === null || clientOptions === void 0 ? void 0 : clientOptions.urlPrefix) !== null && _a !== void 0 ? _a : "";
         let lib = urlPrefix.startsWith("https:") ? libhttps : libhttp;

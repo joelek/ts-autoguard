@@ -53,7 +53,7 @@ class ServerResponse {
 }
 exports.ServerResponse = ServerResponse;
 ;
-function xhr(raw, clientOptions) {
+function xhr(raw, clientOptions, requestOptions) {
     return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
         var _a;
         // @ts-ignore
@@ -71,6 +71,12 @@ function xhr(raw, clientOptions) {
                 payload
             };
             resolve(raw);
+        };
+        xhr.onprogress = (event) => {
+            var _a;
+            if (event.lengthComputable) {
+                (_a = requestOptions === null || requestOptions === void 0 ? void 0 : requestOptions.onprogress) === null || _a === void 0 ? void 0 : _a.call(requestOptions, event.loaded / event.total);
+            }
         };
         let url = (_a = clientOptions === null || clientOptions === void 0 ? void 0 : clientOptions.urlPrefix) !== null && _a !== void 0 ? _a : "";
         url += shared.api.combineComponents(raw.components);

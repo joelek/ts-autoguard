@@ -187,7 +187,7 @@ function getContentTypeFromType(payload) {
 function generateClientRoute(route, options) {
     let lines = new Array();
     let tag = makeRouteTag(route);
-    lines.push(`async (request) => {`);
+    lines.push(`async (request, requestOptions) => {`);
     lines.push(`\tlet guard = autoguard.api.wrapMessageGuard(shared.Autoguard.Requests["${tag}"], clientOptions?.debugMode);`);
     lines.push(`\tguard.as(request, "request");`);
     lines.push(`\tlet method = "${route.method.method}";`);
@@ -244,7 +244,7 @@ function generateClientRoute(route, options) {
     lines.push(`\tlet defaultHeaders = clientOptions?.defaultHeaders?.slice() ?? [];`);
     lines.push(`\tdefaultHeaders.push(["Content-Type", "${getContentTypeFromType(route.request.payload)}"]);`);
     lines.push(`\tdefaultHeaders.push(["Accept", "${getContentTypeFromType(route.response.payload)}"]);`);
-    lines.push(`\tlet raw = await requestHandler(autoguard.api.finalizeRequest({ method, components, parameters, headers, payload }, defaultHeaders), clientOptions);`);
+    lines.push(`\tlet raw = await requestHandler(autoguard.api.finalizeRequest({ method, components, parameters, headers, payload }, defaultHeaders), clientOptions, requestOptions);`);
     lines.push(`\t{`);
     lines.push(`\t\tlet status = raw.status;`);
     lines.push(`\t\tlet headers: Record<string, autoguard.api.JSON> = {};`);
