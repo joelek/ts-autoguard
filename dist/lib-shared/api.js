@@ -407,10 +407,11 @@ function deserializeValue(value, plain) {
 }
 exports.deserializeValue = deserializeValue;
 ;
-function collectPayload(binary) {
+function collectPayload(binary, maxByteLength) {
     var _a, binary_1, binary_1_1;
     var _b, e_1, _c, _d;
     return __awaiter(this, void 0, void 0, function* () {
+        maxByteLength = maxByteLength !== null && maxByteLength !== void 0 ? maxByteLength : Infinity;
         let chunks = new Array();
         let length = 0;
         try {
@@ -421,6 +422,9 @@ function collectPayload(binary) {
                     let chunk = _d;
                     chunks.push(chunk);
                     length += chunk.length;
+                    if (length > maxByteLength) {
+                        throw `Expected payload to contain at most ${maxByteLength} bytes!`;
+                    }
                 }
                 finally {
                     _a = true;

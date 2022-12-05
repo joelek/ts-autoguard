@@ -47,7 +47,7 @@ export declare class ClientRequest<A extends shared.api.EndpointRequest> {
     constructor(request: A, collect: boolean, auxillary: Auxillary);
     options(): {} & A["options"];
     headers(): {} & A["headers"];
-    payload(): Promise<shared.api.CollectedPayload<A["payload"]>>;
+    payload(maxByteLength?: number): Promise<shared.api.CollectedPayload<A["payload"]>>;
     socket(): Auxillary["socket"];
 }
 export type Server<A extends shared.api.RequestMap<A>, B extends shared.api.ResponseMap<B>> = {

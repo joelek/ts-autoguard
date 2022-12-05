@@ -68,7 +68,7 @@ export type RequestMap<A extends RequestMap<A>> = {
 export type ResponseMap<A extends ResponseMap<A>> = {
     [B in keyof A]: EndpointResponse;
 };
-export declare function collectPayload(binary: Binary): Promise<Uint8Array>;
+export declare function collectPayload(binary: Binary, maxByteLength?: number): Promise<Uint8Array>;
 export declare function serializeStringPayload(string: string): Binary;
 export declare function serializePayload(payload: JSON): Binary;
 export declare function compareArrays(one: Uint8Array, two: Uint8Array): boolean;

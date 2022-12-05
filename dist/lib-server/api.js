@@ -69,13 +69,13 @@ class ClientRequest {
         let headers = this.request.headers;
         return Object.assign({}, headers);
     }
-    payload() {
+    payload(maxByteLength) {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.collectedPayload !== undefined) {
                 return this.collectedPayload;
             }
             let payload = this.request.payload;
-            let collectedPayload = (this.collect ? yield shared.api.collectPayload(payload) : payload);
+            let collectedPayload = (this.collect ? yield shared.api.collectPayload(payload, maxByteLength) : payload);
             this.collectedPayload = collectedPayload;
             return collectedPayload;
         });
