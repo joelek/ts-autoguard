@@ -520,4 +520,8 @@ export type ServerOptions = {
 	debugMode?: boolean;
 };
 
-export type RequestHandler = (raw: RawRequest, clientOptions?: ClientOptions) => Promise<RawResponse>;
+export type RequestOptions = {
+	onprogress?: (factor: number) => void;
+};
+
+export type RequestHandler = (raw: RawRequest, clientOptions?: ClientOptions, requestOptions?: RequestOptions) => Promise<RawResponse>;

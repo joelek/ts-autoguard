@@ -36,10 +36,16 @@ export class ServerResponse<A extends shared.api.EndpointResponse> {
 };
 
 export type Client<A extends shared.api.RequestMap<A>, B extends shared.api.ResponseMap<B>> = {
-	[C in keyof A & keyof B]: (request: A[C]) => Promise<ServerResponse<B[C]>>;
+	[C in keyof A & keyof B]: (request: A[C], requestOptions?: shared.api.RequestOptions) => Promise<ServerResponse<B[C]>>;
 };
 
-export function xhr(raw: shared.api.RawRequest, clientOptions?: shared.api.ClientOptions): Promise<shared.api.RawResponse> {
+type XHRProgressEvent = {
+	lengthComputable: boolean;
+	loaded: number;
+	total: number;
+};
+
+export function xhr(raw: shared.api.RawRequest, clientOptions?: shared.api.ClientOptions, requestOptions?: shared.api.RequestOptions): Promise<shared.api.RawResponse> {
 	return new Promise(async (resolve, reject) => {
 		// @ts-ignore
 		let xhr = new XMLHttpRequest();
@@ -56,6 +62,11 @@ export function xhr(raw: shared.api.RawRequest, clientOptions?: shared.api.Clien
 				payload
 			};
 			resolve(raw);
+		};
+		xhr.onprogress = (event: XHRProgressEvent) => {
+			if (event.lengthComputable) {
+				requestOptions?.onprogress?.(event.loaded / event.total);
+			}
 		};
 		let url = clientOptions?.urlPrefix ?? "";
 		url += shared.api.combineComponents(raw.components);

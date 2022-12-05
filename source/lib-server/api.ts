@@ -188,7 +188,7 @@ export function combineNodeRawHeaders(raw: Array<string>): Array<string> {
 export type NodeRequestHandlerOptions = Partial<Omit<libhttps.RequestOptions, keyof libhttp.RequestOptions>>;
 
 export function makeNodeRequestHandler(options?: NodeRequestHandlerOptions): shared.api.RequestHandler {
-	return (raw, clientOptions) => {
+	return (raw, clientOptions, requestOptions) => {
 		let urlPrefix = clientOptions?.urlPrefix ?? "";
 		let lib = urlPrefix.startsWith("https:") ? libhttps : libhttp;
 		return new Promise(async (resolve, reject) => {
