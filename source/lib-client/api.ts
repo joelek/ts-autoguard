@@ -63,11 +63,20 @@ export function xhr(raw: shared.api.RawRequest, clientOptions?: shared.api.Clien
 			};
 			resolve(raw);
 		};
-		xhr.onprogress = (event: XHRProgressEvent) => {
-			if (event.lengthComputable) {
-				requestOptions?.onprogress?.(event.loaded / event.total);
-			}
-		};
+		if (requestOptions?.onresponseprogess !== undefined) {
+			xhr.onprogress = (event: XHRProgressEvent) => {
+				if (event.lengthComputable) {
+					requestOptions?.onresponseprogess?.(event.loaded / event.total);
+				}
+			};
+		}
+		if (requestOptions?.onrequestprogress !== undefined) {
+			xhr.upload.onprogress = (event: XHRProgressEvent) => {
+				if (event.lengthComputable) {
+					requestOptions?.onrequestprogress?.(event.loaded / event.total);
+				}
+			};
+		}
 		let url = clientOptions?.urlPrefix ?? "";
 		url += shared.api.combineComponents(raw.components);
 		url += shared.api.combineParameters(raw.parameters);

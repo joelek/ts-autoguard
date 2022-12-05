@@ -521,7 +521,8 @@ export type ServerOptions = {
 };
 
 export type RequestOptions = {
-	onprogress?: (factor: number) => void;
+	onrequestprogress?: (factor: number) => void;
+	onresponseprogess?: (factor: number) => void;
 };
 
 export type RequestHandler = (raw: RawRequest, clientOptions?: ClientOptions, requestOptions?: RequestOptions) => Promise<RawResponse>;
