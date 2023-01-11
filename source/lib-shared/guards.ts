@@ -279,7 +279,7 @@ export const Number = new NumberGuard();
 export type NumberLiteral<A extends number> = A;
 
 export class NumberLiteralGuard<A extends number> extends serialization.MessageGuardBase<NumberLiteral<A>> {
-	readonly value : A;
+	readonly value: A;
 
 	constructor(value: A) {
 		super();
