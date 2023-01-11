@@ -371,6 +371,9 @@ NB: This project targets TypeScript 4 in strict mode.
 * Migrate functionality used in Nexus to Nexus.
 * Add support for bigint and binary in API.
 * Add helper guards for optional primitives.
+* Remove upgrade feature from CLI.
+* Remove transpilation feature from CLI.
+* Rework code generation to provide support for additional languages.
 
 ## Syntax
 
