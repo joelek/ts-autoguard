@@ -165,7 +165,7 @@ export function getResponseType(route: route.Route): types.Type {
 		}
 	}
 	response.add("status", {
-		type: types.NumberType.INSTANCE,
+		type: types.IntegerType.INSTANCE,
 		optional: true
 	});
 	response.add("headers", {
