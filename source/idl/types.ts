@@ -21,6 +21,7 @@ export const Type = {
 				BooleanType.parse,
 				BooleanLiteralType.parse,
 				IntegerType.parse,
+				IntegerLiteralType.parse,
 				NullType.parse,
 				NumberType.parse,
 				NumberLiteralType.parse,
@@ -332,6 +333,39 @@ export class IntegerType implements Type {
 		return tokenizer.newContext((read, peek) => {
 			tokenization.expect(read(), "integer");
 			return IntegerType.INSTANCE;
+		});
+	}
+};
+
+export class IntegerLiteralType implements Type {
+	value: number;
+
+	constructor(value: number) {
+		this.value = value;
+	}
+
+	generateSchema(options: shared.Options): string {
+		return "" + this.value;
+	}
+
+	generateType(options: shared.Options): string {
+		return `autoguard.guards.IntegerLiteral<${this.value}>`;
+	}
+
+	generateTypeGuard(options: shared.Options): string {
+		let lines = new Array<string>();
+		lines.push("autoguard.guards.IntegerLiteral.of(" + this.value + ")");
+		return lines.join(options.eol);
+	}
+
+	getReferences(): Array<shared.Reference> {
+		return [];
+	}
+
+	static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): IntegerLiteralType {
+		return tokenizer.newContext((read, peek) => {
+			let value = tokenization.expect(read(), "NUMBER_LITERAL").value;
+			return new IntegerLiteralType(Number.parseInt(value));
 		});
 	}
 };

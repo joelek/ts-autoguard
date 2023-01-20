@@ -401,6 +401,7 @@ BooleanType = "boolean"
 BooleanLiteralType = "true" or "false"
 GroupType = "(" Type ")"
 IntegerType = "integer"
+IntegerLiteralType = Digit or (DigitPositive Digit*)
 IntersectionType = Type "&" Type
 NullType = "null"
 NumberType = "number"

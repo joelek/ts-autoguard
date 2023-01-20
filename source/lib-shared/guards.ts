@@ -202,6 +202,34 @@ export class IntegerGuard extends serialization.MessageGuardBase<Integer> {
 
 export const Integer = new IntegerGuard();
 
+export type IntegerLiteral<A extends number> = A;
+
+export class IntegerLiteralGuard<A extends number> extends serialization.MessageGuardBase<IntegerLiteral<A>> {
+	readonly value: A;
+
+	constructor(value: A) {
+		super();
+		this.value = value;
+	}
+
+	as(subject: any, path: string = ""): IntegerLiteral<A> {
+		if (subject === this.value) {
+			return subject;
+		}
+		throw new serialization.MessageGuardError(this, subject, path);
+	}
+
+	ts(eol: string = "\n"): string {
+		return `${this.value}`;
+	}
+};
+
+export const IntegerLiteral = {
+	of<A extends number>(value: A): IntegerLiteralGuard<A> {
+		return new IntegerLiteralGuard(value);
+	}
+};
+
 export type Intersection<A extends TupleOf<serialization.MessageMap<any>[]>> = IntersectionOf<A>;
 
 export class IntersectionGuard<A extends TupleOf<serialization.MessageMap<any>[]>> extends serialization.MessageGuardBase<Intersection<A>> {
