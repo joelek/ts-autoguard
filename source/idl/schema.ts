@@ -6,7 +6,7 @@ import * as table from "./table";
 import * as tokenization from "./tokenization";
 import * as types from "./types";
 
-class BinaryPayloadType implements types.Type {
+export class BinaryPayloadType implements types.Type {
 	constructor() {
 
 	}
@@ -30,7 +30,7 @@ class BinaryPayloadType implements types.Type {
 	static readonly INSTANCE = new BinaryPayloadType();
 };
 
-function areAllMembersOptional(object: types.ObjectType): boolean {
+export function areAllMembersOptional(object: types.ObjectType): boolean {
 	for (let [key, value] of object.members) {
 		if (!value.optional) {
 			return false;
@@ -39,7 +39,7 @@ function areAllMembersOptional(object: types.ObjectType): boolean {
 	return true;
 }
 
-function makeRouteTag(route: route.Route): string {
+export function makeRouteTag(route: route.Route): string {
 	if (route.alias.identifier !== "") {
 		return route.alias.identifier;
 	}
@@ -53,7 +53,7 @@ function makeRouteTag(route: route.Route): string {
 	return `${route.method.method}:${components.join("")}`;
 }
 
-function getRequestType(route: route.Route): types.Type {
+export function getRequestType(route: route.Route): types.Type {
 	let request = new types.ObjectType();
 	let options = new types.ObjectType();
 	for (let component of route.path.components) {
@@ -141,7 +141,7 @@ function getRequestType(route: route.Route): types.Type {
 	return request;
 }
 
-function getResponseType(route: route.Route): types.Type {
+export function getResponseType(route: route.Route): types.Type {
 	let response = new types.ObjectType();
 	let headers = new types.ObjectType();
 	for (let header of route.response.headers.headers) {
@@ -183,7 +183,7 @@ function getResponseType(route: route.Route): types.Type {
 	return response;
 }
 
-function getContentTypeFromType(payload: types.Type | types.BinaryType): string {
+export function getContentTypeFromType(payload: types.Type): string {
 	if (payload instanceof types.BinaryType) {
 		return "application/octet-stream";
 	}
