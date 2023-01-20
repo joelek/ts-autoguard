@@ -80,7 +80,7 @@ function run(): void {
 			options.root = parts[1];
 		} else if ((parts = /^--upgrade=(true|false)$/.exec(arg)) != null) {
 			options.upgrade = parts[1] === "true" ? true : false;
-		} else if ((parts = /^--target=(ts|js)$/.exec(arg)) != null) {
+		} else if ((parts = /^--target=(ts|js|php:api)$/.exec(arg)) != null) {
 			options.target = parts[1];
 		} else {
 			unrecognizedArguments.push(arg);
@@ -100,8 +100,8 @@ function run(): void {
 		process.stderr.write(`		Set root directory for source code traversal.\n`);
 		process.stderr.write(`	--upgrade=boolean\n`);
 		process.stderr.write(`		Upgrade legacy schema files with current syntax.\n`);
-		process.stderr.write(`	--target="ts"|"js"\n`);
-		process.stderr.write(`		Set target language for generated code.\n`);
+		process.stderr.write(`	--target="ts"|"js"|"php:api"\n`);
+		process.stderr.write(`		Set target for generated code.\n`);
 		process.exit(0);
 	}
 	let paths = findFiles(options.root);
@@ -122,22 +122,33 @@ function run(): void {
 				let duration = Date.now() - start;
 				process.stderr.write("	Parse: " + terminal.stylize(duration, terminal.FG_CYAN) + " ms\n");
 				let directory = libpath.join(libpath.dirname(path), filename(path));
-				let generated = libpath.join(libpath.dirname(path), filename(path) + ".ts");
-				libfs.rmSync(directory, { force: true, recursive: true });
-				libfs.rmSync(generated, { force: true, recursive: true });
-				libfs.mkdirSync(directory, { recursive: true });
-				let client = schema.generateClient(options);
-				let shared = schema.generateShared(options);
-				let server = schema.generateServer(options);
-				if (options.target === "js") {
-					client = transpile(client);
-					shared = transpile(shared);
-					server = transpile(server);
-				}
-				libfs.writeFileSync(libpath.join(directory, "index.ts"), shared, "utf8");
-				if (schema.routes.length > 0) {
-					libfs.writeFileSync(libpath.join(directory, "client.ts"), client, "utf8");
-					libfs.writeFileSync(libpath.join(directory, "server.ts"), server, "utf8");
+				if (options.target === "ts" || options.target === "js") {
+					let generated = libpath.join(libpath.dirname(path), filename(path) + ".ts");
+					libfs.rmSync(directory, { force: true, recursive: true });
+					libfs.rmSync(generated, { force: true, recursive: true });
+					libfs.mkdirSync(directory, { recursive: true });
+					let client = schema.generateClient(options);
+					let shared = schema.generateShared(options);
+					let server = schema.generateServer(options);
+					if (options.target === "js") {
+						client = transpile(client);
+						shared = transpile(shared);
+						server = transpile(server);
+					}
+					libfs.writeFileSync(libpath.join(directory, "index.ts"), shared, "utf8");
+					if (schema.routes.length > 0) {
+						libfs.writeFileSync(libpath.join(directory, "client.ts"), client, "utf8");
+						libfs.writeFileSync(libpath.join(directory, "server.ts"), server, "utf8");
+					}
+				} else if (options.target === "php:api") {
+					let files = new idl.generators.php.api.PHPAPIGenerator().generate(schema, options.eol);
+					for (let file of files) {
+						let path = libpath.join(directory, file.name);
+						if (!libfs.existsSync(path) || file.overwrite) {
+							libfs.mkdirSync(libpath.dirname(path), { recursive: true });
+							libfs.writeFileSync(path, file.content, "utf-8");
+						}
+					}
 				}
 			}
 			return sum + 0;
