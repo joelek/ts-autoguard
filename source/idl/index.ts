@@ -1,3 +1,4 @@
+export * as generators from "./generators";
 export * as guard from "./guard";
 export * as is from "./is";
 export * as route from "./route";
