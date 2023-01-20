@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Schema = void 0;
+exports.Schema = exports.getContentTypeFromType = exports.getResponseType = exports.getRequestType = exports.makeRouteTag = exports.areAllMembersOptional = exports.BinaryPayloadType = void 0;
 const guard = require("./guard");
 const is = require("./is");
 const route = require("./route");
@@ -23,6 +23,7 @@ class BinaryPayloadType {
         return [];
     }
 }
+exports.BinaryPayloadType = BinaryPayloadType;
 BinaryPayloadType.INSTANCE = new BinaryPayloadType();
 ;
 function areAllMembersOptional(object) {
@@ -33,6 +34,7 @@ function areAllMembersOptional(object) {
     }
     return true;
 }
+exports.areAllMembersOptional = areAllMembersOptional;
 function makeRouteTag(route) {
     if (route.alias.identifier !== "") {
         return route.alias.identifier;
@@ -47,6 +49,7 @@ function makeRouteTag(route) {
     });
     return `${route.method.method}:${components.join("")}`;
 }
+exports.makeRouteTag = makeRouteTag;
 function getRequestType(route) {
     let request = new types.ObjectType();
     let options = new types.ObjectType();
@@ -134,6 +137,7 @@ function getRequestType(route) {
     });
     return request;
 }
+exports.getRequestType = getRequestType;
 function getResponseType(route) {
     let response = new types.ObjectType();
     let headers = new types.ObjectType();
@@ -158,7 +162,7 @@ function getResponseType(route) {
         }
     }
     response.add("status", {
-        type: types.NumberType.INSTANCE,
+        type: types.IntegerType.INSTANCE,
         optional: true
     });
     response.add("headers", {
@@ -175,6 +179,7 @@ function getResponseType(route) {
     });
     return response;
 }
+exports.getResponseType = getResponseType;
 function getContentTypeFromType(payload) {
     if (payload instanceof types.BinaryType) {
         return "application/octet-stream";
@@ -184,6 +189,7 @@ function getContentTypeFromType(payload) {
     }
     return "application/json; charset=utf-8";
 }
+exports.getContentTypeFromType = getContentTypeFromType;
 function generateClientRoute(route, options) {
     let lines = new Array();
     let tag = makeRouteTag(route);

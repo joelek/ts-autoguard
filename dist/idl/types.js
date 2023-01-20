@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PlainType = exports.Options = exports.Headers = exports.UnionType = exports.UndefinedType = exports.TupleType = exports.StringLiteralType = exports.StringType = exports.ReferenceType = exports.RecordType = exports.ObjectType = exports.NumberLiteralType = exports.NumberType = exports.NullType = exports.IntersectionType = exports.IntegerType = exports.GroupType = exports.BooleanLiteralType = exports.BooleanType = exports.BinaryType = exports.BigIntType = exports.ArrayType = exports.AnyType = exports.Type = void 0;
+exports.PlainType = exports.Options = exports.Headers = exports.UnionType = exports.UndefinedType = exports.TupleType = exports.StringLiteralType = exports.StringType = exports.ReferenceType = exports.RecordType = exports.ObjectType = exports.NumberLiteralType = exports.NumberType = exports.NullType = exports.IntersectionType = exports.IntegerLiteralType = exports.IntegerType = exports.GroupType = exports.BooleanLiteralType = exports.BooleanType = exports.BinaryType = exports.BigIntType = exports.ArrayType = exports.AnyType = exports.Type = void 0;
 const tokenization = require("./tokenization");
 ;
 exports.Type = {
@@ -15,6 +15,7 @@ exports.Type = {
                 BooleanType.parse,
                 BooleanLiteralType.parse,
                 IntegerType.parse,
+                IntegerLiteralType.parse,
                 NullType.parse,
                 NumberType.parse,
                 NumberLiteralType.parse,
@@ -282,6 +283,33 @@ class IntegerType {
 }
 exports.IntegerType = IntegerType;
 IntegerType.INSTANCE = new IntegerType();
+;
+class IntegerLiteralType {
+    constructor(value) {
+        this.value = value;
+    }
+    generateSchema(options) {
+        return "" + this.value;
+    }
+    generateType(options) {
+        return `autoguard.guards.IntegerLiteral<${this.value}>`;
+    }
+    generateTypeGuard(options) {
+        let lines = new Array();
+        lines.push("autoguard.guards.IntegerLiteral.of(" + this.value + ")");
+        return lines.join(options.eol);
+    }
+    getReferences() {
+        return [];
+    }
+    static parse(tokenizer, parsers) {
+        return tokenizer.newContext((read, peek) => {
+            let value = tokenization.expect(read(), "NUMBER_LITERAL").value;
+            return new IntegerLiteralType(Number.parseInt(value));
+        });
+    }
+}
+exports.IntegerLiteralType = IntegerLiteralType;
 ;
 class IntersectionType {
     constructor(types = []) {

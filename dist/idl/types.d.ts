@@ -86,6 +86,15 @@ export declare class IntegerType implements Type {
     static readonly INSTANCE: IntegerType;
     static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): IntegerType;
 }
+export declare class IntegerLiteralType implements Type {
+    value: number;
+    constructor(value: number);
+    generateSchema(options: shared.Options): string;
+    generateType(options: shared.Options): string;
+    generateTypeGuard(options: shared.Options): string;
+    getReferences(): Array<shared.Reference>;
+    static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): IntegerLiteralType;
+}
 export declare class IntersectionType implements Type {
     types: Set<Type>;
     constructor(types?: Iterable<Type>);

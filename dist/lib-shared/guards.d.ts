@@ -83,6 +83,16 @@ export declare class IntegerGuard extends serialization.MessageGuardBase<Integer
     ts(eol?: string): string;
 }
 export declare const Integer: IntegerGuard;
+export type IntegerLiteral<A extends number> = A;
+export declare class IntegerLiteralGuard<A extends number> extends serialization.MessageGuardBase<IntegerLiteral<A>> {
+    readonly value: A;
+    constructor(value: A);
+    as(subject: any, path?: string): IntegerLiteral<A>;
+    ts(eol?: string): string;
+}
+export declare const IntegerLiteral: {
+    of<A extends number>(value: A): IntegerLiteralGuard<A>;
+};
 export type Intersection<A extends TupleOf<serialization.MessageMap<any>[]>> = IntersectionOf<A>;
 export declare class IntersectionGuard<A extends TupleOf<serialization.MessageMap<any>[]>> extends serialization.MessageGuardBase<Intersection<A>> {
     readonly guards: TupleOf<serialization.MessageGuardTuple<A>>;

@@ -22,7 +22,7 @@ class Quantifier {
     }
     getMinMax() {
         if (this.kind === "repeated") {
-            return { min: 0, max: Infinity };
+            return { min: 0, max: 255 };
         }
         if (this.kind === "optional") {
             return { min: 0, max: 1 };

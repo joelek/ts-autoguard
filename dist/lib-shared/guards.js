@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Union = exports.UnionGuard = exports.Undefined = exports.UndefinedGuard = exports.Tuple = exports.TupleGuard = exports.StringLiteral = exports.StringLiteralGuard = exports.String = exports.StringGuard = exports.Reference = exports.ReferenceGuard = exports.Record = exports.RecordGuard = exports.Object = exports.ObjectGuard = exports.NumberLiteral = exports.NumberLiteralGuard = exports.Number = exports.NumberGuard = exports.Null = exports.NullGuard = exports.Intersection = exports.IntersectionGuard = exports.Integer = exports.IntegerGuard = exports.Group = exports.GroupGuard = exports.BooleanLiteral = exports.BooleanLiteralGuard = exports.Boolean = exports.BooleanGuard = exports.Binary = exports.BinaryGuard = exports.BigInt = exports.BigIntGuard = exports.Array = exports.ArrayGuard = exports.Any = exports.AnyGuard = void 0;
+exports.Union = exports.UnionGuard = exports.Undefined = exports.UndefinedGuard = exports.Tuple = exports.TupleGuard = exports.StringLiteral = exports.StringLiteralGuard = exports.String = exports.StringGuard = exports.Reference = exports.ReferenceGuard = exports.Record = exports.RecordGuard = exports.Object = exports.ObjectGuard = exports.NumberLiteral = exports.NumberLiteralGuard = exports.Number = exports.NumberGuard = exports.Null = exports.NullGuard = exports.Intersection = exports.IntersectionGuard = exports.IntegerLiteral = exports.IntegerLiteralGuard = exports.Integer = exports.IntegerGuard = exports.Group = exports.GroupGuard = exports.BooleanLiteral = exports.BooleanLiteralGuard = exports.Boolean = exports.BooleanGuard = exports.Binary = exports.BinaryGuard = exports.BigInt = exports.BigIntGuard = exports.Array = exports.ArrayGuard = exports.Any = exports.AnyGuard = void 0;
 const serialization = require("./serialization");
 class AnyGuard extends serialization.MessageGuardBase {
     constructor() {
@@ -152,6 +152,28 @@ class IntegerGuard extends serialization.MessageGuardBase {
 exports.IntegerGuard = IntegerGuard;
 ;
 exports.Integer = new IntegerGuard();
+class IntegerLiteralGuard extends serialization.MessageGuardBase {
+    constructor(value) {
+        super();
+        this.value = value;
+    }
+    as(subject, path = "") {
+        if (subject === this.value) {
+            return subject;
+        }
+        throw new serialization.MessageGuardError(this, subject, path);
+    }
+    ts(eol = "\n") {
+        return `${this.value}`;
+    }
+}
+exports.IntegerLiteralGuard = IntegerLiteralGuard;
+;
+exports.IntegerLiteral = {
+    of(value) {
+        return new IntegerLiteralGuard(value);
+    }
+};
 class IntersectionGuard extends serialization.MessageGuardBase {
     constructor(...guards) {
         super();

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.types = exports.tokenization = exports.table = exports.shared = exports.schema = exports.route = exports.is = exports.guard = void 0;
+exports.types = exports.tokenization = exports.table = exports.shared = exports.schema = exports.route = exports.is = exports.guard = exports.generators = void 0;
+exports.generators = require("./generators");
 exports.guard = require("./guard");
 exports.is = require("./is");
 exports.route = require("./route");
