@@ -1,6 +1,6 @@
 import { Route } from "../../route";
 import { BinaryPayloadType, getContentTypeFromType, getRequestType, getResponseType, Schema } from "../../schema";
-import { ArrayType, BinaryType, BooleanLiteralType, BooleanType, Headers, IntegerLiteralType, IntegerType, IntersectionType, NullType, NumberLiteralType, NumberType, ObjectType, Options, PlainType, ReferenceType, StringLiteralType, StringType, Type, UndefinedType, UnionType } from "../../types";
+import { AnyType, ArrayType, BinaryType, BooleanLiteralType, BooleanType, Headers, IntegerLiteralType, IntegerType, IntersectionType, NullType, NumberLiteralType, NumberType, ObjectType, Options, PlainType, RecordType, ReferenceType, StringLiteralType, StringType, Type, UndefinedType, UnionType } from "../../types";
 import { File, Generator } from "../generator";
 
 export class PHPAPIGenerator extends Generator {
@@ -10,7 +10,9 @@ export class PHPAPIGenerator extends Generator {
 
 	generateTypeGuard(type: Type, eol: string): string {
 		let lines = [] as Array<string>;
-		if (type instanceof ArrayType) {
+		if (type instanceof AnyType) {
+			lines.push(`new AnyGuard()`);
+		} else if (type instanceof ArrayType) {
 			lines.push(`new ArrayGuard(`);
 			lines.push(`\t${this.generateTypeGuard(type.type, eol + "\t")}`);
 			lines.push(`)`);
@@ -47,6 +49,10 @@ export class PHPAPIGenerator extends Generator {
 			lines.push(`new ObjectGuard((object) [${content}])`);
 		} else if (type instanceof PlainType) {
 			lines.push(`new StringGuard()`);
+		} else if (type instanceof RecordType) {
+			lines.push(`new RecordGuard(`);
+			lines.push(`\t${this.generateTypeGuard(type.type, eol + "\t")}`);
+			lines.push(`)`);
 		} else if (type instanceof ReferenceType) {
 			lines.push(`new ReferenceGuard(function () {`);
 			lines.push(`\tglobal $${type.typename};`);
@@ -306,6 +312,14 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(`	}`);
 		lines.push(`}`);
 		lines.push(``);
+		lines.push(`class AnyGuard extends Guard {`);
+		lines.push(`	function __construct() {}`);
+		lines.push(``);
+		lines.push(`	function as(mixed &$subject, ?string $path = ""): mixed {`);
+		lines.push(`		return $subject;`);
+		lines.push(`	}`);
+		lines.push(`}`);
+		lines.push(``);
 		lines.push(`class ArrayGuard extends Guard {`);
 		lines.push(`	protected Guard $guard;`);
 		lines.push(``);
@@ -435,6 +449,22 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(`			$member = $undefined;`);
 		lines.push(`			Guard::access_member($subject, $key, $member);`);
 		lines.push(`			$guard->as($member, $path . ".$key");`);
+		lines.push(`		}`);
+		lines.push(`		return $subject;`);
+		lines.push(`	}`);
+		lines.push(`}`);
+		lines.push(``);
+		lines.push(`class RecordGuard extends Guard {`);
+		lines.push(`	protected Guard $guard;`);
+		lines.push(``);
+		lines.push(`	function __construct(Guard $guard) {`);
+		lines.push(`		$this->guard = $guard;`);
+		lines.push(`	}`);
+		lines.push(``);
+		lines.push(`	function as(mixed &$subject, ?string $path = ""): mixed {`);
+		lines.push(`		Guard::check_typename($subject, $path, "object");`);
+		lines.push(`		foreach ($subject as $key => $member) {`);
+		lines.push(`			$this->guard->as($member, $path . ".$key");`);
 		lines.push(`		}`);
 		lines.push(`		return $subject;`);
 		lines.push(`	}`);
