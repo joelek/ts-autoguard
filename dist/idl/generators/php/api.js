@@ -10,7 +10,10 @@ class PHPAPIGenerator extends generator_1.Generator {
     }
     generateTypeGuard(type, eol) {
         let lines = [];
-        if (type instanceof types_1.ArrayType) {
+        if (type instanceof types_1.AnyType) {
+            lines.push(`new AnyType()`);
+        }
+        else if (type instanceof types_1.ArrayType) {
             lines.push(`new ArrayGuard(`);
             lines.push(`\t${this.generateTypeGuard(type.type, eol + "\t")}`);
             lines.push(`)`);
@@ -58,6 +61,11 @@ class PHPAPIGenerator extends generator_1.Generator {
         }
         else if (type instanceof types_1.PlainType) {
             lines.push(`new StringGuard()`);
+        }
+        else if (type instanceof types_1.RecordType) {
+            lines.push(`new RecordGuard(`);
+            lines.push(`\t${this.generateTypeGuard(type.type, eol + "\t")}`);
+            lines.push(`)`);
         }
         else if (type instanceof types_1.ReferenceType) {
             lines.push(`new ReferenceGuard(function () {`);
@@ -324,6 +332,14 @@ class PHPAPIGenerator extends generator_1.Generator {
         lines.push(`	}`);
         lines.push(`}`);
         lines.push(``);
+        lines.push(`class AnyGuard extends Guard {`);
+        lines.push(`	function __construct() {}`);
+        lines.push(``);
+        lines.push(`	function as(mixed &$subject, ?string $path = ""): mixed {`);
+        lines.push(`		return $subject;`);
+        lines.push(`	}`);
+        lines.push(`}`);
+        lines.push(``);
         lines.push(`class ArrayGuard extends Guard {`);
         lines.push(`	protected Guard $guard;`);
         lines.push(``);
@@ -453,6 +469,22 @@ class PHPAPIGenerator extends generator_1.Generator {
         lines.push(`			$member = $undefined;`);
         lines.push(`			Guard::access_member($subject, $key, $member);`);
         lines.push(`			$guard->as($member, $path . ".$key");`);
+        lines.push(`		}`);
+        lines.push(`		return $subject;`);
+        lines.push(`	}`);
+        lines.push(`}`);
+        lines.push(``);
+        lines.push(`class RecordGuard extends Guard {`);
+        lines.push(`	protected Guard $guard;`);
+        lines.push(``);
+        lines.push(`	function __construct(Guard $guard) {`);
+        lines.push(`		$this->guard = $guard;`);
+        lines.push(`	}`);
+        lines.push(``);
+        lines.push(`	function as(mixed &$subject, ?string $path = ""): mixed {`);
+        lines.push(`		Guard::check_typename($subject, $path, "object");`);
+        lines.push(`		foreach ($subject as $key => $member) {`);
+        lines.push(`			$this->guard->as($member, $path . ".$key");`);
         lines.push(`		}`);
         lines.push(`		return $subject;`);
         lines.push(`	}`);
