@@ -11,7 +11,7 @@ class PHPAPIGenerator extends generator_1.Generator {
     generateTypeGuard(type, eol) {
         let lines = [];
         if (type instanceof types_1.AnyType) {
-            lines.push(`new AnyType()`);
+            lines.push(`new AnyGuard()`);
         }
         else if (type instanceof types_1.ArrayType) {
             lines.push(`new ArrayGuard(`);
