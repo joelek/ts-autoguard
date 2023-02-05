@@ -104,7 +104,8 @@ export type Server<A extends shared.api.RequestMap<A>, B extends shared.api.Resp
 };
 
 export interface RouteMatcher {
-	acceptComponent(component: string): boolean;
+	acceptComponent(component: string, collect?: boolean): boolean;
+	acceptsComponent(component: string): boolean;
 	getValue(): shared.api.JSON;
 	isSatisfied(): boolean;
 };
@@ -118,12 +119,21 @@ export class StaticRouteMatcher implements RouteMatcher {
 		this.accepted = false;
 	}
 
-	acceptComponent(component: string): boolean {
+	acceptComponent(component: string, collect: boolean = true): boolean {
 		if (this.accepted) {
 			return false;
 		}
-		this.accepted = component === this.string;
-		return this.accepted;
+		if (component === this.string) {
+			if (collect) {
+				this.accepted = true;
+			}
+			return true;
+		}
+		return false;
+	}
+
+	acceptsComponent(component: string): boolean {
+		return this.acceptComponent(component, false);
 	}
 
 	getValue(): shared.api.JSON {
@@ -150,18 +160,24 @@ export class DynamicRouteMatcher<A> implements RouteMatcher {
 		this.values = new Array<shared.api.JSON>();
 	}
 
-	acceptComponent(component: string): boolean {
+	acceptComponent(component: string, collect: boolean = true): boolean {
 		if (this.values.length >= this.maxOccurences) {
 			return false;
 		}
 		try {
 			let value = shared.api.deserializeValue(component, this.plain);
 			if (this.guard.is(value)) {
-				this.values.push(value);
+				if (collect) {
+					this.values.push(value);
+				}
 				return true;
 			}
 		} catch (error) {}
 		return false;
+	}
+
+	acceptsComponent(component: string): boolean {
+		return this.acceptComponent(component, false);
 	}
 
 	getValue(): shared.api.JSON {
@@ -237,33 +253,43 @@ export function makeNodeRequestHandler(options?: NodeRequestHandlerOptions): sha
 };
 
 export function acceptsComponents(components: Array<string>, matchers: Array<RouteMatcher>): boolean {
-	let currentMatcher = 0;
-	outer: for (let component of components) {
+	let i = 0;
+	for (let component of components) {
 		let decoded = decodeURIComponent(component);
 		if (decoded === undefined) {
 			throw `Expected component to be properly encoded!`;
 		}
-		inner: for (let matcher of matchers.slice(currentMatcher)) {
-			if (matcher.acceptComponent(decoded)) {
-				continue outer;
-			} else {
-				if (matcher.isSatisfied()) {
-					currentMatcher += 1;
-					continue inner;
-				} else {
-					break outer;
+		let accepted = false;
+		for (let matcher of matchers.slice(i)) {
+			if (matcher.isSatisfied()) {
+				if (!matcher.acceptsComponent(decoded)) {
+					i += 1;
+					continue;
+				}
+				if (i + 1 < matchers.length) {
+					let next_matcher = matchers[i + 1];
+					if (next_matcher.acceptsComponent(decoded)) {
+						i += 1;
+						continue;
+					}
 				}
 			}
+			if (!matcher.acceptsComponent(decoded)) {
+				return false;
+			}
+			matcher.acceptComponent(decoded);
+			accepted = true;
+			break;
 		}
-		break outer;
-	}
-	if (currentMatcher >= matchers.length) {
-		return false;
-	}
-	for (let matcher of matchers.slice(currentMatcher)) {
-		if (!matcher.isSatisfied()) {
+		if (!accepted) {
 			return false;
 		}
+	}
+	if (i !== matchers.length - 1) {
+		return false;
+	}
+	if (!matchers[i].isSatisfied()) {
+		return false;
 	}
 	return true;
 };
