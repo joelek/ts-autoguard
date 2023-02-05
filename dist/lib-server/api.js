@@ -92,12 +92,20 @@ class StaticRouteMatcher {
         this.string = string;
         this.accepted = false;
     }
-    acceptComponent(component) {
+    acceptComponent(component, collect = true) {
         if (this.accepted) {
             return false;
         }
-        this.accepted = component === this.string;
-        return this.accepted;
+        if (component === this.string) {
+            if (collect) {
+                this.accepted = true;
+            }
+            return true;
+        }
+        return false;
+    }
+    acceptsComponent(component) {
+        return this.acceptComponent(component, false);
     }
     getValue() {
         return this.string;
@@ -116,19 +124,24 @@ class DynamicRouteMatcher {
         this.guard = guard;
         this.values = new Array();
     }
-    acceptComponent(component) {
+    acceptComponent(component, collect = true) {
         if (this.values.length >= this.maxOccurences) {
             return false;
         }
         try {
             let value = shared.api.deserializeValue(component, this.plain);
             if (this.guard.is(value)) {
-                this.values.push(value);
+                if (collect) {
+                    this.values.push(value);
+                }
                 return true;
             }
         }
         catch (error) { }
         return false;
+    }
+    acceptsComponent(component) {
+        return this.acceptComponent(component, false);
     }
     getValue() {
         if (this.maxOccurences === 1) {
@@ -204,35 +217,43 @@ function makeNodeRequestHandler(options) {
 exports.makeNodeRequestHandler = makeNodeRequestHandler;
 ;
 function acceptsComponents(components, matchers) {
-    let currentMatcher = 0;
-    outer: for (let component of components) {
+    let i = 0;
+    for (let component of components) {
         let decoded = decodeURIComponent(component);
         if (decoded === undefined) {
             throw `Expected component to be properly encoded!`;
         }
-        inner: for (let matcher of matchers.slice(currentMatcher)) {
-            if (matcher.acceptComponent(decoded)) {
-                continue outer;
-            }
-            else {
-                if (matcher.isSatisfied()) {
-                    currentMatcher += 1;
-                    continue inner;
+        let accepted = false;
+        for (let matcher of matchers.slice(i)) {
+            if (matcher.isSatisfied()) {
+                if (!matcher.acceptsComponent(decoded)) {
+                    i += 1;
+                    continue;
                 }
-                else {
-                    break outer;
+                if (i + 1 < matchers.length) {
+                    let next_matcher = matchers[i + 1];
+                    if (next_matcher.acceptsComponent(decoded)) {
+                        i += 1;
+                        continue;
+                    }
                 }
             }
+            if (!matcher.acceptsComponent(decoded)) {
+                return false;
+            }
+            matcher.acceptComponent(decoded);
+            accepted = true;
+            break;
         }
-        break outer;
-    }
-    if (currentMatcher >= matchers.length) {
-        return false;
-    }
-    for (let matcher of matchers.slice(currentMatcher)) {
-        if (!matcher.isSatisfied()) {
+        if (!accepted) {
             return false;
         }
+    }
+    if (i !== matchers.length - 1) {
+        return false;
+    }
+    if (!matchers[i].isSatisfied()) {
+        return false;
     }
     return true;
 }

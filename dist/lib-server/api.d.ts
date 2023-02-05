@@ -54,7 +54,8 @@ export type Server<A extends shared.api.RequestMap<A>, B extends shared.api.Resp
     [C in keyof A & keyof B]: (request: ClientRequest<A[C]>) => Promise<B[C]>;
 };
 export interface RouteMatcher {
-    acceptComponent(component: string): boolean;
+    acceptComponent(component: string, collect?: boolean): boolean;
+    acceptsComponent(component: string): boolean;
     getValue(): shared.api.JSON;
     isSatisfied(): boolean;
 }
@@ -62,7 +63,8 @@ export declare class StaticRouteMatcher implements RouteMatcher {
     private string;
     private accepted;
     constructor(string: string);
-    acceptComponent(component: string): boolean;
+    acceptComponent(component: string, collect?: boolean): boolean;
+    acceptsComponent(component: string): boolean;
     getValue(): shared.api.JSON;
     isSatisfied(): boolean;
 }
@@ -73,7 +75,8 @@ export declare class DynamicRouteMatcher<A> implements RouteMatcher {
     private guard;
     private values;
     constructor(minOccurences: number, maxOccurences: number, plain: boolean, guard: shared.serialization.MessageGuard<A>);
-    acceptComponent(component: string): boolean;
+    acceptComponent(component: string, collect?: boolean): boolean;
+    acceptsComponent(component: string): boolean;
     getValue(): shared.api.JSON;
     isSatisfied(): boolean;
 }
