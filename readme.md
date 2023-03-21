@@ -374,6 +374,7 @@ NB: This project targets TypeScript 4 in strict mode.
 * Remove upgrade feature from CLI.
 * Remove transpilation feature from CLI.
 * Rework code generation to provide support for additional languages.
+* Throw detailed errors with complete response information on error.
 
 ## Syntax
 
