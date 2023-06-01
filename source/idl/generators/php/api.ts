@@ -627,6 +627,7 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(``);
 		lines.push(`class Request {`);
 		lines.push(`	public string $method;`);
+		lines.push(`	public array $base_components;`);
 		lines.push(`	public array $components;`);
 		lines.push(`	public object $parameters;`);
 		lines.push(`	public object $headers;`);
@@ -635,6 +636,7 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(``);
 		lines.push(`	function __construct() {`);
 		lines.push(`		$this->method = Request::get_method();`);
+		lines.push(`		$this->base_components = Request::get_base_components();`);
 		lines.push(`		$this->components = Request::get_components();`);
 		lines.push(`		$this->parameters = Request::get_parameters();`);
 		lines.push(`		$this->headers = Request::get_headers();`);
