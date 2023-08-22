@@ -183,7 +183,6 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(`	}`);
 		lines.push(``);
 		lines.push(`	function finalize_response(object $response): object {`);
-		lines.push(`		$response->headers = (object) array_change_key_case((array) $response->headers);`);
 		lines.push(`		$response->headers->{"content-type"} = $response->headers->{"content-type"} ?? "${route.response.getContentType()}";`);
 		for (let [index, { name, quantifier, type }] of route.response.headers.headers.entries()) {
 			name = name.toLowerCase();
@@ -742,6 +741,7 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(`			$response = $route->handle_request($request);`);
 		lines.push(`			$response->status = $response->status ?? 200;`);
 		lines.push(`			$response->headers = $response->headers ?? (object) [];`);
+		lines.push(`			$response->headers = (object) array_change_key_case((array) $response->headers);`);
 		lines.push(`			$response->payload = $response->payload ?? "";`);
 		lines.push(`			$response = $route->validate_response($response);`);
 		lines.push(`			$response = $route->finalize_response($response);`);
