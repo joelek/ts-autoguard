@@ -317,6 +317,23 @@ class Message {
         this.headers = headers;
         this.payload = payload;
     }
+    getContentType() {
+        let content_type_header = this.headers.headers.find((header) => header.name.toLowerCase() === "content-type");
+        if (content_type_header != null) {
+            let content_type_header_type = content_type_header.type;
+            if (content_type_header_type instanceof types.StringLiteralType) {
+                return content_type_header_type.value;
+            }
+        }
+        let payload = this.payload;
+        if (payload instanceof types.BinaryType) {
+            return "application/octet-stream";
+        }
+        if (payload instanceof types.UndefinedType) {
+            return "application/octet-stream";
+        }
+        return "application/json; charset=utf-8";
+    }
     generateSchema(options) {
         let lines = new Array();
         let parts = new Array();

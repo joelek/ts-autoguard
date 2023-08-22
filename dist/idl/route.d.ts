@@ -62,6 +62,7 @@ export declare class Message {
     headers: Headers;
     payload: types.Type;
     constructor(headers: Headers, payload: types.Type);
+    getContentType(): string;
     generateSchema(options: shared.Options): string;
     static parse(tokenizer: tokenization.Tokenizer): Message;
 }
