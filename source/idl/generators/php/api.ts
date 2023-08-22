@@ -184,7 +184,7 @@ export class PHPAPIGenerator extends Generator {
 			if (quantifier.kind === "repeated") {
 				throw new Error(`Quantifier not supported by generator!`);
 			} else if (!plain) {
-				lines.push(`		$response->headers->{"${name}"} = Route::serialize_member($request->headers, "${name}", ${plain});`);
+				lines.push(`		$response->headers->{"${name}"} = Route::serialize_member($response->headers, "${name}", ${plain});`);
 			}
 		}
 		if (!(route.response.payload instanceof BinaryType)) {
