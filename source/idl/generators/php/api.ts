@@ -143,6 +143,7 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(``);
 		lines.push(`	function prepare_request(object $request): object {`);
 		for (let [index, { name, quantifier, type }] of route.request.headers.headers.entries()) {
+			name = name.toLowerCase();
 			let plain = type instanceof PlainType;
 			if (quantifier.kind === "repeated") {
 				throw new Error(`Quantifier not supported by generator!`);
@@ -178,8 +179,10 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(`	}`);
 		lines.push(``);
 		lines.push(`	function finalize_response(object $response): object {`);
-		lines.push(`		$response->headers->{"Content-Type"} = $response->headers->{"Content-Type"} ?? "${getContentTypeFromType(route.response.payload)}";`);
+		lines.push(`		$response->headers = (object) array_change_key_case((array) $response->headers);`);
+		lines.push(`		$response->headers->{"content-type"} = $response->headers->{"content-type"} ?? "${getContentTypeFromType(route.response.payload)}";`);
 		for (let [index, { name, quantifier, type }] of route.response.headers.headers.entries()) {
+			name = name.toLowerCase();
 			let plain = type instanceof PlainType;
 			if (quantifier.kind === "repeated") {
 				throw new Error(`Quantifier not supported by generator!`);
