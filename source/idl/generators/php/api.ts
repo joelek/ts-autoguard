@@ -141,6 +141,10 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(`		return $method === "${route.method.method}";`);
 		lines.push(`	}`);
 		lines.push(``);
+		lines.push(`	function accepts_accepts(array $accepts): bool {`);
+		lines.push(`		return Route::accepts_content_type($accepts, "${route.response.getContentType()}");`);
+		lines.push(`	}`);
+		lines.push(``);
 		lines.push(`	function prepare_request(object $request): object {`);
 		for (let [index, { name, quantifier, type }] of route.request.headers.headers.entries()) {
 			name = name.toLowerCase();
@@ -180,7 +184,7 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(``);
 		lines.push(`	function finalize_response(object $response): object {`);
 		lines.push(`		$response->headers = (object) array_change_key_case((array) $response->headers);`);
-		lines.push(`		$response->headers->{"content-type"} = $response->headers->{"content-type"} ?? "${getContentTypeFromType(route.response.payload)}";`);
+		lines.push(`		$response->headers->{"content-type"} = $response->headers->{"content-type"} ?? "${route.response.getContentType()}";`);
 		for (let [index, { name, quantifier, type }] of route.response.headers.headers.entries()) {
 			name = name.toLowerCase();
 			let plain = type instanceof PlainType;
@@ -709,6 +713,7 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(``);
 		lines.push(`	abstract function accepts_components(array $components): bool;`);
 		lines.push(`	abstract function accepts_method(string $method): bool;`);
+		lines.push(`	abstract function accepts_accepts(array $accepts): bool;`);
 		lines.push(`	abstract function prepare_request(object $request): object;`);
 		lines.push(`	abstract function validate_request(object $request): object;`);
 		lines.push(`	abstract function handle_request(object $request): object;`);
@@ -725,6 +730,10 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(`			$routes = array_filter($routes, fn ($route) => $route->accepts_method($request->method));`);
 		lines.push(`			if (count($routes) === 0) {`);
 		lines.push(`				throw new HTTPException(Status::METHOD_NOT_ALLOWED);`);
+		lines.push(`			}`);
+		lines.push(`			$routes = array_filter($routes, fn ($route) => $route->accepts_accepts(self::parse_multi_valued_header($request->headers->accept ?? null)));`);
+		lines.push(`			if (count($routes) === 0) {`);
+		lines.push(`				throw new HTTPException(Status::NOT_ACCEPTABLE);`);
 		lines.push(`			}`);
 		lines.push(`			$routes = array_values($routes);`);
 		lines.push(`			$route = $routes[0];`);
@@ -749,6 +758,25 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(`				http_response_code(500);`);
 		lines.push(`			}`);
 		lines.push(`		}`);
+		lines.push(`	}`);
+		lines.push(``);
+		lines.push(`	static function accepts_content_type(array $accepts, string $content_type): bool {`);
+		lines.push(`		if (count($accepts) === 0) {`);
+		lines.push(`			return true;`);
+		lines.push(`		}`);
+		lines.push(`		$content_type = trim(explode(";", $content_type)[0]);`);
+		lines.push(`		foreach ($accepts as $accept) {`);
+		lines.push(`			$accept = preg_replace("/[.]/", "[.]", $accept);`);
+		lines.push(`			$accept = preg_replace("/[\\/]/", "[\\\\/]", $accept);`);
+		lines.push(`			$accept = preg_replace("/[-]/", "[-]", $accept);`);
+		lines.push(`			$accept = preg_replace("/[+]/", "[+]", $accept);`);
+		lines.push(`			$accept = preg_replace("/[*]/", "(.+)", $accept);`);
+		lines.push(`			$expression = "/^{$accept}$/";`);
+		lines.push(`			if (preg_match($expression, $content_type)) {`);
+		lines.push(`				return true;`);
+		lines.push(`			}`);
+		lines.push(`		}`);
+		lines.push(`		return false;`);
 		lines.push(`	}`);
 		lines.push(``);
 		lines.push(`	static function guard_request(object $request, Guard $guard): object {`);
@@ -783,6 +811,16 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(`		$string = trim($string);`);
 		lines.push(`		$string = implode("-", preg_split("/[ ]+/", $string));`);
 		lines.push(`		return $string;`);
+		lines.push(`	}`);
+		lines.push(``);
+		lines.push(`	static function parse_multi_valued_header(?string $string): array {`);
+		lines.push(`		if ($string === null) {`);
+		lines.push(`			return [];`);
+		lines.push(`		}`);
+		lines.push(`		$parts = explode(",", $string);`);
+		lines.push(`		$parts = array_map(fn ($part) => explode(";", $part)[0], $parts);`);
+		lines.push(`		$parts = array_map(fn ($part) => trim($part), $parts);`);
+		lines.push(`		return $parts;`);
 		lines.push(`	}`);
 		lines.push(``);
 		lines.push(`	static function parse_json(mixed &$subject): mixed {`);
