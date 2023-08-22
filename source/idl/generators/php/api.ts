@@ -881,6 +881,18 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(`	function __construct() {}`);
 		lines.push(`}`);
 		lines.push(``);
+		lines.push(`abstract class Base64URL {`);
+		lines.push(`	function __construct() {}`);
+		lines.push(``);
+		lines.push(`	static function decode(string $string): string {`);
+		lines.push(`		return base64_decode(str_replace(["-", "_"], ["+", "/"], $string));`);
+		lines.push(`	}`);
+		lines.push(``);
+		lines.push(`	static function encode(string $string): string {`);
+		lines.push(`		return str_replace(["+", "/", "="], ["-", "_", ""], base64_encode($string));`);
+		lines.push(`	}`);
+		lines.push(`}`);
+		lines.push(``);
 		lines.push(`?>`);
 		lines.push(``);
 		let content = lines.join(eol);
