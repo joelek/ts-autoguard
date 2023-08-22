@@ -377,6 +377,7 @@ NB: This project targets TypeScript 4 in strict mode.
 * Throw detailed errors with complete response information on error.
 * Use implicit encoding based on context and type.
 * Remove Plain type.
+* Add content negotation to ts generator.
 
 ## Syntax
 
