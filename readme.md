@@ -375,6 +375,8 @@ NB: This project targets TypeScript 4 in strict mode.
 * Remove transpilation feature from CLI.
 * Rework code generation to provide support for additional languages.
 * Throw detailed errors with complete response information on error.
+* Use implicit encoding based on context and type.
+* Remove Plain type.
 
 ## Syntax
 
