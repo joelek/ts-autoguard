@@ -378,6 +378,7 @@ NB: This project targets TypeScript 4 in strict mode.
 * Use implicit encoding based on context and type.
 * Remove Plain type.
 * Add content negotation to ts generator.
+* Require routes to be specified using an alias in v6.
 
 ## Syntax
 
