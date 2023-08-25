@@ -739,7 +739,7 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(`			$request = $route->prepare_request($request);`);
 		lines.push(`			$request = $route->validate_request($request);`);
 		lines.push(`			$response = $route->handle_request($request);`);
-		lines.push(`			$response->status = $response->status ?? 200;`);
+		lines.push(`			$response->status = $response->status ?? Status::OK;`);
 		lines.push(`			$response->headers = $response->headers ?? (object) [];`);
 		lines.push(`			$response->headers = (object) array_change_key_case((array) $response->headers);`);
 		lines.push(`			$response->payload = $response->payload ?? "";`);
