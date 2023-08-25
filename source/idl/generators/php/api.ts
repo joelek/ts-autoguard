@@ -745,6 +745,14 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(`			$response->payload = $response->payload ?? "";`);
 		lines.push(`			$response = $route->validate_response($response);`);
 		lines.push(`			$response = $route->finalize_response($response);`);
+		lines.push(`			$if_modified_since = $request->headers->{"if-modified-since"} ?? null;`);
+		lines.push(`			$last_modified = $response->headers->{"last-modified"} ?? null;`);
+		lines.push(`			if ($if_modified_since !== null && $last_modified !== null) {`);
+		lines.push(`				if (strtotime($last_modified) <= strtotime($if_modified_since)) {`);
+		lines.push(`					$response->status = Status::NOT_MODIFIED;`);
+		lines.push(`					$response->payload = "";`);
+		lines.push(`				}`);
+		lines.push(`			}`);
 		lines.push(`			http_response_code($response->status);`);
 		lines.push(`			foreach ($response->headers as $key => $value) {`);
 		lines.push(`				header($key . ": " . $value);`);
