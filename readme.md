@@ -379,7 +379,6 @@ NB: This project targets TypeScript 4 in strict mode.
 * Remove Plain type.
 * Add content negotation to ts generator.
 * Require routes to be specified using an alias in v6.
-* Add support for "-", "." and "~" in StaticComponentPart.
 
 ## Syntax
 
@@ -445,7 +444,7 @@ OptionsKeyValue = OptionsKey Quantifier? (":" OptionsType)?
 OptionsBodyTail = "," OptionsKeyValue
 OptionsBody = OptionsKeyValue OptionsBodyTail*
 Options = "<" "{" OptionsBody* "}" ">"
-StaticComponentPart = AsciiLetter or Digit or "_" or PercentEncodedOctet
+StaticComponentPart = AsciiLetter or Digit or "_" or "~" or "." or "-" or PercentEncodedOctet
 StaticComponent = StaticComponentPart*
 Quantifier = "*" or "?"
 DynamicComponent = "<" (Identifier or StringLiteral) Quantifier? (":" OptionsType)? ">"
