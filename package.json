@@ -30,6 +30,7 @@
 		"test:modules": "node ./dist/cli/index.js --root=./test/modules/",
 		"test:rpc": "node ./dist/cli/index.js --root=./test/rpc/",
 		"test:node": "node ./dist/cli/index.js --root=./test/node/",
+		"test:table": "node ./dist/cli/index.js --root=./test/table/",
 		"test": "node ./dist/cli/index.js --root=./test/"
 	},
 	"version": "5.13.0"

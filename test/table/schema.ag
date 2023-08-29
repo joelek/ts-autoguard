@@ -1,0 +1,9 @@
+table Table: {
+	"A",
+	"B"
+};
+
+guard Guard: {
+	key: Table.Key,
+	value: Table.Value
+};
