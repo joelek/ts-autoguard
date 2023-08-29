@@ -152,3 +152,9 @@ route GET:/binary_response => binary;
 route GET:/number/<number:number> ? <{ number: number }>;
 
 route queryParameters(): GET:/ ? <required> & <optional?> & <repeated*>;
+
+route requestHeaders(): GET:/
+	<= [required, optional?, repeated*];
+
+route responseHeaders(): GET:/
+	=> [required, optional?, repeated*];

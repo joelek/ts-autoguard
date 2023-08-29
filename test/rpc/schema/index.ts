@@ -972,6 +972,34 @@ export namespace Autoguard {
 				autoguard.api.Headers
 			),
 			"payload": autoguard.api.Binary
+		}),
+		"requestHeaders": autoguard.guards.Object.of({
+			"headers": autoguard.guards.Intersection.of(
+				autoguard.guards.Object.of({
+					"required": autoguard.guards.String
+				}, {
+					"optional": autoguard.guards.String,
+					"repeated": autoguard.guards.Array.of(autoguard.guards.String)
+				}),
+				autoguard.api.Headers
+			)
+		}, {
+			"options": autoguard.guards.Intersection.of(
+				autoguard.guards.Object.of({}, {}),
+				autoguard.api.Options
+			),
+			"payload": autoguard.api.Binary
+		}),
+		"responseHeaders": autoguard.guards.Object.of({}, {
+			"options": autoguard.guards.Intersection.of(
+				autoguard.guards.Object.of({}, {}),
+				autoguard.api.Options
+			),
+			"headers": autoguard.guards.Intersection.of(
+				autoguard.guards.Object.of({}, {}),
+				autoguard.api.Headers
+			),
+			"payload": autoguard.api.Binary
 		})
 	};
 
@@ -1612,6 +1640,28 @@ export namespace Autoguard {
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
 			),
+			"payload": autoguard.api.Binary
+		}),
+		"requestHeaders": autoguard.guards.Object.of({}, {
+			"status": autoguard.guards.Integer,
+			"headers": autoguard.guards.Intersection.of(
+				autoguard.guards.Object.of({}, {}),
+				autoguard.api.Headers
+			),
+			"payload": autoguard.api.Binary
+		}),
+		"responseHeaders": autoguard.guards.Object.of({
+			"headers": autoguard.guards.Intersection.of(
+				autoguard.guards.Object.of({
+					"required": autoguard.guards.String
+				}, {
+					"optional": autoguard.guards.String,
+					"repeated": autoguard.guards.Array.of(autoguard.guards.String)
+				}),
+				autoguard.api.Headers
+			)
+		}, {
+			"status": autoguard.guards.Integer,
 			"payload": autoguard.api.Binary
 		})
 	};
