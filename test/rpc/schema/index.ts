@@ -962,7 +962,7 @@ export namespace Autoguard {
 
 	export const Responses = {
 		"GET:/": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -970,7 +970,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"POST:/": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -978,7 +978,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/one": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -986,7 +986,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/one/": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -994,7 +994,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/one/two": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1002,7 +1002,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/<dynamic_component>": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1010,7 +1010,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/<dynamic_plain_component>": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1018,7 +1018,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/<dynamic_boolean_component>": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1026,7 +1026,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/<dynamic_number_component>": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1034,7 +1034,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/<dynamic_string_component>": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1042,7 +1042,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/<dynamic_component_one>/<dynamic_component_two>": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1050,7 +1050,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/<quoted key>": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1058,7 +1058,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/%22r%C3%A4ksm%C3%B6rg%C3%A5s%22": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1066,7 +1066,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/parameters01": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1074,7 +1074,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/parameters02": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1082,7 +1082,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/parameters03": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1090,7 +1090,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/parameters04": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1098,7 +1098,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/parameters05": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1106,7 +1106,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/parameters06": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1114,7 +1114,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/parameters07": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1122,7 +1122,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/parameters08": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1130,7 +1130,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/parameters09": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1138,7 +1138,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/parameters10": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1146,7 +1146,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/parameters11": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1154,7 +1154,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/parameters12": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1162,7 +1162,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/parameters13": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1170,7 +1170,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/query02": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1178,7 +1178,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/query03": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1186,7 +1186,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/query04": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1194,7 +1194,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/query05": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1202,7 +1202,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/query06": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1210,7 +1210,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/query07": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1218,7 +1218,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/query08": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1226,7 +1226,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/query09": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1234,7 +1234,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/query10": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1242,7 +1242,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/query11": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1250,7 +1250,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/query12": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1258,7 +1258,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/query13": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1266,7 +1266,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/request_headers01": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1274,7 +1274,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/request_headers02": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1282,7 +1282,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/request_headers03": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1290,7 +1290,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/request_headers04": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1298,7 +1298,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/request_headers05": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1306,7 +1306,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/request_headers06": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1314,7 +1314,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/request_headers07": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1322,7 +1322,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/request_headers08": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1330,7 +1330,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/request_headers09": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1338,7 +1338,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/request_headers10": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1346,7 +1346,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/request_headers11": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1354,7 +1354,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/request_headers12": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1362,7 +1362,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/request_headers13": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1370,7 +1370,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/response_headers01": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1385,11 +1385,11 @@ export namespace Autoguard {
 				autoguard.api.Headers
 			)
 		}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/response_headers03": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {
 					"optional_boolean_response_header": autoguard.guards.Boolean
@@ -1406,11 +1406,11 @@ export namespace Autoguard {
 				autoguard.api.Headers
 			)
 		}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/response_headers05": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {
 					"optional_number_response_header": autoguard.guards.Number
@@ -1427,11 +1427,11 @@ export namespace Autoguard {
 				autoguard.api.Headers
 			)
 		}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/response_headers07": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {
 					"optional_string_response_header": autoguard.guards.String
@@ -1449,7 +1449,7 @@ export namespace Autoguard {
 				autoguard.api.Headers
 			)
 		}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/response_headers09": autoguard.guards.Object.of({
@@ -1460,7 +1460,7 @@ export namespace Autoguard {
 				autoguard.api.Headers
 			)
 		}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/response_headers10": autoguard.guards.Object.of({
@@ -1471,11 +1471,11 @@ export namespace Autoguard {
 				autoguard.api.Headers
 			)
 		}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/response_headers11": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {
 					"optional_response_header": autoguard.guards.String
@@ -1492,11 +1492,11 @@ export namespace Autoguard {
 				autoguard.api.Headers
 			)
 		}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/response_headers13": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {
 					"optional_plain_response_header": autoguard.guards.String
@@ -1506,7 +1506,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/request_payload01": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1514,7 +1514,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/request_payload02": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1526,7 +1526,7 @@ export namespace Autoguard {
 				"required_request_member": autoguard.guards.String
 			}, {})
 		}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1537,7 +1537,7 @@ export namespace Autoguard {
 				"optional_request_member": autoguard.guards.String
 			})
 		}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1554,19 +1554,19 @@ export namespace Autoguard {
 				"in_response_payload": autoguard.guards.String
 			}, {})
 		}, {
-			"status": autoguard.guards.Number
+			"status": autoguard.guards.Integer
 		}),
 		"GET:/reference": autoguard.guards.Object.of({
 			"payload": autoguard.guards.Reference.of(() => Object)
 		}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
 			)
 		}),
 		"GET:/binary_request": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1574,7 +1574,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/binary_response": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers
@@ -1582,7 +1582,7 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/number/<number>": autoguard.guards.Object.of({}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
 				autoguard.api.Headers

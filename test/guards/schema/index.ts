@@ -60,9 +60,9 @@ export const MyNumberType: autoguard.serialization.MessageGuard<MyNumberType> = 
 
 export type MyNumberType = autoguard.guards.Number;
 
-export const MyNumberLiteralType: autoguard.serialization.MessageGuard<MyNumberLiteralType> = autoguard.guards.NumberLiteral.of(1337);
+export const MyNumberLiteralType: autoguard.serialization.MessageGuard<MyNumberLiteralType> = autoguard.guards.IntegerLiteral.of(1337);
 
-export type MyNumberLiteralType = autoguard.guards.NumberLiteral<1337>;
+export type MyNumberLiteralType = autoguard.guards.IntegerLiteral<1337>;
 
 export const MyObjectType: autoguard.serialization.MessageGuard<MyObjectType> = autoguard.guards.Object.of({
 	"string_member": autoguard.guards.String,

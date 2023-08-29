@@ -13,7 +13,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("plain")));
 		matchers.push(new autoguard.api.DynamicRouteMatcher(1, 1, true, autoguard.guards.String));
 		matchers.push(new autoguard.api.DynamicRouteMatcher(0, 1, true, autoguard.guards.String));
-		matchers.push(new autoguard.api.DynamicRouteMatcher(0, Infinity, true, autoguard.guards.String));
+		matchers.push(new autoguard.api.DynamicRouteMatcher(0, 255, true, autoguard.guards.String));
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),
@@ -64,7 +64,7 @@ export const makeServer = (routes: autoguard.api.Server<shared.Autoguard.Request
 		matchers.push(new autoguard.api.StaticRouteMatcher(decodeURIComponent("json")));
 		matchers.push(new autoguard.api.DynamicRouteMatcher(1, 1, false, autoguard.guards.Number));
 		matchers.push(new autoguard.api.DynamicRouteMatcher(0, 1, false, autoguard.guards.Number));
-		matchers.push(new autoguard.api.DynamicRouteMatcher(0, Infinity, false, autoguard.guards.Number));
+		matchers.push(new autoguard.api.DynamicRouteMatcher(0, 255, false, autoguard.guards.Number));
 		return {
 			acceptsComponents: () => autoguard.api.acceptsComponents(raw.components, matchers),
 			acceptsMethod: () => autoguard.api.acceptsMethod(raw.method, method),

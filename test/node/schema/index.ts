@@ -74,7 +74,7 @@ export namespace Autoguard {
 				autoguard.api.Headers
 			)
 		}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"payload": autoguard.api.Binary
 		}),
 		"json": autoguard.guards.Object.of({
@@ -88,7 +88,7 @@ export namespace Autoguard {
 				autoguard.api.Headers
 			)
 		}, {
-			"status": autoguard.guards.Number,
+			"status": autoguard.guards.Integer,
 			"payload": autoguard.api.Binary
 		})
 	};
