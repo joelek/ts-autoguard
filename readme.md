@@ -379,6 +379,7 @@ NB: This project targets TypeScript 4 in strict mode.
 * Remove Plain type.
 * Add content negotation to ts generator.
 * Require routes to be specified using an alias in v6.
+* Add support for "-", "." and "~" in StaticComponentPart.
 
 ## Syntax
 
