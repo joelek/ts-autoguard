@@ -955,6 +955,23 @@ export namespace Autoguard {
 				autoguard.api.Headers
 			),
 			"payload": autoguard.api.Binary
+		}),
+		"queryParameters": autoguard.guards.Object.of({
+			"options": autoguard.guards.Intersection.of(
+				autoguard.guards.Object.of({
+					"required": autoguard.guards.String
+				}, {
+					"optional": autoguard.guards.String,
+					"repeated": autoguard.guards.Array.of(autoguard.guards.String)
+				}),
+				autoguard.api.Options
+			)
+		}, {
+			"headers": autoguard.guards.Intersection.of(
+				autoguard.guards.Object.of({}, {}),
+				autoguard.api.Headers
+			),
+			"payload": autoguard.api.Binary
 		})
 	};
 
@@ -1582,6 +1599,14 @@ export namespace Autoguard {
 			"payload": autoguard.api.Binary
 		}),
 		"GET:/number/<number>": autoguard.guards.Object.of({}, {
+			"status": autoguard.guards.Integer,
+			"headers": autoguard.guards.Intersection.of(
+				autoguard.guards.Object.of({}, {}),
+				autoguard.api.Headers
+			),
+			"payload": autoguard.api.Binary
+		}),
+		"queryParameters": autoguard.guards.Object.of({}, {
 			"status": autoguard.guards.Integer,
 			"headers": autoguard.guards.Intersection.of(
 				autoguard.guards.Object.of({}, {}),
