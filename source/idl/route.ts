@@ -307,7 +307,7 @@ export class Headers {
 		return "<{ " + parts.join(", ") + " }>";
 	}
 
-	static parse(tokenizer: tokenization.Tokenizer): Headers {
+	static parseOld(tokenizer: tokenization.Tokenizer): Headers {
 		return tokenizer.newContext((read, peek) => {
 			let headers = new Array<Parameter>();
 			tokenization.expect(read(), "<");
@@ -324,6 +324,29 @@ export class Headers {
 			}
 			tokenization.expect(read(), "}");
 			tokenization.expect(read(), ">");
+			return new Headers(headers);
+		});
+	}
+
+	static parse(tokenizer: tokenization.Tokenizer): Headers {
+		// TODO: Remove compatibility behaviour in v6.
+		try {
+			return Headers.parseOld(tokenizer);
+		} catch (error) {}
+		return tokenizer.newContext((read, peek) => {
+			let headers = new Array<Parameter>();
+			tokenization.expect(read(), "[");
+			while (peek()?.value !== "]") {
+				let header = Parameter.parse(tokenizer);
+				header.name = header.name.toLowerCase();
+				headers.push(header);
+				if (peek()?.family === ",") {
+					tokenization.expect(read(), ",");
+				} else {
+					break;
+				}
+			}
+			tokenization.expect(read(), "]");
 			return new Headers(headers);
 		});
 	}
@@ -373,7 +396,7 @@ export class Message {
 	static parse(tokenizer: tokenization.Tokenizer): Message {
 		return tokenizer.newContext((read, peek) => {
 			let headers = new Headers([]);
-			if (peek()?.family === "<") {
+			if ((["<", "["] as Array<string | undefined>).includes(peek()?.family)) {
 				headers = Headers.parse(tokenizer);
 			}
 			let payload: types.Type = types.BinaryType.INSTANCE;

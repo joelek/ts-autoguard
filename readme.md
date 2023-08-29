@@ -379,8 +379,8 @@ NB: This project targets TypeScript 4 in strict mode.
 * Remove Plain type.
 * Add content negotation to ts generator.
 * Require routes to be specified using an alias in v6.
+* Remove convoluted syntax for request and response headers in v6.
 * Remove convoluted syntax for query parameters in v6.
-* Improve syntax for request and response headers.
 
 ## Syntax
 
@@ -453,14 +453,14 @@ DynamicComponent = "<" (Identifier or StringLiteral) Quantifier? (":" OptionsTyp
 Component = StaticComponent or DynamicComponent
 Path = "/" Component Path*
 Method = Identifier
-Headers = Options
+Headers = Options or ("[" OptionsBody* "]")
 Payload = Type
 ParametersType = PlainType or Type
 ParametersKey = Identifier or StringLiteral
 ParametersKeyValue =  "<" ParametersKey Quantifier? (":" ParametersType)? ">"
 ParametersBodyTail = "&" ParametersKeyValue
 ParametersBody = ParametersKeyValue ParametersBodyTail*
-Parameters = "?" (Headers or ParametersBody)
+Parameters = "?" (Options or ParametersBody)
 Request = "<=" Headers? Payload?
 Response = "=>" Headers? Payload?
 Alias = Identifier "(" ")" ":"
