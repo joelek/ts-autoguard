@@ -92,15 +92,19 @@ class Component {
                 return new Component(name, quantifier, type);
             }
             else {
-                let name = "";
-                if ([...tokenization.IdentifierFamilies, "PATH_COMPONENT"].includes((_d = peek()) === null || _d === void 0 ? void 0 : _d.family)) {
-                    let token = tokenization.expect(read(), [
-                        ...tokenization.IdentifierFamilies,
-                        "PATH_COMPONENT"
-                    ]);
-                    name = token.family === "PATH_COMPONENT" ? decodeURIComponent(token.value) : token.value;
+                let accepted_tokens = [...tokenization.IdentifierFamilies, "NUMBER_LITERAL", "_", "~", ".", "-", "PERCENT_ENCODED_OCTET"];
+                let encoded_name = "";
+                while (true) {
+                    if (accepted_tokens.includes((_d = peek()) === null || _d === void 0 ? void 0 : _d.family)) {
+                        let token = tokenization.expect(read(), accepted_tokens);
+                        encoded_name += token.value;
+                    }
+                    else {
+                        break;
+                    }
                 }
-                return new Component(name, new Quantifier("required"));
+                let decoded_name = decodeURIComponent(encoded_name);
+                return new Component(decoded_name, new Quantifier("required"));
             }
         });
     }

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.expect = exports.SyntaxError = exports.Tokenizer = exports.removeWhitespaceAndComments = exports.IdentifierFamilies = exports.Families = void 0;
-exports.Families = ((...tuple) => tuple)("LS", "WS", "(", ")", "[", "]", "{", "}", "?", "|", ".", "..", "/", "*", "&", ",", ":", ";", "<", ">", "=>", "<=", "any", "bigint", "binary", "boolean", "false", "guard", "integer", "null", "number", "plain", "route", "string", "table", "true", "undefined", "IDENTIFIER", "NUMBER_LITERAL", "STRING_LITERAL", "PATH_COMPONENT", "COMMENT");
+exports.Families = ((...tuple) => tuple)("LS", "WS", "(", ")", "[", "]", "{", "}", "?", "|", ".", "..", "/", "*", "&", ",", ":", ";", "<", ">", "_", "~", "-", "=>", "<=", "any", "bigint", "binary", "boolean", "false", "guard", "integer", "null", "number", "plain", "route", "string", "table", "true", "undefined", "IDENTIFIER", "NUMBER_LITERAL", "STRING_LITERAL", "PERCENT_ENCODED_OCTET", "COMMENT");
 exports.IdentifierFamilies = ((...tuple) => tuple)("any", "bigint", "binary", "boolean", "false", "guard", "integer", "null", "number", "plain", "route", "string", "table", "true", "undefined", "IDENTIFIER");
 function removeWhitespaceAndComments(unfiltered) {
     let filtered = new Array();
@@ -50,6 +50,9 @@ class Tokenizer {
             ";": /^([;])/su,
             "<": /^([<])/su,
             ">": /^([>])/su,
+            "_": /^([_])/su,
+            "~": /^([~])/su,
+            "-": /^([-])/su,
             "=>": /^([=][>])/su,
             "<=": /^([<][=])/su,
             "any": /^(any)/su,
@@ -70,7 +73,7 @@ class Tokenizer {
             "IDENTIFIER": /^([a-zA-Z][a-zA-Z0-9_]*)/su,
             "NUMBER_LITERAL": /^(([1-9][0-9]+)|([0-9]))/su,
             "STRING_LITERAL": /^(["][^"]*["])/su,
-            "PATH_COMPONENT": /^(([a-zA-Z0-9_]|[%][0-9a-fA-F]{2})+)/su,
+            "PERCENT_ENCODED_OCTET": /^([%][0-9a-fA-F]{2})/su,
             "COMMENT": /^([#][^\r\n]*)/su
         };
         let tokens = new Array();
