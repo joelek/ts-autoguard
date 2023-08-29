@@ -379,6 +379,8 @@ NB: This project targets TypeScript 4 in strict mode.
 * Remove Plain type.
 * Add content negotation to ts generator.
 * Require routes to be specified using an alias in v6.
+* Remove convoluted syntax for query parameters in v6.
+* Improve syntax for request and response headers.
 
 ## Syntax
 
