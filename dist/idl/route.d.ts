@@ -56,6 +56,7 @@ export declare class Headers {
     headers: Array<Parameter>;
     constructor(headers: Array<Parameter>);
     generateSchema(options: shared.Options): string;
+    static parseOld(tokenizer: tokenization.Tokenizer): Headers;
     static parse(tokenizer: tokenization.Tokenizer): Headers;
 }
 export declare class Message {
