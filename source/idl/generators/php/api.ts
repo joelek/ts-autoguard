@@ -174,7 +174,7 @@ export class PHPAPIGenerator extends Generator {
 			let plain = type instanceof PlainType;
 			if (quantifier.kind === "repeated") {
 				throw new Error(`Quantifier not supported by generator!`);
-			} else {
+			} else if (!plain) {
 				lines.push(`		Route::parse_member($request->parameters, "${name}", ${plain});`);
 			}
 		}
