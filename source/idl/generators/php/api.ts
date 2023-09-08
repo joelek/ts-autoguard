@@ -1,6 +1,6 @@
 import { Route } from "../../route";
 import { BinaryPayloadType, getContentTypeFromType, getRequestType, getResponseType, Schema } from "../../schema";
-import { AnyType, ArrayType, BinaryType, BooleanLiteralType, BooleanType, Headers, IntegerLiteralType, IntegerType, IntersectionType, NullType, NumberLiteralType, NumberType, ObjectType, Options, PlainType, RecordType, ReferenceType, StringLiteralType, StringType, TupleType, Type, UndefinedType, UnionType } from "../../types";
+import { AnyType, ArrayType, BinaryType, BooleanLiteralType, BooleanType, Headers, IntegerLiteralType, IntegerType, IntersectionType, NullType, NumberLiteralType, NumberType, ObjectType, Options, PlainType, RecordType, ReferenceType, StringLiteralType, StringType, TupleType, Type, UnionType } from "../../types";
 import { File, Generator } from "../generator";
 
 export class PHPAPIGenerator extends Generator {
@@ -40,13 +40,18 @@ export class PHPAPIGenerator extends Generator {
 		} else if (type instanceof NumberLiteralType) {
 			lines.push(`new NumberLiteralGuard(${type.value})`);
 		} else if (type instanceof ObjectType) {
-			let bodylines = [] as Array<string>;
+			let required_lines = [] as Array<string>;
+			let optional_lines = [] as Array<string>;
 			for (let [key, member] of type.members.entries()) {
-				let type = member.optional ? new UnionType([UndefinedType.INSTANCE, member.type]) : member.type;
-				bodylines.push(`	"${key}" => ${this.generateTypeGuard(type, eol + "\t")}`);
+				if (member.optional) {
+					optional_lines.push(`	"${key}" => ${this.generateTypeGuard(member.type, eol + "\t")}`);
+				} else {
+					required_lines.push(`	"${key}" => ${this.generateTypeGuard(member.type, eol + "\t")}`);
+				}
 			}
-			let content = bodylines.length === 0 ? "" : eol + bodylines.join("," + eol) + eol;
-			lines.push(`new ObjectGuard((object) [${content}])`);
+			let required = required_lines.length === 0 ? "" : eol + required_lines.join("," + eol) + eol;
+			let optional = optional_lines.length === 0 ? "" : eol + optional_lines.join("," + eol) + eol;
+			lines.push(`new ObjectGuard((object) [${required}], (object) [${optional}])`);
 		} else if (type instanceof PlainType) {
 			lines.push(`new StringGuard()`);
 		} else if (type instanceof RecordType) {
@@ -69,8 +74,6 @@ export class PHPAPIGenerator extends Generator {
 			}
 			let content = lines.length === 0 ? "" : eol + lines.join("," + eol) + eol;
 			lines.push(`new TupleGuard([${content}])`);
-		} else if (type instanceof UndefinedType) {
-			lines.push(`new UndefinedGuard()`);
 		} else if (type instanceof UnionType) {
 			let bodylines = [] as Array<string>;
 			for (let subtype of type.types) {
@@ -80,10 +83,10 @@ export class PHPAPIGenerator extends Generator {
 			lines.push(`new UnionGuard([${content}])`);
 		} else if (type instanceof Options) {
 			// TODO: Remove when Options is removed.
-			lines.push(`new ObjectGuard((object) [])`);
+			lines.push(`new ObjectGuard((object) [], (object) [])`);
 		} else if (type instanceof Headers) {
 			// TODO: Remove when Headers is removed.
-			lines.push(`new ObjectGuard((object) [])`);
+			lines.push(`new ObjectGuard((object) [], (object) [])`);
 		} else if (type instanceof BinaryPayloadType) {
 			lines.push(`new StringGuard()`);
 		} else {
@@ -159,7 +162,7 @@ export class PHPAPIGenerator extends Generator {
 			if (quantifier.kind === "repeated") {
 				throw new Error(`Quantifier not supported by generator!`);
 			} else if (!plain) {
-				lines.push(`		$request->headers->{"${name}"} = Route::parse_member($request->headers, "${name}", ${plain});`);
+				lines.push(`		Route::parse_member($request->headers, "${name}", ${plain});`);
 			}
 		}
 		for (let [index, { name, quantifier, type }] of route.path.components.entries()) {
@@ -172,7 +175,7 @@ export class PHPAPIGenerator extends Generator {
 			if (quantifier.kind === "repeated") {
 				throw new Error(`Quantifier not supported by generator!`);
 			} else {
-				lines.push(`		$request->options->{"${name}"} = Route::parse_member($request->parameters, "${name}", ${plain});`);
+				lines.push(`		Route::parse_member($request->parameters, "${name}", ${plain});`);
 			}
 		}
 		if (!(route.request.payload instanceof BinaryType)) {
@@ -197,7 +200,7 @@ export class PHPAPIGenerator extends Generator {
 			if (quantifier.kind === "repeated") {
 				throw new Error(`Quantifier not supported by generator!`);
 			} else if (!plain) {
-				lines.push(`		$response->headers->{"${name}"} = Route::serialize_member($response->headers, "${name}", ${plain});`);
+				lines.push(`		Route::serialize_member($response->headers, "${name}", ${plain});`);
 			}
 		}
 		if (!(route.response.payload instanceof BinaryType)) {
@@ -258,18 +261,6 @@ export class PHPAPIGenerator extends Generator {
 		let lines = [] as Array<string>;
 		lines.push(`<?php namespace autoguard;`);
 		lines.push(``);
-		lines.push(`class Undefined implements \\JsonSerializable {`);
-		lines.push(`	function __toString(): string {`);
-		lines.push(`		return "undefined";`);
-		lines.push(`	}`);
-		lines.push(``);
-		lines.push(`	function jsonSerialize(): mixed {`);
-		lines.push(`		return null;`);
-		lines.push(`	}`);
-		lines.push(`}`);
-		lines.push(``);
-		lines.push(`$undefined = new Undefined();`);
-		lines.push(``);
 		lines.push(`class GuardException extends \\Exception {`);
 		lines.push(`	public string $path;`);
 		lines.push(`	public string $observed;`);
@@ -306,19 +297,8 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(`		}`);
 		lines.push(`	}`);
 		lines.push(``);
-		lines.push(`	static function access_member(object &$subject, string $key, mixed &$member): void {`);
-		lines.push(`		global $undefined;`);
-		lines.push(`		$member = property_exists($subject, $key) ? $subject->$key : $undefined;`);
-		lines.push(`	}`);
-		lines.push(``);
-		lines.push(`	static function access_element(array &$subject, int $i, mixed &$member): void {`);
-		lines.push(`		global $undefined;`);
-		lines.push(`		$member = $i >= 0 && $i < count($subject) ? $subject[$i] : $undefined;`);
-		lines.push(`	}`);
-		lines.push(``);
 		lines.push(`	static function check_typename(mixed &$subject, string $path, string $expected): void {`);
-		lines.push(`		global $undefined;`);
-		lines.push(`		$observed = $subject === $undefined ? "undefined" : mb_strtolower(gettype($subject));`);
+		lines.push(`		$observed = mb_strtolower(gettype($subject));`);
 		lines.push(`		if ($observed !== $expected) {`);
 		lines.push(`			throw new GuardException($path, $observed, $expected);`);
 		lines.push(`		}`);
@@ -341,12 +321,9 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(`	}`);
 		lines.push(``);
 		lines.push(`	function as(mixed &$subject, ?string $path = ""): mixed {`);
-		lines.push(`		global $undefined;`);
 		lines.push(`		Guard::check_typename($subject, $path, "array");`);
 		lines.push(`		for ($i = 0; $i < count($subject); $i++) {`);
-		lines.push(`			$member = $undefined;`);
-		lines.push(`			Guard::access_element($subject, $i, $member);`);
-		lines.push(`			$this->guard->as($member, $path . "[$i]");`);
+		lines.push(`			$this->guard->as($subject[$i], $path . "[$i]");`);
 		lines.push(`		}`);
 		lines.push(`		return $subject;`);
 		lines.push(`	}`);
@@ -449,19 +426,27 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(`}`);
 		lines.push(``);
 		lines.push(`class ObjectGuard extends Guard {`);
-		lines.push(`	protected object $guards;`);
+		lines.push(`	protected object $required_guards;`);
+		lines.push(`	protected object $optional_guards;`);
 		lines.push(``);
-		lines.push(`	function __construct(object $guards) {`);
-		lines.push(`		$this->guards = $guards;`);
+		lines.push(`	function __construct(object $required_guards, object $optional_guards) {`);
+		lines.push(`		$this->required_guards = $required_guards;`);
+		lines.push(`		$this->optional_guards = $optional_guards;`);
 		lines.push(`	}`);
 		lines.push(``);
 		lines.push(`	function as(mixed &$subject, ?string $path = ""): mixed {`);
-		lines.push(`		global $undefined;`);
 		lines.push(`		Guard::check_typename($subject, $path, "object");`);
-		lines.push(`		foreach ($this->guards as $key => $guard) {`);
-		lines.push(`			$member = $undefined;`);
-		lines.push(`			Guard::access_member($subject, $key, $member);`);
-		lines.push(`			$guard->as($member, $path . ".$key");`);
+		lines.push(`		foreach ($this->required_guards as $key => $guard) {`);
+		lines.push(`			if (property_exists($subject, $key)) {`);
+		lines.push(`				$guard->as($subject->$key, $path . ".$key");`);
+		lines.push(`			} else {`);
+		lines.push(`				throw new GuardException($path . ".$key", "absent member", "present");`);
+		lines.push(`			}`);
+		lines.push(`		}`);
+		lines.push(`		foreach ($this->optional_guards as $key => $guard) {`);
+		lines.push(`			if (property_exists($subject, $key)) {`);
+		lines.push(`				$guard->as($subject->$key, $path . ".$key");`);
+		lines.push(`			}`);
 		lines.push(`		}`);
 		lines.push(`		return $subject;`);
 		lines.push(`	}`);
@@ -535,15 +520,6 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(`				throw new GuardException($path . "[$i]", "absent element", "present");`);
 		lines.push(`			}`);
 		lines.push(`		}`);
-		lines.push(`		return $subject;`);
-		lines.push(`	}`);
-		lines.push(`}`);
-		lines.push(``);
-		lines.push(`class UndefinedGuard extends Guard {`);
-		lines.push(`	function __construct() {}`);
-		lines.push(``);
-		lines.push(`	function as(mixed &$subject, ?string $path = ""): mixed {`);
-		lines.push(`		Guard::check_typename($subject, $path, "undefined");`);
 		lines.push(`		return $subject;`);
 		lines.push(`	}`);
 		lines.push(`}`);
@@ -858,34 +834,24 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(`		return $parts;`);
 		lines.push(`	}`);
 		lines.push(``);
-		lines.push(`	static function parse_json(mixed &$subject): mixed {`);
-		lines.push(`		global $undefined;`);
-		lines.push(`		if ($subject === $undefined || $subject === "") {`);
-		lines.push(`			return $undefined;`);
-		lines.push(`		}`);
+		lines.push(`	static function parse_json(string $subject): mixed {`);
 		lines.push(`		return json_decode($subject);`);
 		lines.push(`	}`);
 		lines.push(``);
-		lines.push(`	static function parse_member(object $object, string $key, bool $plain): mixed {`);
-		lines.push(`		global $undefined;`);
-		lines.push(`		$member = $undefined;`);
-		lines.push(`		Guard::access_member($object, $key, $member);`);
-		lines.push(`		return $plain ? $member : Route::parse_json($member);`);
+		lines.push(`	static function parse_member(object $object, string $key, bool $plain): void {`);
+		lines.push(`		if (property_exists($object, $key) && !$plain) {`);
+		lines.push(`			$object->$key = Route::parse_json($object->$key);`);
+		lines.push(`		}`);
 		lines.push(`	}`);
 		lines.push(``);
-		lines.push(`	static function serialize_json(mixed &$subject): mixed {`);
-		lines.push(`		global $undefined;`);
-		lines.push(`		if ($subject === $undefined || $subject === "") {`);
-		lines.push(`			return $undefined;`);
-		lines.push(`		}`);
+		lines.push(`	static function serialize_json(mixed $subject): string {`);
 		lines.push(`		return json_encode($subject, JSON_PRESERVE_ZERO_FRACTION | JSON_UNESCAPED_UNICODE);`);
 		lines.push(`	}`);
 		lines.push(``);
-		lines.push(`	static function serialize_member(object $object, string $key, bool $plain): mixed {`);
-		lines.push(`		global $undefined;`);
-		lines.push(`		$member = $undefined;`);
-		lines.push(`		Guard::access_member($object, $key, $member);`);
-		lines.push(`		return $plain ? $member : Route::serialize_json($member);`);
+		lines.push(`	static function serialize_member(object $object, string $key, bool $plain): void {`);
+		lines.push(`		if (property_exists($object, $key) && !$plain) {`);
+		lines.push(`			$object->$key = Route::serialize_json($object->$key);`);
+		lines.push(`		}`);
 		lines.push(`	}`);
 		lines.push(`}`);
 		lines.push(``);
