@@ -381,7 +381,6 @@ NB: This project targets TypeScript 4 in strict mode.
 * Require routes to be specified using an alias in v6.
 * Remove convoluted syntax for request and response headers in v6.
 * Remove convoluted syntax for query parameters in v6.
-* Improve handling of optional object members in php:api generator ($undefined).
 
 ## Syntax
 
