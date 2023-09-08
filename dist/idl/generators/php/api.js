@@ -51,13 +51,19 @@ class PHPAPIGenerator extends generator_1.Generator {
             lines.push(`new NumberLiteralGuard(${type.value})`);
         }
         else if (type instanceof types_1.ObjectType) {
-            let bodylines = [];
+            let required_lines = [];
+            let optional_lines = [];
             for (let [key, member] of type.members.entries()) {
-                let type = member.optional ? new types_1.UnionType([types_1.UndefinedType.INSTANCE, member.type]) : member.type;
-                bodylines.push(`	"${key}" => ${this.generateTypeGuard(type, eol + "\t")}`);
+                if (member.optional) {
+                    optional_lines.push(`	"${key}" => ${this.generateTypeGuard(member.type, eol + "\t")}`);
+                }
+                else {
+                    required_lines.push(`	"${key}" => ${this.generateTypeGuard(member.type, eol + "\t")}`);
+                }
             }
-            let content = bodylines.length === 0 ? "" : eol + bodylines.join("," + eol) + eol;
-            lines.push(`new ObjectGuard((object) [${content}])`);
+            let required = required_lines.length === 0 ? "" : eol + required_lines.join("," + eol) + eol;
+            let optional = optional_lines.length === 0 ? "" : eol + optional_lines.join("," + eol) + eol;
+            lines.push(`new ObjectGuard((object) [${required}], (object) [${optional}])`);
         }
         else if (type instanceof types_1.PlainType) {
             lines.push(`new StringGuard()`);
@@ -79,8 +85,13 @@ class PHPAPIGenerator extends generator_1.Generator {
         else if (type instanceof types_1.StringLiteralType) {
             lines.push(`new StringLiteralGuard("${type.value}")`);
         }
-        else if (type instanceof types_1.UndefinedType) {
-            lines.push(`new UndefinedGuard()`);
+        else if (type instanceof types_1.TupleType) {
+            let lines = [];
+            for (let subtype of type.types) {
+                lines.push(`\t${this.generateTypeGuard(subtype, eol + "\t")}`);
+            }
+            let content = lines.length === 0 ? "" : eol + lines.join("," + eol) + eol;
+            lines.push(`new TupleGuard([${content}])`);
         }
         else if (type instanceof types_1.UnionType) {
             let bodylines = [];
@@ -92,11 +103,11 @@ class PHPAPIGenerator extends generator_1.Generator {
         }
         else if (type instanceof types_1.Options) {
             // TODO: Remove when Options is removed.
-            lines.push(`new ObjectGuard((object) [])`);
+            lines.push(`new ObjectGuard((object) [], (object) [])`);
         }
         else if (type instanceof types_1.Headers) {
             // TODO: Remove when Headers is removed.
-            lines.push(`new ObjectGuard((object) [])`);
+            lines.push(`new ObjectGuard((object) [], (object) [])`);
         }
         else if (type instanceof schema_1.BinaryPayloadType) {
             lines.push(`new StringGuard()`);
@@ -173,7 +184,7 @@ class PHPAPIGenerator extends generator_1.Generator {
                 throw new Error(`Quantifier not supported by generator!`);
             }
             else if (!plain) {
-                lines.push(`		$request->headers->{"${name}"} = Route::parse_member($request->headers, "${name}", ${plain});`);
+                lines.push(`		Route::parse_member($request->headers, "${name}", ${plain});`);
             }
         }
         for (let [index, { name, quantifier, type }] of route.path.components.entries()) {
@@ -186,8 +197,8 @@ class PHPAPIGenerator extends generator_1.Generator {
             if (quantifier.kind === "repeated") {
                 throw new Error(`Quantifier not supported by generator!`);
             }
-            else {
-                lines.push(`		$request->options->{"${name}"} = Route::parse_member($request->parameters, "${name}", ${plain});`);
+            else if (!plain) {
+                lines.push(`		Route::parse_member($request->parameters, "${name}", ${plain});`);
             }
         }
         if (!(route.request.payload instanceof types_1.BinaryType)) {
@@ -213,7 +224,7 @@ class PHPAPIGenerator extends generator_1.Generator {
                 throw new Error(`Quantifier not supported by generator!`);
             }
             else if (!plain) {
-                lines.push(`		$response->headers->{"${name}"} = Route::serialize_member($response->headers, "${name}", ${plain});`);
+                lines.push(`		Route::serialize_member($response->headers, "${name}", ${plain});`);
             }
         }
         if (!(route.response.payload instanceof types_1.BinaryType)) {
@@ -527,6 +538,26 @@ class PHPAPIGenerator extends generator_1.Generator {
         lines.push(`	function as(mixed &$subject, ?string $path = ""): mixed {`);
         lines.push(`		if ($subject !== $this->literal) {`);
         lines.push(`			throw new GuardException($path, $subject, (string) $this->literal);`);
+        lines.push(`		}`);
+        lines.push(`		return $subject;`);
+        lines.push(`	}`);
+        lines.push(`}`);
+        lines.push(``);
+        lines.push(`class TupleGuard extends Guard {`);
+        lines.push(`	protected array $guards;`);
+        lines.push(``);
+        lines.push(`	function __construct(array $guards) {`);
+        lines.push(`		$this->guards = $guards;`);
+        lines.push(`	}`);
+        lines.push(``);
+        lines.push(`	function as(mixed &$subject, ?string $path = ""): mixed {`);
+        lines.push(`		Guard::check_typename($subject, $path, "array");`);
+        lines.push(`		foreach ($this->guards as $i => $guard) {`);
+        lines.push(`			if (array_key_exists($i, $subject)) {`);
+        lines.push(`				$guard->as($subject[$i], $path . "[$i]");`);
+        lines.push(`			} else {`);
+        lines.push(`				throw new GuardException($path . "[$i]", "absent element", "present");`);
+        lines.push(`			}`);
         lines.push(`		}`);
         lines.push(`		return $subject;`);
         lines.push(`	}`);
