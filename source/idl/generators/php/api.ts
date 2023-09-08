@@ -1,6 +1,6 @@
 import { Route } from "../../route";
 import { BinaryPayloadType, getContentTypeFromType, getRequestType, getResponseType, Schema } from "../../schema";
-import { AnyType, ArrayType, BinaryType, BooleanLiteralType, BooleanType, Headers, IntegerLiteralType, IntegerType, IntersectionType, NullType, NumberLiteralType, NumberType, ObjectType, Options, PlainType, RecordType, ReferenceType, StringLiteralType, StringType, Type, UndefinedType, UnionType } from "../../types";
+import { AnyType, ArrayType, BinaryType, BooleanLiteralType, BooleanType, Headers, IntegerLiteralType, IntegerType, IntersectionType, NullType, NumberLiteralType, NumberType, ObjectType, Options, PlainType, RecordType, ReferenceType, StringLiteralType, StringType, TupleType, Type, UndefinedType, UnionType } from "../../types";
 import { File, Generator } from "../generator";
 
 export class PHPAPIGenerator extends Generator {
@@ -62,6 +62,13 @@ export class PHPAPIGenerator extends Generator {
 			lines.push(`new StringGuard()`);
 		} else if (type instanceof StringLiteralType) {
 			lines.push(`new StringLiteralGuard("${type.value}")`);
+		} else if (type instanceof TupleType) {
+			let lines = [] as Array<string>;
+			for (let subtype of type.types) {
+				lines.push(`\t${this.generateTypeGuard(subtype, eol + "\t")}`);
+			}
+			let content = lines.length === 0 ? "" : eol + lines.join("," + eol) + eol;
+			lines.push(`new TupleGuard([${content}])`);
 		} else if (type instanceof UndefinedType) {
 			lines.push(`new UndefinedGuard()`);
 		} else if (type instanceof UnionType) {
@@ -507,6 +514,26 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(`	function as(mixed &$subject, ?string $path = ""): mixed {`);
 		lines.push(`		if ($subject !== $this->literal) {`);
 		lines.push(`			throw new GuardException($path, $subject, (string) $this->literal);`);
+		lines.push(`		}`);
+		lines.push(`		return $subject;`);
+		lines.push(`	}`);
+		lines.push(`}`);
+		lines.push(``);
+		lines.push(`class TupleGuard extends Guard {`);
+		lines.push(`	protected array $guards;`);
+		lines.push(``);
+		lines.push(`	function __construct(array $guards) {`);
+		lines.push(`		$this->guards = $guards;`);
+		lines.push(`	}`);
+		lines.push(``);
+		lines.push(`	function as(mixed &$subject, ?string $path = ""): mixed {`);
+		lines.push(`		Guard::check_typename($subject, $path, "array");`);
+		lines.push(`		foreach ($this->guards as $i => $guard) {`);
+		lines.push(`			if (array_key_exists($i, $subject)) {`);
+		lines.push(`				$guard->as($subject[$i], $path . "[$i]");`);
+		lines.push(`			} else {`);
+		lines.push(`				throw new GuardException($path . "[$i]", "absent element", "present");`);
+		lines.push(`			}`);
 		lines.push(`		}`);
 		lines.push(`		return $subject;`);
 		lines.push(`	}`);
