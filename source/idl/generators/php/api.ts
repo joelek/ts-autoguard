@@ -653,6 +653,14 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(`		$this->options = (object) [];`);
 		lines.push(`	}`);
 		lines.push(``);
+		lines.push(`	function get_base_path(): string {`);
+		lines.push(`		return implode("/", array_map(fn ($component) => rawurlencode($component), $this->base_components)) . "/";`);
+		lines.push(`	}`);
+		lines.push(``);
+		lines.push(`	function get_path(): string {`);
+		lines.push(`		return implode("/", array_map(fn ($component) => rawurlencode($component), $this->components));`);
+		lines.push(`	}`);
+		lines.push(``);
 		lines.push(`	static function get_method(): string {`);
 		lines.push(`		return $_SERVER["REQUEST_METHOD"];`);
 		lines.push(`	}`);
