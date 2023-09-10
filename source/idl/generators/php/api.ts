@@ -167,7 +167,7 @@ export class PHPAPIGenerator extends Generator {
 		}
 		for (let [index, { name, quantifier, type }] of route.path.components.entries()) {
 			if (type != null) {
-				lines.push(`		$request->options->{"${name}"} = $this->matchers[${index}]->get_value();`);
+				lines.push(`		$this->matchers[${index}]->read_value($request->options, "${name}");`);
 			}
 		}
 		for (let [index, { name, quantifier, type }] of route.parameters.parameters.entries()) {
@@ -576,11 +576,13 @@ export class PHPAPIGenerator extends Generator {
 		lines.push(`		return $this->accept_component($component, false);`);
 		lines.push(`	}`);
 		lines.push(``);
-		lines.push(`	function get_value(): mixed {`);
+		lines.push(`	function read_value(object $target, string $key): void {`);
 		lines.push(`		if ($this->max_occurences === 1) {`);
-		lines.push(`			return $this->values[0];`);
+		lines.push(`			if (count($this->values) > 0) {`);
+		lines.push(`				$target->$key = $this->values[0];`);
+		lines.push(`			}`);
 		lines.push(`		} else {`);
-		lines.push(`			return $this->values;`);
+		lines.push(`			$target->$key = $this->values;`);
 		lines.push(`		}`);
 		lines.push(`	}`);
 		lines.push(``);
