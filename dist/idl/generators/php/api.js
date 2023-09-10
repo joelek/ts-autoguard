@@ -184,7 +184,7 @@ class PHPAPIGenerator extends generator_1.Generator {
                 throw new Error(`Quantifier not supported by generator!`);
             }
             else if (!plain) {
-                lines.push(`		Route::parse_member($request->headers, "${name}", ${plain});`);
+                lines.push(`		Route::parse_member($request->headers, $request->headers, "${name}", ${plain});`);
             }
         }
         for (let [index, { name, quantifier, type }] of route.path.components.entries()) {
@@ -197,8 +197,8 @@ class PHPAPIGenerator extends generator_1.Generator {
             if (quantifier.kind === "repeated") {
                 throw new Error(`Quantifier not supported by generator!`);
             }
-            else if (!plain) {
-                lines.push(`		Route::parse_member($request->parameters, "${name}", ${plain});`);
+            else {
+                lines.push(`		Route::parse_member($request->options, $request->parameters, "${name}", ${plain});`);
             }
         }
         if (!(route.request.payload instanceof types_1.BinaryType)) {
@@ -224,7 +224,7 @@ class PHPAPIGenerator extends generator_1.Generator {
                 throw new Error(`Quantifier not supported by generator!`);
             }
             else if (!plain) {
-                lines.push(`		Route::serialize_member($response->headers, "${name}", ${plain});`);
+                lines.push(`		Route::serialize_member($response->headers, $response->headers, "${name}", ${plain});`);
             }
         }
         if (!(route.response.payload instanceof types_1.BinaryType)) {
@@ -867,9 +867,9 @@ class PHPAPIGenerator extends generator_1.Generator {
         lines.push(`		return json_decode($subject);`);
         lines.push(`	}`);
         lines.push(``);
-        lines.push(`	static function parse_member(object $object, string $key, bool $plain): void {`);
-        lines.push(`		if (property_exists($object, $key) && !$plain) {`);
-        lines.push(`			$object->$key = Route::parse_json($object->$key);`);
+        lines.push(`	static function parse_member(object $target, object $source, string $key, bool $plain): void {`);
+        lines.push(`		if (property_exists($source, $key)) {`);
+        lines.push(`			$target->$key = $plain ? $source->$key : Route::parse_json($source->$key);`);
         lines.push(`		}`);
         lines.push(`	}`);
         lines.push(``);
@@ -877,9 +877,9 @@ class PHPAPIGenerator extends generator_1.Generator {
         lines.push(`		return json_encode($subject, JSON_PRESERVE_ZERO_FRACTION | JSON_UNESCAPED_UNICODE);`);
         lines.push(`	}`);
         lines.push(``);
-        lines.push(`	static function serialize_member(object $object, string $key, bool $plain): void {`);
-        lines.push(`		if (property_exists($object, $key) && !$plain) {`);
-        lines.push(`			$object->$key = Route::serialize_json($object->$key);`);
+        lines.push(`	static function serialize_member(object $target, object $source, string $key, bool $plain): void {`);
+        lines.push(`		if (property_exists($source, $key)) {`);
+        lines.push(`			$target->$key = $plain ? $source->$key : Route::serialize_json($source->$key);`);
         lines.push(`		}`);
         lines.push(`	}`);
         lines.push(`}`);
