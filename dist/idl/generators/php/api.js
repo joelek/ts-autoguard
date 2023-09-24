@@ -232,6 +232,28 @@ class PHPAPIGenerator extends generator_1.Generator {
         }
         lines.push(`		return $response;`);
         lines.push(`	}`);
+        lines.push(``);
+        lines.push(`	function sync_request(object $request): void {`);
+        for (let [index, { name, quantifier, type }] of route.path.components.entries()) {
+            if (type != null) {
+                let plain = type instanceof types_1.PlainType || type instanceof types_1.StringType || type instanceof types_1.StringLiteralType;
+                lines.push(`		$this->matchers[${index}]->store_value($request->options, "${name}");`);
+            }
+        }
+        lines.push(`		$request->components = [];`);
+        lines.push(`		foreach ($this->matchers as $matcher) {`);
+        lines.push(`			array_push($request->components, ...$matcher->get_values());`);
+        lines.push(`		}`);
+        for (let [index, { name, quantifier, type }] of route.parameters.parameters.entries()) {
+            let plain = type instanceof types_1.PlainType;
+            if (quantifier.kind === "repeated") {
+                throw new Error(`Quantifier not supported by generator!`);
+            }
+            else {
+                lines.push(`		Route::serialize_member($request->parameters, $request->options, "${name}", ${plain});`);
+            }
+        }
+        lines.push(`	}`);
         lines.push(`}`);
         lines.push(``);
         lines.push(`?>`);
@@ -607,6 +629,24 @@ class PHPAPIGenerator extends generator_1.Generator {
         lines.push(`		}`);
         lines.push(`	}`);
         lines.push(``);
+        lines.push(`	function store_value(object $source, string $key): void {`);
+        lines.push(`		if (property_exists($source, $key)) {`);
+        lines.push(`			if (gettype($source->$key) === "array") {`);
+        lines.push(`				$values = $source->$key;`);
+        lines.push(`			} else {`);
+        lines.push(`				$values = [$source->$key];`);
+        lines.push(`			}`);
+        lines.push(`			$values = array_map(fn ($value) => gettype($value) === "string" ? $value : Route::serialize_json($value), $values);`);
+        lines.push(`			$this->values = $values;`);
+        lines.push(`		} else {`);
+        lines.push(`			$this->values = [];`);
+        lines.push(`		}`);
+        lines.push(`	}`);
+        lines.push(``);
+        lines.push(`	function get_values(): array {`);
+        lines.push(`		return $this->values;`);
+        lines.push(`	}`);
+        lines.push(``);
         lines.push(`	function is_satisfied(): bool {`);
         lines.push(`		return $this->min_occurences <= count($this->values) && count($this->values) <= $this->max_occurences;`);
         lines.push(`	}`);
@@ -674,6 +714,29 @@ class PHPAPIGenerator extends generator_1.Generator {
         lines.push(`		$this->headers = Request::get_headers();`);
         lines.push(`		$this->payload = Request::get_payload();`);
         lines.push(`		$this->options = (object) [];`);
+        lines.push(`	}`);
+        lines.push(``);
+        lines.push(`	function get_absolute_path(): string {`);
+        lines.push(`		$components = array_merge($this->base_components, $this->components);`);
+        lines.push(`		$components = array_map(fn ($component) => rawurlencode($component), $components);`);
+        lines.push(`		$query = $this->get_query();`);
+        lines.push(`		$query = $query === null ? "" : "?" . $query;`);
+        lines.push(`		$path = implode("/", $components) . $query;`);
+        lines.push(`		return $path;`);
+        lines.push(`	}`);
+        lines.push(``);
+        lines.push(`	function get_query(): ?string {`);
+        lines.push(`		$parts = [];`);
+        lines.push(`		foreach ($this->parameters as $key => $value) {`);
+        lines.push(`			$key = rawurlencode($key);`);
+        lines.push(`			$value = rawurlencode($value);`);
+        lines.push(`			array_push($parts, $key . "=" . $value);`);
+        lines.push(`		}`);
+        lines.push(`		if (count($parts) === 0) {`);
+        lines.push(`			return null;`);
+        lines.push(`		} else {`);
+        lines.push(`			return "?" . implode("&", $parts);`);
+        lines.push(`		}`);
         lines.push(`	}`);
         lines.push(``);
         lines.push(`	function get_base_path(): string {`);
@@ -752,6 +815,7 @@ class PHPAPIGenerator extends generator_1.Generator {
         lines.push(`	abstract function handle_request(object $request): object;`);
         lines.push(`	abstract function validate_response(object $response): object;`);
         lines.push(`	abstract function finalize_response(object $response): object;`);
+        lines.push(`	abstract function sync_request(object $request): void;`);
         lines.push(``);
         lines.push(`	static function respond(array $routes): void {`);
         lines.push(`		try {`);
@@ -800,6 +864,16 @@ class PHPAPIGenerator extends generator_1.Generator {
         lines.push(`				http_response_code(500);`);
         lines.push(`			}`);
         lines.push(`		}`);
+        lines.push(`	}`);
+        lines.push(``);
+        lines.push(`	static function redirect(string $url, bool $permanent = true): void {`);
+        lines.push(`		header("Location: " . $url);`);
+        lines.push(`		if ($permanent) {`);
+        lines.push(`			http_response_code(Status::PERMANENT_REDIRECT);`);
+        lines.push(`		} else {`);
+        lines.push(`			http_response_code(Status::TEMPORARY_REDIRECT);`);
+        lines.push(`		}`);
+        lines.push(`		exit(0);`);
         lines.push(`	}`);
         lines.push(``);
         lines.push(`	static function accepts_content_type(array $accepts, string $content_type): bool {`);
