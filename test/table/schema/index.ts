@@ -8,32 +8,31 @@ export enum Table {
 };
 
 export namespace Table {
-	export const Key: autoguard.serialization.MessageGuard<Key> = autoguard.guards.Union.of(
-		autoguard.guards.StringLiteral.of("A"),
-		autoguard.guards.StringLiteral.of("B")
-	);
+	export const Entries = [
+		{ key: "A", value: 0 },
+		{ key: "B", value: 1 }
+	] as const;
 
-	export type Key = autoguard.guards.Union<[
-		autoguard.guards.StringLiteral<"A">,
-		autoguard.guards.StringLiteral<"B">
-	]>;
+	export const Keys = autoguard.tables.createKeys(Entries);
 
-	export const Value: autoguard.serialization.MessageGuard<Value> = autoguard.guards.Union.of(
-		autoguard.guards.NumberLiteral.of(0),
-		autoguard.guards.NumberLiteral.of(1)
-	);
+	export const Values = autoguard.tables.createValues(Entries);
 
-	export type Value = autoguard.guards.Union<[
-		autoguard.guards.NumberLiteral<0>,
-		autoguard.guards.NumberLiteral<1>
-	]>;
+	export const KeyToValueMap = autoguard.tables.createKeyToValueMap(Entries);
+
+	export const ValueToKeyMap = autoguard.tables.createValueToKeyMap(Entries);
+
+	export type Key = typeof Keys[number];
+	export const Key: autoguard.serialization.MessageGuard<Key> = autoguard.guards.Key.of(KeyToValueMap);
+
+	export type Value = typeof Values[number];
+	export const Value: autoguard.serialization.MessageGuard<Value> = autoguard.guards.Key.of(ValueToKeyMap);
 
 	export function keyFromValue(value: number): Key {
-		return Key.as(Table[Value.as(value)]);
+		return ValueToKeyMap[Value.as(value)];
 	};
 
 	export function valueFromKey(key: string): Value {
-		return Value.as(Table[Key.as(key)]);
+		return KeyToValueMap[Key.as(key)];
 	};
 };
 
