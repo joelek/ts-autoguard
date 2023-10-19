@@ -258,17 +258,32 @@ class GroupType {
 exports.GroupType = GroupType;
 ;
 class IntegerType {
-    constructor() {
+    constructor(min, max) {
+        this.min = min;
+        this.max = max;
     }
     generateSchema(options) {
-        return "integer";
+        var _a, _b;
+        if (this.min == null && this.max == null) {
+            return "integer";
+        }
+        else {
+            let min = (_a = this.min) !== null && _a !== void 0 ? _a : "*";
+            let max = (_b = this.max) !== null && _b !== void 0 ? _b : "*";
+            return `integer(${min}, ${max})`;
+        }
     }
     generateType(options) {
         return "autoguard.guards.Integer";
     }
     generateTypeGuard(options) {
         let lines = new Array();
-        lines.push("autoguard.guards.Integer");
+        if (this.min == null && this.max == null) {
+            lines.push("autoguard.guards.Integer");
+        }
+        else {
+            lines.push("new autoguard.guards.IntegerGuard(" + this.min + ", " + this.max + ")");
+        }
         return lines.join(options.eol);
     }
     getReferences() {
@@ -276,8 +291,31 @@ class IntegerType {
     }
     static parse(tokenizer, parsers) {
         return tokenizer.newContext((read, peek) => {
+            var _a, _b, _c;
             tokenization.expect(read(), "integer");
-            return IntegerType.INSTANCE;
+            if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) === "(") {
+                let min;
+                let max;
+                tokenization.expect(read(), "(");
+                if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === "*") {
+                    tokenization.expect(read(), "*");
+                }
+                else {
+                    min = globalThis.Number.parseInt(tokenization.expect(read(), "NUMBER_LITERAL").value);
+                }
+                tokenization.expect(read(), ",");
+                if (((_c = peek()) === null || _c === void 0 ? void 0 : _c.family) === "*") {
+                    tokenization.expect(read(), "*");
+                }
+                else {
+                    max = globalThis.Number.parseInt(tokenization.expect(read(), "NUMBER_LITERAL").value);
+                }
+                tokenization.expect(read(), ")");
+                return new IntegerType(min, max);
+            }
+            else {
+                return IntegerType.INSTANCE;
+            }
         });
     }
 }
@@ -403,17 +441,32 @@ exports.NullType = NullType;
 NullType.INSTANCE = new NullType();
 ;
 class NumberType {
-    constructor() {
+    constructor(min, max) {
+        this.min = min;
+        this.max = max;
     }
     generateSchema(options) {
-        return "number";
+        var _a, _b;
+        if (this.min == null && this.max == null) {
+            return "number";
+        }
+        else {
+            let min = (_a = this.min) !== null && _a !== void 0 ? _a : "*";
+            let max = (_b = this.max) !== null && _b !== void 0 ? _b : "*";
+            return `number(${min}, ${max})`;
+        }
     }
     generateType(options) {
         return "autoguard.guards.Number";
     }
     generateTypeGuard(options) {
         let lines = new Array();
-        lines.push("autoguard.guards.Number");
+        if (this.min == null && this.max == null) {
+            lines.push("autoguard.guards.Number");
+        }
+        else {
+            lines.push("new autoguard.guards.NumberGuard(" + this.min + ", " + this.max + ")");
+        }
         return lines.join(options.eol);
     }
     getReferences() {
@@ -421,8 +474,31 @@ class NumberType {
     }
     static parse(tokenizer, parsers) {
         return tokenizer.newContext((read, peek) => {
+            var _a, _b, _c;
             tokenization.expect(read(), "number");
-            return NumberType.INSTANCE;
+            if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) === "(") {
+                let min;
+                let max;
+                tokenization.expect(read(), "(");
+                if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === "*") {
+                    tokenization.expect(read(), "*");
+                }
+                else {
+                    min = globalThis.Number.parseInt(tokenization.expect(read(), "NUMBER_LITERAL").value);
+                }
+                tokenization.expect(read(), ",");
+                if (((_c = peek()) === null || _c === void 0 ? void 0 : _c.family) === "*") {
+                    tokenization.expect(read(), "*");
+                }
+                else {
+                    max = globalThis.Number.parseInt(tokenization.expect(read(), "NUMBER_LITERAL").value);
+                }
+                tokenization.expect(read(), ")");
+                return new NumberType(min, max);
+            }
+            else {
+                return NumberType.INSTANCE;
+            }
         });
     }
 }
@@ -639,17 +715,29 @@ class ReferenceType {
 exports.ReferenceType = ReferenceType;
 ;
 class StringType {
-    constructor() {
+    constructor(pattern) {
+        this.pattern = pattern;
     }
     generateSchema(options) {
-        return "string";
+        if (this.pattern == null) {
+            return "string";
+        }
+        else {
+            let pattern = this.pattern != null ? `"${this.pattern}"` : "*";
+            return `string(${pattern})`;
+        }
     }
     generateType(options) {
         return "autoguard.guards.String";
     }
     generateTypeGuard(options) {
         let lines = new Array();
-        lines.push("autoguard.guards.String");
+        if (this.pattern == null) {
+            lines.push("autoguard.guards.String");
+        }
+        else {
+            lines.push("new autoguard.guards.StringGuard(new RegExp(\"" + this.pattern + "\"))");
+        }
         return lines.join(options.eol);
     }
     getReferences() {
@@ -657,8 +745,23 @@ class StringType {
     }
     static parse(tokenizer, parsers) {
         return tokenizer.newContext((read, peek) => {
+            var _a, _b;
             tokenization.expect(read(), "string");
-            return StringType.INSTANCE;
+            if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.family) === "(") {
+                let pattern;
+                tokenization.expect(read(), "(");
+                if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === "*") {
+                    tokenization.expect(read(), "*");
+                }
+                else {
+                    pattern = tokenization.expect(read(), "STRING_LITERAL").value.slice(1, -1);
+                }
+                tokenization.expect(read(), ")");
+                return new StringType(pattern);
+            }
+            else {
+                return StringType.INSTANCE;
+            }
         });
     }
 }

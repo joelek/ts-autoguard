@@ -78,7 +78,9 @@ export declare const Group: {
 };
 export type Integer = number;
 export declare class IntegerGuard extends serialization.MessageGuardBase<Integer> {
-    constructor();
+    readonly min?: number;
+    readonly max?: number;
+    constructor(min?: number, max?: number);
     as(subject: any, path?: string): Integer;
     ts(eol?: string): string;
 }
@@ -112,7 +114,9 @@ export declare class NullGuard extends serialization.MessageGuardBase<Null> {
 export declare const Null: NullGuard;
 export type Number = number;
 export declare class NumberGuard extends serialization.MessageGuardBase<Number> {
-    constructor();
+    readonly min?: number;
+    readonly max?: number;
+    constructor(min?: number, max?: number);
     as(subject: any, path?: string): Number;
     ts(eol?: string): string;
 }
@@ -160,7 +164,8 @@ export declare const Reference: {
 };
 export type String = string;
 export declare class StringGuard extends serialization.MessageGuardBase<String> {
-    constructor();
+    readonly pattern?: RegExp;
+    constructor(pattern?: RegExp);
     as(subject: any, path?: string): String;
     ts(eol?: string): string;
 }

@@ -78,7 +78,9 @@ export declare class GroupType implements Type {
     static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): GroupType;
 }
 export declare class IntegerType implements Type {
-    constructor();
+    min?: number;
+    max?: number;
+    constructor(min?: number, max?: number);
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
@@ -115,7 +117,9 @@ export declare class NullType implements Type {
     static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): NullType;
 }
 export declare class NumberType implements Type {
-    constructor();
+    min?: number;
+    max?: number;
+    constructor(min?: number, max?: number);
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;
@@ -167,7 +171,8 @@ export declare class ReferenceType implements Type {
     static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): ReferenceType;
 }
 export declare class StringType implements Type {
-    constructor();
+    pattern?: string;
+    constructor(pattern?: string);
     generateSchema(options: shared.Options): string;
     generateType(options: shared.Options): string;
     generateTypeGuard(options: shared.Options): string;

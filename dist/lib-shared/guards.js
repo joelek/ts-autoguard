@@ -136,17 +136,32 @@ exports.Group = {
     }
 };
 class IntegerGuard extends serialization.MessageGuardBase {
-    constructor() {
+    constructor(min, max) {
         super();
+        this.min = min;
+        this.max = max;
     }
     as(subject, path = "") {
         if ((subject != null) && (subject.constructor === globalThis.Number) && globalThis.Number.isInteger(subject)) {
-            return subject;
+            let number = subject;
+            if (this.min != null && number < this.min) {
+                throw new serialization.MessageGuardError(this, subject, path);
+            }
+            if (this.max != null && number > this.max) {
+                throw new serialization.MessageGuardError(this, subject, path);
+            }
+            return number;
         }
         throw new serialization.MessageGuardError(this, subject, path);
     }
     ts(eol = "\n") {
-        return "number";
+        var _a, _b;
+        if (this.min == null && this.max == null) {
+            return "integer";
+        }
+        else {
+            return `integer(${(_a = this.min) !== null && _a !== void 0 ? _a : "*"}, ${(_b = this.max) !== null && _b !== void 0 ? _b : "*"})`;
+        }
     }
 }
 exports.IntegerGuard = IntegerGuard;
@@ -218,17 +233,32 @@ exports.NullGuard = NullGuard;
 ;
 exports.Null = new NullGuard();
 class NumberGuard extends serialization.MessageGuardBase {
-    constructor() {
+    constructor(min, max) {
         super();
+        this.min = min;
+        this.max = max;
     }
     as(subject, path = "") {
         if ((subject != null) && (subject.constructor === globalThis.Number)) {
-            return subject;
+            let number = subject;
+            if (this.min != null && number < this.min) {
+                throw new serialization.MessageGuardError(this, subject, path);
+            }
+            if (this.max != null && number > this.max) {
+                throw new serialization.MessageGuardError(this, subject, path);
+            }
+            return number;
         }
         throw new serialization.MessageGuardError(this, subject, path);
     }
     ts(eol = "\n") {
-        return "number";
+        var _a, _b;
+        if (this.min == null && this.max == null) {
+            return "number";
+        }
+        else {
+            return `number(${(_a = this.min) !== null && _a !== void 0 ? _a : "*"}, ${(_b = this.max) !== null && _b !== void 0 ? _b : "*"})`;
+        }
     }
 }
 exports.NumberGuard = NumberGuard;
@@ -340,17 +370,28 @@ exports.Reference = {
     }
 };
 class StringGuard extends serialization.MessageGuardBase {
-    constructor() {
+    constructor(pattern) {
         super();
+        this.pattern = pattern;
     }
     as(subject, path = "") {
         if ((subject != null) && (subject.constructor === globalThis.String)) {
-            return subject;
+            let string = subject;
+            if (this.pattern != null && !this.pattern.test(string)) {
+                throw new serialization.MessageGuardError(this, subject, path);
+            }
+            return string;
         }
         throw new serialization.MessageGuardError(this, subject, path);
     }
     ts(eol = "\n") {
-        return "string";
+        if (this.pattern == null) {
+            return "string";
+        }
+        else {
+            let pattern = this.pattern != null ? `"${this.pattern.source}"` : "*";
+            return `string(${pattern})`;
+        }
     }
 }
 exports.StringGuard = StringGuard;
