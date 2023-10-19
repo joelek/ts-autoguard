@@ -441,6 +441,41 @@ export const Record = {
 	}
 };
 
+export type Key<A extends serialization.MessageMap<A>> = keyof A;
+
+export class KeyGuard<A extends serialization.MessageMap<A>> extends serialization.MessageGuardBase<Key<A>> {
+	readonly record: A;
+
+	constructor(record: A) {
+		super();
+		this.record = record;
+	}
+
+	as(subject: any, path: string = ""): Key<A> {
+		if ((subject != null) && (subject.constructor === globalThis.String)) {
+			let string = subject as string;
+			if (string in this.record) {
+				return string as Key<A>;
+			}
+		}
+		throw new serialization.MessageGuardError(this, subject, path);
+	}
+
+	ts(eol: string = "\n"): string {
+		let lines = new globalThis.Array<string>();
+		for (let key of globalThis.Object.keys(this.record)) {
+			lines.push(`\t"${key}"`);
+		}
+		return lines.length === 0 ? "key<>" : "key<" + eol + lines.join("," + eol) + eol + ">";
+	}
+};
+
+export const Key = {
+	of<A extends serialization.MessageMap<A>>(record: A): KeyGuard<A> {
+		return new KeyGuard(record);
+	}
+};
+
 export type Reference<A extends serialization.Message> = A;
 
 export class ReferenceGuard<A extends serialization.Message> extends serialization.MessageGuardBase<Reference<A>> {
