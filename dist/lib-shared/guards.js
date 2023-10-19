@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Union = exports.UnionGuard = exports.Undefined = exports.UndefinedGuard = exports.Tuple = exports.TupleGuard = exports.StringLiteral = exports.StringLiteralGuard = exports.String = exports.StringGuard = exports.Reference = exports.ReferenceGuard = exports.Record = exports.RecordGuard = exports.Object = exports.ObjectGuard = exports.NumberLiteral = exports.NumberLiteralGuard = exports.Number = exports.NumberGuard = exports.Null = exports.NullGuard = exports.Intersection = exports.IntersectionGuard = exports.IntegerLiteral = exports.IntegerLiteralGuard = exports.Integer = exports.IntegerGuard = exports.Group = exports.GroupGuard = exports.BooleanLiteral = exports.BooleanLiteralGuard = exports.Boolean = exports.BooleanGuard = exports.Binary = exports.BinaryGuard = exports.BigInt = exports.BigIntGuard = exports.Array = exports.ArrayGuard = exports.Any = exports.AnyGuard = void 0;
+exports.Union = exports.UnionGuard = exports.Undefined = exports.UndefinedGuard = exports.Tuple = exports.TupleGuard = exports.StringLiteral = exports.StringLiteralGuard = exports.String = exports.StringGuard = exports.Reference = exports.ReferenceGuard = exports.Key = exports.KeyGuard = exports.Record = exports.RecordGuard = exports.Object = exports.ObjectGuard = exports.NumberLiteral = exports.NumberLiteralGuard = exports.Number = exports.NumberGuard = exports.Null = exports.NullGuard = exports.Intersection = exports.IntersectionGuard = exports.IntegerLiteral = exports.IntegerLiteralGuard = exports.Integer = exports.IntegerGuard = exports.Group = exports.GroupGuard = exports.BooleanLiteral = exports.BooleanLiteralGuard = exports.Boolean = exports.BooleanGuard = exports.Binary = exports.BinaryGuard = exports.BigInt = exports.BigIntGuard = exports.Array = exports.ArrayGuard = exports.Any = exports.AnyGuard = void 0;
 const serialization = require("./serialization");
 class AnyGuard extends serialization.MessageGuardBase {
     constructor() {
@@ -348,6 +348,35 @@ exports.RecordGuard = RecordGuard;
 exports.Record = {
     of(guard) {
         return new RecordGuard(guard);
+    }
+};
+class KeyGuard extends serialization.MessageGuardBase {
+    constructor(record) {
+        super();
+        this.record = record;
+    }
+    as(subject, path = "") {
+        if ((subject != null) && (subject.constructor === globalThis.String)) {
+            let string = subject;
+            if (string in this.record) {
+                return string;
+            }
+        }
+        throw new serialization.MessageGuardError(this, subject, path);
+    }
+    ts(eol = "\n") {
+        let lines = new globalThis.Array();
+        for (let key of globalThis.Object.keys(this.record)) {
+            lines.push(`\t"${key}"`);
+        }
+        return lines.length === 0 ? "key<>" : "key<" + eol + lines.join("," + eol) + eol + ">";
+    }
+}
+exports.KeyGuard = KeyGuard;
+;
+exports.Key = {
+    of(record) {
+        return new KeyGuard(record);
     }
 };
 class ReferenceGuard extends serialization.MessageGuardBase {

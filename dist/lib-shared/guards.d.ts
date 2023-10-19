@@ -152,6 +152,16 @@ export declare class RecordGuard<A extends serialization.Message> extends serial
 export declare const Record: {
     of<A extends unknown>(guard: serialization.MessageGuard<A>): RecordGuard<A>;
 };
+export type Key<A extends serialization.MessageMap<A>> = keyof A;
+export declare class KeyGuard<A extends serialization.MessageMap<A>> extends serialization.MessageGuardBase<Key<A>> {
+    readonly record: A;
+    constructor(record: A);
+    as(subject: any, path?: string): Key<A>;
+    ts(eol?: string): string;
+}
+export declare const Key: {
+    of<A extends import("@joelek/ts-stdlib/dist/lib/routing").MessageMap<A>>(record: A): KeyGuard<A>;
+};
 export type Reference<A extends serialization.Message> = A;
 export declare class ReferenceGuard<A extends serialization.Message> extends serialization.MessageGuardBase<Reference<A>> {
     readonly guard: () => serialization.MessageGuard<A>;
