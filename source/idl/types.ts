@@ -305,12 +305,22 @@ export class GroupType implements Type {
 };
 
 export class IntegerType implements Type {
-	constructor() {
+	min?: number;
+	max?: number;
 
+	constructor(min?: number, max?: number) {
+		this.min = min;
+		this.max = max;
 	}
 
 	generateSchema(options: shared.Options): string {
-		return "integer";
+		if (this.min == null && this.max == null) {
+			return "integer";
+		} else {
+			let min = this.min ?? "*";
+			let max = this.max ?? "*";
+			return `integer(${min}, ${max})`;
+		}
 	}
 
 	generateType(options: shared.Options): string {
@@ -319,7 +329,11 @@ export class IntegerType implements Type {
 
 	generateTypeGuard(options: shared.Options): string {
 		let lines = new Array<string>();
-		lines.push("autoguard.guards.Integer");
+		if (this.min == null && this.max == null) {
+			lines.push("autoguard.guards.Integer");
+		} else {
+			lines.push("new autoguard.guards.IntegerGuard(" + this.min + ", " + this.max +")");
+		}
 		return lines.join(options.eol);
 	}
 
@@ -332,7 +346,26 @@ export class IntegerType implements Type {
 	static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): IntegerType {
 		return tokenizer.newContext((read, peek) => {
 			tokenization.expect(read(), "integer");
-			return IntegerType.INSTANCE;
+			if (peek()?.family === "(") {
+				let min: number | undefined;
+				let max: number | undefined;
+				tokenization.expect(read(), "(");
+				if (peek()?.family === "*") {
+					tokenization.expect(read(), "*");
+				} else {
+					min = globalThis.Number.parseInt(tokenization.expect(read(), "NUMBER_LITERAL").value);
+				}
+				tokenization.expect(read(), ",");
+				if (peek()?.family === "*") {
+					tokenization.expect(read(), "*");
+				} else {
+					max = globalThis.Number.parseInt(tokenization.expect(read(), "NUMBER_LITERAL").value);
+				}
+				tokenization.expect(read(), ")");
+				return new IntegerType(min, max);
+			} else {
+				return IntegerType.INSTANCE;
+			}
 		});
 	}
 };
@@ -474,12 +507,22 @@ export class NullType implements Type {
 };
 
 export class NumberType implements Type {
-	constructor() {
+	min?: number;
+	max?: number;
 
+	constructor(min?: number, max?: number) {
+		this.min = min;
+		this.max = max;
 	}
 
 	generateSchema(options: shared.Options): string {
-		return "number";
+		if (this.min == null && this.max == null) {
+			return "number";
+		} else {
+			let min = this.min ?? "*";
+			let max = this.max ?? "*";
+			return `number(${min}, ${max})`;
+		}
 	}
 
 	generateType(options: shared.Options): string {
@@ -488,7 +531,11 @@ export class NumberType implements Type {
 
 	generateTypeGuard(options: shared.Options): string {
 		let lines = new Array<string>();
-		lines.push("autoguard.guards.Number");
+		if (this.min == null && this.max == null) {
+			lines.push("autoguard.guards.Number");
+		} else {
+			lines.push("new autoguard.guards.NumberGuard(" + this.min + ", " + this.max +")");
+		}
 		return lines.join(options.eol);
 	}
 
@@ -501,7 +548,26 @@ export class NumberType implements Type {
 	static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): NumberType {
 		return tokenizer.newContext((read, peek) => {
 			tokenization.expect(read(), "number");
-			return NumberType.INSTANCE;
+			if (peek()?.family === "(") {
+				let min: number | undefined;
+				let max: number | undefined;
+				tokenization.expect(read(), "(");
+				if (peek()?.family === "*") {
+					tokenization.expect(read(), "*");
+				} else {
+					min = globalThis.Number.parseInt(tokenization.expect(read(), "NUMBER_LITERAL").value);
+				}
+				tokenization.expect(read(), ",");
+				if (peek()?.family === "*") {
+					tokenization.expect(read(), "*");
+				} else {
+					max = globalThis.Number.parseInt(tokenization.expect(read(), "NUMBER_LITERAL").value);
+				}
+				tokenization.expect(read(), ")");
+				return new NumberType(min, max);
+			} else {
+				return NumberType.INSTANCE;
+			}
 		});
 	}
 };
@@ -744,12 +810,19 @@ export class ReferenceType implements Type {
 };
 
 export class StringType implements Type {
-	constructor() {
+	pattern?: string;
 
+	constructor(pattern?: string) {
+		this.pattern = pattern;
 	}
 
 	generateSchema(options: shared.Options): string {
-		return "string";
+		if (this.pattern == null) {
+			return "string";
+		} else {
+			let pattern = this.pattern != null ? `"${this.pattern}"` : "*";
+			return `string(${pattern})`;
+		}
 	}
 
 	generateType(options: shared.Options): string {
@@ -758,7 +831,11 @@ export class StringType implements Type {
 
 	generateTypeGuard(options: shared.Options): string {
 		let lines = new Array<string>();
-		lines.push("autoguard.guards.String");
+		if (this.pattern == null) {
+			lines.push("autoguard.guards.String");
+		} else {
+			lines.push("new autoguard.guards.StringGuard(new RegExp(\"" + this.pattern + "\"))");
+		}
 		return lines.join(options.eol);
 	}
 
@@ -771,7 +848,19 @@ export class StringType implements Type {
 	static parse(tokenizer: tokenization.Tokenizer, parsers: Array<TypeParser>): StringType {
 		return tokenizer.newContext((read, peek) => {
 			tokenization.expect(read(), "string");
-			return StringType.INSTANCE;
+			if (peek()?.family === "(") {
+				let pattern: string | undefined;
+				tokenization.expect(read(), "(");
+				if (peek()?.family === "*") {
+					tokenization.expect(read(), "*");
+				} else {
+					pattern = tokenization.expect(read(), "STRING_LITERAL").value.slice(1, -1);
+				}
+				tokenization.expect(read(), ")");
+				return new StringType(pattern);
+			} else {
+				return StringType.INSTANCE;
+			}
 		});
 	}
 };

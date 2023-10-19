@@ -184,19 +184,35 @@ export const Group = {
 export type Integer = number;
 
 export class IntegerGuard extends serialization.MessageGuardBase<Integer> {
-	constructor() {
+	readonly min?: number;
+	readonly max?: number;
+
+	constructor(min?: number, max?: number) {
 		super();
+		this.min = min;
+		this.max = max;
 	}
 
 	as(subject: any, path: string = ""): Integer {
 		if ((subject != null) && (subject.constructor === globalThis.Number) && globalThis.Number.isInteger(subject)) {
-			return subject as number;
+			let number = subject as number;
+			if (this.min != null && number < this.min) {
+				throw new serialization.MessageGuardError(this, subject, path);
+			}
+			if (this.max != null && number > this.max) {
+				throw new serialization.MessageGuardError(this, subject, path);
+			}
+			return number;
 		}
 		throw new serialization.MessageGuardError(this, subject, path);
 	}
 
 	ts(eol: string = "\n"): string {
-		return "number";
+		if (this.min == null && this.max == null) {
+			return "integer";
+		} else {
+			return `integer(${this.min ?? "*"}, ${this.max ?? "*"})`;
+		}
 	}
 };
 
@@ -286,19 +302,35 @@ export const Null = new NullGuard();
 export type Number = number;
 
 export class NumberGuard extends serialization.MessageGuardBase<Number> {
-	constructor() {
+	readonly min?: number;
+	readonly max?: number;
+
+	constructor(min?: number, max?: number) {
 		super();
+		this.min = min;
+		this.max = max;
 	}
 
 	as(subject: any, path: string = ""): Number {
 		if ((subject != null) && (subject.constructor === globalThis.Number)) {
-			return subject as number;
+			let number = subject as number;
+			if (this.min != null && number < this.min) {
+				throw new serialization.MessageGuardError(this, subject, path);
+			}
+			if (this.max != null && number > this.max) {
+				throw new serialization.MessageGuardError(this, subject, path);
+			}
+			return number;
 		}
 		throw new serialization.MessageGuardError(this, subject, path);
 	}
 
 	ts(eol: string = "\n"): string {
-		return "number";
+		if (this.min == null && this.max == null) {
+			return "number";
+		} else {
+			return `number(${this.min ?? "*"}, ${this.max ?? "*"})`;
+		}
 	}
 };
 
@@ -437,19 +469,31 @@ export const Reference = {
 export type String = string;
 
 export class StringGuard extends serialization.MessageGuardBase<String> {
-	constructor() {
+	readonly pattern?: RegExp;
+
+	constructor(pattern?: RegExp) {
 		super();
+		this.pattern = pattern;
 	}
 
 	as(subject: any, path: string = ""): String {
 		if ((subject != null) && (subject.constructor === globalThis.String)) {
-			return subject as string;
+			let string = subject as string;
+			if (this.pattern != null && !this.pattern.test(string)) {
+				throw new serialization.MessageGuardError(this, subject, path);
+			}
+			return string;
 		}
 		throw new serialization.MessageGuardError(this, subject, path);
 	}
 
 	ts(eol: string = "\n"): string {
-		return "string";
+		if (this.pattern == null) {
+			return "string";
+		} else {
+			let pattern = this.pattern != null ? `"${this.pattern.source}"` : "*";
+			return `string(${pattern})`;
+		}
 	}
 };
 
