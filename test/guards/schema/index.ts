@@ -30,9 +30,29 @@ export const MyGroupType: autoguard.serialization.MessageGuard<MyGroupType> = au
 
 export type MyGroupType = autoguard.guards.Group<autoguard.guards.Any>;
 
-export const MyIntegerType: autoguard.serialization.MessageGuard<MyIntegerType> = autoguard.guards.Integer;
+export const MyIntegerType: autoguard.serialization.MessageGuard<MyIntegerType> = autoguard.guards.Number;
 
-export type MyIntegerType = autoguard.guards.Integer;
+export type MyIntegerType = autoguard.guards.Number;
+
+export const MyIntegerLiteralType: autoguard.serialization.MessageGuard<MyIntegerLiteralType> = autoguard.guards.IntegerLiteral.of(1337);
+
+export type MyIntegerLiteralType = autoguard.guards.IntegerLiteral<1337>;
+
+export const MyConstrainedIntegerType1: autoguard.serialization.MessageGuard<MyConstrainedIntegerType1> = new autoguard.guards.IntegerGuard(0, 9);
+
+export type MyConstrainedIntegerType1 = autoguard.guards.Integer;
+
+export const MyConstrainedIntegerType2: autoguard.serialization.MessageGuard<MyConstrainedIntegerType2> = new autoguard.guards.IntegerGuard(0, undefined);
+
+export type MyConstrainedIntegerType2 = autoguard.guards.Integer;
+
+export const MyConstrainedIntegerType3: autoguard.serialization.MessageGuard<MyConstrainedIntegerType3> = new autoguard.guards.IntegerGuard(undefined, 9);
+
+export type MyConstrainedIntegerType3 = autoguard.guards.Integer;
+
+export const MyConstrainedIntegerType4: autoguard.serialization.MessageGuard<MyConstrainedIntegerType4> = autoguard.guards.Integer;
+
+export type MyConstrainedIntegerType4 = autoguard.guards.Integer;
 
 export const MyIntersectionType: autoguard.serialization.MessageGuard<MyIntersectionType> = autoguard.guards.Intersection.of(
 	autoguard.guards.Object.of({
@@ -64,6 +84,22 @@ export const MyNumberLiteralType: autoguard.serialization.MessageGuard<MyNumberL
 
 export type MyNumberLiteralType = autoguard.guards.IntegerLiteral<1337>;
 
+export const MyConstrainedNumberType1: autoguard.serialization.MessageGuard<MyConstrainedNumberType1> = new autoguard.guards.NumberGuard(0, 9);
+
+export type MyConstrainedNumberType1 = autoguard.guards.Number;
+
+export const MyConstrainedNumberType2: autoguard.serialization.MessageGuard<MyConstrainedNumberType2> = new autoguard.guards.NumberGuard(0, undefined);
+
+export type MyConstrainedNumberType2 = autoguard.guards.Number;
+
+export const MyConstrainedNumberType3: autoguard.serialization.MessageGuard<MyConstrainedNumberType3> = new autoguard.guards.NumberGuard(undefined, 9);
+
+export type MyConstrainedNumberType3 = autoguard.guards.Number;
+
+export const MyConstrainedNumberType4: autoguard.serialization.MessageGuard<MyConstrainedNumberType4> = autoguard.guards.Number;
+
+export type MyConstrainedNumberType4 = autoguard.guards.Number;
+
 export const MyObjectType: autoguard.serialization.MessageGuard<MyObjectType> = autoguard.guards.Object.of({
 	"string_member": autoguard.guards.String,
 	"quoted-member": autoguard.guards.String
@@ -93,6 +129,14 @@ export type MyStringType = autoguard.guards.String;
 export const MyStringLiteralType: autoguard.serialization.MessageGuard<MyStringLiteralType> = autoguard.guards.StringLiteral.of("räksmörgås");
 
 export type MyStringLiteralType = autoguard.guards.StringLiteral<"räksmörgås">;
+
+export const MyConstrainedStringType1: autoguard.serialization.MessageGuard<MyConstrainedStringType1> = autoguard.guards.String;
+
+export type MyConstrainedStringType1 = autoguard.guards.String;
+
+export const MyConstrainedStringType2: autoguard.serialization.MessageGuard<MyConstrainedStringType2> = new autoguard.guards.StringGuard(new RegExp("/^([a-z]*)$/"));
+
+export type MyConstrainedStringType2 = autoguard.guards.String;
 
 export const MyTupleType: autoguard.serialization.MessageGuard<MyTupleType> = autoguard.guards.Tuple.of(
 	autoguard.guards.String,
@@ -128,15 +172,26 @@ export namespace Autoguard {
 		"MyBooleanliteralType": autoguard.guards.Reference.of(() => MyBooleanliteralType),
 		"MyGroupType": autoguard.guards.Reference.of(() => MyGroupType),
 		"MyIntegerType": autoguard.guards.Reference.of(() => MyIntegerType),
+		"MyIntegerLiteralType": autoguard.guards.Reference.of(() => MyIntegerLiteralType),
+		"MyConstrainedIntegerType1": autoguard.guards.Reference.of(() => MyConstrainedIntegerType1),
+		"MyConstrainedIntegerType2": autoguard.guards.Reference.of(() => MyConstrainedIntegerType2),
+		"MyConstrainedIntegerType3": autoguard.guards.Reference.of(() => MyConstrainedIntegerType3),
+		"MyConstrainedIntegerType4": autoguard.guards.Reference.of(() => MyConstrainedIntegerType4),
 		"MyIntersectionType": autoguard.guards.Reference.of(() => MyIntersectionType),
 		"MyNullType": autoguard.guards.Reference.of(() => MyNullType),
 		"MyNumberType": autoguard.guards.Reference.of(() => MyNumberType),
 		"MyNumberLiteralType": autoguard.guards.Reference.of(() => MyNumberLiteralType),
+		"MyConstrainedNumberType1": autoguard.guards.Reference.of(() => MyConstrainedNumberType1),
+		"MyConstrainedNumberType2": autoguard.guards.Reference.of(() => MyConstrainedNumberType2),
+		"MyConstrainedNumberType3": autoguard.guards.Reference.of(() => MyConstrainedNumberType3),
+		"MyConstrainedNumberType4": autoguard.guards.Reference.of(() => MyConstrainedNumberType4),
 		"MyObjectType": autoguard.guards.Reference.of(() => MyObjectType),
 		"MyRecordOfStringType": autoguard.guards.Reference.of(() => MyRecordOfStringType),
 		"MyReferenceType": autoguard.guards.Reference.of(() => MyReferenceType),
 		"MyStringType": autoguard.guards.Reference.of(() => MyStringType),
 		"MyStringLiteralType": autoguard.guards.Reference.of(() => MyStringLiteralType),
+		"MyConstrainedStringType1": autoguard.guards.Reference.of(() => MyConstrainedStringType1),
+		"MyConstrainedStringType2": autoguard.guards.Reference.of(() => MyConstrainedStringType2),
 		"MyTupleType": autoguard.guards.Reference.of(() => MyTupleType),
 		"MyUndefinedType": autoguard.guards.Reference.of(() => MyUndefinedType),
 		"MyUnionType": autoguard.guards.Reference.of(() => MyUnionType)
