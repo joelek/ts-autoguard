@@ -180,6 +180,13 @@ guard MyImportedType: ./module/MyExternalType;
 
 guard MyIntegerType: integer;
 
+guard MyIntegerLiteralType: 1337;
+
+guard MyConstrainedIntegerType1: integer(0, 9);
+guard MyConstrainedIntegerType2: integer(0, *);
+guard MyConstrainedIntegerType3: integer(*, 9);
+guard MyConstrainedIntegerType4: integer(*, *);
+
 guard MyIntersectionType: {
 	a_string_member: string
 } & {
@@ -191,6 +198,11 @@ guard MyNullType: null;
 guard MyNumberType: number;
 
 guard MyNumberLiteralType: 1337;
+
+guard MyConstrainedNumberType1: number(0, 9);
+guard MyConstrainedNumberType2: number(0, *);
+guard MyConstrainedNumberType3: number(*, 9);
+guard MyConstrainedNumberType4: number(*, *);
 
 guard MyObjectType: {
 	string_member: string,
@@ -205,6 +217,9 @@ guard MyReferenceType: MyObjectType;
 guard MyStringType: string;
 
 guard MyStringLiteralType: "räksmörgås";
+
+guard MyConstrainedStringType1: string(*);
+guard MyConstrainedStringType2: string("/^([a-z]*)$/");
 
 guard MyTupleType: [
 	string,
