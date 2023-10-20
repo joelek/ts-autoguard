@@ -219,7 +219,7 @@ guard MyStringType: string;
 guard MyStringLiteralType: "räksmörgås";
 
 guard MyConstrainedStringType1: string(*);
-guard MyConstrainedStringType2: string("/^([a-z]*)$/");
+guard MyConstrainedStringType2: string("^([a-z]*)$");
 
 guard MyTupleType: [
 	string,
