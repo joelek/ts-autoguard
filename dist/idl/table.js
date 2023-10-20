@@ -28,7 +28,11 @@ class Table {
             if (((_a = peek()) === null || _a === void 0 ? void 0 : _a.value) !== "}") {
                 let nextValue = 0;
                 while (true) {
-                    let key = types.StringLiteralType.parse(tokenizer, []);
+                    let token = tokenization.expect(read(), [
+                        ...tokenization.IdentifierFamilies,
+                        "STRING_LITERAL"
+                    ]);
+                    let key = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
                     let value;
                     if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === ":") {
                         tokenization.expect(read(), ":");
