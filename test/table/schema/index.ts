@@ -4,13 +4,17 @@ import * as autoguard from "../../../dist/lib-shared";
 
 export enum Table {
 	"A" = 0,
-	"B" = 1
+	"B" = 1,
+	"C" = 2,
+	"D" = 3
 };
 
 export namespace Table {
 	export const Entries = [
 		{ key: "A", value: 0 },
-		{ key: "B", value: 1 }
+		{ key: "B", value: 1 },
+		{ key: "C", value: 2 },
+		{ key: "D", value: 3 }
 	] as const;
 
 	export const Keys = autoguard.tables.createKeys(Entries);

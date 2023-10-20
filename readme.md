@@ -488,7 +488,8 @@ Request = "<=" Headers? Payload?
 Response = "=>" Headers? Payload?
 Alias = Identifier "(" ")" ":"
 Route = "route" Alias? Method ":" Path Parameters? Request? Response? ";"
-TableKeyValue = StringLiteralType (":" NumberLiteralType)?
+TableKey = Identifier or StringLiteral
+TableKeyValue = TableKey (":" NumberLiteralType)?
 TableBodyTail = "," TableKeyValue
 TableBody = TableKeyValue TableBodyTail*
 Table = "table" Identifier ":" "{" TableBody* "}" ";"

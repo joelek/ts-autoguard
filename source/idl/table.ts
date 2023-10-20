@@ -4,7 +4,7 @@ import * as tokenization from "./tokenization";
 import * as types from "./types";
 
 export type TableMember = {
-	key: types.StringLiteralType;
+	key: string;
 	value: types.NumberLiteralType;
 };
 
@@ -36,7 +36,11 @@ export class Table {
 			if (peek()?.value !== "}") {
 				let nextValue = 0;
 				while (true) {
-					let key = types.StringLiteralType.parse(tokenizer, []);
+					let token = tokenization.expect(read(), [
+						...tokenization.IdentifierFamilies,
+						"STRING_LITERAL"
+					]);
+					let key = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
 					let value: types.NumberLiteralType | undefined;
 					if (peek()?.family === ":") {
 						tokenization.expect(read(), ":");
