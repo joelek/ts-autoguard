@@ -1,9 +1,8 @@
 import * as shared from "./shared";
 import * as tokenization from "./tokenization";
-import * as types from "./types";
 export type TableMember = {
     key: string;
-    value: types.NumberLiteralType;
+    value: number | string;
 };
 export declare class Table {
     typename: string;

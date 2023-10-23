@@ -36,16 +36,28 @@ class Table {
                     let value;
                     if (((_b = peek()) === null || _b === void 0 ? void 0 : _b.family) === ":") {
                         tokenization.expect(read(), ":");
-                        value = types.NumberLiteralType.parse(tokenizer, []);
+                        let type = types.Type.parse(tokenizer, {
+                            parsers: [
+                                types.IntegerLiteralType.parse,
+                                types.StringLiteralType.parse
+                            ]
+                        });
+                        if (type instanceof types.IntegerLiteralType) {
+                            value = type.value;
+                            nextValue = type.value;
+                        }
+                        else {
+                            value = type.value;
+                        }
                     }
                     if (is.absent(value)) {
-                        value = new types.NumberLiteralType(nextValue);
+                        value = nextValue;
                     }
                     members.push({
                         key,
                         value
                     });
-                    nextValue = value.value + 1;
+                    nextValue = nextValue + 1;
                     if (((_c = peek()) === null || _c === void 0 ? void 0 : _c.value) !== ",") {
                         break;
                     }
