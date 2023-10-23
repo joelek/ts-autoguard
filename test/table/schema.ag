@@ -1,8 +1,14 @@
 table Table: {
 	"A",
-	"B",
-	C,
-	D
+	"B": 50,
+	"C",
+	"D": "Value for D",
+	E,
+	F: 100,
+	G,
+	H: "Value for H",
+	I,
+	J
 };
 
 guard Guard: {

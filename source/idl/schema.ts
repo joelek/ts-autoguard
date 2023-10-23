@@ -525,7 +525,8 @@ export class Schema {
 		for (let table of this.tables) {
 			let elines = new Array<string>();
 			for (let { key, value } of table.members) {
-				elines.push(`\t"${key}" = ${value.value}`);
+				value = typeof value === "string" ? `"${value}"` : value;
+				elines.push(`\t"${key}" = ${value}`);
 			}
 			let ebody = elines.length > 0 ? options.eol + elines.join("," + options.eol) + options.eol : "";
 			lines.push(`export enum ${table.typename} {${ebody}};`);
@@ -533,7 +534,8 @@ export class Schema {
 			lines.push(`export namespace ${table.typename} {`);
 			let entries_lines = new Array<string>();
 			for (let { key, value } of table.members) {
-				entries_lines.push(`\t{ key: "${key}", value: ${value.value} }`);
+				value = typeof value === "string" ? `"${value}"` : value;
+				entries_lines.push(`\t{ key: "${key}", value: ${value} }`);
 			}
 			let entries_body = entries_lines.length > 0 ? options.eol + "\t" + entries_lines.join("," + options.eol + "\t") + options.eol + "\t" : "";
 			lines.push(`\texport const Entries = [${entries_body}] as const;`);

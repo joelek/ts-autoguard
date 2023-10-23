@@ -5,7 +5,7 @@ import * as types from "./types";
 
 export type TableMember = {
 	key: string;
-	value: types.NumberLiteralType;
+	value: number | string;
 };
 
 export class Table {
@@ -41,19 +41,30 @@ export class Table {
 						"STRING_LITERAL"
 					]);
 					let key = token.family === "STRING_LITERAL" ? token.value.slice(1, -1) : token.value;
-					let value: types.NumberLiteralType | undefined;
+					let value: string | number | undefined;
 					if (peek()?.family === ":") {
 						tokenization.expect(read(), ":");
-						value = types.NumberLiteralType.parse(tokenizer, []);
+						let type = types.Type.parse(tokenizer, {
+							parsers: [
+								types.IntegerLiteralType.parse,
+								types.StringLiteralType.parse
+							]
+						}) as types.IntegerLiteralType | types.StringLiteralType;
+						if (type instanceof types.IntegerLiteralType) {
+							value = type.value;
+							nextValue = type.value;
+						} else {
+							value = type.value;
+						}
 					}
 					if (is.absent(value)) {
-						value = new types.NumberLiteralType(nextValue);
+						value = nextValue;
 					}
 					members.push({
 						key,
 						value
 					});
-					nextValue = value.value + 1;
+					nextValue = nextValue + 1;
 					if (peek()?.value !== ",") {
 						break;
 					}

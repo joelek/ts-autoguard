@@ -1,7 +1,12 @@
 type ExpansionOf<A> = A extends infer B ? { [C in keyof B]: B[C] } : never;
 type IntersectionOfUnion<A> = (A extends any ? (_: A) => void : never) extends ((_: infer B) => void) ? B : never;
 
-type Entries = readonly { key: string, value: number }[];
+type Entry = {
+	key: string;
+	value: number | string;
+};
+
+type Entries = readonly Entry[];
 
 type Keys<A extends Entries> = readonly [...{
 	[B in keyof A]: A[B]["key"];
