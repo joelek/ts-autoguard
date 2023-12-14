@@ -403,6 +403,7 @@ NB: This project targets TypeScript 4 in strict mode.
 * Add array length constraint to schema.
 * Fix issue with tables containing repeated values.
 * Consider allowing recursive array types (generate `A[]` instead of `autoguard.guards.Array<A>`).
+* Add support for optional tuple members.
 
 ## Syntax
 
