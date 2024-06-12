@@ -360,7 +360,7 @@ Ethereum contributions can be made to address `0xf1B63d95BEfEdAf70B3623B1A4Ba0D9
 Releases follow semantic versioning and release packages are published using the GitHub platform. Use the following command to install the latest release.
 
 ```
-npm install joelek/ts-autoguard#semver:^5.12
+npm install joelek/ts-autoguard#semver:^5.14
 ```
 
 Use the following command to install the very latest build. The very latest build may include breaking changes and should not be used in production environments.
