@@ -17,6 +17,8 @@ export type RequestLike = shared.api.AsyncBinary & {
 
 export type ResponseLike = {
 	end(): void;
+	off(type: string, callback: () => void): void;
+	on(type: string, callback: () => void): void;
 	once(type: string, callback: () => void): void;
 	setHeader(key: string, value: string | Array<string>): void;
 	write(payload: Uint8Array): boolean;
@@ -356,6 +358,12 @@ export async function respond(httpResponse: ResponseLike, raw: Partial<shared.ap
 		rawHeaders.push(...header);
 	}
 	httpResponse.writeHead(raw.status ?? 200, rawHeaders);
+	if (raw.payload instanceof libfs.ReadStream) {
+		let readStream = raw.payload;
+		httpResponse.once("close", function onclose() {
+			readStream.destroy();
+		});
+	}
 	for await (let chunk of raw.payload ?? []) {
 		if (!httpResponse.write(chunk)) {
 			await new Promise<void>((resolve, reject) => {
