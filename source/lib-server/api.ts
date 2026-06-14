@@ -364,14 +364,25 @@ export async function respond(httpResponse: ResponseLike, raw: Partial<shared.ap
 			readStream.destroy();
 		});
 	}
-	for await (let chunk of raw.payload ?? []) {
-		if (!httpResponse.write(chunk)) {
-			await new Promise<void>((resolve, reject) => {
-				httpResponse.once("drain", resolve);
-			});
+	try {
+		for await (let chunk of raw.payload ?? []) {
+			if (!httpResponse.write(chunk)) {
+				await new Promise<void>((resolve, reject) => {
+					function onclose() {
+						httpResponse.off("drain", ondrain);
+						reject();
+					}
+					function ondrain() {
+						httpResponse.off("close", onclose);
+						resolve();
+					}
+					httpResponse.once("drain", ondrain);
+					httpResponse.once("close", onclose);
+				});
+			}
 		}
-	}
-	httpResponse.end();
+		httpResponse.end();
+	} catch (error) {}
 	await new Promise<void>((resolve, reject) => {
 		httpResponse.once("finish", resolve);
 	});
