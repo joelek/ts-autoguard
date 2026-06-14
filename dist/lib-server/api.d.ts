@@ -16,6 +16,8 @@ export type RequestLike = shared.api.AsyncBinary & {
 };
 export type ResponseLike = {
     end(): void;
+    off(type: string, callback: () => void): void;
+    on(type: string, callback: () => void): void;
     once(type: string, callback: () => void): void;
     setHeader(key: string, value: string | Array<string>): void;
     write(payload: Uint8Array): boolean;

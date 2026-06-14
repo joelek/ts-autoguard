@@ -327,31 +327,49 @@ function respond(httpResponse, raw, serverOptions) {
             rawHeaders.push(...header);
         }
         httpResponse.writeHead((_e = raw.status) !== null && _e !== void 0 ? _e : 200, rawHeaders);
+        if (raw.payload instanceof libfs.ReadStream) {
+            let readStream = raw.payload;
+            httpResponse.once("close", function onclose() {
+                readStream.destroy();
+            });
+        }
         try {
-            for (var _g = true, _h = __asyncValues((_f = raw.payload) !== null && _f !== void 0 ? _f : []), _j; _j = yield _h.next(), _a = _j.done, !_a;) {
-                _c = _j.value;
-                _g = false;
-                try {
-                    let chunk = _c;
-                    if (!httpResponse.write(chunk)) {
-                        yield new Promise((resolve, reject) => {
-                            httpResponse.once("drain", resolve);
-                        });
+            try {
+                for (var _g = true, _h = __asyncValues((_f = raw.payload) !== null && _f !== void 0 ? _f : []), _j; _j = yield _h.next(), _a = _j.done, !_a;) {
+                    _c = _j.value;
+                    _g = false;
+                    try {
+                        let chunk = _c;
+                        if (!httpResponse.write(chunk)) {
+                            yield new Promise((resolve, reject) => {
+                                function onclose() {
+                                    httpResponse.off("drain", ondrain);
+                                    reject();
+                                }
+                                function ondrain() {
+                                    httpResponse.off("close", onclose);
+                                    resolve();
+                                }
+                                httpResponse.once("drain", ondrain);
+                                httpResponse.once("close", onclose);
+                            });
+                        }
+                    }
+                    finally {
+                        _g = true;
                     }
                 }
-                finally {
-                    _g = true;
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (!_g && !_a && (_b = _h.return)) yield _b.call(_h);
                 }
+                finally { if (e_1) throw e_1.error; }
             }
+            httpResponse.end();
         }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (!_g && !_a && (_b = _h.return)) yield _b.call(_h);
-            }
-            finally { if (e_1) throw e_1.error; }
-        }
-        httpResponse.end();
+        catch (error) { }
         yield new Promise((resolve, reject) => {
             httpResponse.once("finish", resolve);
         });
